@@ -1,5 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { EmailParameter } from '@core/domain-classes/email-parameter';
@@ -12,18 +19,37 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from 'src/app/email-template/email-template.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-send-email',
   templateUrl: './send-email.component.html',
-  styleUrls: ['./send-email.component.scss']
+  styleUrls: ['./send-email.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatChipSet,
+    NgFor,
+    MatChip,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    ReactiveFormsModule,
+    AngularEditorModule,
+    TranslatePipe,
+  ],
 })
 export class SendEmailComponent extends BaseComponent implements OnInit {
   emailTamplates: EmailTemplate[] = [];
   selectedEmailTamplate: EmailTemplate;
   emailForm: UntypedFormGroup;
-  editorConfig= EditorConfig;
+  editorConfig = EditorConfig;
   isLoading = false;
   constructor(
     private fb: UntypedFormBuilder,
@@ -33,7 +59,8 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     public dialogRef: MatDialogRef<SendEmailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SendEmailSuppliers,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     super();
   }
 
@@ -47,7 +74,7 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
     this.emailForm.patchValue(this.selectedEmailTamplate);
     const regex = /\##(.*?)\##/gi;
     const parameters: Array<string> = this.selectedEmailTamplate.body.match(regex);
-    [...new Set(parameters)].forEach(parameter => {
+    [...new Set(parameters)].forEach((parameter) => {
       this.parameters.push(this.newParameter(parameter));
     });
   }
@@ -55,8 +82,8 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
   newParameter(parameter): UntypedFormGroup {
     return this.fb.group({
       parameter: [parameter, [Validators.required]],
-      value: ['', [Validators.required]]
-    })
+      value: ['', [Validators.required]],
+    });
   }
 
   get parameters(): UntypedFormArray {
@@ -67,7 +94,7 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
     const paramters: EmailParameter[] = this.parameters.value;
     let emailBody = this.selectedEmailTamplate.body;
     if (paramters) {
-      paramters.forEach(paramter => {
+      paramters.forEach((paramter) => {
         if (paramter.value) {
           emailBody = emailBody.split(paramter.parameter).join(paramter.value);
         }
@@ -77,17 +104,18 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
   }
 
   getEmailTamplate() {
-    this.sub$.sink = this.emailTemplateService.getEmailTemplates()
+    this.sub$.sink = this.emailTemplateService
+      .getEmailTemplates()
       .subscribe((emailTamplats: EmailTemplate[]) => {
         this.emailTamplates = emailTamplats;
-      })
+      });
   }
 
   createEmailForm() {
     this.emailForm = this.fb.group({
       subject: ['', [Validators.required]],
       body: ['', [Validators.required]],
-      parameters: this.fb.array([])
+      parameters: this.fb.array([]),
     });
   }
 
@@ -97,17 +125,15 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
       return;
     }
     const sendEmail: SendEmail = {
-      suppliers: this.data.suppliers.map(c => c.id),
+      suppliers: this.data.suppliers.map((c) => c.id),
       subject: this.emailForm.get('subject').value,
-      message: this.emailForm.get('body').value
+      message: this.emailForm.get('body').value,
     };
-    this.sub$.sink = this.commonService.sendEmail(sendEmail)
-      .subscribe(c => {
-        if (c) {
-          this.toastrService.success("Email send to suppliers successfully.");
-        }
-      });
-
+    this.sub$.sink = this.commonService.sendEmail(sendEmail).subscribe((c) => {
+      if (c) {
+        this.toastrService.success('Email send to suppliers successfully.');
+      }
+    });
   }
   clearForm() {
     this.parameters.clear();
@@ -119,10 +145,9 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
     };
     this.emailForm.patchValue({
       id: [''],
-      subject: ['']
+      subject: [''],
     });
-    this.emailForm.get('body').setValue("");
-
+    this.emailForm.get('body').setValue('');
   }
 
   closeDialog() {

@@ -25,15 +25,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
-
 @NgModule({
-  declarations: [ContactUsComponent, ContactUsDetailComponent],
   providers: [ContactRequestTypePipe],
   imports: [
-    
-    
-   
-
     CommonModule,
     ContactUsRoutingModule,
     SharedModule,
@@ -57,6 +51,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatNativeDateModule,
     MatIconModule,
-  ]
+    ContactUsComponent,
+    ContactUsDetailComponent,
+  ],
 })
-export class ContactUsModule { }
+export class ContactUsModule {}

@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Role } from '@core/domain-classes/role';
 import { User } from '@core/domain-classes/user';
 import { UserAllowedIP } from '@core/domain-classes/user-allowed-Ip';
@@ -10,13 +17,33 @@ import { environment } from '@environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
-
+import { NgIf, NgFor } from '@angular/common';
+import { MatLabel, MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
-  styleUrls: ['./manage-user.component.scss']
+  styleUrls: ['./manage-user.component.scss'],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    MatLabel,
+    MatSelect,
+    MatSelectTrigger,
+    NgFor,
+    MatOption,
+    MatSlideToggle,
+    MatCard,
+    MatCardActions,
+    HasClaimDirective,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class ManageUserComponent extends BaseComponent implements OnInit {
   user: User;
@@ -26,62 +53,66 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
   selectedRoles: Role[] = [];
   imgSrc: string | ArrayBuffer;
   isImageUpdate: boolean = false;
-  constructor(private fb: UntypedFormBuilder,
+  constructor(
+    private fb: UntypedFormBuilder,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private userService: UserService,
     private toastrService: ToastrService,
     private commonService: CommonService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.createUserForm();
-    this.sub$.sink = this.activeRoute.data.subscribe(
-      (data: { user: User }) => {
-        if (data.user) {
-          this.isEditMode = true;
-          this.userForm.patchValue(data.user);
-          this.userForm.get('userAllowedIPs').patchValue(data.user.userAllowedIPs);
-          this.user = data.user;
-          if (this.user.profilePhoto) {
-            this.imgSrc = environment.apiUrl + this.user.profilePhoto;
-          }
-        } else {
-          this.userForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
-          this.userForm.get('confirmPassword').setValidators([Validators.required]);
+    this.sub$.sink = this.activeRoute.data.subscribe((data: { user: User }) => {
+      if (data.user) {
+        this.isEditMode = true;
+        this.userForm.patchValue(data.user);
+        this.userForm.get('userAllowedIPs').patchValue(data.user.userAllowedIPs);
+        this.user = data.user;
+        if (this.user.profilePhoto) {
+          this.imgSrc = environment.apiUrl + this.user.profilePhoto;
         }
-      });
+      } else {
+        this.userForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
+        this.userForm.get('confirmPassword').setValidators([Validators.required]);
+      }
+    });
     this.getRoles();
   }
 
   createUserForm() {
-    this.userForm = this.fb.group({
-      id: [''],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required]],
-      password: [''],
-      confirmPassword: [''],
-      address: [''],
-      isActive: [true],
-      userAllowedIPs: this.fb.array([this.newIP()])
-    }, {
-      validator: this.checkPasswords
-    });
+    this.userForm = this.fb.group(
+      {
+        id: [''],
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', [Validators.required]],
+        password: [''],
+        confirmPassword: [''],
+        address: [''],
+        isActive: [true],
+        userAllowedIPs: this.fb.array([this.newIP()]),
+      },
+      {
+        validator: this.checkPasswords,
+      },
+    );
   }
 
   get userAllowedIPs(): UntypedFormArray {
-    return this.userForm.get("userAllowedIPs") as UntypedFormArray
+    return this.userForm.get('userAllowedIPs') as UntypedFormArray;
   }
 
   newIP(): UntypedFormGroup {
     return this.fb.group({
       userId: [''],
-      ipAddress: ['']
-    })
+      ipAddress: [''],
+    });
   }
 
   addIP() {
@@ -95,7 +126,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
   checkPasswords(group: UntypedFormGroup) {
     let pass = group.get('password').value;
     let confirmPass = group.get('confirmPassword').value;
-    return pass === confirmPass ? null : { notSame: true }
+    return pass === confirmPass ? null : { notSame: true };
   }
 
   onFileSelect($event) {
@@ -114,7 +145,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpdate = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -156,8 +187,8 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
       userRoles: this.getSelectedRoles(),
       isImageUpdate: this.isImageUpdate,
       imgSrc: this.imgSrc as string,
-      userAllowedIPs: (this.userAllowedIPs.value as UserAllowedIP[]).filter(c => c.ipAddress)
-    }
+      userAllowedIPs: (this.userAllowedIPs.value as UserAllowedIP[]).filter((c) => c.ipAddress),
+    };
     return user;
   }
 
@@ -165,17 +196,17 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
     return this.selectedRoles.map((role) => {
       return {
         userId: this.userForm.get('id').value,
-        roleId: role.id
-      }
-    })
+        roleId: role.id,
+      };
+    });
   }
 
   getRoles() {
     this.sub$.sink = this.commonService.getRoles().subscribe((roles: Role[]) => {
       this.roleList = roles;
       if (this.isEditMode) {
-        const selectedRoleIds = this.user.userRoles.map(c => c.roleId);
-        this.selectedRoles = this.roleList.filter(c => selectedRoleIds.indexOf(c.id) > -1);
+        const selectedRoleIds = this.user.userRoles.map((c) => c.roleId);
+        this.selectedRoles = this.roleList.filter((c) => selectedRoleIds.indexOf(c.id) > -1);
       }
     });
   }

@@ -9,15 +9,17 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { InquiryAttachmentAddComponent } from '../inquiry-attachment-add/inquiry-attachment-add.component';
 import { InquiryAttachmentService } from './inquiry-attachment.service';
+import { NgFor } from '@angular/common';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-attachment',
   templateUrl: './inquiry-attachment.component.html',
-  styleUrls: ['./inquiry-attachment.component.scss']
+  styleUrls: ['./inquiry-attachment.component.scss'],
+  imports: [NgFor, UTCToLocalTime, TranslatePipe],
 })
 export class InquiryAttachmentComponent extends BaseComponent implements OnInit {
-
   @Input() inquiryId: string;
   inquiryAttachments: InquiryAttachment[] = [];
   constructor(
@@ -25,7 +27,7 @@ export class InquiryAttachmentComponent extends BaseComponent implements OnInit 
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
     private dialog: MatDialog,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
   ) {
     super();
   }
@@ -35,23 +37,25 @@ export class InquiryAttachmentComponent extends BaseComponent implements OnInit 
   }
 
   getInquiryAttachments() {
-    this.sub$.sink = this.inquiryAttachmentService.getInquiryAttachments(this.inquiryId)
-      .subscribe(c => {
+    this.sub$.sink = this.inquiryAttachmentService
+      .getInquiryAttachments(this.inquiryId)
+      .subscribe((c) => {
         this.inquiryAttachments = c;
       });
   }
   onDownload(inquiryAttachment: InquiryAttachment) {
-    this.sub$.sink = this.inquiryAttachmentService.downloadFile(inquiryAttachment.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, inquiryAttachment.name);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.inquiryAttachmentService.downloadFile(inquiryAttachment.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, inquiryAttachment.name);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {
@@ -66,16 +70,20 @@ export class InquiryAttachmentComponent extends BaseComponent implements OnInit 
     document.body.removeChild(a);
   }
 
-
   onDeleted(inquiryAttachment: InquiryAttachment) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.inquiryAttachmentService.deleteInquiryAttachment(inquiryAttachment.id)
-            .subscribe(c => {
+          this.sub$.sink = this.inquiryAttachmentService
+            .deleteInquiryAttachment(inquiryAttachment.id)
+            .subscribe((c) => {
               if (c) {
-                this.toastrService.success(this.translationService.getValue('INQUIRY_ATTACHMENT_DELETED'));
+                this.toastrService.success(
+                  this.translationService.getValue('INQUIRY_ATTACHMENT_DELETED'),
+                );
                 this.getInquiryAttachments();
               }
             });
@@ -85,16 +93,14 @@ export class InquiryAttachmentComponent extends BaseComponent implements OnInit 
   onAddInquiryAttachement() {
     const inquiryAttachmentDialog: InquiryAttachmentDialog = {
       inquiryId: this.inquiryId,
-      inquiryAttachment: null
+      inquiryAttachment: null,
     };
     const dialogRef = this.dialog.open(InquiryAttachmentAddComponent, {
       width: '600px',
-      data: inquiryAttachmentDialog
+      data: inquiryAttachmentDialog,
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        this.getInquiryAttachments();
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      this.getInquiryAttachments();
+    });
   }
-
 }

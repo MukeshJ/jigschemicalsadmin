@@ -10,13 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '@shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [
-    InquirySourceListComponent,
-    InquirySourceListPresentationComponent,
-    ManageInquirySourceComponent],
   imports: [
     CommonModule,
     InquirySourceRoutingModule,
@@ -24,7 +18,10 @@ import { SharedModule } from '@shared/shared.module';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SharedModule
-  ]
+    SharedModule,
+    InquirySourceListComponent,
+    InquirySourceListPresentationComponent,
+    ManageInquirySourceComponent,
+  ],
 })
-export class InquirySourceModule { }
+export class InquirySourceModule {}

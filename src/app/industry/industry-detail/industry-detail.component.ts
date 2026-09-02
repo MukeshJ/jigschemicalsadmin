@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Industry } from '@core/domain-classes/industry';
 import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
@@ -8,12 +14,25 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { IndustryService } from '../industry.service';
+import { NgIf } from '@angular/common';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-industry-detail',
   templateUrl: './industry-detail.component.html',
-  styleUrls: ['./industry-detail.component.scss']
+  styleUrls: ['./industry-detail.component.scss'],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class IndustryDetailComponent extends BaseComponent implements OnInit {
   isEditMode = false;
@@ -21,27 +40,28 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
   editorConfig = EditorConfig;
   imgSrc: any = null;
   isImageUpload: boolean = false;
-  constructor(private fb: UntypedFormBuilder,
+  constructor(
+    private fb: UntypedFormBuilder,
     private activeRoute: ActivatedRoute,
     private industryService: IndustryService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private router: Router) {
+    private router: Router,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.createIndustryForm();
-    this.sub$.sink = this.activeRoute.data.subscribe(
-      (data: { industry: Industry }) => {
-        if (data.industry) {
-          this.isEditMode = true;
-          this.industryForm.patchValue(data.industry);
-          if (data.industry.imageUrl) {
-            this.imgSrc = `${environment.apiUrl}${data.industry.imageUrl}`;
-          }
+    this.sub$.sink = this.activeRoute.data.subscribe((data: { industry: Industry }) => {
+      if (data.industry) {
+        this.isEditMode = true;
+        this.industryForm.patchValue(data.industry);
+        if (data.industry.imageUrl) {
+          this.imgSrc = `${environment.apiUrl}${data.industry.imageUrl}`;
         }
-      });
+      }
+    });
   }
 
   createIndustryForm() {
@@ -50,7 +70,7 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
       name: ['', [Validators.required]],
       shortDescription: [''],
       description: [''],
-      imageUrl: ['']
+      imageUrl: [''],
     });
   }
 
@@ -70,7 +90,7 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -81,21 +101,25 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
   onIndustryubmit() {
     if (this.industryForm.valid) {
       const industy: Industry = this.industryForm.value;
-      industy.imageData = this.imgSrc
-      industy.isImageUpload =this.isImageUpload;
+      industy.imageData = this.imgSrc;
+      industy.isImageUpload = this.isImageUpload;
       if (!this.isEditMode) {
         this.industryService.saveIndustry(industy).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('INDUSTRY_ADDED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('INDUSTRY_ADDED_SUCCESSFULLY'),
+          );
           this.router.navigate(['/industry']);
         });
       } else {
         this.industryService.updateIndustry(industy, industy.id).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('INDUSTRY_UPDATED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('INDUSTRY_UPDATED_SUCCESSFULLY'),
+          );
           this.router.navigate(['/industry']);
         });
       }
     } else {
-      this.industryForm.markAllAsTouched()
+      this.industryForm.markAllAsTouched();
     }
   }
 }

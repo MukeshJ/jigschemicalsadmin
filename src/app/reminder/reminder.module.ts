@@ -25,11 +25,6 @@ import { ReminderFrequencyPipe } from './reminder-list/reminder-frequency.pipe';
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [
-    ReminderListComponent,
-    AddReminderComponent,
-    ReminderFrequencyPipe
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -51,10 +46,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatButtonToggleModule,
     MatRadioModule,
-    MatIconModule
+    MatIconModule,
+    ReminderListComponent,
+    AddReminderComponent,
+    ReminderFrequencyPipe,
   ],
-  providers: [
-    ReminderDetailResolverService
-  ]
+  providers: [ReminderDetailResolverService],
 })
-export class ReminderModule { }
+export class ReminderModule {}

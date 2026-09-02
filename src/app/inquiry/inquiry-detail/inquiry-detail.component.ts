@@ -1,6 +1,15 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationEnums } from '@core/domain-classes/application.enum';
@@ -28,22 +37,53 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption, MatSelect, MatError } from '@angular/material/select';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { InquiryNoteComponent } from '../inquiry-note/inquiry-note.component';
+import { InquiryTaskComponent } from '../inquiry-task/inquiry-task.component';
+import { InquiryAttachmentComponent } from '../inquiry-attachment/inquiry-attachment.component';
+import { TranslatePipe } from '@ngx-translate/core';
 export function emailOrMobileValidator(): ValidatorFn {
   return (form: UntypedFormGroup): ValidationErrors | null => {
-    const email: string = form.get("email").value;
-    const mobileNo: string = form.get("mobileNo").value;
+    const email: string = form.get('email').value;
+    const mobileNo: string = form.get('mobileNo').value;
     if (email || mobileNo) {
       return null;
     }
     return { mobileoremail: true };
-  }
+  };
 }
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-detail',
   templateUrl: './inquiry-detail.component.html',
-  styleUrls: ['./inquiry-detail.component.scss']
+  styleUrls: ['./inquiry-detail.component.scss'],
+  imports: [
+    HasClaimDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatProgressSpinner,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgFor,
+    MatOption,
+    MatChipSet,
+    MatChip,
+    MatSelect,
+    MatError,
+    AngularEditorModule,
+    InquiryNoteComponent,
+    InquiryTaskComponent,
+    InquiryAttachmentComponent,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class InquiryDetailComponent extends BaseComponent implements OnInit {
   inquiryForm: UntypedFormGroup;
@@ -55,7 +95,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
   isLoading = false;
   public filterObservable$: Subject<string> = new Subject<string>();
   public filterCityObservable$: Subject<string> = new Subject<string>();
-  editorConfig= EditorConfig;
+  editorConfig = EditorConfig;
   inquiryStatuses: InquiryStatus[] = [];
   userResource: UserResource;
   users: User[] = [];
@@ -82,7 +122,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     super();
     this.userResource = new UserResource();
     this.userResource.pageSize = 10;
-    this.userResource.orderBy = 'firstName desc'
+    this.userResource.orderBy = 'firstName desc';
   }
 
   ngOnInit(): void {
@@ -92,39 +132,40 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     this.getInuiriesStatus();
     this.getInquirySource();
     this.getUsers();
-    const routeSub$ = this.route.data.subscribe(
-      (data: { inquiry: Inquiry }) => {
-        if (data.inquiry) {
-          this.inquiry = data.inquiry;
-          this.titlePage = 'Inquiry Detail';
-          this.patchInquiry();
-          this.pushValuesInquiryChemical();
-        } else {
-          this.titlePage = 'Add Inquiry';
-          if (this.inquiry) {
-            this.createInquiryForm();
-            this.inquiry = null;
-          }
+    const routeSub$ = this.route.data.subscribe((data: { inquiry: Inquiry }) => {
+      if (data.inquiry) {
+        this.inquiry = data.inquiry;
+        this.titlePage = 'Inquiry Detail';
+        this.patchInquiry();
+        this.pushValuesInquiryChemical();
+      } else {
+        this.titlePage = 'Add Inquiry';
+        if (this.inquiry) {
+          this.createInquiryForm();
+          this.inquiry = null;
         }
       }
-    );
+    });
     this.sub$.add(routeSub$);
-    this.chemicals$ = this.inquiryForm
-      .get('chemicalNameInput')
-      .valueChanges
-      .pipe(
-        debounceTime(1000),
-        tap(() => this.isLoading = true),
-        switchMap(value =>
-          this.chemicalService.getChemicalsForDropDown('all', value)
-            .pipe(tap(() => { this.isLoading = false }))
+    this.chemicals$ = this.inquiryForm.get('chemicalNameInput').valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => (this.isLoading = true)),
+      switchMap((value) =>
+        this.chemicalService.getChemicalsForDropDown('all', value).pipe(
+          tap(() => {
+            this.isLoading = false;
+          }),
         ),
-        finalize(() => { this.isLoading = false })
-      );
+      ),
+      finalize(() => {
+        this.isLoading = false;
+      }),
+    );
   }
 
   getUsers() {
-    this.sub$.sink = this.userService.getUsers(this.userResource)
+    this.sub$.sink = this.userService
+      .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
       });
@@ -134,23 +175,30 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.filterCityObservable$
       .pipe(
         debounceTime(1000),
-        tap(() => this.isLoading = true),
+        tap(() => (this.isLoading = true)),
         distinctUntilChanged(),
         switchMap((c: string) => {
           if (c) {
             var strArray = c.split(':');
-            return this.commonService.getCityByName(strArray[0], strArray[1]).pipe(tap(() => { this.isLoading = false }));
+            return this.commonService.getCityByName(strArray[0], strArray[1]).pipe(
+              tap(() => {
+                this.isLoading = false;
+              }),
+            );
           } else {
             return of(null);
           }
-        }), finalize(() => { this.isLoading = false })
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        }),
       )
       .subscribe(
         (c: City[]) => {
           this.cities = [...c];
           this.isLoading = false;
         },
-        (err) => (this.isLoading = false)
+        (err) => (this.isLoading = false),
       );
   }
 
@@ -170,36 +218,38 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
       message: this.inquiry.message,
       inquirySourceId: this.inquiry.inquirySourceId,
       assignTo: this.inquiry.assignTo,
-      inquiryStatusId: this.inquiry.inquiryStatusId
+      inquiryStatusId: this.inquiry.inquiryStatusId,
     });
     if (this.inquiry.countryName && this.inquiry.cityName) {
-      const strCountryCity =
-        this.inquiry.countryName + ':' + this.inquiry.cityName;
+      const strCountryCity = this.inquiry.countryName + ':' + this.inquiry.cityName;
       this.filterCityObservable$.next(strCountryCity);
     }
   }
 
   createInquiryForm() {
-    this.inquiryForm = this.fb.group({
-      id: [''],
-      chemicalNameInput: [''],
-      inquiryChemicals: this.fb.array([]),
-      companyName: ['', [Validators.required, Validators.maxLength(500)]],
-      contactPerson: ['', Validators.required],
-      email: ['', [ Validators.email]],
-      mobileNo: [''],
-      phoneNo: [''],
-      website: ['', [ValidateUrl]],
-      address: [''],
-      cityName: [''],
-      countryName: [''],
-      message: [''],
-      inquirySourceId: ['', [Validators.required]],
-      inquiryStatusId: [null, [Validators.required]],
-      assignTo: [null]
-    },{
-      validators: [emailOrMobileValidator()]
-    });
+    this.inquiryForm = this.fb.group(
+      {
+        id: [''],
+        chemicalNameInput: [''],
+        inquiryChemicals: this.fb.array([]),
+        companyName: ['', [Validators.required, Validators.maxLength(500)]],
+        contactPerson: ['', Validators.required],
+        email: ['', [Validators.email]],
+        mobileNo: [''],
+        phoneNo: [''],
+        website: ['', [ValidateUrl]],
+        address: [''],
+        cityName: [''],
+        countryName: [''],
+        message: [''],
+        inquirySourceId: ['', [Validators.required]],
+        inquiryStatusId: [null, [Validators.required]],
+        assignTo: [null],
+      },
+      {
+        validators: [emailOrMobileValidator()],
+      },
+    );
   }
 
   getCountry() {
@@ -209,19 +259,17 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
   }
 
   getInuiriesStatus() {
-    this.sub$.sink = this.inquiryStatusService.getAll()
-      .subscribe(c => {
-        this.inquiryStatuses = c;
-      })
+    this.sub$.sink = this.inquiryStatusService.getAll().subscribe((c) => {
+      this.inquiryStatuses = c;
+    });
   }
 
   getInquirySource() {
-    this.inquirySourceService.getAll()
-      .subscribe(c => this.sourcesOfInquiry = c);
+    this.inquirySourceService.getAll().subscribe((c) => (this.sourcesOfInquiry = c));
   }
 
   handleFilterCity(cityName: string) {
-    cityName = this.inquiryForm.get('cityName').value
+    cityName = this.inquiryForm.get('cityName').value;
     const country = this.inquiryForm.get('countryName').value;
     if (cityName && country) {
       const strCountryCity = country + ':' + cityName;
@@ -246,27 +294,39 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
 
   onInquirySubmit() {
     if (this.inquieryChemicalArray.length == 0) {
-      this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_AT_LEAST_ONE_CHEMICAL'));
+      this.toastrService.error(
+        this.translationService.getValue('PLEASE_SELECT_AT_LEAST_ONE_CHEMICAL'),
+      );
       return;
     }
     if (this.inquiryForm.valid) {
       this.isLoading = true;
       const inqObj = this.createBuildForm();
       if (this.inquiry) {
-        this.sub$.sink = this.inquiryService
-          .updateInquiry(this.inquiry.id, inqObj)
-          .subscribe((c) => {
-            this.toastrService.success(this.translationService.getValue('INQUIRY_UPDATE_SUCCESSFULLY'));
+        this.sub$.sink = this.inquiryService.updateInquiry(this.inquiry.id, inqObj).subscribe(
+          (c) => {
+            this.toastrService.success(
+              this.translationService.getValue('INQUIRY_UPDATE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/inquiry']);
-          }, () => { this.isLoading = false; });
-      } else {
-        this.sub$.sink = this.inquiryService
-          .saveInquiry(inqObj)
-          .subscribe((c) => {
+          },
+          () => {
             this.isLoading = false;
-            this.toastrService.success(this.translationService.getValue('INQUIRY_SAVE_SUCCESSFULLY'));
+          },
+        );
+      } else {
+        this.sub$.sink = this.inquiryService.saveInquiry(inqObj).subscribe(
+          (c) => {
+            this.isLoading = false;
+            this.toastrService.success(
+              this.translationService.getValue('INQUIRY_SAVE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/inquiry']);
-          }, () => { this.isLoading = false; });
+          },
+          () => {
+            this.isLoading = false;
+          },
+        );
       }
     } else {
       this.markFormGroupTouched(this.inquiryForm);
@@ -299,7 +359,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
       inquiryChemicals: this.inquiryForm.get('inquiryChemicals').value,
       inquirySourceId: this.inquiryForm.get('inquirySourceId').value,
       inquiryStatusId: this.inquiryForm.get('inquiryStatusId').value,
-      assignTo: this.inquiryForm.get('assignTo').value
+      assignTo: this.inquiryForm.get('assignTo').value,
     };
     return inquiryObj;
   }
@@ -308,7 +368,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     return this.fb.group({
       chemicalId: [''],
       name: [''],
-      casNumber: ['']
+      casNumber: [''],
     });
   }
 
@@ -316,40 +376,42 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     return this.fb.group({
       chemicalId: [chemical.chemicalId],
       name: [chemical.name],
-      casNumber: [chemical.casNumber]
+      casNumber: [chemical.casNumber],
     });
   }
 
   pushValuesInquiryChemical() {
     if (this.inquiry.inquiryChemicals && this.inquiry.inquiryChemicals.length > 0) {
-      this.inquiry.inquiryChemicals.map(chemical => {
+      this.inquiry.inquiryChemicals.map((chemical) => {
         this.inquieryChemicalArray.push(this.editInquiryChemical(chemical));
-      })
+      });
     }
   }
 
   selectChemical = (chemical: Chemical) => {
-    this.inquieryChemicalArray.push(this.editInquiryChemical({
-      chemicalId: chemical.id,
-      inquiryId: this.inquiry ? this.inquiry.id : '',
-      name: chemical.name,
-      casNumber: chemical.casNumber
-    }));
+    this.inquieryChemicalArray.push(
+      this.editInquiryChemical({
+        chemicalId: chemical.id,
+        inquiryId: this.inquiry ? this.inquiry.id : '',
+        name: chemical.name,
+        casNumber: chemical.casNumber,
+      }),
+    );
     this.inquiryForm.get('chemicalNameInput').setValue(null);
   };
 
-  onAddReminder(){
+  onAddReminder() {
     const moduleReference: ModuleReference = {
       application: ApplicationEnums.Inquiry,
-      referenceId: this.inquiry.id
+      referenceId: this.inquiry.id,
     };
     this.dialog.open(AddReminderSchedulerComponent, {
       minWidth: '800px',
-      data: Object.assign({}, moduleReference)
+      data: Object.assign({}, moduleReference),
     });
   }
 
   removeChemical(index: number) {
-    this.inquieryChemicalArray.removeAt(index)
+    this.inquieryChemicalArray.removeAt(index);
   }
 }

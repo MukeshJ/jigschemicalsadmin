@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NLog } from '@core/domain-classes/n-log';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-n-log-detail',
   templateUrl: './n-log-detail.component.html',
-  styleUrls: ['./n-log-detail.component.scss']
+  styleUrls: ['./n-log-detail.component.scss'],
+  imports: [RouterLink, NgIf, UTCToLocalTime, TranslatePipe],
 })
 export class NLogDetailComponent extends BaseComponent implements OnInit {
   log: NLog;
@@ -16,11 +19,10 @@ export class NLogDetailComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sub$.sink = this.activeRoute.data.subscribe(
-      (data: { log: NLog }) => {
-        if (data.log) {
-          this.log = data.log;
-        }
-      });
+    this.sub$.sink = this.activeRoute.data.subscribe((data: { log: NLog }) => {
+      if (data.log) {
+        this.log = data.log;
+      }
+    });
   }
 }

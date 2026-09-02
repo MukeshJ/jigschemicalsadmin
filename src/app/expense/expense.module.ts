@@ -19,13 +19,7 @@ import { ExpenseResolverService } from './manage-expense/expense-resolver.servic
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
-
-
 @NgModule({
-  declarations: [
-    ExpenseListComponent,
-    ManageExpenseComponent
-  ],
   imports: [
     CommonModule,
     ExpenseRoutingModule,
@@ -43,10 +37,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    ExpenseListComponent,
+    ManageExpenseComponent,
   ],
-  providers: [
-    ExpenseResolverService
-  ]
+  providers: [ExpenseResolverService],
 })
-export class ExpenseModule { }
+export class ExpenseModule {}

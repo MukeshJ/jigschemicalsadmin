@@ -1,6 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -20,16 +25,70 @@ import { BaseComponent } from 'src/app/base.component';
 import { SalesPaymentReportDataSource } from './sales-payment-report.datasource';
 import { SalesPaymentReportService } from './sales-payment-report.service';
 import * as XLSX from 'xlsx';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { PaymentMethodPipe as PaymentMethodPipe_1 } from '../../shared/pipes/paymentMethod.pipe';
+import { CustomCurrencyPipe as CustomCurrencyPipe_1 } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime as UTCToLocalTime_1 } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-payment-report',
   templateUrl: './sales-payment-report.component.html',
   styleUrls: ['./sales-payment-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, PaymentMethodPipe]
+  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, PaymentMethodPipe],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    PaymentMethodPipe_1,
+    CustomCurrencyPipe_1,
+    UTCToLocalTime_1,
+    TranslatePipe,
+  ],
 })
 export class SalesPaymentReportComponent extends BaseComponent implements OnInit {
-
   dataSource: SalesPaymentReportDataSource;
   isData: boolean = false;
   isDeleted = false;
@@ -49,14 +108,20 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
     private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
-    private paymentMethodPipe: PaymentMethodPipe) {
+    private paymentMethodPipe: PaymentMethodPipe,
+  ) {
     super();
     this.salesOrderResource = new SalesOrderResourceParameter();
   }
 
-  displayedColumns: string[] = ['paymentDate', 'orderNumber', 'referenceNumber', 'amount', 'paymentMethod'];
-  footerToDisplayed = ['footer']
-
+  displayedColumns: string[] = [
+    'paymentDate',
+    'orderNumber',
+    'referenceNumber',
+    'amount',
+    'paymentMethod',
+  ];
+  footerToDisplayed = ['footer'];
 
   ngOnInit(): void {
     this.createSearchFormGroup();
@@ -66,13 +131,16 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
   }
 
   createSearchFormGroup() {
-    this.searchForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
-      filterChemicalValue: [''],
-    }, {
-      validators: dateCompare()
-    });
+    this.searchForm = this.fb.group(
+      {
+        fromDate: [''],
+        toDate: [''],
+        filterChemicalValue: [''],
+      },
+      {
+        validators: dateCompare(),
+      },
+    );
   }
 
   onSearch() {
@@ -91,7 +159,7 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -100,52 +168,62 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
           this.salesOrderResource.pageSize = this.paginator.pageSize;
           this.salesOrderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.salesOrderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.salesOrderResource.pageSize = c.pageSize;
-          this.salesOrderResource.skip = c.skip;
-          this.salesOrderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.salesOrderResource.pageSize = c.pageSize;
+        this.salesOrderResource.skip = c.skip;
+        this.salesOrderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   onDownloadReport() {
-    this.salesPaymentReportService.getAllSalesOrderPaymentReportExcel(this.salesOrderResource)
+    this.salesPaymentReportService
+      .getAllSalesOrderPaymentReportExcel(this.salesOrderResource)
       .subscribe((c: HttpResponse<SalesOrderPayment[]>) => {
         const salesOrderPayments = [...c.body];
-        let heading = [[
-          this.translationService.getValue('PAYMENT_DATE'),
-          this.translationService.getValue('SO_NUMBER'),
-          this.translationService.getValue('REFERENCE_NUMBER'),
-          this.translationService.getValue('AMOUNT'),
-          this.translationService.getValue('PAID_BY')
-        ]];
+        let heading = [
+          [
+            this.translationService.getValue('PAYMENT_DATE'),
+            this.translationService.getValue('SO_NUMBER'),
+            this.translationService.getValue('REFERENCE_NUMBER'),
+            this.translationService.getValue('AMOUNT'),
+            this.translationService.getValue('PAID_BY'),
+          ],
+        ];
 
         let saleOrderPaymentReport = [];
         salesOrderPayments.forEach((salesOrderPayment: SalesOrderPayment) => {
           saleOrderPaymentReport.push({
-            'PAYMENT_DATE': this.utcToLocalTime.transform(salesOrderPayment.paymentDate, 'shortDate'),
-            'SO_NUMBER': salesOrderPayment.orderNumber,
-            'REFERENCE_NUMBER': salesOrderPayment.referenceNumber,
-            'AMOUNT': this.customCurrencyPipe.transform(salesOrderPayment.amount),
-            'PAID_BY': this.paymentMethodPipe.transform(salesOrderPayment.paymentMethod)
+            PAYMENT_DATE: this.utcToLocalTime.transform(salesOrderPayment.paymentDate, 'shortDate'),
+            SO_NUMBER: salesOrderPayment.orderNumber,
+            REFERENCE_NUMBER: salesOrderPayment.referenceNumber,
+            AMOUNT: this.customCurrencyPipe.transform(salesOrderPayment.amount),
+            PAID_BY: this.paymentMethodPipe.transform(salesOrderPayment.paymentMethod),
           });
         });
 
         let workBook = XLSX.utils.book_new();
         XLSX.utils.sheet_add_aoa(workBook, heading);
-        let workSheet = XLSX.utils.sheet_add_json(workBook, saleOrderPaymentReport, { origin: "A2", skipHeader: true });
-        XLSX.utils.book_append_sheet(workBook, workSheet, this.translationService.getValue('SALES_PAYMENT_ORDER_REPORT'));
-        XLSX.writeFile(workBook, this.translationService.getValue('SALES_PAYMENT_ORDER_REPORT') + ".xlsx");
+        let workSheet = XLSX.utils.sheet_add_json(workBook, saleOrderPaymentReport, {
+          origin: 'A2',
+          skipHeader: true,
+        });
+        XLSX.utils.book_append_sheet(
+          workBook,
+          workSheet,
+          this.translationService.getValue('SALES_PAYMENT_ORDER_REPORT'),
+        );
+        XLSX.writeFile(
+          workBook,
+          this.translationService.getValue('SALES_PAYMENT_ORDER_REPORT') + '.xlsx',
+        );
       });
   }
-
-
 }

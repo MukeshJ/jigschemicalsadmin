@@ -5,15 +5,43 @@ import { InquirySource } from '@core/domain-classes/inquiry-source';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageInquirySourceComponent } from '../manage-inquiry-source/manage-inquiry-source.component';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-source-list-presentation',
   templateUrl: './inquiry-source-list-presentation.component.html',
-  styleUrls: ['./inquiry-source-list-presentation.component.scss']
+  styleUrls: ['./inquiry-source-list-presentation.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    TranslatePipe,
+  ],
 })
 export class InquirySourceListPresentationComponent extends BaseComponent implements OnInit {
-
   @Input() inquirySources: InquirySource[];
   @Input() loading: boolean = false;
   @Output() deleteInquirySourceHandler: EventEmitter<string> = new EventEmitter<string>();
@@ -21,18 +49,18 @@ export class InquirySourceListPresentationComponent extends BaseComponent implem
   constructor(
     private dialog: MatDialog,
     private commonDialogService: CommonDialogService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   deleteInquirySource(inquirySource: InquirySource): void {
     const areU = this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE');
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${areU} :: ${inquirySource.name}`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(`${areU} :: ${inquirySource.name}`)
+      .subscribe((isTrue) => {
         if (isTrue) {
           this.deleteInquirySourceHandler.emit(inquirySource.id);
         }
@@ -42,7 +70,7 @@ export class InquirySourceListPresentationComponent extends BaseComponent implem
   manageInquirySource(inquirySource: InquirySource): void {
     this.dialog.open(ManageInquirySourceComponent, {
       width: '350px',
-      data: Object.assign({}, inquirySource)
+      data: Object.assign({}, inquirySource),
     });
   }
 }

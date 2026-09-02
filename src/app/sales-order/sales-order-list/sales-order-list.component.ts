@@ -1,10 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Customer } from '@core/domain-classes/customer';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -21,9 +21,39 @@ import { AddSalesOrderPaymentComponent } from '../add-sales-order-payment/add-sa
 import { SalesOrderService } from '../sales-order.service';
 import { ViewSalesOrderPaymentComponent } from '../view-sales-order-payment/view-sales-order-payment.component';
 import { SalesOrderDataSource } from './sales-order-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { SalesOrderItemsComponent } from './sales-order-items/sales-order-items.component';
+import { SalesOrderInvoiceComponent } from '../../shared/sales-order-invoice/sales-order-invoice.component';
+import { PaymentStatusPipe } from '../../shared/pipes/purchase-order-paymentStatus.pipe';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-order-list',
   templateUrl: './sales-order-list.component.html',
   styleUrls: ['./sales-order-list.component.scss'],
@@ -34,12 +64,79 @@ import { SalesOrderDataSource } from './sales-order-datasource';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    NgClass,
+    FormsModule,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatAutocomplete,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    SalesOrderItemsComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    SalesOrderInvoiceComponent,
+    AsyncPipe,
+    PaymentStatusPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class SalesOrderListComponent extends BaseComponent implements OnInit {
   dataSource: SalesOrderDataSource;
   salesOrders: SalesOrder[] = [];
-  displayedColumns: string[] = ['action', 'soCreatedDate', 'orderNumber', 'deliveryDate', 'customerName', 'totalDiscount', 'totalTax', 'totalAmount', 'totalPaidAmount', 'paymentStatus','status'];
-  filterColumns: string[] = ['action-search', 'soCreatedDate-search', 'orderNumber-search', 'deliverDate-search', 'customer-search', 'totalAmount-search', 'totalDiscount-search', 'totalTax-search', 'totalPaidAmount-search', 'paymentStatus-search', 'status-search'];
+  displayedColumns: string[] = [
+    'action',
+    'soCreatedDate',
+    'orderNumber',
+    'deliveryDate',
+    'customerName',
+    'totalDiscount',
+    'totalTax',
+    'totalAmount',
+    'totalPaidAmount',
+    'paymentStatus',
+    'status',
+  ];
+  filterColumns: string[] = [
+    'action-search',
+    'soCreatedDate-search',
+    'orderNumber-search',
+    'deliverDate-search',
+    'customer-search',
+    'totalAmount-search',
+    'totalDiscount-search',
+    'totalTax-search',
+    'totalPaidAmount-search',
+    'paymentStatus-search',
+    'status-search',
+  ];
   footerToDisplayed: string[] = ['footer'];
   isLoadingResults = true;
   salesOrderResource: SalesOrderResourceParameter;
@@ -85,11 +182,12 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
     private router: Router,
     private translationService: TranslationService,
     private dialog: MatDialog,
-    private clonerService: ClonerService) {
+    private clonerService: ClonerService,
+  ) {
     super();
     this.salesOrderResource = new SalesOrderResourceParameter();
     this.salesOrderResource.pageSize = 50;
-    this.salesOrderResource.orderBy = 'soCreatedDate asc'
+    this.salesOrderResource.orderBy = 'soCreatedDate asc';
   }
 
   ngOnInit(): void {
@@ -98,9 +196,7 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.salesOrderResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.salesOrderResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -121,14 +217,14 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
     this.customerList$ = this.customerNameControl.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
-      switchMap(c => {
+      switchMap((c) => {
         return this.customerService.getCustomersForDropDown('customerName', c);
-      })
+      }),
     );
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -137,20 +233,19 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
           this.salesOrderResource.pageSize = this.paginator.pageSize;
           this.salesOrderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.salesOrderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.salesOrderResource.pageSize = c.pageSize;
-          this.salesOrderResource.skip = c.skip;
-          this.salesOrderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.salesOrderResource.pageSize = c.pageSize;
+        this.salesOrderResource.skip = c.skip;
+        this.salesOrderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   toggleRow(element: SalesOrder) {
@@ -159,11 +254,12 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
   }
 
   approveSalesOrder(salesOrder: SalesOrder) {
-    this.commonDialogService.deleteConformationDialog('Are you Sure you want to Approve?')
+    this.commonDialogService
+      .deleteConformationDialog('Are you Sure you want to Approve?')
       .subscribe((isYes) => {
         if (isYes) {
           this.salesOrderService.approveSalesOrder(salesOrder.id).subscribe(() => {
-            this.toastrService.success('Sales Order Updated Successfully.')
+            this.toastrService.success('Sales Order Updated Successfully.');
             this.dataSource.loadData(this.salesOrderResource);
           });
         }
@@ -171,11 +267,14 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
   }
 
   deleteSalesOrder(salesOrder: SalesOrder) {
-    this.commonDialogService.deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE'))
+    this.commonDialogService
+      .deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE'))
       .subscribe((isYes) => {
         if (isYes) {
           this.salesOrderService.deleteSalesOrder(salesOrder.id).subscribe(() => {
-            this.toastrService.success(this.translationService.getValue('SALES_ORDER_DELETED_SUCCESSFULLY'))
+            this.toastrService.success(
+              this.translationService.getValue('SALES_ORDER_DELETED_SUCCESSFULLY'),
+            );
             this.dataSource.loadData(this.salesOrderResource);
           });
         }
@@ -185,27 +284,27 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
   addPayment(salesOrder: SalesOrder): void {
     const dialogRef = this.dialog.open(AddSalesOrderPaymentComponent, {
       width: '100vh',
-      data: Object.assign({}, salesOrder)
+      data: Object.assign({}, salesOrder),
     });
     dialogRef.afterClosed().subscribe((isAdded: boolean) => {
       if (isAdded) {
         this.dataSource.loadData(this.salesOrderResource);
       }
-    })
+    });
   }
 
   viewPayment(salesOrder: SalesOrder) {
     const dialogRef = this.dialog.open(ViewSalesOrderPaymentComponent, {
-      data: Object.assign({}, salesOrder)
+      data: Object.assign({}, salesOrder),
     });
     dialogRef.afterClosed().subscribe((isAdded: boolean) => {
       if (isAdded) {
         this.dataSource.loadData(this.salesOrderResource);
       }
-    })
+    });
   }
-  
-  onSaleOrderReturn(saleOrder: SalesOrder){
+
+  onSaleOrderReturn(saleOrder: SalesOrder) {
     this.router.navigate(['sales-order-return', saleOrder.id]);
   }
 
@@ -213,7 +312,7 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
     let soForInvoice = this.clonerService.deepClone<SalesOrder>(so);
     const getCustomerRequest = this.customerService.getCustomer(so.customerId);
     const getSalesOrderItems = this.salesOrderService.getSalesOrderItems(so.id);
-    forkJoin({ getCustomerRequest, getSalesOrderItems }).subscribe(response => {
+    forkJoin({ getCustomerRequest, getSalesOrderItems }).subscribe((response) => {
       soForInvoice.customer = response.getCustomerRequest;
       soForInvoice.salesOrderItems = response.getSalesOrderItems;
       this.salesOrderForInvoice = soForInvoice;

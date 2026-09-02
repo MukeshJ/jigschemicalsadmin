@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Customer } from '@core/domain-classes/customer';
@@ -11,15 +17,30 @@ import { Observable } from 'rxjs';
 import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { MatOption } from '@angular/material/select';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-add-chemical-customer',
   templateUrl: './add-chemical-customer.component.html',
-  styleUrls: ['./add-chemical-customer.component.scss']
+  styleUrls: ['./add-chemical-customer.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatProgressSpinner,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class AddChemicalCustomerComponent extends BaseComponent implements OnInit {
-
   customerChemicalForm: UntypedFormGroup;
   isLoading = false;
   skip = 0;
@@ -34,7 +55,7 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
     private customerChemicalService: CustomerChemicalService,
     @Inject(MAT_DIALOG_DATA) public data: Chemical,
     private translationService: TranslationService,
-    public dialogRef: MatDialogRef<AddChemicalCustomerComponent>
+    public dialogRef: MatDialogRef<AddChemicalCustomerComponent>,
   ) {
     super();
     this.customerResource = new CustomerResourceParameter();
@@ -47,25 +68,27 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
   }
 
   customerNameChangeEvent() {
-    this.customers$ = this.customerChemicalForm
-      .get('customerName')
-      .valueChanges.pipe(
-        debounceTime(1000),
-        tap(() => this.isLoading = true),
-        switchMap(value => {
-          this.customerResource.searchQuery = value
-          return this.customerChemicalService.searchCustomer(this.customerResource)
-            .pipe(tap(() => { this.isLoading = false }))
-        }
-        ),
-        finalize(() => { this.isLoading = false })
-      );
+    this.customers$ = this.customerChemicalForm.get('customerName').valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => (this.isLoading = true)),
+      switchMap((value) => {
+        this.customerResource.searchQuery = value;
+        return this.customerChemicalService.searchCustomer(this.customerResource).pipe(
+          tap(() => {
+            this.isLoading = false;
+          }),
+        );
+      }),
+      finalize(() => {
+        this.isLoading = false;
+      }),
+    );
   }
 
   createCustomerChemicalForm() {
     this.customerChemicalForm = this.fb.group({
       chemicalId: [this.data.id, [Validators.required]],
-      customerName: ['', [Validators.required]]
+      customerName: ['', [Validators.required]],
     });
   }
 
@@ -73,30 +96,39 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
     this.currentCustomer = { ...customer };
   }
 
-
   saveCustomerChemicals() {
     if (this.customerChemicalForm.valid) {
-      if (this.currentCustomer.customerName != this.customerChemicalForm.get('customerName').value) {
+      if (
+        this.currentCustomer.customerName != this.customerChemicalForm.get('customerName').value
+      ) {
         this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CUSTOMER'));
         return;
       }
       const chemicalSupplier: CustomerChemical = {
         chemicalId: this.customerChemicalForm.get('chemicalId').value,
-        customerId: this.currentCustomer.id
+        customerId: this.currentCustomer.id,
       };
       this.isLoading = true;
-      this.sub$.sink = this.customerChemicalService.addCustomerByChemical(chemicalSupplier)
-        .subscribe(c => {
-          this.isLoading = false;
-          if (!c) {
-            this.toastrService.error(`${this.translationService.getValue('CUSTOMER_ALREADY_ADDED_FOR')} ${this.data.name}`);
-          } else {
-            this.toastrService.success(`${this.translationService.getValue('CUSTOMER_ADDED_FOR')} ${this.data.name}`);
-            this.dialogRef.close({ flag: true });
-          }
-        }, () => {
-          this.isLoading = false;
-        });
+      this.sub$.sink = this.customerChemicalService
+        .addCustomerByChemical(chemicalSupplier)
+        .subscribe(
+          (c) => {
+            this.isLoading = false;
+            if (!c) {
+              this.toastrService.error(
+                `${this.translationService.getValue('CUSTOMER_ALREADY_ADDED_FOR')} ${this.data.name}`,
+              );
+            } else {
+              this.toastrService.success(
+                `${this.translationService.getValue('CUSTOMER_ADDED_FOR')} ${this.data.name}`,
+              );
+              this.dialogRef.close({ flag: true });
+            }
+          },
+          () => {
+            this.isLoading = false;
+          },
+        );
     } else {
       this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CUSTOMER'));
     }
@@ -105,6 +137,4 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
   closeDialog() {
     this.dialogRef.close({ flag: false });
   }
-
-
 }

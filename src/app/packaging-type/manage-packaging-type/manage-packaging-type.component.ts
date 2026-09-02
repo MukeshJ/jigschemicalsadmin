@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-packaging-type',
   templateUrl: './manage-packaging-type.component.html',
-  styleUrls: ['./manage-packaging-type.component.scss']
+  styleUrls: ['./manage-packaging-type.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManagePackagingTypeComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManagePackagingTypeComponent extends BaseComponent implements OnIni
     private packagingTypeService: PackagingTypeService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class ManagePackagingTypeComponent extends BaseComponent implements OnIni
   createForm() {
     this.packagingTypeForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -53,12 +62,16 @@ export class ManagePackagingTypeComponent extends BaseComponent implements OnIni
 
     if (this.data.id) {
       this.packagingTypeService.update(packagingType).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('PACKAGING_TYPE_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('PACKAGING_TYPE_UPDATED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     } else {
       this.packagingTypeService.add(packagingType).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('PACKAGING_TYPE_SAVED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('PACKAGING_TYPE_SAVED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     }

@@ -14,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GalleryCategoryPipe } from '@shared/pipes/gallery-category.pipe';
 
 @NgModule({
-  declarations: [GalleryDetailComponent, GalleryListComponent, GalleryCategoryPipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,7 +25,10 @@ import { GalleryCategoryPipe } from '@shared/pipes/gallery-category.pipe';
     MatProgressSpinnerModule,
     MatCardModule,
     MatSelectModule,
-    MatSortModule
-  ]
+    MatSortModule,
+    GalleryDetailComponent,
+    GalleryListComponent,
+    GalleryCategoryPipe,
+  ],
 })
-export class GalleryModule { }
+export class GalleryModule {}

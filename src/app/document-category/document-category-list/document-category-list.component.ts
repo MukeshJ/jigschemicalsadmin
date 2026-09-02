@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from '../../base.component';
+import { DocumentCategoryListPresentationComponent } from '../document-category-list-presentation/document-category-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-document-category-list',
   templateUrl: './document-category-list.component.html',
-  styleUrls: ['./document-category-list.component.scss']
+  styleUrls: ['./document-category-list.component.scss'],
+  imports: [DocumentCategoryListPresentationComponent, AsyncPipe],
 })
 export class DocumentCategoryListComponent extends BaseComponent implements OnInit {
   categories$: Observable<DocumentCategory[]>;
@@ -19,19 +21,19 @@ export class DocumentCategoryListComponent extends BaseComponent implements OnIn
   constructor(
     private categoryService: DocumentCategoryService,
     private toastrService: ToastrService,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-    this.loading$ = this.categoryService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getCategories();
-          }
-        })
-      )
-    this.categories$ = this.categoryService.entities$
+    this.loading$ = this.categoryService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getCategories();
+        }
+      }),
+    );
+    this.categories$ = this.categoryService.entities$;
   }
 
   getCategories(): void {

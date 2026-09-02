@@ -5,15 +5,43 @@ import { Unit } from '@core/domain-classes/unit';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageUnitComponent } from '../manage-unit/manage-unit.component';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-unit-list-presentation',
   templateUrl: './unit-list-presentation.component.html',
-  styleUrls: ['./unit-list-presentation.component.scss']
+  styleUrls: ['./unit-list-presentation.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    TranslatePipe,
+  ],
 })
 export class UnitListPresentationComponent extends BaseComponent implements OnInit {
-
   @Input() units: Unit[];
   @Input() loading: boolean = false;
   @Output() deleteUnitHandler: EventEmitter<string> = new EventEmitter<string>();
@@ -21,18 +49,18 @@ export class UnitListPresentationComponent extends BaseComponent implements OnIn
   constructor(
     private dialog: MatDialog,
     private commonDialogService: CommonDialogService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   deleteUnit(unit: Unit): void {
     const areU = this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE');
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${areU} :: ${unit.name}`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(`${areU} :: ${unit.name}`)
+      .subscribe((isTrue) => {
         if (isTrue) {
           this.deleteUnitHandler.emit(unit.id);
         }
@@ -42,8 +70,7 @@ export class UnitListPresentationComponent extends BaseComponent implements OnIn
   manageUnit(unit: Unit): void {
     this.dialog.open(ManageUnitComponent, {
       width: '350px',
-      data: Object.assign({}, unit)
+      data: Object.assign({}, unit),
     });
   }
-
 }

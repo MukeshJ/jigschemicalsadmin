@@ -12,10 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NLogDetailComponent } from './n-log-detail/n-log-detail.component';
 import { LogDetailResolverService } from './log-detail-resolver';
 
-
-
 @NgModule({
-  declarations: [NLogListComponent, NLogDetailComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -25,8 +22,10 @@ import { LogDetailResolverService } from './log-detail-resolver';
     MatPaginatorModule,
     MatInputModule,
     MatSelectModule,
-    NLogRoutingModule
+    NLogRoutingModule,
+    NLogListComponent,
+    NLogDetailComponent,
   ],
-  providers: [LogDetailResolverService]
+  providers: [LogDetailResolverService],
 })
-export class NLogModule { }
+export class NLogModule {}

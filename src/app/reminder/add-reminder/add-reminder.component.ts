@@ -1,5 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ReminderFrequency } from '@core/domain-classes/reminder-frequency';
 import { User } from '@core/domain-classes/user';
 import { ReminderService } from '../reminder.service';
@@ -10,15 +17,37 @@ import { Reminder } from '@core/domain-classes/reminder';
 import { Frequency } from '@core/domain-classes/frequency.enum';
 import { DayOfWeek } from '@core/domain-classes/dayOfWeek.enum';
 import { Quarter } from '@core/domain-classes/quarter.enum';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { TranslationService } from '@core/services/translation.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-add-reminder',
   templateUrl: './add-reminder.component.html',
-  styleUrls: ['./add-reminder.component.scss']
+  styleUrls: ['./add-reminder.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatCheckbox,
+    MatSelect,
+    MatSelectTrigger,
+    NgFor,
+    MatOption,
+    MatRadioGroup,
+    MatRadioButton,
+    MatDatepickerInput,
+    MatDatepicker,
+    RouterLink,
+    MatProgressSpinner,
+    TranslatePipe,
+  ],
 })
 export class AddReminderComponent extends BaseComponent implements OnInit {
   reminderFrequencies: ReminderFrequency[] = [];
@@ -29,67 +58,86 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
   reminder: Reminder;
   isLoading = false;
 
-  dayOfWeek = [{
-    id: 0,
-    name: 'Sunday'
-  }, {
-    id: 1,
-    name: 'Monday'
-  }, {
-    id: 2,
-    name: 'Tuesday'
-  }, {
-    id: 3,
-    name: 'Wednesday'
-  }, {
-    id: 4,
-    name: 'Thursday'
-  }, {
-    id: 5,
-    name: 'Friday'
-  }, {
-    id: 6,
-    name: 'Saturday'
-  }];
+  dayOfWeek = [
+    {
+      id: 0,
+      name: 'Sunday',
+    },
+    {
+      id: 1,
+      name: 'Monday',
+    },
+    {
+      id: 2,
+      name: 'Tuesday',
+    },
+    {
+      id: 3,
+      name: 'Wednesday',
+    },
+    {
+      id: 4,
+      name: 'Thursday',
+    },
+    {
+      id: 5,
+      name: 'Friday',
+    },
+    {
+      id: 6,
+      name: 'Saturday',
+    },
+  ];
 
   months = [
     {
       id: 1,
-      name: 'January'
-    }, {
+      name: 'January',
+    },
+    {
       id: 2,
-      name: 'February'
-    }, {
+      name: 'February',
+    },
+    {
       id: 3,
-      name: 'March'
-    }, {
+      name: 'March',
+    },
+    {
       id: 4,
-      name: 'April'
-    }, {
+      name: 'April',
+    },
+    {
       id: 5,
-      name: 'May'
-    }, {
+      name: 'May',
+    },
+    {
       id: 6,
-      name: 'June'
-    }, {
+      name: 'June',
+    },
+    {
       id: 7,
-      name: 'July'
-    }, {
+      name: 'July',
+    },
+    {
       id: 8,
-      name: 'August'
-    }, {
+      name: 'August',
+    },
+    {
       id: 9,
-      name: 'September'
-    }, {
+      name: 'September',
+    },
+    {
       id: 10,
-      name: 'October'
-    }, {
+      name: 'October',
+    },
+    {
       id: 11,
-      name: 'November'
-    }, {
+      name: 'November',
+    },
+    {
       id: 12,
-      name: 'December'
-    }
+      name: 'December',
+    },
   ];
   days: number[] = [];
 
@@ -112,7 +160,8 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private route: Router,
     private activatedRoute: ActivatedRoute,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -122,25 +171,24 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     }
     this.getReminderFrequency();
     this.createReminderForm();
-    this.sub$.sink = this.activatedRoute.data.subscribe(
-      (data: { reminder: Reminder }) => {
-        if (data.reminder) {
-          this.reminder = { ...data.reminder };
-          this.reminderForm.patchValue(this.reminder);
-          this.onFrequencyChange();
-          this.reminderForm.patchValue(this.reminder);
-          if (this.reminderForm.get('isRepeated').value) {
-            this.reminderForm.get('frequency').setValidators([Validators.required]);
-          }
+    this.sub$.sink = this.activatedRoute.data.subscribe((data: { reminder: Reminder }) => {
+      if (data.reminder) {
+        this.reminder = { ...data.reminder };
+        this.reminderForm.patchValue(this.reminder);
+        this.onFrequencyChange();
+        this.reminderForm.patchValue(this.reminder);
+        if (this.reminderForm.get('isRepeated').value) {
+          this.reminderForm.get('frequency').setValidators([Validators.required]);
         }
       }
-    );
+    });
     this.getUsers();
   }
 
   getReminderFrequency() {
-    this.sub$.sink = this.commonService.getReminderFrequency()
-      .subscribe(f => this.reminderFrequencies = [...f]);
+    this.sub$.sink = this.commonService
+      .getReminderFrequency()
+      .subscribe((f) => (this.reminderFrequencies = [...f]));
   }
 
   createReminderForm() {
@@ -154,7 +202,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       isEmailNotification: [false],
       startDate: [currentDate, [Validators.required]],
       endDate: [null],
-      dayOfWeek: [2]
+      dayOfWeek: [2],
     });
   }
 
@@ -172,51 +220,58 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       return;
     }
     let reminder: Reminder = this.reminderForm.value;
-    reminder.reminderUsers = this.selectedUsers.map(u => {
+    reminder.reminderUsers = this.selectedUsers.map((u) => {
       return {
         reminderId: reminder.id,
-        userId: u.id
-      }
+        userId: u.id,
+      };
     });
     if (reminder.isRepeated) {
-      reminder.frequencyId = "6";
+      reminder.frequencyId = '6';
     }
-
-
 
     if (!this.reminder) {
       this.isLoading = true;
-      this.sub$.sink = this.reminderService.addReminder(reminder).subscribe(d => {
-        this.toastrService.success(this.translationService.getValue('REMINDER_CREATED_SUCCESSFULLY'));
-        this.route.navigate(['/reminders']);
-        this.isLoading = false;
-      }, () => this.isLoading = false);
-
+      this.sub$.sink = this.reminderService.addReminder(reminder).subscribe(
+        (d) => {
+          this.toastrService.success(
+            this.translationService.getValue('REMINDER_CREATED_SUCCESSFULLY'),
+          );
+          this.route.navigate(['/reminders']);
+          this.isLoading = false;
+        },
+        () => (this.isLoading = false),
+      );
     } else {
       if (reminder.dailyReminders) {
-        reminder.dailyReminders = reminder.dailyReminders.map(c => {
+        reminder.dailyReminders = reminder.dailyReminders.map((c) => {
           c.reminderId = this.reminder.id;
           return c;
         });
       }
       if (reminder.quarterlyReminders) {
-        reminder.quarterlyReminders = reminder.quarterlyReminders.map(c => {
+        reminder.quarterlyReminders = reminder.quarterlyReminders.map((c) => {
           c.reminderId = this.reminder.id;
           return c;
         });
       }
       if (reminder.halfYearlyReminders) {
-        reminder.halfYearlyReminders = reminder.halfYearlyReminders.map(c => {
+        reminder.halfYearlyReminders = reminder.halfYearlyReminders.map((c) => {
           c.reminderId = this.reminder.id;
           return c;
         });
       }
       this.isLoading = true;
-      this.sub$.sink = this.reminderService.updateReminder(reminder).subscribe(d => {
-        this.toastrService.success(this.translationService.getValue('REMINDER_UPDATED_SUCCESSFULLY'));
-        this.route.navigate(['/reminders']);
-        this.isLoading = false;
-      }, () => this.isLoading = false);
+      this.sub$.sink = this.reminderService.updateReminder(reminder).subscribe(
+        (d) => {
+          this.toastrService.success(
+            this.translationService.getValue('REMINDER_UPDATED_SUCCESSFULLY'),
+          );
+          this.route.navigate(['/reminders']);
+          this.isLoading = false;
+        },
+        () => (this.isLoading = false),
+      );
     }
   }
 
@@ -224,8 +279,8 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.commonService.getAllUsers().subscribe((u: User[]) => {
       this.users = u;
       if (this.reminder) {
-        const reminderUsers = this.reminder.reminderUsers.map(c => c.userId);
-        this.selectedUsers = this.users.filter(c => reminderUsers.indexOf(c.id) >= 0);
+        const reminderUsers = this.reminder.reminderUsers.map((c) => c.userId);
+        this.selectedUsers = this.users.filter((c) => reminderUsers.indexOf(c.id) >= 0);
       }
     });
   }
@@ -243,8 +298,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       this.removeQuarterlyReminders();
       this.removeHalfYearlyReminders();
       this.reminderForm.get('dayOfWeek').setValue(2);
-    }
-    else if (frequency == Frequency.Quarterly.toString()) {
+    } else if (frequency == Frequency.Quarterly.toString()) {
       this.removeDailReminders();
       this.removeHalfYearlyReminders();
       this.addQuarterlyReminders();
@@ -279,14 +333,22 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
   addQuarterlyReminders() {
     if (!this.reminderForm.contains('quarterlyReminders')) {
       var formArray = this.fb.array([]);
-      var firstQuaterMonths = this.months.filter(c => [1, 2, 3].indexOf(c.id) >= 0);
-      var secondQuaterMonths = this.months.filter(c => [4, 5, 6].indexOf(c.id) >= 0);
-      var thirdQuaterMonths = this.months.filter(c => [7, 8, 9].indexOf(c.id) >= 0);
-      var forthQuaterMonths = this.months.filter(c => [10, 11, 12].indexOf(c.id) >= 0);
-      formArray.push(this.createQuarterlyReminderFormGroup(Quarter.Quarter1, "Jan - Mar", firstQuaterMonths));
-      formArray.push(this.createQuarterlyReminderFormGroup(Quarter.Quarter2, "Apr - Jun", secondQuaterMonths));
-      formArray.push(this.createQuarterlyReminderFormGroup(Quarter.Quarter3, "Jul - Sept", thirdQuaterMonths));
-      formArray.push(this.createQuarterlyReminderFormGroup(Quarter.Quarter4, "Oct - Dec", forthQuaterMonths));
+      var firstQuaterMonths = this.months.filter((c) => [1, 2, 3].indexOf(c.id) >= 0);
+      var secondQuaterMonths = this.months.filter((c) => [4, 5, 6].indexOf(c.id) >= 0);
+      var thirdQuaterMonths = this.months.filter((c) => [7, 8, 9].indexOf(c.id) >= 0);
+      var forthQuaterMonths = this.months.filter((c) => [10, 11, 12].indexOf(c.id) >= 0);
+      formArray.push(
+        this.createQuarterlyReminderFormGroup(Quarter.Quarter1, 'Jan - Mar', firstQuaterMonths),
+      );
+      formArray.push(
+        this.createQuarterlyReminderFormGroup(Quarter.Quarter2, 'Apr - Jun', secondQuaterMonths),
+      );
+      formArray.push(
+        this.createQuarterlyReminderFormGroup(Quarter.Quarter3, 'Jul - Sept', thirdQuaterMonths),
+      );
+      formArray.push(
+        this.createQuarterlyReminderFormGroup(Quarter.Quarter4, 'Oct - Dec', forthQuaterMonths),
+      );
       this.reminderForm.addControl('quarterlyReminders', formArray);
     }
   }
@@ -294,10 +356,14 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
   addHalfYearlyReminders() {
     if (!this.reminderForm.contains('halfYearlyReminders')) {
       var formArray = this.fb.array([]);
-      var firstQuaterMonths = this.months.filter(c => [1, 2, 3, 4, 5, 6].indexOf(c.id) >= 0);
-      var secondQuaterMonths = this.months.filter(c => [7, 8, 9, 10, 11, 13].indexOf(c.id) >= 0);
-      formArray.push(this.createHalfYearlyReminderFormGroup(Quarter.Quarter1, "Jan - Jun", firstQuaterMonths));
-      formArray.push(this.createHalfYearlyReminderFormGroup(Quarter.Quarter2, "Jul - Dec", secondQuaterMonths));
+      var firstQuaterMonths = this.months.filter((c) => [1, 2, 3, 4, 5, 6].indexOf(c.id) >= 0);
+      var secondQuaterMonths = this.months.filter((c) => [7, 8, 9, 10, 11, 13].indexOf(c.id) >= 0);
+      formArray.push(
+        this.createHalfYearlyReminderFormGroup(Quarter.Quarter1, 'Jan - Jun', firstQuaterMonths),
+      );
+      formArray.push(
+        this.createHalfYearlyReminderFormGroup(Quarter.Quarter2, 'Jul - Dec', secondQuaterMonths),
+      );
       this.reminderForm.addControl('halfYearlyReminders', formArray);
     }
   }
@@ -326,7 +392,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       reminderId: [''],
       dayOfWeek: [dayOfWeek],
       isActive: [true],
-      name: [DayOfWeek[dayOfWeek]]
+      name: [DayOfWeek[dayOfWeek]],
     });
   }
 
@@ -338,7 +404,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       day: [this.getCurrentDay()],
       month: [monthValues[0]],
       name: [name],
-      monthValues: [monthValues]
+      monthValues: [monthValues],
     });
   }
 
@@ -350,7 +416,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
       day: [this.getCurrentDay()],
       month: [monthValues[0]],
       name: [name],
-      monthValues: [monthValues]
+      monthValues: [monthValues],
     });
   }
 
@@ -364,7 +430,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     var daysInMonth = new Date(new Date().getFullYear(), Number.parseInt(month), 0).getDate();
     if (day > daysInMonth) {
       formGrouup.setErrors({
-        'invalidDate': 'Invalid Date'
+        invalidDate: 'Invalid Date',
       });
       formGrouup.markAllAsTouched();
     }

@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
+import { ExpenseCategoryListPresentationComponent } from '../expense-category-list-presentation/expense-category-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-expense-category-list',
   templateUrl: './expense-category-list.component.html',
-  styleUrls: ['./expense-category-list.component.scss']
+  styleUrls: ['./expense-category-list.component.scss'],
+  imports: [ExpenseCategoryListPresentationComponent, AsyncPipe],
 })
 export class ExpenseCategoryListComponent extends BaseComponent implements OnInit {
   expenseCategories$: Observable<ExpenseCategory[]>;
@@ -19,20 +21,19 @@ export class ExpenseCategoryListComponent extends BaseComponent implements OnIni
   constructor(
     private expenseCategoryService: ExpenseCategoryService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.expenseCategoryService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getExpenseCategories();
-          }
-        })
-      )
-    this.expenseCategories$ = this.expenseCategoryService.entities$
+    this.loading$ = this.expenseCategoryService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getExpenseCategories();
+        }
+      }),
+    );
+    this.expenseCategories$ = this.expenseCategoryService.entities$;
   }
 
   getExpenseCategories(): void {
@@ -41,7 +42,9 @@ export class ExpenseCategoryListComponent extends BaseComponent implements OnIni
 
   deleteExpenseCategory(id: string): void {
     this.sub$.sink = this.expenseCategoryService.delete(id).subscribe(() => {
-      this.toastrService.success(this.translationService.getValue('EXPENSE_CATEGORY_DELETED_SUCCESSFULLY'));
+      this.toastrService.success(
+        this.translationService.getValue('EXPENSE_CATEGORY_DELETED_SUCCESSFULLY'),
+      );
     });
   }
 }

@@ -2,8 +2,8 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Expense } from '@core/domain-classes/expense';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
@@ -20,17 +20,89 @@ import { BaseComponent } from 'src/app/base.component';
 import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 import { ExpenseDataSource } from './expense-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
-  styleUrls: ['./expense-list.component.scss']
+  styleUrls: ['./expense-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class ExpenseListComponent extends BaseComponent implements OnInit {
   dataSource: ExpenseDataSource;
   expenses: Expense[] = [];
-  displayedColumns: string[] = ['action', 'createdDate', 'expenseDate','amount', 'reference', 'expenseCategoryId', 'expenseBy'];
+  displayedColumns: string[] = [
+    'action',
+    'createdDate',
+    'expenseDate',
+    'amount',
+    'reference',
+    'expenseCategoryId',
+    'expenseBy',
+  ];
   footerToDisplayed = ['footer'];
   isLoadingResults = true;
   expenseResource: ExpenseResourceParameter;
@@ -82,7 +154,8 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
     private router: Router,
     private translationService: TranslationService,
     private expenseCategoryService: ExpenseCategoryService,
-    private userService: UserService) {
+    private userService: UserService,
+  ) {
     super();
     this.expenseResource = new ExpenseResourceParameter();
     this.expenseResource.pageSize = 15;
@@ -96,9 +169,7 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
     this.getExpenseCategories();
     this.getUsers();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.expenseResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -114,7 +185,7 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -122,22 +193,23 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
           this.expenseResource.pageSize = this.paginator.pageSize;
           this.expenseResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.expenseResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getExpenseCategories() {
-    this.expenseCategoryService.getAll().subscribe(categories => {
+    this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
-    })
+    });
   }
 
   getUsers() {
     let userResource = new UserResource();
     userResource.pageSize = 10;
-    userResource.orderBy = 'firstName desc'
-    this.sub$.sink = this.userService.getUsers(userResource)
+    userResource.orderBy = 'firstName desc';
+    this.sub$.sink = this.userService
+      .getUsers(userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
       });
@@ -145,46 +217,49 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
 
   deleteExpense(expense: Expense) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.expenseService.deleteExpense(expense.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('EXPENSE_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.expenseResource);
-            });
+          this.sub$.sink = this.expenseService.deleteExpense(expense.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('EXPENSE_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.expenseResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.expenseResource.pageSize = c.pageSize;
-          this.expenseResource.skip = c.skip;
-          this.expenseResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.expenseResource.pageSize = c.pageSize;
+        this.expenseResource.skip = c.skip;
+        this.expenseResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editExpense(expenseId: string) {
-    this.router.navigate(['/expense/manage', expenseId])
+    this.router.navigate(['/expense/manage', expenseId]);
   }
 
   downloadReceipt(expense: Expense) {
-    this.sub$.sink = this.expenseService.downloadReceipt(expense.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, expense.receiptName);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.expenseService.downloadReceipt(expense.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, expense.receiptName);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {

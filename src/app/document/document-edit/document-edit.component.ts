@@ -1,5 +1,11 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Category } from '@core/domain-classes/category';
 import { DocumentAuditTrail } from '@core/domain-classes/document-audit-trail';
@@ -11,15 +17,29 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { DocumentService } from '../document.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-edit',
   templateUrl: './document-edit.component.html',
-  styleUrls: ['./document-edit.component.scss']
+  styleUrls: ['./document-edit.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgFor,
+    HasClaimDirective,
+    TranslatePipe,
+  ],
 })
 export class DocumentEditComponent extends BaseComponent implements OnInit {
-
   documentForm: UntypedFormGroup;
   extension: string = '';
   @Input() categories: Category[];
@@ -33,7 +53,7 @@ export class DocumentEditComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private documentService: DocumentService,
     private commonService: CommonService,
-    private translationService:TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
@@ -46,24 +66,27 @@ export class DocumentEditComponent extends BaseComponent implements OnInit {
     this.documentForm.patchValue({
       name: this.data.document.name,
       description: this.data.document.description,
-      categoryId: this.data.document.categoryId
-    })
+      categoryId: this.data.document.categoryId,
+    });
   }
 
   createDocumentForm() {
     this.documentForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
-      categoryId: ['', [Validators.required]]
+      categoryId: ['', [Validators.required]],
     });
   }
 
   SaveDocument() {
     if (this.documentForm.valid) {
-      this.sub$.sink = this.documentService.updateDocument(this.buildDocumentObject())
-        .subscribe(c => {
-          this.toastrService.success(this.translationService.getValue('DOCUMENT_UPDATE_SUCCESSFULLY'));
-          this.dialogRef.close("loaded");
+      this.sub$.sink = this.documentService
+        .updateDocument(this.buildDocumentObject())
+        .subscribe((c) => {
+          this.toastrService.success(
+            this.translationService.getValue('DOCUMENT_UPDATE_SUCCESSFULLY'),
+          );
+          this.dialogRef.close('loaded');
           this.addDocumentTrail();
         });
     } else {
@@ -74,11 +97,11 @@ export class DocumentEditComponent extends BaseComponent implements OnInit {
   addDocumentTrail() {
     const objDocumentAuditTrail: DocumentAuditTrail = {
       documentId: this.data.document.id,
-      operationName: DocumentOperation.Modified.toString()
-    }
-    this.sub$.sink = this.commonService.addDocumentAuditTrail(objDocumentAuditTrail)
-      .subscribe(c => {
-      })
+      operationName: DocumentOperation.Modified.toString(),
+    };
+    this.sub$.sink = this.commonService
+      .addDocumentAuditTrail(objDocumentAuditTrail)
+      .subscribe((c) => {});
   }
 
   private markFormGroupTouched(formGroup: UntypedFormGroup) {
@@ -95,12 +118,11 @@ export class DocumentEditComponent extends BaseComponent implements OnInit {
       id: this.data.document.id,
       categoryId: this.documentForm.get('categoryId').value,
       description: this.documentForm.get('description').value,
-      name: this.documentForm.get('name').value
+      name: this.documentForm.get('name').value,
     };
     return document;
   }
   onDocumentCancel() {
-    this.dialogRef.close("canceled");
+    this.dialogRef.close('canceled');
   }
-
 }

@@ -25,15 +25,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { PurchaseOrderReturnRoutingModule } from './purchase-order-return-routing.module';
 
-
-
-
 @NgModule({
-  declarations: [
-    PurchaseOrderReturnComponent,
-    PurchaseOrderReturnItemComponent,
-    PurchaseOrderReturnListComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -57,7 +49,10 @@ import { PurchaseOrderReturnRoutingModule } from './purchase-order-return-routin
     PurchaseOrderReturnRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
-  ]
+    MatSortModule,
+    PurchaseOrderReturnComponent,
+    PurchaseOrderReturnItemComponent,
+    PurchaseOrderReturnListComponent,
+  ],
 })
-export class PurchaseOrderReturnModule { }
+export class PurchaseOrderReturnModule {}

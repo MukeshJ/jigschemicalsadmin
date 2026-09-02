@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Inventory } from '@core/domain-classes/inventory/inventory';
 import { InventoryResourceParameter } from '@core/domain-classes/inventory/inventory-resource-parameter';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -12,9 +12,30 @@ import { BaseComponent } from 'src/app/base.component';
 import { InventoryService } from '../inventory.service';
 import { ManageInventoryComponent } from '../manage-inventory/manage-inventory.component';
 import { InventoryDataSource } from './inventory-datasource';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { InventoryHistoryListComponent } from './inventory-history-list/inventory-history-list.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inventory-list',
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss'],
@@ -25,11 +46,43 @@ import { InventoryDataSource } from './inventory-datasource';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatSortHeader,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    InventoryHistoryListComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class InventoryListComponent extends BaseComponent implements OnInit {
   dataSource: InventoryDataSource;
-  displayedColumns: string[] = ['action', 'chemicalName', 'stock', 'averagePurchasePrice', 'averageSalesPrice'];
-  columnsToDisplay: string[] = ["footer"];
+  displayedColumns: string[] = [
+    'action',
+    'chemicalName',
+    'stock',
+    'averagePurchasePrice',
+    'averageSalesPrice',
+  ];
+  columnsToDisplay: string[] = ['footer'];
   inventoryResource: InventoryResourceParameter;
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,11 +105,12 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
   constructor(
     private inventoryService: InventoryService,
     private cd: ChangeDetectorRef,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+  ) {
     super();
     this.inventoryResource = new InventoryResourceParameter();
     this.inventoryResource.pageSize = 50;
-    this.inventoryResource.orderBy = 'chemicalName asc'
+    this.inventoryResource.orderBy = 'chemicalName asc';
   }
 
   ngOnInit(): void {
@@ -64,9 +118,7 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.inventoryResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.inventoryResource.skip = 0;
         const strArray: Array<string> = c.split('##');
@@ -78,7 +130,7 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => {
@@ -86,21 +138,19 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
           this.inventoryResource.pageSize = this.paginator.pageSize;
           this.inventoryResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.inventoryResource);
-        })
+        }),
       )
       .subscribe();
   }
 
-
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.inventoryResource.pageSize = c.pageSize;
-          this.inventoryResource.skip = c.skip;
-          this.inventoryResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.inventoryResource.pageSize = c.pageSize;
+        this.inventoryResource.skip = c.skip;
+        this.inventoryResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   toggleRow(element: Inventory) {
@@ -111,12 +161,12 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
   addInvenotry(inventory: Inventory) {
     const dialogRef = this.dialog.open(ManageInventoryComponent, {
       width: '450px',
-      data: Object.assign({}, inventory)
+      data: Object.assign({}, inventory),
     });
     dialogRef.afterClosed().subscribe((data: boolean) => {
       if (data) {
         this.dataSource.loadData(this.inventoryResource);
       }
-    })
+    });
   }
 }

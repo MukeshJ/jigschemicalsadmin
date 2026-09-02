@@ -20,7 +20,6 @@ import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [DashboardComponent, CalenderViewComponent, InquiryChartComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -39,6 +38,9 @@ import { FormsModule } from '@angular/forms';
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-  ]
+    DashboardComponent,
+    CalenderViewComponent,
+    InquiryChartComponent,
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

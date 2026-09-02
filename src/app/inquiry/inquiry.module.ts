@@ -24,7 +24,7 @@ import { InquiryDetailComponent } from './inquiry-detail/inquiry-detail.componen
 import { InquiryNoteComponent } from './inquiry-note/inquiry-note.component';
 import { InquiryTaskComponent } from './inquiry-task/inquiry-task.component';
 import { InquiryTaskAddComponent } from './inquiry-task-add/inquiry-task-add.component';
-import { MatDatepickerModule, } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { InquiryAttachmentComponent } from './inquiry-attachment/inquiry-attachment.component';
 import { InquiryAttachmentAddComponent } from './inquiry-attachment-add/inquiry-attachment-add.component';
@@ -34,17 +34,6 @@ import { ChemicalSupplierModule } from '../chemical-supplier/chemical-supplier.m
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-  declarations: [
-    InquiryListComponent,
-    AddInquiryComponent,
-    InquiryChemicalListComponent,
-    InquiryDetailComponent,
-    InquiryNoteComponent,
-    InquiryTaskComponent,
-    InquiryTaskAddComponent,
-    InquiryAttachmentComponent,
-    InquiryAttachmentAddComponent
-  ],
   imports: [
     CommonModule,
     MatNativeDateModule,
@@ -69,10 +58,17 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatDatepickerModule,
     MatIconModule,
     MatButtonModule,
-    ChemicalSupplierModule
+    ChemicalSupplierModule,
+    InquiryListComponent,
+    AddInquiryComponent,
+    InquiryChemicalListComponent,
+    InquiryDetailComponent,
+    InquiryNoteComponent,
+    InquiryTaskComponent,
+    InquiryTaskAddComponent,
+    InquiryAttachmentComponent,
+    InquiryAttachmentAddComponent,
   ],
-  providers: [
-    AddInquiryResolverService
-  ]
+  providers: [AddInquiryResolverService],
 })
-export class InquiryModule { }
+export class InquiryModule {}

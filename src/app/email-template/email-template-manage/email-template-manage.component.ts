@@ -1,24 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EmailTemplate } from '@core/domain-classes/email-template';
 import { TranslationService } from '@core/services/translation.service';
 import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from '../email-template.service';
+import { NgIf } from '@angular/common';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-email-template-manage',
   templateUrl: './email-template-manage.component.html',
-  styleUrls: ['./email-template-manage.component.scss']
+  styleUrls: ['./email-template-manage.component.scss'],
+  imports: [NgIf, FormsModule, ReactiveFormsModule, AngularEditorModule, RouterLink, TranslatePipe],
 })
 export class EmailTemplateManageComponent extends BaseComponent implements OnInit {
-
   emailTemplateForm: UntypedFormGroup;
   emailTemplate: EmailTemplate;
-  editorConfig= EditorConfig;
+  editorConfig = EditorConfig;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -26,7 +34,7 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
     private emailTemplateService: EmailTemplateService,
     private router: Router,
     private toastrService: ToastrService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
@@ -37,13 +45,12 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
   }
 
   getEmailResolverData() {
-    this.sub$.sink = this.route.data.subscribe(
-      (data: { emailTemplate: EmailTemplate }) => {
-        if (data.emailTemplate) {
-          this.emailTemplate = data.emailTemplate;
-          this.patchEmailTemplateData();
-        }
-      });
+    this.sub$.sink = this.route.data.subscribe((data: { emailTemplate: EmailTemplate }) => {
+      if (data.emailTemplate) {
+        this.emailTemplate = data.emailTemplate;
+        this.patchEmailTemplateData();
+      }
+    });
   }
 
   addUpdateEmailTemplate() {
@@ -51,17 +58,21 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
       if (this.emailTemplate) {
         this.sub$.sink = this.emailTemplateService
           .updateEmailTemplate(this.createBuildObject())
-          .subscribe(c => {
-            this.toastrService.success(this.translationService.getValue('EMAIL_TEMPLATE_UPDATED_SUCCESSFULLY'));
+          .subscribe((c) => {
+            this.toastrService.success(
+              this.translationService.getValue('EMAIL_TEMPLATE_UPDATED_SUCCESSFULLY'),
+            );
             this.router.navigate(['/emailtemplate']);
           });
       } else {
         this.sub$.sink = this.emailTemplateService
           .addEmailTemplate(this.createBuildObject())
-          .subscribe(c => {
-            this.toastrService.success(this.translationService.getValue('EMAIL_TEMPLATE_SAVE_SUCCESSFULLY'))
+          .subscribe((c) => {
+            this.toastrService.success(
+              this.translationService.getValue('EMAIL_TEMPLATE_SAVE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/emailtemplate']);
-          })
+          });
       }
     } else {
       for (let inner in this.emailTemplateForm.controls) {
@@ -76,8 +87,8 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
       id: this.emailTemplate ? this.emailTemplate.id : null,
       name: this.emailTemplateForm.get('name').value,
       subject: this.emailTemplateForm.get('subject').value,
-      body: this.emailTemplateForm.get('body').value
-    }
+      body: this.emailTemplateForm.get('body').value,
+    };
     return emailTemplate;
   }
 
@@ -85,16 +96,15 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
     this.emailTemplateForm = this.fb.group({
       name: ['', [Validators.required]],
       subject: ['', [Validators.required]],
-      body: ['', [Validators.required]]
-    })
+      body: ['', [Validators.required]],
+    });
   }
 
   patchEmailTemplateData() {
     this.emailTemplateForm.patchValue({
       name: this.emailTemplate.name,
       subject: this.emailTemplate.subject,
-      body: this.emailTemplate.body
-    })
+      body: this.emailTemplate.body,
+    });
   }
-
 }

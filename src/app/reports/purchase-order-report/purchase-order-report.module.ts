@@ -23,13 +23,7 @@ import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
 import { PurchaseOrderReportRoutingModule } from './purchase-order-report-routing.module';
 
-
-
 @NgModule({
-  declarations: [
-    PurchaseOrderReportComponent,
-    PurchaseOrderItemComponent
-  ],
   imports: [
     CommonModule,
     PurchaseOrderReportRoutingModule,
@@ -52,7 +46,9 @@ import { PurchaseOrderReportRoutingModule } from './purchase-order-report-routin
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,
-    MatAutocompleteModule
-  ]
+    MatAutocompleteModule,
+    PurchaseOrderReportComponent,
+    PurchaseOrderItemComponent,
+  ],
 })
-export class PurchaseOrderReportModule { }
+export class PurchaseOrderReportModule {}

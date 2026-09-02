@@ -8,15 +8,58 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-customer-chemical.component';
 import { CustomerService } from '../customer.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
-  styleUrls: ['./chemical-list.component.scss']
+  styleUrls: ['./chemical-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    TranslatePipe,
+  ],
 })
-export class ChemicalListComponent  extends BaseComponent implements OnInit {
-
+export class ChemicalListComponent extends BaseComponent implements OnInit {
   chemicals: Chemical[] = [];
   isLoading: boolean = false;
   skip: number = 0;
@@ -25,7 +68,7 @@ export class ChemicalListComponent  extends BaseComponent implements OnInit {
   _nameFilter = '';
   _casNumberFilter = '';
   displayedColumns = ['name', 'casNumber'];
-  columnsToDisplay: string[] = ["footer"];
+  columnsToDisplay: string[] = ['footer'];
   public filterObservable$: Subject<string> = new Subject<string>();
   @ViewChild('paginator') paginator: MatPaginator;
 
@@ -50,18 +93,16 @@ export class ChemicalListComponent  extends BaseComponent implements OnInit {
     private customerService: CustomerService,
     public dialogRef: MatDialogRef<ChemicalListComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
-        if (this.paginator)
-          this.paginator.firstPage();
+        if (this.paginator) this.paginator.firstPage();
         this.getChemicalsList();
       });
     if (this.data) {
@@ -73,14 +114,23 @@ export class ChemicalListComponent  extends BaseComponent implements OnInit {
   getChemicalsList() {
     this.isLoading = true;
     this.sub$.sink = this.customerService
-      .getChemicalsByCustomerId(this.data.id, this.skip, this.pageSize, this.NameFilter, this.CasNumberFilter)
-      .subscribe((c) => {
-        this.chemicals = c.chemicals;
-        this.totalChemicals = c.totalCount;
-        this.isLoading = false;
-      }, () => {
-        this.isLoading = false;
-      });
+      .getChemicalsByCustomerId(
+        this.data.id,
+        this.skip,
+        this.pageSize,
+        this.NameFilter,
+        this.CasNumberFilter,
+      )
+      .subscribe(
+        (c) => {
+          this.chemicals = c.chemicals;
+          this.totalChemicals = c.totalCount;
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        },
+      );
   }
 
   public pageChange(event: PageEvent): void {
@@ -91,18 +141,16 @@ export class ChemicalListComponent  extends BaseComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
-  addChemicalCustomer(){
+  addChemicalCustomer() {
     const dialogRef = this.dialog.open(AddCustomerChemicalComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, this.data)
+      data: Object.assign({}, this.data),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"]) {
-          this.getChemicalsList();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) {
+        this.getChemicalsList();
+      }
+    });
   }
-
 }

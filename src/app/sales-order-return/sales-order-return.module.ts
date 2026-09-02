@@ -25,14 +25,7 @@ import { SaleOrderReturnListComponent } from './sales-order-return-list/sales-or
 import { SaleOrderReturnComponent } from './sales-order-return/sales-order-return.component';
 import { SaleOrderReturnItemComponent } from './sales-order-return-item/sales-order-return-item.component';
 
-
-
 @NgModule({
-  declarations: [
-    SaleOrderReturnListComponent,
-    SaleOrderReturnComponent,
-    SaleOrderReturnItemComponent
-  ],
   imports: [
     CommonModule,
     SaleOrderReturnRoutingModule,
@@ -56,7 +49,10 @@ import { SaleOrderReturnItemComponent } from './sales-order-return-item/sales-or
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
-  ]
+    MatSortModule,
+    SaleOrderReturnListComponent,
+    SaleOrderReturnComponent,
+    SaleOrderReturnItemComponent,
+  ],
 })
-export class SaleOrderReturnModule { }
+export class SaleOrderReturnModule {}

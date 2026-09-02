@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApplicationEnums } from '@core/domain-classes/application.enum';
 import { CustomReminderScheduler } from '@core/domain-classes/custom-reminder-scheduler';
@@ -7,15 +13,55 @@ import { ModuleReference } from '@core/domain-classes/module-reference';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { User } from '@core/domain-classes/user';
 import { CommonService } from '@core/services/common.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { UTCToLocalTime } from '../pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-add-reminder-scheduler',
   templateUrl: './add-reminder-scheduler.component.html',
-  styleUrls: ['./add-reminder-scheduler.component.scss']
+  styleUrls: ['./add-reminder-scheduler.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatSelect,
+    MatSelectTrigger,
+    NgFor,
+    MatOption,
+    MatCheckbox,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class AddReminderSchedulerComponent implements OnInit {
-
   reminderForm: UntypedFormGroup;
   users: User[] = [];
   selectedUsers: User[] = [];
@@ -26,7 +72,8 @@ export class AddReminderSchedulerComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private commonService: CommonService,
     public dialogRef: MatDialogRef<AddReminderSchedulerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ModuleReference) { }
+    @Inject(MAT_DIALOG_DATA) public data: ModuleReference,
+  ) {}
 
   ngOnInit(): void {
     this.createReminder();
@@ -40,7 +87,7 @@ export class AddReminderSchedulerComponent implements OnInit {
       message: ['', [Validators.required]],
       isEmailNotification: [true],
       reminderDate: [new Date()],
-      selectedUsers: [null]
+      selectedUsers: [null],
     });
   }
   buildReminderSchedule() {
@@ -50,9 +97,9 @@ export class AddReminderSchedulerComponent implements OnInit {
       message: this.reminderForm.get('message').value,
       isEmailNotification: this.reminderForm.get('isEmailNotification').value,
       createdDate: this.reminderForm.get('reminderDate').value,
-      userIds: selectedUsers ? selectedUsers.map(c => c.id) : null,
+      userIds: selectedUsers ? selectedUsers.map((c) => c.id) : null,
       application: this.data.application,
-      referenceId: this.data.referenceId
+      referenceId: this.data.referenceId,
     };
     return customReminderScheduler;
   }
@@ -69,24 +116,21 @@ export class AddReminderSchedulerComponent implements OnInit {
       if (!reminderSchedulers.userIds) {
         reminderSchedulers.userIds = [];
       }
-      this.commonService.addReminderSchedule(reminderSchedulers)
-        .subscribe(c => {
-          if (c) {
-            this.dialogRef.close();
-          }
-        })
+      this.commonService.addReminderSchedule(reminderSchedulers).subscribe((c) => {
+        if (c) {
+          this.dialogRef.close();
+        }
+      });
     } else {
       this.reminderForm.markAllAsTouched();
     }
   }
   getReminderSchedulers() {
-    this.commonService.getReminderSchedulers(this.data)
-      .subscribe((c: ReminderScheduler[]) => {
-        this.reminderSchedulers = c;
-      });
+    this.commonService.getReminderSchedulers(this.data).subscribe((c: ReminderScheduler[]) => {
+      this.reminderSchedulers = c;
+    });
   }
   cancelReminder() {
     this.dialogRef.close();
   }
-
 }

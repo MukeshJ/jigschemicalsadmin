@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Testimonial } from '@core/domain-classes/testimonial';
 import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
@@ -8,18 +14,35 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { TestimonialService } from '../testimonial.service';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-testimonial-detail',
   templateUrl: './testimonial-detail.component.html',
-  styleUrls: ['./testimonial-detail.component.scss']
+  styleUrls: ['./testimonial-detail.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatProgressSpinner,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    MatSlideToggle,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class TestimonialDetailComponent extends BaseComponent implements OnInit {
   testimonialForm: UntypedFormGroup;
   testimonial: Testimonial;
   isLoading = false;
-  editorConfig= EditorConfig;
+  editorConfig = EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;
   constructor(
@@ -27,22 +50,21 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
     private route: ActivatedRoute,
     private testimonialService: TestimonialService,
     private toastrService: ToastrService,
-    private translationService:TranslationService,
-    private router: Router) {
+    private translationService: TranslationService,
+    private router: Router,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.createTestimonialForm();
-    const routeSub$ = this.route.data.subscribe(
-      (data: { testimonial: Testimonial }) => {
-        if (data.testimonial) {
-          this.testimonial = data.testimonial;
-          this.patchTestimonial();
-        } else {
-        }
+    const routeSub$ = this.route.data.subscribe((data: { testimonial: Testimonial }) => {
+      if (data.testimonial) {
+        this.testimonial = data.testimonial;
+        this.patchTestimonial();
+      } else {
       }
-    );
+    });
     this.sub$.add(routeSub$);
   }
 
@@ -51,7 +73,7 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
       name: this.testimonial.name,
       designation: this.testimonial.designation,
       message: this.testimonial.message,
-      isActive: this.testimonial.isActive
+      isActive: this.testimonial.isActive,
     });
     if (this.testimonial.url) {
       this.imgSrc = `${environment.apiUrl}${this.testimonial.url}`;
@@ -64,7 +86,7 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
       designation: ['', [Validators.required]],
       message: ['', Validators.required],
       isActive: [true],
-      profileImage: ['']
+      profileImage: [''],
     });
   }
 
@@ -72,16 +94,22 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
     if (this.testimonialForm.valid) {
       const testimonial: Testimonial = Object.assign(this.testimonialForm.value, {
         imageSrc: this.imgSrc,
-        isImageUpload: this.isImageUpload
+        isImageUpload: this.isImageUpload,
       });
       if (this.testimonial) {
-        this.testimonialService.updateTestimonial(this.testimonial.id, testimonial).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('TESTIMONIAL_UPDATED_SUCCESSFULLY'));
-          this.router.navigate(['/testimonial']);
-        });
+        this.testimonialService
+          .updateTestimonial(this.testimonial.id, testimonial)
+          .subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('TESTIMONIAL_UPDATED_SUCCESSFULLY'),
+            );
+            this.router.navigate(['/testimonial']);
+          });
       } else {
         this.testimonialService.saveTestimonial(testimonial).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('TESTIMONIAL_ADDED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('TESTIMONIAL_ADDED_SUCCESSFULLY'),
+          );
           this.router.navigate(['/testimonial']);
         });
       }
@@ -106,7 +134,7 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -114,4 +142,3 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
     this.isImageUpload = true;
   }
 }
-

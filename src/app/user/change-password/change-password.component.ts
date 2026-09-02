@@ -1,20 +1,43 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { User } from '@core/domain-classes/user';
 import { SecurityService } from '@core/security/security.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+  styleUrls: ['./change-password.component.scss'],
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatDialogActions,
+    TranslatePipe,
+  ],
 })
-
 export class ChangePasswordComponent extends BaseComponent implements OnInit {
   changePasswordForm: UntypedFormGroup;
   constructor(
@@ -24,7 +47,8 @@ export class ChangePasswordComponent extends BaseComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: User,
     private toastrService: ToastrService,
     private securityService: SecurityService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -34,29 +58,34 @@ export class ChangePasswordComponent extends BaseComponent implements OnInit {
   }
 
   createChangePasswordForm() {
-    this.changePasswordForm = this.fb.group({
-      email: [],
-      oldPasswordPassword: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-    }, {
-      validator: this.checkPasswords
-    });
+    this.changePasswordForm = this.fb.group(
+      {
+        email: [],
+        oldPasswordPassword: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validator: this.checkPasswords,
+      },
+    );
   }
 
   checkPasswords(group: UntypedFormGroup) {
     let pass = group.get('password').value;
     let confirmPass = group.get('confirmPassword').value;
-    return pass === confirmPass ? null : { notSame: true }
+    return pass === confirmPass ? null : { notSame: true };
   }
 
   changePassword() {
     if (this.changePasswordForm.valid) {
-      this.sub$.sink = this.userService.changePassword(this.createBuildObject()).subscribe(d => {
-        this.toastrService.success(this.translationService.getValue('SUCCESSFULLY_CHANGED_PASSWORD'))
+      this.sub$.sink = this.userService.changePassword(this.createBuildObject()).subscribe((d) => {
+        this.toastrService.success(
+          this.translationService.getValue('SUCCESSFULLY_CHANGED_PASSWORD'),
+        );
         this.securityService.logout();
         this.dialogRef.close();
-      })
+      });
     }
   }
 
@@ -66,7 +95,7 @@ export class ChangePasswordComponent extends BaseComponent implements OnInit {
       oldPassword: this.changePasswordForm.get('oldPasswordPassword').value,
       newPassword: this.changePasswordForm.get('password').value,
       userName: this.changePasswordForm.get('email').value,
-    }
+    };
   }
 
   onNoClick(): void {

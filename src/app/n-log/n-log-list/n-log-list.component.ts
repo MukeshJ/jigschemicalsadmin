@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { NLog } from '@core/domain-classes/n-log';
 import { NLogResource } from '@core/domain-classes/n-log-resource';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -9,12 +9,58 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { NLogDataSource } from '../n-log-datasource';
 import { NLogService } from '../n-log.service';
+import { NgIf, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect, MatOption } from '@angular/material/select';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-n-log-list',
   templateUrl: './n-log-list.component.html',
-  styleUrls: ['./n-log-list.component.scss']
+  styleUrls: ['./n-log-list.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatSortHeader,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    AsyncPipe,
+    TruncatePipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class NLogListComponent extends BaseComponent implements OnInit, AfterViewInit {
   dataSource: NLogDataSource;
@@ -44,7 +90,7 @@ export class NLogListComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -53,7 +99,7 @@ export class NLogListComponent extends BaseComponent implements OnInit, AfterVie
           this.nLogResource.pageSize = this.paginator.pageSize;
           this.nLogResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadNLogs(this.nLogResource);
-        })
+        }),
       )
       .subscribe();
 
@@ -65,7 +111,7 @@ export class NLogListComponent extends BaseComponent implements OnInit, AfterVie
           this.paginator.pageIndex = 0;
           this.nLogResource.message = this.input.nativeElement.value;
           this.dataSource.loadNLogs(this.nLogResource);
-        })
+        }),
       )
       .subscribe();
   }
@@ -91,13 +137,12 @@ export class NLogListComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.nLogResource.pageSize = c.pageSize;
-          this.nLogResource.skip = c.skip;
-          this.nLogResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.nLogResource.pageSize = c.pageSize;
+        this.nLogResource.skip = c.skip;
+        this.nLogResource.totalCount = c.totalCount;
+      }
+    });
   }
 }

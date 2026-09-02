@@ -3,7 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Inventory } from '@core/domain-classes/inventory/inventory';
 import { InventoryResourceParameter } from '@core/domain-classes/inventory/inventory-resource-parameter';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -15,9 +15,31 @@ import { BaseComponent } from 'src/app/base.component';
 import { InventoryDataSource } from 'src/app/inventory/inventory-list/inventory-datasource';
 import { InventoryService } from 'src/app/inventory/inventory.service';
 import * as XLSX from 'xlsx';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { InventoryHistoryListComponent } from './inventory-history-list/inventory-history-list.component';
+import { CustomCurrencyPipe as CustomCurrencyPipe_1 } from '../../shared/pipes/custome-currency.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-stock-report',
   templateUrl: './stock-report.component.html',
   styleUrls: ['./stock-report.component.scss'],
@@ -28,12 +50,45 @@ import * as XLSX from 'xlsx';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  providers: [CustomCurrencyPipe]
+  providers: [CustomCurrencyPipe],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatSortHeader,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    InventoryHistoryListComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    CustomCurrencyPipe_1,
+    TranslatePipe,
+  ],
 })
 export class StockReportComponent extends BaseComponent implements OnInit {
   dataSource: InventoryDataSource;
-  displayedColumns: string[] = ['action', 'chemicalName', 'stock', 'averagePurchasePrice', 'averageSalesPrice'];
-  columnsToDisplay: string[] = ["footer"];
+  displayedColumns: string[] = [
+    'action',
+    'chemicalName',
+    'stock',
+    'averagePurchasePrice',
+    'averageSalesPrice',
+  ];
+  columnsToDisplay: string[] = ['footer'];
   inventoryResource: InventoryResourceParameter;
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -58,11 +113,12 @@ export class StockReportComponent extends BaseComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private dialog: MatDialog,
     private translationService: TranslationService,
-    private customCurrencyPipe: CustomCurrencyPipe) {
+    private customCurrencyPipe: CustomCurrencyPipe,
+  ) {
     super();
     this.inventoryResource = new InventoryResourceParameter();
     this.inventoryResource.pageSize = 50;
-    this.inventoryResource.orderBy = 'chemicalName asc'
+    this.inventoryResource.orderBy = 'chemicalName asc';
   }
 
   ngOnInit(): void {
@@ -70,9 +126,7 @@ export class StockReportComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.inventoryResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.inventoryResource.skip = 0;
         const strArray: Array<string> = c.split('##');
@@ -84,7 +138,7 @@ export class StockReportComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => {
@@ -92,21 +146,19 @@ export class StockReportComponent extends BaseComponent implements OnInit {
           this.inventoryResource.pageSize = this.paginator.pageSize;
           this.inventoryResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.inventoryResource);
-        })
+        }),
       )
       .subscribe();
   }
 
-
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.inventoryResource.pageSize = c.pageSize;
-          this.inventoryResource.skip = c.skip;
-          this.inventoryResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.inventoryResource.pageSize = c.pageSize;
+        this.inventoryResource.skip = c.skip;
+        this.inventoryResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   toggleRow(element: Inventory) {
@@ -114,36 +166,44 @@ export class StockReportComponent extends BaseComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-
   onDownloadReport() {
-    this.inventoryService.getInventoriesReport(this.inventoryResource)
+    this.inventoryService
+      .getInventoriesReport(this.inventoryResource)
       .subscribe((c: HttpResponse<Inventory[]>) => {
         const inventories = [...c.body];
-        let heading = [[
-          this.translationService.getValue('CHEMICAL_NAME'),
-          this.translationService.getValue('STOCK'),
-          this.translationService.getValue('AVERAGE_PURCHASE_PRICE'),
-          this.translationService.getValue('AVERAGE_SALES_PRICE')
-        ]];
+        let heading = [
+          [
+            this.translationService.getValue('CHEMICAL_NAME'),
+            this.translationService.getValue('STOCK'),
+            this.translationService.getValue('AVERAGE_PURCHASE_PRICE'),
+            this.translationService.getValue('AVERAGE_SALES_PRICE'),
+          ],
+        ];
 
         let inventoryReport = [];
         inventories.forEach((inventory: Inventory) => {
           inventoryReport.push({
-            'CHEMICAL_NAME': inventory.chemicalName,
-            'STOCK': `${inventory.stock} - ${inventory.unitName}`,
-            'AVERAGE_PURCHASE_PRICE': this.customCurrencyPipe.transform(inventory.averagePurchasePrice),
-            'AVERAGE_SALES_PRICE': this.customCurrencyPipe.transform(inventory.averageSalesPrice)
+            CHEMICAL_NAME: inventory.chemicalName,
+            STOCK: `${inventory.stock} - ${inventory.unitName}`,
+            AVERAGE_PURCHASE_PRICE: this.customCurrencyPipe.transform(
+              inventory.averagePurchasePrice,
+            ),
+            AVERAGE_SALES_PRICE: this.customCurrencyPipe.transform(inventory.averageSalesPrice),
           });
         });
 
         let workBook = XLSX.utils.book_new();
         XLSX.utils.sheet_add_aoa(workBook, heading);
-        let workSheet = XLSX.utils.sheet_add_json(workBook, inventoryReport, { origin: "A2", skipHeader: true });
-        XLSX.utils.book_append_sheet(workBook, workSheet, this.translationService.getValue('STOCK_REPORT'));
-        XLSX.writeFile(workBook, this.translationService.getValue('STOCK_REPORT') + ".xlsx");
+        let workSheet = XLSX.utils.sheet_add_json(workBook, inventoryReport, {
+          origin: 'A2',
+          skipHeader: true,
+        });
+        XLSX.utils.book_append_sheet(
+          workBook,
+          workSheet,
+          this.translationService.getValue('STOCK_REPORT'),
+        );
+        XLSX.writeFile(workBook, this.translationService.getValue('STOCK_REPORT') + '.xlsx');
       });
   }
-
-
 }
-

@@ -5,22 +5,25 @@ import { PageService } from '@core/services/page.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-page',
   templateUrl: './manage-page.component.html',
-  styleUrls: ['./manage-page.component.scss']
+  styleUrls: ['./manage-page.component.scss'],
+  imports: [FormsModule, NgIf, TranslatePipe],
 })
 export class ManagePageComponent extends BaseComponent implements OnChanges {
-
   isEdit: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ManagePageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Page,
     private pageService: PageService,
     private toastrServoce: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -38,7 +41,7 @@ export class ManagePageComponent extends BaseComponent implements OnChanges {
 
   savePage(): void {
     if (this.data.id) {
-      this.pageService.update(this.data).subscribe(d => {
+      this.pageService.update(this.data).subscribe((d) => {
         this.toastrServoce.success(this.translationService.getValue('PAGE_UPDATED_SUCCESSFULLY'));
         this.dialogRef.close();
       });

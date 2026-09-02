@@ -2,15 +2,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 enum UTCToLocalTimeFormat {
   FULL = 'full',
   SHORT = 'short',
-  SHORT_DATE = "shortDate",
-  SHORT_TIME = "shortTime"
+  SHORT_DATE = 'shortDate',
+  SHORT_TIME = 'shortTime',
 }
 
-@Pipe({
-  standalone: false,
-  name: 'utcToLocalTime'
-})
-
+@Pipe({ name: 'utcToLocalTime' })
 export class UTCToLocalTime implements PipeTransform {
   transform(utcDate: Date | string, format: UTCToLocalTimeFormat | string): any {
     const browserLanuges = navigator.language;
@@ -22,12 +18,10 @@ export class UTCToLocalTime implements PipeTransform {
       const time = new Date(utcDate).toLocaleTimeString(browserLanuges);
       return `${date} ${time}`;
       //  return moment.utc(utcDate).format("MM/DD/YYYY hh:mm:ss");
-    }
-    else if (format === UTCToLocalTimeFormat.SHORT_DATE) {
+    } else if (format === UTCToLocalTimeFormat.SHORT_DATE) {
       const date = new Date(utcDate).toLocaleDateString(browserLanuges);
       return `${date}`;
-    }
-    else if (format === UTCToLocalTimeFormat.SHORT_TIME) {
+    } else if (format === UTCToLocalTimeFormat.SHORT_TIME) {
       const time = new Date(utcDate).toLocaleTimeString(browserLanuges);
       return `${time}`;
     } else {
@@ -35,6 +29,5 @@ export class UTCToLocalTime implements PipeTransform {
       const time = new Date(utcDate).toLocaleTimeString(browserLanuges);
       return `${date} ${time}`;
     }
-
   }
 }

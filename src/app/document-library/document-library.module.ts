@@ -19,9 +19,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  declarations: [
-    DocumentLibraryListComponent
-  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -39,7 +36,8 @@ import { MatButtonModule } from '@angular/material/button';
     NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+    DocumentLibraryListComponent,
+  ],
 })
-export class DocumentLibraryModule { }
+export class DocumentLibraryModule {}

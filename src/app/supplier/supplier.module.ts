@@ -26,14 +26,6 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { UploadChemicalComponent } from './upload-chemical/upload-chemical.component';
 
 @NgModule({
-  declarations: [
-    SupplierDetailComponent,
-    SupplierListComponent,
-    ChemicalListComponent,
-    AddSupplierChemicalComponent,
-    SupplierPOListComponent,
-    UploadChemicalComponent
-  ],
   imports: [
     CommonModule,
     SupplierRoutingModule,
@@ -54,12 +46,14 @@ import { UploadChemicalComponent } from './upload-chemical/upload-chemical.compo
     MatIconModule,
     MatButtonModule,
     TranslatePipe,
-    TranslateDirective
+    TranslateDirective,
+    SupplierDetailComponent,
+    SupplierListComponent,
+    ChemicalListComponent,
+    AddSupplierChemicalComponent,
+    SupplierPOListComponent,
+    UploadChemicalComponent,
   ],
-  providers: [
-    SupplierResolverService
-  ]
+  providers: [SupplierResolverService],
 })
-export class SupplierModule {
-
-}
+export class SupplierModule {}

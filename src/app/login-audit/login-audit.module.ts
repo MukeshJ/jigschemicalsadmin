@@ -11,7 +11,6 @@ import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [LoginAuditListComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -22,7 +21,8 @@ import { SharedModule } from '@shared/shared.module';
     LoginAuditRoutingModule,
     SharedModule,
     TranslatePipe,
-    TranslateDirective
-  ]
+    TranslateDirective,
+    LoginAuditListComponent,
+  ],
 })
-export class LoginAuditModule { }
+export class LoginAuditModule {}

@@ -17,7 +17,7 @@ import { PoListComponent } from './po-list/po-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '@shared/shared.module';
-import { MatDividerModule } from '@angular/material/divider'
+import { MatDividerModule } from '@angular/material/divider';
 import { ViewSalesOrderPaymentComponent } from './view-sales-order-payment/view-sales-order-payment.component';
 import { AddSalesOrderPaymentComponent } from './add-sales-order-payment/add-sales-order-payment.component';
 import { SalesOrderItemsComponent } from './sales-order-list/sales-order-items/sales-order-items.component';
@@ -25,15 +25,6 @@ import { SalesOrderResolverService } from './sales-order-detail/sales-order-deta
 import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-detail.component';
 
 @NgModule({
-  declarations: [
-    SalesOrderListComponent,
-    SalesOrderAddEditComponent,
-    PoListComponent,
-    ViewSalesOrderPaymentComponent,
-    AddSalesOrderPaymentComponent,
-    SalesOrderItemsComponent,
-    SalesOrderDetailComponent
-  ],
   imports: [
     CommonModule,
     SalesOrderRoutingModule,
@@ -51,10 +42,15 @@ import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-deta
     MatIconModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatDividerModule
+    MatDividerModule,
+    SalesOrderListComponent,
+    SalesOrderAddEditComponent,
+    PoListComponent,
+    ViewSalesOrderPaymentComponent,
+    AddSalesOrderPaymentComponent,
+    SalesOrderItemsComponent,
+    SalesOrderDetailComponent,
   ],
-  providers: [
-    SalesOrderResolverService
-  ]
+  providers: [SalesOrderResolverService],
 })
-export class SalesOrderModule { }
+export class SalesOrderModule {}

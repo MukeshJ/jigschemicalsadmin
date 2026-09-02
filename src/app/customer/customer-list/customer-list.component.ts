@@ -2,14 +2,14 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerService } from '../customer.service';
 import { merge, Observable, Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { CustomerDataSource } from './customer-datasource';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -17,9 +17,34 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChemicalListComponent } from '../chemical-list/chemical-list.component';
 import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-customer-chemical.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { CustomerSOListComponent } from './customer-so-list/customer-so-list.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -30,12 +55,53 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    CustomerSOListComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class CustomerListComponent extends BaseComponent implements OnInit {
   dataSource: CustomerDataSource;
   customers: Customer[] = [];
-  displayedColumns: string[] = ['action', 'customerName', 'contactPerson', 'email', 'mobileNo', 'website', 'chemicalsCount'];
-  columnsToDisplay: string[] = ["footer"];
+  displayedColumns: string[] = [
+    'action',
+    'customerName',
+    'contactPerson',
+    'email',
+    'mobileNo',
+    'website',
+    'chemicalsCount',
+  ];
+  columnsToDisplay: string[] = ['footer'];
   isLoadingResults = true;
   customerResource: CustomerResourceParameter;
   loading$: Observable<boolean>;
@@ -101,11 +167,12 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
     private router: Router,
     private translationService: TranslationService,
     private dialog: MatDialog,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+  ) {
     super();
     this.customerResource = new CustomerResourceParameter();
     this.customerResource.pageSize = 50;
-    this.customerResource.orderBy = 'customerName asc'
+    this.customerResource.orderBy = 'customerName asc';
   }
 
   ngOnInit(): void {
@@ -113,9 +180,7 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.customerResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.customerResource.skip = 0;
         const strArray: Array<string> = c.split('##');
@@ -125,8 +190,7 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
           this.customerResource.email = strArray[1];
         } else if (strArray[0] === 'mobileNo') {
           this.customerResource.mobileNo = strArray[1];
-        }
-        else if (strArray[0] === 'website') {
+        } else if (strArray[0] === 'website') {
           this.customerResource.website = encodeURI(strArray[1].trim());
         }
         this.dataSource.loadData(this.customerResource);
@@ -134,7 +198,7 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -143,45 +207,46 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
           this.customerResource.pageSize = this.paginator.pageSize;
           this.customerResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.customerResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   deleteCustomer(customer: Customer) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${customer.customerName}`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${customer.customerName}`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.customerService.deleteCustomer(customer.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('CUSTOMER_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.customerResource);
-            });
+          this.sub$.sink = this.customerService.deleteCustomer(customer.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('CUSTOMER_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.customerResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.customerResource.pageSize = c.pageSize;
-          this.customerResource.skip = c.skip;
-          this.customerResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.customerResource.pageSize = c.pageSize;
+        this.customerResource.skip = c.skip;
+        this.customerResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editCustomer(customerId: string) {
-    this.router.navigate(['/customer', customerId])
+    this.router.navigate(['/customer', customerId]);
   }
-
 
   viewChemicals(customer: Customer): void {
     this.dialog.open(ChemicalListComponent, {
-      data: Object.assign({}, customer)
+      data: Object.assign({}, customer),
     });
   }
 
@@ -189,14 +254,13 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
     const dialogRef = this.dialog.open(AddCustomerChemicalComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, customer)
+      data: Object.assign({}, customer),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"]) {
-          this.dataSource.loadData(this.customerResource);
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) {
+        this.dataSource.loadData(this.customerResource);
+      }
+    });
   }
 
   toggleRow(customer: Customer) {

@@ -5,13 +5,7 @@ import { SessionRoutingModule } from './session-routing.module';
 import { SessionComponent } from './session.component';
 import { SharedModule } from '@shared/shared.module';
 
-
 @NgModule({
-  declarations: [SessionComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SessionRoutingModule
-  ]
+  imports: [CommonModule, SharedModule, SessionRoutingModule, SessionComponent],
 })
-export class SessionModule { }
+export class SessionModule {}

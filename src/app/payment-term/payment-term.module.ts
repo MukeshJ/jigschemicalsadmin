@@ -11,13 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '@shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
-  declarations: [
-    PaymentTermComponent,
-    ManagePaymentTermComponent,
-    PaymentTermPresentationComponent
-  ],
   imports: [
     CommonModule,
     PaymentTermRoutingModule,
@@ -25,7 +19,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SharedModule
-  ]
+    SharedModule,
+    PaymentTermComponent,
+    ManagePaymentTermComponent,
+    PaymentTermPresentationComponent,
+  ],
 })
-export class PaymentTermModule { }
+export class PaymentTermModule {}

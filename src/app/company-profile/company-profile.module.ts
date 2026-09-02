@@ -8,10 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-
-
 @NgModule({
-  declarations: [CompanyProfileComponent],
   imports: [
     CommonModule,
     CompanyProfileRoutingModule,
@@ -19,7 +16,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MatCardModule,
     MatSelectModule,
-    MatProgressSpinnerModule
-  ]
+    MatProgressSpinnerModule,
+    CompanyProfileComponent,
+  ],
 })
-export class CompanyProfileModule { }
+export class CompanyProfileModule {}

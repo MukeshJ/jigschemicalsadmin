@@ -20,12 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [
-    ChemicalSalesReportComponent
-  ],
   imports: [
     CommonModule,
     ChemicalSalesReportRoutingModule,
@@ -50,7 +45,8 @@ import { SharedModule } from '@shared/shared.module';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDividerModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    ChemicalSalesReportComponent,
+  ],
 })
-export class ChemicalSalesReportModule { }
+export class ChemicalSalesReportModule {}

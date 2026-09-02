@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmailParameter } from '@core/domain-classes/email-parameter';
 import { EmailTemplate } from '@core/domain-classes/email-template';
@@ -10,12 +17,30 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../base.component';
 import { EmailTemplateService } from '../email-template/email-template.service';
 import { EmailSendService } from './email-send.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { DragDropDirective } from '../shared/directives/drag-drop.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-email-send',
   templateUrl: './email-send.component.html',
-  styleUrls: ['./email-send.component.scss']
+  styleUrls: ['./email-send.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    NgFor,
+    MatOption,
+    ReactiveFormsModule,
+    AngularEditorModule,
+    DragDropDirective,
+    TranslatePipe,
+  ],
 })
 export class EmailSendComponent extends BaseComponent implements OnInit {
   emailTamplates: EmailTemplate[] = [];
@@ -33,7 +58,8 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private emailSendService: EmailSendService,
     private router: Router,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -47,7 +73,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     this.emailForm.patchValue(this.selectedEmailTamplate);
     const regex = /\##(.*?)\##/gi;
     const parameters: Array<string> = this.selectedEmailTamplate.body.match(regex);
-    [...new Set(parameters)].forEach(parameter => {
+    [...new Set(parameters)].forEach((parameter) => {
       this.parameters.push(this.newParameter(parameter));
     });
   }
@@ -55,8 +81,8 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
   newParameter(parameter): UntypedFormGroup {
     return this.fb.group({
       parameter: [parameter, [Validators.required]],
-      value: ['', [Validators.required]]
-    })
+      value: ['', [Validators.required]],
+    });
   }
 
   get parameters(): UntypedFormArray {
@@ -67,7 +93,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     const paramters: EmailParameter[] = this.parameters.value;
     let emailBody = this.selectedEmailTamplate.body;
     if (paramters) {
-      paramters.forEach(paramter => {
+      paramters.forEach((paramter) => {
         if (paramter.value) {
           emailBody = emailBody.split(paramter.parameter).join(paramter.value);
         }
@@ -77,9 +103,11 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
   }
 
   getEmailTamplate() {
-    this.sub$.sink = this.emailTemplateService.getEmailTemplates().subscribe((emailTamplats: EmailTemplate[]) => {
-      this.emailTamplates = emailTamplats;
-    })
+    this.sub$.sink = this.emailTemplateService
+      .getEmailTemplates()
+      .subscribe((emailTamplats: EmailTemplate[]) => {
+        this.emailTamplates = emailTamplats;
+      });
   }
 
   createEmailForm() {
@@ -89,7 +117,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
       cCAddress: [''],
       subject: ['', [Validators.required]],
       body: ['', [Validators.required]],
-      parameters: this.fb.array([])
+      parameters: this.fb.array([]),
     });
   }
 
@@ -113,9 +141,9 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
         fileInfo.name = this.files[i].name;
         fileInfo.fileType = this.fileType;
         this.fileData.push(fileInfo);
-      }
+      };
       reader.readAsDataURL(this.files[i]);
-    };
+    }
   }
 
   sendEmail() {
@@ -126,14 +154,16 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     this.isLoading = true;
     const emailObj = this.emailForm.value;
     emailObj.attechments = this.fileData;
-    this.emailSendService.sendEmail(emailObj)
-      .subscribe(() => {
+    this.emailSendService.sendEmail(emailObj).subscribe(
+      () => {
         this.toastrService.success(this.translationService.getValue('EMAIL_SENT_SUCCESSFULLY'));
         this.isLoading = false;
         this.clearForm();
-      }, () => {
+      },
+      () => {
         this.isLoading = false;
-      });
+      },
+    );
   }
 
   clearForm() {
@@ -149,19 +179,18 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
       id: '',
       toAddress: '',
       cCAddress: '',
-      subject: ''
+      subject: '',
     });
-    this.emailForm.get('body').setValue("");
-
+    this.emailForm.get('body').setValue('');
   }
 
   formatBytes(bytes: number) {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-    if (bytes === 0) return 'n/a'
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return 'n/a';
     const value = Math.floor(Math.log(bytes) / Math.log(1024));
-    const i = parseInt(value.toString(), 10)
-    if (i === 0) return `${bytes} ${sizes[i]})`
-    return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
+    const i = parseInt(value.toString(), 10);
+    if (i === 0) return `${bytes} ${sizes[i]})`;
+    return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
   }
   onDeleteFile(index: number) {
     this.files.splice(index, 1);
@@ -172,6 +201,5 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
       this.files.push(file);
     }
     this.getFileInfo();
-
   }
 }

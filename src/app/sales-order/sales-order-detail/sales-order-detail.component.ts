@@ -9,19 +9,40 @@ import { ClonerService } from '@core/services/clone.service';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderService } from '../sales-order.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgClass, NgFor } from '@angular/common';
 import { SalesOrderAttachment } from '@core/domain-classes/sales-order-attachment';
 import { ToastrService } from 'ngx-toastr';
-
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatCard, MatCardSubtitle } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { SalesOrderInvoiceComponent } from '../../shared/sales-order-invoice/sales-order-invoice.component';
+import { PaymentStatusPipe } from '../../shared/pipes/purchase-order-paymentStatus.pipe';
+import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-order-detail',
   templateUrl: './sales-order-detail.component.html',
-  styleUrls: ['./sales-order-detail.component.scss']
+  styleUrls: ['./sales-order-detail.component.scss'],
+  imports: [
+    HasClaimDirective,
+    NgIf,
+    NgClass,
+    NgFor,
+    MatCard,
+    MatCardSubtitle,
+    MatProgressSpinner,
+    SalesOrderInvoiceComponent,
+    PaymentStatusPipe,
+    PaymentMethodPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class SalesOrderDetailComponent extends BaseComponent {
-
   currentDate: Date = new Date();
   quantitesErrormsg: string = '';
   errorMsg: string = '';
@@ -37,8 +58,9 @@ export class SalesOrderDetailComponent extends BaseComponent {
     private clonerService: ClonerService,
     private location: Location,
     private securityService: SecurityService,
-    private toastrService :ToastrService,
-    private translationService: TranslationService) {
+    private toastrService: ToastrService,
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -54,31 +76,35 @@ export class SalesOrderDetailComponent extends BaseComponent {
   }
 
   subScribeCompanyProfile() {
-    this.securityService.companyProfile.subscribe(data => {
+    this.securityService.companyProfile.subscribe((data) => {
       this.companyProfile = data;
     });
   }
 
   getSalesOrderById(id: string) {
     this.isLoading = true;
-    this.salesOrderService.getSalesOrderById(id)
-      .subscribe((c: SalesOrder) => {
+    this.salesOrderService.getSalesOrderById(id).subscribe(
+      (c: SalesOrder) => {
         this.salesOrder = this.clonerService.deepClone<SalesOrder>(c);
-        this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems.map(item => item.status == 1 ? -1 * item.quantity : item.quantity).reduce((prev, next) => prev + next);
-        this.salesOrderItems = this.salesOrder.salesOrderItems.filter(c => c.status == 0);
-        this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter(c => c.status == 1);
+        this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems
+          .map((item) => (item.status == 1 ? -1 * item.quantity : item.quantity))
+          .reduce((prev, next) => prev + next);
+        this.salesOrderItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 0);
+        this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 1);
         this.isLoading = false;
-      }, (err) => {
+      },
+      (err) => {
         this.isLoading = false;
-      });
+      },
+    );
   }
 
   generateInvoice() {
     let soForInvoice = this.clonerService.deepClone<SalesOrder>(this.salesOrder);
-    soForInvoice.salesOrderItems.map(c => {
+    soForInvoice.salesOrderItems.map((c) => {
       c.unitName = c.chemical?.unitName;
       return c;
-    })
+    });
     this.salesOrderForInvoice = soForInvoice;
   }
 
@@ -114,19 +140,20 @@ export class SalesOrderDetailComponent extends BaseComponent {
   //       }
   //     );
   // }
-  
+
   downloadAttachment(attachement: SalesOrderAttachment) {
-    this.sub$.sink = this.salesOrderService.downloadAttachment(attachement.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, attachement.name);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.salesOrderService.downloadAttachment(attachement.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, attachement.name);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {

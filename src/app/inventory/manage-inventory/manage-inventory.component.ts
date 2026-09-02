@@ -1,6 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -10,12 +16,25 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { InventoryService } from '../inventory.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatDivider } from '@angular/material/divider';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-inventory',
   templateUrl: './manage-inventory.component.html',
-  styleUrls: ['./manage-inventory.component.scss']
+  styleUrls: ['./manage-inventory.component.scss'],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelect,
+    MatDivider,
+    NgFor,
+    MatOption,
+    TranslatePipe,
+  ],
 })
 export class ManageInventoryComponent extends BaseComponent implements OnInit {
   inventoryForm: UntypedFormGroup;
@@ -28,7 +47,8 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
     private inventoryService: InventoryService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService) {
+    private chemicalService: ChemicalService,
+  ) {
     super();
     this.chemicalResource = new ChemicalResourceParameter();
   }
@@ -50,30 +70,31 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
       filerChemical: [],
       chemicalName: [''],
       chemicalId: ['', [Validators.required]],
-      pricePerUnit: ['', [Validators.required]]
+      pricePerUnit: ['', [Validators.required]],
     });
   }
 
   getChemicals() {
     this.chemicalResource.name = '';
-    this.chemicalService.getChemicals(this.chemicalResource)
-      .subscribe(resp => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-        }
-      });
+    this.chemicalService.getChemicals(this.chemicalResource).subscribe((resp) => {
+      if (resp && resp.headers) {
+        this.chemicals = [...resp.body];
+      }
+    });
   }
 
   chemicalNameChangeValue() {
-    this.sub$.sink = this.inventoryForm.get('filerChemical').valueChanges
-      .pipe(
+    this.sub$.sink = this.inventoryForm
+      .get('filerChemical')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.chemicalResource.name = c;
           return this.chemicalService.getChemicals(this.chemicalResource);
-        })
-      ).subscribe((resp: HttpResponse<Chemical[]>) => {
+        }),
+      )
+      .subscribe((resp: HttpResponse<Chemical[]>) => {
         if (resp && resp.headers) {
           this.chemicals = [...resp.body];
           if (this.data.id) {

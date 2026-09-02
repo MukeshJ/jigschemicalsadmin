@@ -16,10 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '@shared/shared.module';
 import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 
-
-
 @NgModule({
-  declarations: [SupplierChemicalComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -37,7 +34,8 @@ import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
     MatTableModule,
     MatCardModule,
     TranslatePipe,
-    TranslateDirective
-  ]
+    TranslateDirective,
+    SupplierChemicalComponent,
+  ],
 })
-export class SupplierChemicalModule { }
+export class SupplierChemicalModule {}

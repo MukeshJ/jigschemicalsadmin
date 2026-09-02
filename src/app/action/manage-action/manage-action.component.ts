@@ -5,12 +5,15 @@ import { Action } from '@core/domain-classes/action';
 import { ActionService } from '@core/services/action.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslationService } from '@core/services/translation.service';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-action',
   templateUrl: './manage-action.component.html',
-  styleUrls: ['./manage-action.component.scss']
+  styleUrls: ['./manage-action.component.scss'],
+  imports: [FormsModule, NgIf, TranslatePipe],
 })
 export class ManageActionComponent extends BaseComponent implements OnChanges {
   isEdit: boolean = false;
@@ -19,7 +22,8 @@ export class ManageActionComponent extends BaseComponent implements OnChanges {
     @Inject(MAT_DIALOG_DATA) public data: Action,
     private actionService: ActionService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -38,7 +42,7 @@ export class ManageActionComponent extends BaseComponent implements OnChanges {
   saveAction(): void {
     if (this.data.id) {
       this.actionService.update(this.data).subscribe(() => {
-        this.toastrService.success( this.translationService.getValue('ACTION_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(this.translationService.getValue('ACTION_UPDATED_SUCCESSFULLY'));
         this.dialogRef.close();
       });
     } else {
@@ -48,5 +52,4 @@ export class ManageActionComponent extends BaseComponent implements OnChanges {
       });
     }
   }
-
 }

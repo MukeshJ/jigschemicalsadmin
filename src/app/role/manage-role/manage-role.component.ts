@@ -13,15 +13,17 @@ import { Role } from '@core/domain-classes/role';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslationService } from '@core/services/translation.service';
+import { ManageRolePresentationComponent } from '../manage-role-presentation/manage-role-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-role',
   templateUrl: './manage-role.component.html',
-  styleUrls: ['./manage-role.component.scss']
+  styleUrls: ['./manage-role.component.scss'],
+  imports: [ManageRolePresentationComponent, AsyncPipe],
 })
 export class ManageRoleComponent extends BaseComponent implements OnInit {
-  pageActions$: Observable<PageAction[]>
+  pageActions$: Observable<PageAction[]>;
   pages$: Observable<Page[]>;
   actions$: Observable<Action[]>;
   loading$: Observable<boolean>;
@@ -37,46 +39,43 @@ export class ManageRoleComponent extends BaseComponent implements OnInit {
     private actionService: ActionService,
     private pageActionService: PageActionService,
     private roleService: RoleService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.sub$.sink = this.activeRoute.data.subscribe(
-      (data: { role: Role }) => {
-        if (data.role) {
-          this.role = data.role;
-        } else {
-          this.role = {
-            roleClaims: [],
-            userRoles: []
-          };
+    this.sub$.sink = this.activeRoute.data.subscribe((data: { role: Role }) => {
+      if (data.role) {
+        this.role = data.role;
+      } else {
+        this.role = {
+          roleClaims: [],
+          userRoles: [],
+        };
+      }
+    });
+
+    this.loadingAction$ = this.actionService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getActions();
         }
-      });
+      }),
+    );
+    this.actions$ = this.actionService.entities$;
 
-    this.loadingAction$ = this.actionService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getActions();
-          }
-        })
-      )
-    this.actions$ = this.actionService.entities$
-
-    this.loadingPage$ = this.pageService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getPages();
-          }
-        })
-      )
-    this.pages$ = this.pageService.entities$
-    this.loading$ = this.pageActionService.loaded$
-    this.pageActions$ = this.pageActionService.entities$
+    this.loadingPage$ = this.pageService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getPages();
+        }
+      }),
+    );
+    this.pages$ = this.pageService.entities$;
+    this.loading$ = this.pageActionService.loaded$;
+    this.pageActions$ = this.pageActionService.entities$;
     this.getPageActions();
-
   }
 
   getActions(): void {
@@ -98,7 +97,9 @@ export class ManageRoleComponent extends BaseComponent implements OnInit {
     }
 
     if (role.roleClaims.length == 0) {
-      this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_AT_LEAT_ONE_PERMISSION'));
+      this.toastrService.error(
+        this.translationService.getValue('PLEASE_SELECT_AT_LEAT_ONE_PERMISSION'),
+      );
       return;
     }
 

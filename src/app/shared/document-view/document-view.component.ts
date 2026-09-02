@@ -10,12 +10,17 @@ import { OverlayPanelRef } from '@shared/overlay-panel/overlay-panel-ref';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { DocumentLibraryService } from '../../document-library/document-library.service';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { NgxDocViewerComponent } from 'ngx-doc-viewer';
 
 @Component({
-  standalone: false,
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  styleUrls: ['./document-view.component.scss']
+  styleUrls: ['./document-view.component.scss'],
+  imports: [MatIcon, NgIf, MatProgressSpinner, NgxExtendedPdfViewerModule, NgxDocViewerComponent],
 })
 export class DocumentViewComponent extends BaseComponent implements OnInit {
   constructor(
@@ -23,7 +28,8 @@ export class DocumentViewComponent extends BaseComponent implements OnInit {
     @Inject(OVERLAY_PANEL_DATA) public data: DocumentView,
     private overlayRef: OverlayPanelRef,
     private toastrService: ToastrService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     super();
   }
   documentUrl: string = null;
@@ -46,18 +52,19 @@ export class DocumentViewComponent extends BaseComponent implements OnInit {
   getDocumentById() {
     this.isLoading = true;
     if (this.data.isRestricted) {
-      this.sub$.sink = this.documentLibraryService.getDocumentLibrary(this.data.documentId)
-        .subscribe(c => {
+      this.sub$.sink = this.documentLibraryService
+        .getDocumentLibrary(this.data.documentId)
+        .subscribe((c) => {
           this.isLoading = false;
           this.documentInfo = c;
           this.viewerType = this.documentInfo.viewerType;
           this.getDocumentUrl();
           this.addDocumentTrail();
         });
-    }
-    else {
-      this.sub$.sink = this.documentLibraryService.getDocumentViewLibrary(this.data.documentId)
-        .subscribe(c => {
+    } else {
+      this.sub$.sink = this.documentLibraryService
+        .getDocumentViewLibrary(this.data.documentId)
+        .subscribe((c) => {
           this.isLoading = false;
           this.documentInfo = c;
           this.viewerType = this.documentInfo.viewerType;
@@ -70,11 +77,11 @@ export class DocumentViewComponent extends BaseComponent implements OnInit {
   addDocumentTrail() {
     const objDocumentAuditTrail: DocumentAuditTrail = {
       documentId: this.documentInfo.id,
-      operationName: DocumentOperation.Read.toString()
-    }
-    this.sub$.sink = this.commonService.addDocumentAuditTrail(objDocumentAuditTrail)
-      .subscribe(c => {
-      })
+      operationName: DocumentOperation.Read.toString(),
+    };
+    this.sub$.sink = this.commonService
+      .addDocumentAuditTrail(objDocumentAuditTrail)
+      .subscribe((c) => {});
   }
 
   getDocumentUrl() {
@@ -83,8 +90,7 @@ export class DocumentViewComponent extends BaseComponent implements OnInit {
   }
 
   downloadDocument() {
-    this.sub$.sink = this.documentLibraryService.downloadDocument(this.documentInfo.id)
-    .subscribe(
+    this.sub$.sink = this.documentLibraryService.downloadDocument(this.documentInfo.id).subscribe(
       (event) => {
         if (event.type === HttpEventType.Response) {
           this.downloadFile(event);
@@ -92,7 +98,7 @@ export class DocumentViewComponent extends BaseComponent implements OnInit {
       },
       (error) => {
         this.toastrService.error('error while downloading document');
-      }
+      },
     );
   }
 

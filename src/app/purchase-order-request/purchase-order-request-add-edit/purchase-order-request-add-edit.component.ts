@@ -1,7 +1,14 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { DeliveryStatusEnum } from '@core/domain-classes/delivery-status-enum';
@@ -27,13 +34,45 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
+import { MatDivider } from '@angular/material/divider';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
+import { QuantitiesUnitPricePipe as QuantitiesUnitPricePipe_1 } from '../../shared/pipes/quantities-unitprice.pipe';
+import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../../shared/pipes/quantities-unitprice-tax.pipe';
 
 @Component({
-  standalone: false,
   selector: 'app-purchase-order-request-add-edit',
   templateUrl: './purchase-order-request-add-edit.component.html',
   styleUrls: ['./purchase-order-request-add-edit.component.scss'],
-  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe]
+  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatSelect,
+    MatDivider,
+    NgFor,
+    MatOption,
+    MatLabel,
+    MatIconButton,
+    MatIcon,
+    HasClaimDirective,
+    RouterLink,
+    CustomCurrencyPipe,
+    TranslatePipe,
+    QuantitiesUnitPricePipe_1,
+    QuantitiesUnitPriceTaxPipe_1,
+  ],
 })
 export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   taxes$: Observable<Tax[]>;
@@ -74,7 +113,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
-    private packagingTypeService: PackagingTypeService
+    private packagingTypeService: PackagingTypeService,
   ) {
     super();
     this.supplierResource = new SupplierResourceParameter();
@@ -88,11 +127,11 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     this.getTaxes();
     this.getPackagingTypes();
   }
-  
+
   getPackagingTypes() {
-    this.packagingTypeService.getAll().subscribe(packagingTypes => {
+    this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
-    })
+    });
   }
 
   onFilterValue(filterValue: any) {
@@ -103,64 +142,64 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     this.taxes$ = this.taxService.entities$;
   }
 
-
-
   createPurchaseOrder() {
-    this.route.data
-      .pipe(
-      )
-      .subscribe((purchaseOrderData: { 'purchaseorder': PurchaseOrder }) => {
-        this.purchaseOrder = purchaseOrderData.purchaseorder;
-        if (this.purchaseOrder) {
-          this.isEdit = true;
-          this.purchaseOrderForm = this.fb.group({
-            orderNumber: [this.purchaseOrder.orderNumber, [Validators.required]],
-            filerSupplier: [''],
-            deliveryDate: [this.purchaseOrder.deliveryDate, [Validators.required]],
-            poCreatedDate: [this.purchaseOrder.poCreatedDate, [Validators.required]],
-            deliveryStatus: [this.purchaseOrder.deliveryStatus],
-            supplierId: [this.purchaseOrder.supplierId, [Validators.required]],
-            packagingTypeId: [this.purchaseOrder.packagingTypeId],
-            note: [this.purchaseOrder.note],
-            paymentStatus: [this.purchaseOrder.paymentStatus],
-            termAndCondition: [this.purchaseOrder.termAndCondition],
-            supplierInvoiceNumber: [this.purchaseOrder.supplierInvoiceNumber],
-            purchaseOrderItems: this.fb.array([])
-          });
-          this.purchaseOrder.purchaseOrderItems.forEach(c => {
-            this.purchaseOrderItemsArray.push(this.createPurchaseOrderItemPatch(this.purchaseOrderItemsArray.length, c));
-          });
-          this.getSuppliers();
-          this.getAllTotal();
-        } else {
-          this.isEdit = false;
-          this.getSuppliers();
-          this.purchaseOrderForm = this.fb.group({
-            orderNumber: ['', [Validators.required]],
-            filerSupplier: [''],
-            deliveryDate: [new Date(), [Validators.required]],
-            poCreatedDate: [new Date(), [Validators.required]],
-            deliveryStatus: [1],
-            supplierId: ['', [Validators.required]],
-            note: [''],
-            termAndCondition: [''],
-            packagingTypeId: ['',[Validators.required]],
-            paymentStatus: [1],
-            supplierInvoiceNumber:[''],
-            purchaseOrderItems: this.fb.array([])
-          });
-          this.purchaseOrderItemsArray.push(this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length));
-        }
-
-      });
+    this.route.data.pipe().subscribe((purchaseOrderData: { purchaseorder: PurchaseOrder }) => {
+      this.purchaseOrder = purchaseOrderData.purchaseorder;
+      if (this.purchaseOrder) {
+        this.isEdit = true;
+        this.purchaseOrderForm = this.fb.group({
+          orderNumber: [this.purchaseOrder.orderNumber, [Validators.required]],
+          filerSupplier: [''],
+          deliveryDate: [this.purchaseOrder.deliveryDate, [Validators.required]],
+          poCreatedDate: [this.purchaseOrder.poCreatedDate, [Validators.required]],
+          deliveryStatus: [this.purchaseOrder.deliveryStatus],
+          supplierId: [this.purchaseOrder.supplierId, [Validators.required]],
+          packagingTypeId: [this.purchaseOrder.packagingTypeId],
+          note: [this.purchaseOrder.note],
+          paymentStatus: [this.purchaseOrder.paymentStatus],
+          termAndCondition: [this.purchaseOrder.termAndCondition],
+          supplierInvoiceNumber: [this.purchaseOrder.supplierInvoiceNumber],
+          purchaseOrderItems: this.fb.array([]),
+        });
+        this.purchaseOrder.purchaseOrderItems.forEach((c) => {
+          this.purchaseOrderItemsArray.push(
+            this.createPurchaseOrderItemPatch(this.purchaseOrderItemsArray.length, c),
+          );
+        });
+        this.getSuppliers();
+        this.getAllTotal();
+      } else {
+        this.isEdit = false;
+        this.getSuppliers();
+        this.purchaseOrderForm = this.fb.group({
+          orderNumber: ['', [Validators.required]],
+          filerSupplier: [''],
+          deliveryDate: [new Date(), [Validators.required]],
+          poCreatedDate: [new Date(), [Validators.required]],
+          deliveryStatus: [1],
+          supplierId: ['', [Validators.required]],
+          note: [''],
+          termAndCondition: [''],
+          packagingTypeId: ['', [Validators.required]],
+          paymentStatus: [1],
+          supplierInvoiceNumber: [''],
+          purchaseOrderItems: this.fb.array([]),
+        });
+        this.purchaseOrderItemsArray.push(
+          this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length),
+        );
+      }
+    });
   }
 
   onAddAnotherChemical() {
-    this.purchaseOrderItemsArray.push(this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length));
+    this.purchaseOrderItemsArray.push(
+      this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length),
+    );
   }
 
   createPurchaseOrderItemPatch(index: number, purchaseOrderItem: PurchaseOrderItem) {
-    const taxs = purchaseOrderItem.purchaseOrderItemTaxes.map(c => c.taxId);
+    const taxs = purchaseOrderItem.purchaseOrderItemTaxes.map((c) => c.taxId);
     const formGroup = this.fb.group({
       chemicalId: [purchaseOrderItem.chemicalId, [Validators.required]],
       filterChemicalValue: [''],
@@ -168,11 +207,11 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       quantity: [purchaseOrderItem.quantity, [Validators.required]],
       taxValue: [taxs],
       unitId: [{ value: purchaseOrderItem.chemical.unitId, disabled: true }, [Validators.required]],
-      discountPercentage: [purchaseOrderItem.discountPercentage]
+      discountPercentage: [purchaseOrderItem.discountPercentage],
     });
 
-    this.unitsMap[index] = [... this.route.snapshot.data['units']];
-    this.taxsMap[index] = [... this.route.snapshot.data['taxs']];
+    this.unitsMap[index] = [...this.route.snapshot.data['units']];
+    this.taxsMap[index] = [...this.route.snapshot.data['taxs']];
     this.filterChemicalsMap[index.toString()] = [purchaseOrderItem.chemical];
     this.getChemicalByNameValue(formGroup, index);
     return formGroup;
@@ -182,14 +221,14 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     const formGroup = this.fb.group({
       chemicalId: ['', [Validators.required]],
       filterChemicalValue: [''],
-      unitPrice: [0, [Validators.required,Validators.min(1)]],
-      quantity: [1, [Validators.required,Validators.min(1)]],
+      unitPrice: [0, [Validators.required, Validators.min(1)]],
+      quantity: [1, [Validators.required, Validators.min(1)]],
       taxValue: [null],
       unitId: [{ value: null, disabled: true }],
-      discountPercentage: [0,[Validators.min(0)]]
+      discountPercentage: [0, [Validators.min(0)]],
     });
-    this.unitsMap[index] = [... this.route.snapshot.data['units']];
-    this.taxsMap[index] = [... this.route.snapshot.data['taxs']];
+    this.unitsMap[index] = [...this.route.snapshot.data['units']];
+    this.taxsMap[index] = [...this.route.snapshot.data['taxs']];
     this.filterChemicalsMap[index.toString()] = [...this.route.snapshot.data['chemicals']];
     this.getChemicalByNameValue(formGroup, index);
     return formGroup;
@@ -199,22 +238,24 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     if (this.purchaseOrder) {
       this.getChemicals(index);
     }
-    this.sub$.sink = formGroup.get('filterChemicalValue').valueChanges
-      .pipe(
+    this.sub$.sink = formGroup
+      .get('filterChemicalValue')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.chemicalResource.name = c;
           return this.chemicalService.getChemicals(this.chemicalResource);
-        })
-      ).subscribe((resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
-        }
-      }, (err) => {
-
-      });
-
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
+          if (resp && resp.headers) {
+            this.filterChemicalsMap[index.toString()] = [...resp.body];
+          }
+        },
+        (err) => {},
+      );
   }
 
   getAllTotal() {
@@ -224,18 +265,48 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     this.totalDiscount = 0;
     this.totalTax = 0;
     if (purchaseOrderItems && purchaseOrderItems.length > 0) {
-      purchaseOrderItems.forEach(po => {
+      purchaseOrderItems.forEach((po) => {
         if (po.unitPrice && po.quantity) {
-          const totalBeforeDiscount = this.totalBeforeDiscount + parseFloat(this.quantitiesUnitPricePipe.transform(po.quantity, po.unitPrice));
+          const totalBeforeDiscount =
+            this.totalBeforeDiscount +
+            parseFloat(this.quantitiesUnitPricePipe.transform(po.quantity, po.unitPrice));
           this.totalBeforeDiscount = parseFloat(totalBeforeDiscount.toFixed(2));
-          const gradTotal = this.grandTotal + parseFloat(this.quantitiesUnitPricePipe.transform(po.quantity, po.unitPrice, po.discountPercentage, po.taxValue, this.taxsMap[0]));
+          const gradTotal =
+            this.grandTotal +
+            parseFloat(
+              this.quantitiesUnitPricePipe.transform(
+                po.quantity,
+                po.unitPrice,
+                po.discountPercentage,
+                po.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.grandTotal = parseFloat(gradTotal.toFixed(2));
-          const totalTax = this.totalTax + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(po.quantity, po.unitPrice, po.discountPercentage, po.taxValue, this.taxsMap[0]));
+          const totalTax =
+            this.totalTax +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                po.quantity,
+                po.unitPrice,
+                po.discountPercentage,
+                po.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.totalTax = parseFloat(totalTax.toFixed(2));
-          const totalDiscount = this.totalDiscount + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(po.quantity, po.unitPrice, po.discountPercentage));
+          const totalDiscount =
+            this.totalDiscount +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                po.quantity,
+                po.unitPrice,
+                po.discountPercentage,
+              ),
+            );
           this.totalDiscount = parseFloat(totalDiscount.toFixed(2));
         }
-      })
+      });
     }
   }
 
@@ -260,25 +331,25 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   getChemicals(index: number) {
     if (this.chemicals.length === 0) {
       this.chemicalResource.name = '';
-      this.chemicalService.getChemicals(this.chemicalResource)
-        .subscribe((resp: HttpResponse<Chemical[]>) => {
+      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
           this.chemicals = [...resp.body];
           this.filterChemicalsMap[index.toString()] = [...resp.body];
-        }, (err) => {
-        });
+        },
+        (err) => {},
+      );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemicals];
     }
-
   }
 
   onChemicalSelectionChange(value: any, index: number) {
     const chemical = this.filterChemicalsMap[index].find((c: Chemical) => c.id === value.value);
     this.purchaseOrderItemsArray.controls[index].patchValue({
-      filterChemicalValue: ''
+      filterChemicalValue: '',
     });
     this.purchaseOrderItemsArray.controls[index].patchValue({
-      unitId: chemical.unitId
+      unitId: chemical.unitId,
     });
     // if (chemical.chemicalTaxes.length) {
     //   this.purchaseOrderItemsArray.controls[index].patchValue({
@@ -289,83 +360,90 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
 
   getNewPurchaseOrderNumber() {
     if (!this.purchaseOrder) {
-      this.purchaseOrderService.getNewPurchaseOrderNumber(false)
-        .subscribe(purchaseOrder => {
-          this.purchaseOrderForm.patchValue({
-            orderNumber: purchaseOrder.orderNumber
-          });
+      this.purchaseOrderService.getNewPurchaseOrderNumber(false).subscribe((purchaseOrder) => {
+        this.purchaseOrderForm.patchValue({
+          orderNumber: purchaseOrder.orderNumber,
         });
+      });
     }
   }
 
-
   supplierNameChangeValue() {
-    this.sub$.sink = this.purchaseOrderForm.get('filerSupplier').valueChanges
-      .pipe(
-        tap(c => this.isSupplierLoading = true),
+    this.sub$.sink = this.purchaseOrderForm
+      .get('filerSupplier')
+      .valueChanges.pipe(
+        tap((c) => (this.isSupplierLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.supplierResource.supplierName = c;
           this.supplierResource.id = '';
           return this.supplierService.getSuppliers(this.supplierResource);
-        })
-      ).subscribe((resp: HttpResponse<Supplier[]>) => {
-        this.isSupplierLoading = false;
-        if (resp && resp.headers) {
-          this.suppliers = [...resp.body];
-        }
-      }, (err) => {
-        this.isSupplierLoading = false;
-      });
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Supplier[]>) => {
+          this.isSupplierLoading = false;
+          if (resp && resp.headers) {
+            this.suppliers = [...resp.body];
+          }
+        },
+        (err) => {
+          this.isSupplierLoading = false;
+        },
+      );
   }
 
   getSuppliers() {
-
     if (this.purchaseOrder) {
       this.supplierResource.id = this.purchaseOrder.supplierId;
     } else {
       this.supplierResource.supplierName = '';
       this.supplierResource.id = '';
     }
-    this.supplierService.getSuppliers(this.supplierResource)
-      .subscribe(resp => {
-        if (resp && resp.headers) {
-          this.suppliers = [...resp.body];
-        }
-      });
+    this.supplierService.getSuppliers(this.supplierResource).subscribe((resp) => {
+      if (resp && resp.headers) {
+        this.suppliers = [...resp.body];
+      }
+    });
   }
 
   onPurchaseOrderSubmit() {
     if (!this.purchaseOrderForm.valid) {
       this.purchaseOrderForm.markAllAsTouched();
     } else {
-      if (this.purchaseOrder && this.purchaseOrder.purchaseOrderStatus === PurchaseOrderStatusEnum.Not_Return) {
+      if (
+        this.purchaseOrder &&
+        this.purchaseOrder.purchaseOrderStatus === PurchaseOrderStatusEnum.Not_Return
+      ) {
         this.toastrService.error("Purchase Order can't edit becuase it's already approved.");
         return;
       }
       this.isLoading = true;
       const purchaseOrder = this.buildPurchaseOrder();
       if (purchaseOrder.id) {
-        this.purchaseOrderService.updatePurchaseOrder(purchaseOrder)
-          .subscribe((c: PurchaseOrder) => {
+        this.purchaseOrderService.updatePurchaseOrder(purchaseOrder).subscribe(
+          (c: PurchaseOrder) => {
             this.isLoading = false;
             this.toastrService.success('Purchase order added successfully.');
             this.router.navigate(['/purchase-order-request/list']);
-          }, (err) => {
+          },
+          (err) => {
             this.isLoading = false;
-          })
+          },
+        );
       } else {
-        this.purchaseOrderService.addPurchaseOrder(purchaseOrder)
-          .subscribe((c: PurchaseOrder) => {
+        this.purchaseOrderService.addPurchaseOrder(purchaseOrder).subscribe(
+          (c: PurchaseOrder) => {
             this.isLoading = false;
             this.toastrService.success('Purchase order added successfully.');
             this.router.navigate(['/purchase-order-request/list']);
-          }, (err) => {
+          },
+          (err) => {
             this.isLoading = false;
-          });
+          },
+        );
       }
-
     }
   }
 
@@ -385,7 +463,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       purchaseOrderItems: [],
       purchaseOrderStatus: PurchaseOrderStatusEnum.Not_Return,
       deliveryStatus: DeliveryStatusEnum.UnDelivery,
-      packagingTypeId:this.purchaseOrderForm.get('packagingTypeId').value,
+      packagingTypeId: this.purchaseOrderForm.get('packagingTypeId').value,
       isStockAtSupplierWarehouse: true,
       supplierInvoiceNumber: this.purchaseOrderForm.get('supplierInvoiceNumber').value,
       paymentStatus: this.purchaseOrderForm.get('paymentStatus').value,
@@ -394,26 +472,40 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
 
     const purchaseOrderItems = this.purchaseOrderForm.get('purchaseOrderItems').value;
     if (purchaseOrderItems && purchaseOrderItems.length > 0) {
-      purchaseOrderItems.forEach(po => {
-        purchaseOrder.purchaseOrderItems.push(
-          {
-            discount: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(po.quantity, po.unitPrice, po.discountPercentage)),
-            discountPercentage: po.discountPercentage,
-            chemicalId: po.chemicalId,
-            quantity: po.quantity,
-            taxValue: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(po.quantity, po.unitPrice, po.discountPercentage, po.taxValue, this.taxsMap[0])),
-            unitPrice: parseFloat(po.unitPrice),
-            purchaseOrderItemTaxes: po.taxValue ? [
-              ...po.taxValue.map(element => {
-                const purchaseOrderItemTaxes: PurchaseOrderItemTax = {
-                  taxId: element
-                };
-                return purchaseOrderItemTaxes;
-              })
-            ] : []
-          }
-        )
-      })
+      purchaseOrderItems.forEach((po) => {
+        purchaseOrder.purchaseOrderItems.push({
+          discount: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              po.quantity,
+              po.unitPrice,
+              po.discountPercentage,
+            ),
+          ),
+          discountPercentage: po.discountPercentage,
+          chemicalId: po.chemicalId,
+          quantity: po.quantity,
+          taxValue: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              po.quantity,
+              po.unitPrice,
+              po.discountPercentage,
+              po.taxValue,
+              this.taxsMap[0],
+            ),
+          ),
+          unitPrice: parseFloat(po.unitPrice),
+          purchaseOrderItemTaxes: po.taxValue
+            ? [
+                ...po.taxValue.map((element) => {
+                  const purchaseOrderItemTaxes: PurchaseOrderItemTax = {
+                    taxId: element,
+                  };
+                  return purchaseOrderItemTaxes;
+                }),
+              ]
+            : [],
+        });
+      });
     }
     return purchaseOrder;
   }

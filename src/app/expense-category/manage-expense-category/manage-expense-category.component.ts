@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
 import { ExpenseCategoryService } from '@core/services/expense-category.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-expense-category',
   templateUrl: './manage-expense-category.component.html',
-  styleUrls: ['./manage-expense-category.component.scss']
+  styleUrls: ['./manage-expense-category.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageExpenseCategoryComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageExpenseCategoryComponent extends BaseComponent implements OnI
     private expenseCategoryService: ExpenseCategoryService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class ManageExpenseCategoryComponent extends BaseComponent implements OnI
   createForm() {
     this.expenseCategoryForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -53,12 +62,16 @@ export class ManageExpenseCategoryComponent extends BaseComponent implements OnI
 
     if (this.data.id) {
       this.expenseCategoryService.update(expenseCategory).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('EXPENSE_CATEGORY_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('EXPENSE_CATEGORY_UPDATED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     } else {
       this.expenseCategoryService.add(expenseCategory).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('EXPENSE_CATEGORY_SAVED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('EXPENSE_CATEGORY_SAVED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     }

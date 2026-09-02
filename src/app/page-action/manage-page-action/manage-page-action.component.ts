@@ -7,15 +7,17 @@ import { Observable } from 'rxjs';
 import { PageService } from '@core/services/page.service';
 import { ActionService } from '@core/services/action.service';
 import { PageActionService } from '@core/services/page-action.service';
+import { ManagePageActionPresentationComponent } from '../manage-page-action-presentation/manage-page-action-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-page-action',
   templateUrl: './manage-page-action.component.html',
-  styleUrls: ['./manage-page-action.component.scss']
+  styleUrls: ['./manage-page-action.component.scss'],
+  imports: [ManagePageActionPresentationComponent, AsyncPipe],
 })
 export class ManagePageActionComponent implements OnInit {
-  pageActions$: Observable<PageAction[]>
+  pageActions$: Observable<PageAction[]>;
   pages$: Observable<Page[]>;
   actions$: Observable<Action[]>;
   loading$: Observable<boolean>;
@@ -25,32 +27,28 @@ export class ManagePageActionComponent implements OnInit {
   constructor(
     private pageService: PageService,
     private actionService: ActionService,
-    private pageActionService: PageActionService) {
-
-  }
+    private pageActionService: PageActionService,
+  ) {}
 
   ngOnInit(): void {
+    this.loadingAction$ = this.actionService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getActions();
+        }
+      }),
+    );
+    this.actions$ = this.actionService.entities$;
 
-    this.loadingAction$ = this.actionService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getActions();
-          }
-        })
-      )
-    this.actions$ = this.actionService.entities$
-
-    this.loadingPage$ = this.pageService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getPages();
-          }
-        })
-      )
-    this.pages$ = this.pageService.entities$
-    this.loading$ = this.pageActionService.loaded$
+    this.loadingPage$ = this.pageService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getPages();
+        }
+      }),
+    );
+    this.pages$ = this.pageService.entities$;
+    this.loading$ = this.pageActionService.loaded$;
     this.pageActions$ = this.pageActionService.entities$;
     this.getPageActions();
   }
@@ -68,7 +66,6 @@ export class ManagePageActionComponent implements OnInit {
   }
 
   onAddPageAction(pageAction: PageAction): void {
-
     this.pageActionService.add(pageAction);
     // TODO: save page action
   }
@@ -76,5 +73,4 @@ export class ManagePageActionComponent implements OnInit {
   onDeletePageAction(pageAction: PageAction) {
     this.pageActionService.delete(pageAction.id);
   }
-
 }

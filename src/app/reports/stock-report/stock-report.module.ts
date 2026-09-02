@@ -20,13 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { StockReportRoutingModule } from './stock-report-routing.module';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
-
 @NgModule({
-  declarations: [
-    StockReportComponent,
-    InventoryHistoryListComponent
-  ],
   imports: [
     CommonModule,
     StockReportRoutingModule,
@@ -46,7 +40,9 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatDividerModule
-  ]
+    MatDividerModule,
+    StockReportComponent,
+    InventoryHistoryListComponent,
+  ],
 })
-export class StockReportModule { }
+export class StockReportModule {}

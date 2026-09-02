@@ -6,33 +6,34 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
+import { UnitListPresentationComponent } from '../unit-list-presentation/unit-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-unit-list',
   templateUrl: './unit-list.component.html',
-  styleUrls: ['./unit-list.component.scss']
+  styleUrls: ['./unit-list.component.scss'],
+  imports: [UnitListPresentationComponent, AsyncPipe],
 })
 export class UnitListComponent extends BaseComponent implements OnInit {
-
   units$: Observable<Unit[]>;
   loading$: Observable<boolean>;
   constructor(
     private unitService: UnitService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-    this.loading$ = this.unitService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getUnits();
-          }
-        })
-      )
-    this.units$ = this.unitService.entities$
+    this.loading$ = this.unitService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getUnits();
+        }
+      }),
+    );
+    this.units$ = this.unitService.entities$;
   }
 
   getUnits(): void {
@@ -44,5 +45,4 @@ export class UnitListComponent extends BaseComponent implements OnInit {
       this.toastrService.success('Unit deleted Successfully');
     });
   }
-
 }

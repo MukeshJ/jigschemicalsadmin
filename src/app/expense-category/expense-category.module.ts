@@ -10,14 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '@shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [
-    ExpenseCategoryListComponent,
-    ExpenseCategoryListPresentationComponent,
-    ManageExpenseCategoryComponent
-  ],
   imports: [
     CommonModule,
     ExpenseCategoryRoutingModule,
@@ -25,7 +18,10 @@ import { SharedModule } from '@shared/shared.module';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SharedModule
-  ]
+    SharedModule,
+    ExpenseCategoryListComponent,
+    ExpenseCategoryListPresentationComponent,
+    ManageExpenseCategoryComponent,
+  ],
 })
-export class ExpenseCategoryModule { }
+export class ExpenseCategoryModule {}

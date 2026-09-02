@@ -2,8 +2,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { ApplicationEnums } from '@core/domain-classes/application.enum';
 import { Inquiry } from '@core/domain-classes/inquiry';
@@ -26,17 +26,92 @@ import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
 import { InquiryChemicalListComponent } from './inquiry-chemical-list/inquiry-chemical-list.component';
 import { InquiryDataSource } from './inquiry-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-list',
   templateUrl: './inquiry-list.component.html',
-  styleUrls: ['./inquiry-list.component.scss']
+  styleUrls: ['./inquiry-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class InquiryListComponent extends BaseComponent implements OnInit {
   dataSource: InquiryDataSource;
   inquiries: Inquiry[] = [];
-  displayedColumns: string[] = ['action', 'createdDate', 'companyName', 'status', 'source', 'assignTo', 'email', 'mobileNo', 'cityName', 'taskCount', 'commentCount', 'attachmentCount'];
+  displayedColumns: string[] = [
+    'action',
+    'createdDate',
+    'companyName',
+    'status',
+    'source',
+    'assignTo',
+    'email',
+    'mobileNo',
+    'cityName',
+    'taskCount',
+    'commentCount',
+    'attachmentCount',
+  ];
   footerToDisplayed = ['footer'];
   isLoadingResults = true;
   inquiryResource: InquiryResourceParameter;
@@ -86,7 +161,6 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
   }
 
   public set AssignToFilter(v: string) {
-
     this._assignToFilter = v ? v : '';
     const assignToFilter = `AssignTo:${this._assignToFilter}`;
     this.filterObservable$.next(assignToFilter);
@@ -134,14 +208,15 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private inquiryStatusService: InquiryStatusService,
-    private inquirySourceService: InquirySourceService) {
+    private inquirySourceService: InquirySourceService,
+  ) {
     super();
     this.inquiryResource = new InquiryResourceParameter();
     this.inquiryResource.pageSize = 15;
     this.inquiryResource.orderBy = 'createdDate asc';
     this.userResource = new UserResource();
     this.userResource.pageSize = 10;
-    this.userResource.orderBy = 'firstName desc'
+    this.userResource.orderBy = 'firstName desc';
   }
 
   ngOnInit(): void {
@@ -152,9 +227,7 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
     this.getInquirySource();
     this.getUsers();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.inquiryResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -166,14 +239,11 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
           this.inquiryResource.mobileNo = strArray[1];
         } else if (strArray[0] === 'cityName') {
           this.inquiryResource.city = strArray[1];
-        }
-        else if (strArray[0] === 'AssignTo') {
+        } else if (strArray[0] === 'AssignTo') {
           this.inquiryResource.assignTo = strArray[1];
-        }
-        else if (strArray[0] === 'Source') {
+        } else if (strArray[0] === 'Source') {
           this.inquiryResource.inquirySourceId = strArray[1];
-        }
-        else if (strArray[0] === 'Status') {
+        } else if (strArray[0] === 'Status') {
           this.inquiryResource.inquiryStatusId = strArray[1];
         }
         this.dataSource.loadData(this.inquiryResource);
@@ -181,7 +251,7 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -189,76 +259,76 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
           this.inquiryResource.pageSize = this.paginator.pageSize;
           this.inquiryResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.inquiryResource);
-        })
+        }),
       )
       .subscribe();
   }
 
-
   getUsers() {
-    this.sub$.sink = this.userService.getUsers(this.userResource)
+    this.sub$.sink = this.userService
+      .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
       });
   }
 
   getInuiriesStatus() {
-    this.sub$.sink = this.inquiryStatusService.getAll()
-      .subscribe(c => {
-        this.inquiryStatuses = c;
-      })
+    this.sub$.sink = this.inquiryStatusService.getAll().subscribe((c) => {
+      this.inquiryStatuses = c;
+    });
   }
 
   getInquirySource() {
-    this.inquirySourceService.getAll()
-      .subscribe(c => this.sourcesOfInquiry = c);
+    this.inquirySourceService.getAll().subscribe((c) => (this.sourcesOfInquiry = c));
   }
 
   deleteInquiry(inquiry: Inquiry) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.inquiryService.deleteInquiry(inquiry.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('INQUIRY_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.inquiryResource);
-            });
+          this.sub$.sink = this.inquiryService.deleteInquiry(inquiry.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('INQUIRY_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.inquiryResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.inquiryResource.pageSize = c.pageSize;
-          this.inquiryResource.skip = c.skip;
-          this.inquiryResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.inquiryResource.pageSize = c.pageSize;
+        this.inquiryResource.skip = c.skip;
+        this.inquiryResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   addReminder(inquiryId: string) {
     const moduleReference: ModuleReference = {
       application: ApplicationEnums.Inquiry,
-      referenceId: inquiryId
+      referenceId: inquiryId,
     };
     this.dialog.open(AddReminderSchedulerComponent, {
       minWidth: '800px',
-      data: Object.assign({}, moduleReference)
+      data: Object.assign({}, moduleReference),
     });
   }
 
   editInquiry(inquiryId: string) {
-    this.router.navigate(['/inquiry/manage', inquiryId])
+    this.router.navigate(['/inquiry/manage', inquiryId]);
   }
 
   viewChemicals(inquiry: Inquiry): void {
     this.dialog.open(InquiryChemicalListComponent, {
       minWidth: '800px',
-      data: Object.assign({}, inquiry)
+      data: Object.assign({}, inquiry),
     });
   }
 }

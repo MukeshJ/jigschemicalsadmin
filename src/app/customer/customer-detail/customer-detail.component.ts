@@ -1,5 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  ValidatorFn,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { City } from '@core/domain-classes/city';
 import { Country } from '@core/domain-classes/country';
@@ -14,7 +22,12 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerService } from '../customer.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
+import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export class AlreadyExistValidator {
   static exist(flag: boolean): ValidatorFn {
@@ -28,13 +41,26 @@ export class AlreadyExistValidator {
 }
 
 @Component({
-  standalone: false,
   selector: 'app-customer-detail',
   templateUrl: './customer-detail.component.html',
   styleUrls: ['./customer-detail.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    TranslatePipe,
+  ],
 })
 export class CustomerDetailComponent extends BaseComponent implements OnInit {
-
   customerForm: UntypedFormGroup;
   imgSrc: any = null;
   isImageUpload: boolean = false;
@@ -53,7 +79,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private location: Location
+    private location: Location,
   ) {
     super();
   }
@@ -62,22 +88,20 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     this.createCustomerForm();
     this.getCountry();
     this.getCityByName();
-    const routeSub$ = this.route.data.subscribe(
-      (data: { customer: Customer }) => {
-        if (data.customer) {
-          this.customer = { ...data.customer };
-          if (this.customer.imageUrl) {
-            this.imgSrc = `${environment.apiUrl}${this.customer.imageUrl}`;
-          }
-          this.patchCustomer();
-        } else {
-          if (this.customer) {
-            this.imgSrc = '';
-            this.customer = Object.assign({}, null);
-          }
+    const routeSub$ = this.route.data.subscribe((data: { customer: Customer }) => {
+      if (data.customer) {
+        this.customer = { ...data.customer };
+        if (this.customer.imageUrl) {
+          this.imgSrc = `${environment.apiUrl}${this.customer.imageUrl}`;
+        }
+        this.patchCustomer();
+      } else {
+        if (this.customer) {
+          this.imgSrc = '';
+          this.customer = Object.assign({}, null);
         }
       }
-    );
+    });
     this.sub$.add(routeSub$);
   }
 
@@ -90,14 +114,14 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
         switchMap((c: string) => {
           var strArray = c.split(':');
           return this.commonService.getCityByName(strArray[0], strArray[1]);
-        })
+        }),
       )
       .subscribe(
         (c: City[]) => {
           this.cities = [...c];
           this.isLoadingCity = false;
         },
-        (err) => (this.isLoadingCity = false)
+        (err) => (this.isLoadingCity = false),
       );
   }
 
@@ -114,7 +138,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
       address: this.customer.address,
       email: this.customer.email,
       countryId: this.customer.countryId,
-      cityName: this.customer.cityName
+      cityName: this.customer.cityName,
     });
   }
 
@@ -131,7 +155,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
       cityId: [''],
       countryId: [''],
       cityName: [''],
-      countryName: ['']
+      countryName: [''],
     });
   }
 
@@ -140,22 +164,16 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     if (!email) {
       return;
     }
-    const id =
-      this.customer && this.customer.id ? this.customer.id : Guid.create();
-    this.sub$.sink = this.customerService
-      .checkEmailOrPhoneExist('', email, id)
-      .subscribe((c) => {
-        const emailControl = this.customerForm.get('email');
-        if (c) {
-          emailControl.setValidators([
-            Validators.required,
-            AlreadyExistValidator.exist(true),
-          ]);
-        } else {
-          emailControl.setValidators([Validators.required]);
-        }
-        emailControl.updateValueAndValidity();
-      });
+    const id = this.customer && this.customer.id ? this.customer.id : Guid.create();
+    this.sub$.sink = this.customerService.checkEmailOrPhoneExist('', email, id).subscribe((c) => {
+      const emailControl = this.customerForm.get('email');
+      if (c) {
+        emailControl.setValidators([Validators.required, AlreadyExistValidator.exist(true)]);
+      } else {
+        emailControl.setValidators([Validators.required]);
+      }
+      emailControl.updateValueAndValidity();
+    });
   }
 
   onMobileNoChange(event: any) {
@@ -163,24 +181,19 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     if (!mobileno) {
       return;
     }
-    const id =
-      this.customer && this.customer.id ? this.customer.id : Guid.create();
+    const id = this.customer && this.customer.id ? this.customer.id : Guid.create();
     this.sub$.sink = this.customerService
       .checkEmailOrPhoneExist('', mobileno, id)
       .subscribe((c) => {
         const mobileNoControl = this.customerForm.get('mobileNo');
         if (c) {
-          mobileNoControl.setValidators([
-            Validators.required,
-            AlreadyExistValidator.exist(true),
-          ]);
+          mobileNoControl.setValidators([Validators.required, AlreadyExistValidator.exist(true)]);
         } else {
           mobileNoControl.setValidators([Validators.required]);
         }
         mobileNoControl.updateValueAndValidity();
       });
   }
-
 
   onFileSelect($event) {
     const fileSelected = $event.target.files[0];
@@ -198,7 +211,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -245,17 +258,19 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
       if (this.customer) {
         this.sub$.sink = this.customerService
           .updateCustomer(this.customer.id, custObj)
-          .subscribe(c => {
-            this.toastrService.success(this.translationService.getValue('CUSTOMER_UPDATE_SUCCESSFULLY'));
+          .subscribe((c) => {
+            this.toastrService.success(
+              this.translationService.getValue('CUSTOMER_UPDATE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/customer']);
           });
       } else {
-        this.sub$.sink = this.customerService
-          .saveCustomer(custObj)
-          .subscribe(c => {
-            this.toastrService.success(this.translationService.getValue('CUSTOMER_SAVE_SUCCESSFULLY'));
-            this.router.navigate(['/customer']);
-          });
+        this.sub$.sink = this.customerService.saveCustomer(custObj).subscribe((c) => {
+          this.toastrService.success(
+            this.translationService.getValue('CUSTOMER_SAVE_SUCCESSFULLY'),
+          );
+          this.router.navigate(['/customer']);
+        });
       }
     } else {
       this.markFormGroupTouched(this.customerForm);
@@ -288,9 +303,8 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
       email: this.customerForm.get('email').value,
       countryId: this.customerForm.get('countryId').value,
       cityId: this.customerForm.get('cityId').value,
-      cityName: this.customerForm.get('cityName').value
+      cityName: this.customerForm.get('cityName').value,
     };
     return customerObj;
   }
-
 }

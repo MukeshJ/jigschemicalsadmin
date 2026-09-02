@@ -17,12 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
-
-
 @NgModule({
-  declarations: [
-    ExpenseReportComponent
-  ],
   imports: [
     CommonModule,
     ExpenseReportRoutingModule,
@@ -40,7 +35,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    MatDatepickerModule
-  ]
+    MatDatepickerModule,
+    ExpenseReportComponent,
+  ],
 })
-export class ExpenseReportModule { }
+export class ExpenseReportModule {}

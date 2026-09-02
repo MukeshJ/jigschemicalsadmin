@@ -1,17 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EmailSMTPSetting } from '@core/domain-classes/email-smtp-setting';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailSmtpSettingService } from '../email-smtp-setting.service';
+import { NgIf } from '@angular/common';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-email-smtp-setting',
   templateUrl: './manage-email-smtp-setting.component.html',
-  styleUrls: ['./manage-email-smtp-setting.component.scss']
+  styleUrls: ['./manage-email-smtp-setting.component.scss'],
+  imports: [NgIf, FormsModule, ReactiveFormsModule, MatSlideToggle, RouterLink, TranslatePipe],
 })
 export class ManageEmailSmtpSettingComponent extends BaseComponent implements OnInit {
   isEditMode: boolean = false;
@@ -22,20 +31,19 @@ export class ManageEmailSmtpSettingComponent extends BaseComponent implements On
     private activeRoute: ActivatedRoute,
     private emailSmtpSettingService: EmailSmtpSettingService,
     private toastrService: ToastrService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.createEmailSMTPForm();
-    this.sub$.sink = this.activeRoute.data.subscribe(
-      (data: { smtpSetting: EmailSMTPSetting }) => {
-        if (data.smtpSetting) {
-          this.isEditMode = true;
-          this.smtpSettingForm.patchValue(data.smtpSetting);
-        }
-      });
+    this.sub$.sink = this.activeRoute.data.subscribe((data: { smtpSetting: EmailSMTPSetting }) => {
+      if (data.smtpSetting) {
+        this.isEditMode = true;
+        this.smtpSettingForm.patchValue(data.smtpSetting);
+      }
+    });
   }
 
   createEmailSMTPForm() {
@@ -54,15 +62,23 @@ export class ManageEmailSmtpSettingComponent extends BaseComponent implements On
     if (this.smtpSettingForm.valid) {
       const emailSMTPSetting = this.createBuildObject();
       if (this.isEditMode) {
-        this.sub$.sink = this.emailSmtpSettingService.updateEmailSMTPSetting(emailSMTPSetting).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('EMAIL_SMTP_SETTING_UPDATED_SUCCESSFULLY'));
-          this.router.navigate(['/email-smtp']);
-        });
+        this.sub$.sink = this.emailSmtpSettingService
+          .updateEmailSMTPSetting(emailSMTPSetting)
+          .subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('EMAIL_SMTP_SETTING_UPDATED_SUCCESSFULLY'),
+            );
+            this.router.navigate(['/email-smtp']);
+          });
       } else {
-        this.sub$.sink = this.emailSmtpSettingService.addEmailSMTPSetting(emailSMTPSetting).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('EMAIL_SMTP_SETTING_CREATED_SUCCESSFULLY'));
-          this.router.navigate(['/email-smtp']);
-        });
+        this.sub$.sink = this.emailSmtpSettingService
+          .addEmailSMTPSetting(emailSMTPSetting)
+          .subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('EMAIL_SMTP_SETTING_CREATED_SUCCESSFULLY'),
+            );
+            this.router.navigate(['/email-smtp']);
+          });
       }
     } else {
       this.smtpSettingForm.markAllAsTouched();
@@ -78,8 +94,8 @@ export class ManageEmailSmtpSettingComponent extends BaseComponent implements On
       password: this.smtpSettingForm.get('password').value,
       isEnableSSL: this.smtpSettingForm.get('isEnableSSL').value,
       port: this.smtpSettingForm.get('port').value,
-      isDefault: this.smtpSettingForm.get('isDefault').value
-    }
+      isDefault: this.smtpSettingForm.get('isDefault').value,
+    };
     return user;
   }
 }

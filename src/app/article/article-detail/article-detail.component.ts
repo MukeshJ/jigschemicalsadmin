@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Article } from '@core/domain-classes/article';
 import { ArticleCategory } from '@core/domain-classes/article-category';
 import { TranslationService } from '@core/services/translation.service';
@@ -9,12 +15,38 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-article-detail',
   templateUrl: './article-detail.component.html',
-  styleUrls: ['./article-detail.component.scss']
+  styleUrls: ['./article-detail.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatProgressSpinner,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatError,
+    MatIcon,
+    MatDatepickerInput,
+    MatDatepicker,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class ArticleDetailComponent extends BaseComponent implements OnInit {
   articleForm: UntypedFormGroup;
@@ -22,39 +54,39 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
   article: Article;
   categories: ArticleCategory[] = [];
   isLoading = false;
-  editorConfig= EditorConfig;
+  editorConfig = EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;
-  constructor(private fb: UntypedFormBuilder,
+  constructor(
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private articleService: ArticleService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private router: Router) {
+    private router: Router,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.createArticleForm();
     this.getArticleCategory();
-    const routeSub$ = this.route.data.subscribe(
-      (data: { article: Article }) => {
-        if (data.article) {
-          this.article = data.article;
-          this.titlePage = 'Update Article';
-          this.patchArticle();
-        } else {
-          this.titlePage = 'Add Article';
-        }
+    const routeSub$ = this.route.data.subscribe((data: { article: Article }) => {
+      if (data.article) {
+        this.article = data.article;
+        this.titlePage = 'Update Article';
+        this.patchArticle();
+      } else {
+        this.titlePage = 'Add Article';
       }
-    );
+    });
     this.sub$.add(routeSub$);
   }
 
   getArticleCategory() {
-    this.sub$.sink = this.articleService.getArticleCategories().subscribe(d => {
+    this.sub$.sink = this.articleService.getArticleCategories().subscribe((d) => {
       this.categories = d;
-    })
+    });
   }
 
   patchArticle() {
@@ -86,16 +118,20 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
     if (this.articleForm.valid) {
       const article: Article = Object.assign(this.articleForm.value, {
         bannerImageSrc: this.imgSrc,
-        isImageUpload: this.isImageUpload
+        isImageUpload: this.isImageUpload,
       });
       if (this.article) {
         this.articleService.updateArticle(this.article.id, article).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('ARTICLE_UPDATED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('ARTICLE_UPDATED_SUCCESSFULLY'),
+          );
           this.router.navigate(['/article']);
         });
       } else {
         this.articleService.saveArticle(article).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('ARTICLE_ADDED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('ARTICLE_ADDED_SUCCESSFULLY'),
+          );
           this.router.navigate(['/article']);
         });
       }
@@ -120,12 +156,11 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
     this.imgSrc = '';
     this.isImageUpload = true;
   }
-
 }

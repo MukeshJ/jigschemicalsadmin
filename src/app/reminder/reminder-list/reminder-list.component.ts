@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Frequency } from '@core/domain-classes/frequency.enum';
 import { Reminder } from '@core/domain-classes/reminder';
@@ -17,18 +17,92 @@ import { BaseComponent } from 'src/app/base.component';
 import { AddReminderComponent } from '../add-reminder/add-reminder.component';
 import { ReminderService } from '../reminder.service';
 import { ReminderDataSource } from './reminder-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { RouterLink } from '@angular/router';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ReminderFrequencyPipe } from './reminder-frequency.pipe';
 
 @Component({
-  standalone: false,
   selector: 'app-reminder-list',
   templateUrl: './reminder-list.component.html',
-  styleUrls: ['./reminder-list.component.scss']
+  styleUrls: ['./reminder-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    NgIf,
+    MatProgressSpinner,
+    AsyncPipe,
+    TruncatePipe,
+    UTCToLocalTime,
+    TranslatePipe,
+    ReminderFrequencyPipe,
+  ],
 })
 export class ReminderListComponent extends BaseComponent implements OnInit {
   dataSource: ReminderDataSource;
   reminders: Reminder[] = [];
   reminderFrequencies: ReminderFrequency[] = [];
-  displayedColumns: string[] = ['action', 'startDate', 'endDate', 'subject', 'message', 'frequency'];
+  displayedColumns: string[] = [
+    'action',
+    'startDate',
+    'endDate',
+    'subject',
+    'message',
+    'frequency',
+  ];
   footerToDisplayed = ['footer'];
   isLoadingResults = true;
   reminderResource: ReminderResourceParameter;
@@ -80,7 +154,8 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
     private commonService: CommonService,
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
     this.reminderResource = new ReminderResourceParameter();
     this.reminderResource.pageSize = 15;
@@ -93,9 +168,7 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.reminderResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.reminderResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -111,7 +184,7 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sub$.sink = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sub$.sink = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -119,57 +192,71 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
           this.reminderResource.pageSize = this.paginator.pageSize;
           this.reminderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.reminderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getReminderFrequency() {
-    this.sub$.sink = this.commonService.getReminderFrequency().subscribe(f =>
-      this.reminderFrequencies = [...f]
-    );
+    this.sub$.sink = this.commonService
+      .getReminderFrequency()
+      .subscribe((f) => (this.reminderFrequencies = [...f]));
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.reminderResource.pageSize = c.pageSize;
-          this.reminderResource.skip = c.skip;
-          this.reminderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.reminderResource.pageSize = c.pageSize;
+        this.reminderResource.skip = c.skip;
+        this.reminderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editReminder(reminder: Reminder) {
     this.isLoadingResults = true;
-    this.sub$.sink = this.reminderService.getReminder(reminder.id).subscribe((reminder: Reminder) => {
-      this.isLoadingResults = false;
-      let dialog = this.dialog.open(AddReminderComponent, {
-        width: '60vw',
-        data: Object.assign({}, {
-          frequencies: this.reminderFrequencies,
-          reminder
-        })
-      });
-      this.sub$.sink = dialog.afterClosed().subscribe((isUpdated: boolean) => {
-        if (isUpdated) {
-          this.dataSource.loadData(this.reminderResource);
-        }
-      });
-    }, () => this.isLoadingResults = false);
+    this.sub$.sink = this.reminderService.getReminder(reminder.id).subscribe(
+      (reminder: Reminder) => {
+        this.isLoadingResults = false;
+        let dialog = this.dialog.open(AddReminderComponent, {
+          width: '60vw',
+          data: Object.assign(
+            {},
+            {
+              frequencies: this.reminderFrequencies,
+              reminder,
+            },
+          ),
+        });
+        this.sub$.sink = dialog.afterClosed().subscribe((isUpdated: boolean) => {
+          if (isUpdated) {
+            this.dataSource.loadData(this.reminderResource);
+          }
+        });
+      },
+      () => (this.isLoadingResults = false),
+    );
   }
 
   deleteReminder(reminder: Reminder) {
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`).subscribe(isTrue => {
-      if (isTrue) {
-        this.isLoadingResults = true;
-        this.reminderService.deleteReminder(reminder.id).subscribe(() => {
-          this.isLoadingResults = false;
-          this.toastrService.success(this.translationService.getValue('REMINDER_DELETED_SUCCESSFULLY'));
-          this.dataSource.loadData(this.reminderResource);
-        }, () => this.isLoadingResults = false);
-      }
-    });
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
+      .subscribe((isTrue) => {
+        if (isTrue) {
+          this.isLoadingResults = true;
+          this.reminderService.deleteReminder(reminder.id).subscribe(
+            () => {
+              this.isLoadingResults = false;
+              this.toastrService.success(
+                this.translationService.getValue('REMINDER_DELETED_SUCCESSFULLY'),
+              );
+              this.dataSource.loadData(this.reminderResource);
+            },
+            () => (this.isLoadingResults = false),
+          );
+        }
+      });
   }
 }

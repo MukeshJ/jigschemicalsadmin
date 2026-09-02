@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquiryStatus } from '@core/domain-classes/inquiry-status';
 import { InquiryStatusService } from '@core/services/inquiry-status.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-inquiry-status',
   templateUrl: './manage-inquiry-status.component.html',
-  styleUrls: ['./manage-inquiry-status.component.scss']
+  styleUrls: ['./manage-inquiry-status.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageInquiryStatusComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageInquiryStatusComponent extends BaseComponent implements OnIni
     private inquiryStatusService: InquiryStatusService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -37,7 +46,7 @@ export class ManageInquiryStatusComponent extends BaseComponent implements OnIni
   createForm() {
     this.inquiryStatusForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -54,15 +63,18 @@ export class ManageInquiryStatusComponent extends BaseComponent implements OnIni
 
     if (this.data.id) {
       this.inquiryStatusService.update(inquiryStatus).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('INQUIRY_STATUS_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('INQUIRY_STATUS_UPDATED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     } else {
       this.inquiryStatusService.add(inquiryStatus).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('INQUIRY_STATUS_SAVED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('INQUIRY_STATUS_SAVED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     }
   }
 }
-

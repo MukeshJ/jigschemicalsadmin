@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { DocumentCategory } from '@core/domain-classes/document-category';
 import { DocumentAuditTrail } from '@core/domain-classes/document-audit-trail';
 import { ResponseHeader } from '@core/domain-classes/document-header';
@@ -15,17 +15,64 @@ import { BaseComponent } from '../base.component';
 import { DocumentAuditTrialDataSource } from './document-audit-trail-datassource';
 import { DocumentAuditTrailService } from './document-audit-trail.service';
 import { TranslationService } from '@core/services/translation.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect, MatOption } from '@angular/material/select';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { UTCToLocalTime } from '../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-audit-trail',
   templateUrl: './document-audit-trail.component.html',
-  styleUrls: ['./document-audit-trail.component.scss']
+  styleUrls: ['./document-audit-trail.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    AsyncPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class DocumentAuditTrailComponent extends BaseComponent implements OnInit, AfterViewInit {
   dataSource: DocumentAuditTrialDataSource;
   documentAuditTrails: DocumentAuditTrail[] = [];
-  displayedColumns: string[] = ['createdDate','documentName', 'categoryName','operationName','createdBy','permissionUser','permissionRole'];
+  displayedColumns: string[] = [
+    'createdDate',
+    'documentName',
+    'categoryName',
+    'operationName',
+    'createdBy',
+    'permissionUser',
+    'permissionRole',
+  ];
   isLoadingResults = true;
   documentResource: DocumentResource;
   categories: DocumentCategory[] = [];
@@ -38,12 +85,12 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
   constructor(
     private documentAuditTrailService: DocumentAuditTrailService,
     private categoryService: DocumentCategoryService,
-    private commonService: CommonService
+    private commonService: CommonService,
   ) {
     super();
     this.documentResource = new DocumentResource();
     this.documentResource.pageSize = 10;
-    this.documentResource.orderBy = "createdDate desc";
+    this.documentResource.orderBy = 'createdDate desc';
   }
 
   ngOnInit(): void {
@@ -51,23 +98,22 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
     this.dataSource.loadDocumentAuditTrails(this.documentResource);
     this.sub$.sink = this.categoryService.loaded$
       .pipe(
-        tap(loaded => {
+        tap((loaded) => {
           if (!loaded) {
             this.getCategories();
           }
-        })
-      ).subscribe();
-    this.sub$.sink = this.categoryService.entities$
-      .subscribe(c => {
-        this.categories = [...c];
-      });
+        }),
+      )
+      .subscribe();
+    this.sub$.sink = this.categoryService.entities$.subscribe((c) => {
+      this.categories = [...c];
+    });
     this.getResourceParameter();
     this.getUsers();
   }
 
   ngAfterViewInit() {
-
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -76,7 +122,7 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
           this.documentResource.pageSize = this.paginator.pageSize;
           this.documentResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadDocumentAuditTrails(this.documentResource);
-        })
+        }),
       )
       .subscribe();
 
@@ -88,7 +134,7 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
           this.paginator.pageIndex = 0;
           this.documentResource.name = this.input.nativeElement.value;
           this.dataSource.loadDocumentAuditTrails(this.documentResource);
-        })
+        }),
       )
       .subscribe();
   }
@@ -118,25 +164,25 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
   }
 
   getUsers(): void {
-    this.sub$.sink = this.commonService.getUsers()
-      .subscribe((data: User[]) => {
+    this.sub$.sink = this.commonService.getUsers().subscribe(
+      (data: User[]) => {
         this.users = data;
-      }, (err: CommonError) => {
+      },
+      (err: CommonError) => {
         err.messages.forEach(() => {
           // this.toastrService.error(msg);
         });
-      });
+      },
+    );
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.documentResource.pageSize = c.pageSize;
-          this.documentResource.skip = c.skip;
-          this.documentResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.documentResource.pageSize = c.pageSize;
+        this.documentResource.skip = c.skip;
+        this.documentResource.totalCount = c.totalCount;
+      }
+    });
   }
-
 }

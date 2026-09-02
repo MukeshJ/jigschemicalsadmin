@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
+import { PackagingTypeListPresentationComponent } from '../packaging-type-list-presentation/packaging-type-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-packaging-type-list',
   templateUrl: './packaging-type-list.component.html',
-  styleUrls: ['./packaging-type-list.component.scss']
+  styleUrls: ['./packaging-type-list.component.scss'],
+  imports: [PackagingTypeListPresentationComponent, AsyncPipe],
 })
 export class PackagingTypeListComponent extends BaseComponent implements OnInit {
   packagingTypes$: Observable<PackagingType[]>;
@@ -19,20 +21,19 @@ export class PackagingTypeListComponent extends BaseComponent implements OnInit 
   constructor(
     private packagingTypeService: PackagingTypeService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.packagingTypeService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getPackagingTypes();
-          }
-        })
-      )
-    this.packagingTypes$ = this.packagingTypeService.entities$
+    this.loading$ = this.packagingTypeService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getPackagingTypes();
+        }
+      }),
+    );
+    this.packagingTypes$ = this.packagingTypeService.entities$;
   }
 
   getPackagingTypes(): void {
@@ -41,7 +42,9 @@ export class PackagingTypeListComponent extends BaseComponent implements OnInit 
 
   deletePackagingType(id: string): void {
     this.sub$.sink = this.packagingTypeService.delete(id).subscribe(() => {
-      this.toastrService.success(this.translationService.getValue('PACKAGING_TYPE_DELETED_SUCCESSFULLY'));
+      this.toastrService.success(
+        this.translationService.getValue('PACKAGING_TYPE_DELETED_SUCCESSFULLY'),
+      );
     });
   }
 

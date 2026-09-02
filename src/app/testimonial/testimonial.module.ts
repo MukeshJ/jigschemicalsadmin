@@ -15,10 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
-
 @NgModule({
-  declarations: [TestimonialListComponent, TestimonialDetailComponent],
   imports: [
     CommonModule,
     TestimonialRoutingModule,
@@ -32,8 +29,10 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatPaginatorModule,
     MatTableModule,
     MatCardModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TestimonialListComponent,
+    TestimonialDetailComponent,
   ],
-  providers: [TestimonialDetailResolverService]
+  providers: [TestimonialDetailResolverService],
 })
-export class TestimonialModule { }
+export class TestimonialModule {}

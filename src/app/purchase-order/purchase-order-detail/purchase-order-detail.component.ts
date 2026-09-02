@@ -9,19 +9,40 @@ import { ClonerService } from '@core/services/clone.service';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderService } from '../purchase-order.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor, NgClass } from '@angular/common';
 import { PurchaseOrderAttachment } from '@core/domain-classes/purchase-order/purchase-order-attachment';
 import { ToastrService } from 'ngx-toastr';
-
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatCard, MatCardSubtitle } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { PurchaseOrderInvoiceComponent } from '../../shared/purchase-order-invoice/purchase-order-invoice.component';
+import { PaymentStatusPipe } from '../../shared/pipes/purchase-order-paymentStatus.pipe';
+import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-purchase-order-detail',
   templateUrl: './purchase-order-detail.component.html',
-  styleUrls: ['./purchase-order-detail.component.scss']
+  styleUrls: ['./purchase-order-detail.component.scss'],
+  imports: [
+    HasClaimDirective,
+    NgIf,
+    NgFor,
+    NgClass,
+    MatCard,
+    MatCardSubtitle,
+    MatProgressSpinner,
+    PurchaseOrderInvoiceComponent,
+    PaymentStatusPipe,
+    PaymentMethodPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class PurchaseOrderDetailComponent extends BaseComponent {
-
   currentDate: Date = new Date();
   quantitesErrormsg: string = '';
   errorMsg: string = '';
@@ -38,7 +59,8 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
     private securityService: SecurityService,
     private location: Location,
     private translationService: TranslationService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+  ) {
     super();
   }
 
@@ -54,46 +76,55 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
   }
 
   subScribeCompanyProfile() {
-    this.securityService.companyProfile.subscribe(data => {
+    this.securityService.companyProfile.subscribe((data) => {
       this.companyProfile = data;
     });
   }
 
   getPurchaseOrderById(id: string) {
     this.isLoading = true;
-    this.purchaseOrderService.getPurchaseOrderById(id)
-      .subscribe((c: PurchaseOrder) => {
+    this.purchaseOrderService.getPurchaseOrderById(id).subscribe(
+      (c: PurchaseOrder) => {
         this.purchaseOrder = this.clonerService.deepClone<PurchaseOrder>(c);
-        this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems.map(item => item.status == 1 ? -1 * item.quantity : item.quantity).reduce((prev, next) => prev + next);
-        this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter(c => c.status == 0);
-        this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(c => c.status == 1);
+        this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems
+          .map((item) => (item.status == 1 ? -1 * item.quantity : item.quantity))
+          .reduce((prev, next) => prev + next);
+        this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter(
+          (c) => c.status == 0,
+        );
+        this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(
+          (c) => c.status == 1,
+        );
         this.isLoading = false;
-      }, (err) => {
+      },
+      (err) => {
         this.isLoading = false;
-      });
+      },
+    );
   }
 
   generateInvoice() {
     let poForInvoice = this.clonerService.deepClone<PurchaseOrder>(this.purchaseOrder);
-    poForInvoice.purchaseOrderItems.map(c => {
+    poForInvoice.purchaseOrderItems.map((c) => {
       c.unitName = c.chemical?.unitName;
       return c;
-    })
+    });
     this.purchaseOrderForInvoice = poForInvoice;
   }
 
   downloadAttachment(attachement: PurchaseOrderAttachment) {
-    this.sub$.sink = this.purchaseOrderService.downloadAttachment(attachement.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, attachement.name);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.purchaseOrderService.downloadAttachment(attachement.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, attachement.name);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {
@@ -112,4 +143,3 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
     this.location.back();
   }
 }
-

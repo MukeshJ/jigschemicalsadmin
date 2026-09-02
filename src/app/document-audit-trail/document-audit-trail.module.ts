@@ -12,9 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from '@shared/shared.module';
 
-
 @NgModule({
-  declarations: [DocumentAuditTrailComponent],
   imports: [
     CommonModule,
     DocumentAuditTrailRoutingModule,
@@ -26,6 +24,7 @@ import { SharedModule } from '@shared/shared.module';
     MatSortModule,
     MatPaginatorModule,
     MatInputModule,
-  ]
+    DocumentAuditTrailComponent,
+  ],
 })
-export class DocumentAuditTrailModule { }
+export class DocumentAuditTrailModule {}

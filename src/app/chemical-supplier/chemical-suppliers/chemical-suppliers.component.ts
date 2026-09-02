@@ -19,12 +19,62 @@ import { SendEmailSuppliers } from '@core/domain-classes/send-email-suppliers';
 import { TranslationService } from '@core/services/translation.service';
 import { Country } from '@core/domain-classes/country';
 import { CommonService } from '@core/services/common.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgFor } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-suppliers',
   templateUrl: './chemical-suppliers.component.html',
-  styleUrls: ['./chemical-suppliers.component.scss']
+  styleUrls: ['./chemical-suppliers.component.scss'],
+  imports: [
+    HasClaimDirective,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatCheckbox,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    TranslatePipe,
+  ],
 })
 export class ChemicalSuppliersComponent extends BaseComponent implements OnInit {
   suppliers: Supplier[] = [];
@@ -89,19 +139,17 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
     @Inject(MAT_DIALOG_DATA) public data: Chemical,
     private dialog: MatDialog,
     private translationService: TranslationService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.getCountries();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
-        if (this.paginator)
-          this.paginator.firstPage();
+        if (this.paginator) this.paginator.firstPage();
         this.getSuppliersList();
       });
     if (this.data) {
@@ -122,13 +170,16 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
     this.isLoading = true;
     this.sub$.sink = this.supplierService
       .getSuppliersByChemicalId(supplierResourceParameter)
-      .subscribe((c) => {
-        this.suppliers = c.suppliers;
-        this.totalSuppliers = c.totalCount;
-        this.isLoading = false;
-      }, () => {
-        this.isLoading = false;
-      });
+      .subscribe(
+        (c) => {
+          this.suppliers = c.suppliers;
+          this.totalSuppliers = c.totalCount;
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        },
+      );
   }
 
   public pageChange(event: PageEvent): void {
@@ -141,17 +192,24 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
   }
 
   getCountries() {
-    this.sub$.sink = this.commonService.getCountry().subscribe(c => this.countryList = c);
+    this.sub$.sink = this.commonService.getCountry().subscribe((c) => (this.countryList = c));
   }
 
   removeSupplierFromChemial(supplier: Supplier) {
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${supplier.supplierName} ?`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${supplier.supplierName} ?`,
+      )
+      .subscribe((isTrue) => {
         if (isTrue) {
-          this.sub$.sink = this.supplierChemicalService.deleteSupplierChemcial(this.data.id, supplier.id).subscribe(data => {
-            this.toasterService.success(this.translationService.getValue('SUPPLIER_DELETED_SUCCESSFULLY'))
-            this.getSuppliersList();
-          });
+          this.sub$.sink = this.supplierChemicalService
+            .deleteSupplierChemcial(this.data.id, supplier.id)
+            .subscribe((data) => {
+              this.toasterService.success(
+                this.translationService.getValue('SUPPLIER_DELETED_SUCCESSFULLY'),
+              );
+              this.getSuppliersList();
+            });
         }
       });
   }
@@ -159,30 +217,27 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
     const dialogRef = this.dialog.open(AddChemicalSupplierComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, this.data)
+      data: Object.assign({}, this.data),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"])
-          this.getSuppliersList();
-      });
-
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) this.getSuppliersList();
+    });
   }
   sendEmail() {
     const sendEmailSuppliers: SendEmailSuppliers = {
-      suppliers: this.selection.selected.filter(c => {
+      suppliers: this.selection.selected.filter((c) => {
         if (c.email) {
           return true;
         }
         return false;
       }),
       chemicalId: this.data.id,
-      chemicalName: this.data.name
-    }
+      chemicalName: this.data.name,
+    };
     this.dialog.open(SendEmailComponent, {
       width: '60vw',
       height: 'auto',
-      data: Object.assign({}, sendEmailSuppliers)
+      data: Object.assign({}, sendEmailSuppliers),
     });
   }
 }

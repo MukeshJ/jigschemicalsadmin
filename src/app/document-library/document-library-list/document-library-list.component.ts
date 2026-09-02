@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Category } from '@core/domain-classes/category';
 import { ResponseHeader } from '@core/domain-classes/document-header';
 import { DocumentInfo } from '@core/domain-classes/document-info';
@@ -15,17 +15,77 @@ import { DocumentLibraryService } from '../document-library.service';
 import { DocumentViewComponent } from '../../shared/document-view/document-view.component';
 import { DocumentLibraryDataSource } from './document-library-datasource';
 import { SelectionModel } from '@angular/cdk/collections';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect, MatOption } from '@angular/material/select';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-library-list',
   templateUrl: './document-library-list.component.html',
-  styleUrls: ['./document-library-list.component.scss']
+  styleUrls: ['./document-library-list.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatIcon,
+    MatSortHeader,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class DocumentLibraryListComponent extends BaseComponent implements OnInit, AfterViewInit {
   dataSource: DocumentLibraryDataSource;
   documents: DocumentInfo[] = [];
-  displayedColumns: string[] = ['action', 'name', 'categoryName', 'createdDate', 'expiredDate', 'createdBy'];
+  displayedColumns: string[] = [
+    'action',
+    'name',
+    'categoryName',
+    'createdDate',
+    'expiredDate',
+    'createdBy',
+  ];
   footerToDisplayed: Array<string> = ['footer'];
   isLoadingResults = true;
   documentResource: DocumentResource;
@@ -39,11 +99,12 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
   constructor(
     private documentLibraryService: DocumentLibraryService,
     private categoryService: DocumentCategoryService,
-    public overlay: OverlayPanel) {
+    public overlay: OverlayPanel,
+  ) {
     super();
     this.documentResource = new DocumentResource();
     this.documentResource.pageSize = 10;
-    this.documentResource.orderBy = "CreatedDate desc";
+    this.documentResource.orderBy = 'CreatedDate desc';
   }
 
   ngOnInit(): void {
@@ -51,21 +112,21 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
     this.dataSource.loadDocuments(this.documentResource);
     this.sub$.sink = this.categoryService.loaded$
       .pipe(
-        tap(loaded => {
+        tap((loaded) => {
           if (!loaded) {
             this.getCategories();
           }
-        })
-      ).subscribe();
-    this.sub$.sink = this.categoryService.entities$
-      .subscribe(c => {
-        this.categories = [...c];
-      });
+        }),
+      )
+      .subscribe();
+    this.sub$.sink = this.categoryService.entities$.subscribe((c) => {
+      this.categories = [...c];
+    });
     this.getResourceParameter();
   }
 
   ngAfterViewInit() {
-    this.sub$.sink = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sub$.sink = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => {
@@ -73,7 +134,7 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
           this.documentResource.pageSize = this.paginator.pageSize;
           this.documentResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadDocuments(this.documentResource);
-        })
+        }),
       )
       .subscribe();
 
@@ -85,7 +146,7 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
           this.paginator.pageIndex = 0;
           this.documentResource.name = this.input.nativeElement.value;
           this.dataSource.loadDocuments(this.documentResource);
-        })
+        }),
       )
       .subscribe();
   }
@@ -105,31 +166,27 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.documentResource.pageSize = c.pageSize;
-          this.documentResource.skip = c.skip;
-          this.documentResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.documentResource.pageSize = c.pageSize;
+        this.documentResource.skip = c.skip;
+        this.documentResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   getDocuments(): void {
     this.isLoadingResults = true;
-    this.sub$.sink = this.documentLibraryService.getDocuments(this.documentResource)
-      .subscribe(
-        (resp: HttpResponse<DocumentInfo[]>) => {
-          const paginationParam = JSON.parse(
-            resp.headers.get('X-Pagination')
-          ) as ResponseHeader;
-          this.documentResource.pageSize = paginationParam.pageSize;
-          this.documentResource.skip = paginationParam.skip;
-          this.documents = [...resp.body];
-          this.isLoadingResults = false;
-        },
-        () => (this.isLoadingResults = false)
-      );
+    this.sub$.sink = this.documentLibraryService.getDocuments(this.documentResource).subscribe(
+      (resp: HttpResponse<DocumentInfo[]>) => {
+        const paginationParam = JSON.parse(resp.headers.get('X-Pagination')) as ResponseHeader;
+        this.documentResource.pageSize = paginationParam.pageSize;
+        this.documentResource.skip = paginationParam.skip;
+        this.documents = [...resp.body];
+        this.isLoadingResults = false;
+      },
+      () => (this.isLoadingResults = false),
+    );
   }
 
   onDocumentView(document: DocumentInfo) {
@@ -137,7 +194,7 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
       position: 'center',
       origin: 'global',
       panelClass: ['file-preview-overlay-container', 'white-background'],
-      data: { documentId: document.id, isRestricted: false }
+      data: { documentId: document.id, isRestricted: false },
     });
   }
 }

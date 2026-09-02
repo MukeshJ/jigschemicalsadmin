@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -14,12 +20,56 @@ import { BaseComponent } from '../base.component';
 import { ChemicalService } from '../chemical/chemical.service';
 import { SupplierService } from '../supplier/supplier.service';
 import { SupplierChemicalService } from './supplier-chemical.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCard } from '@angular/material/card';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-supplier-chemical',
   templateUrl: './supplier-chemical.component.html',
-  styleUrls: ['./supplier-chemical.component.scss']
+  styleUrls: ['./supplier-chemical.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatCard,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgFor,
+    MatOption,
+    MatChipSet,
+    MatChip,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class SupplierChemicalComponent extends BaseComponent implements OnInit {
   supplierChemicalForm: UntypedFormGroup;
@@ -35,13 +85,15 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
   chemicals$: Observable<Chemical[]>;
   suppliers$: Observable<Supplier[]>;
 
-  constructor(private fb: UntypedFormBuilder,
+  constructor(
+    private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private supplierChemicalService: SupplierChemicalService,
     private chemicalService: ChemicalService,
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
     this.SupplierResource = new SupplierResourceParameter();
     this.SupplierResource.pageSize = 10;
@@ -49,31 +101,36 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.createSupplierChemicalForm();
-    this.suppliers$ = this.supplierChemicalForm
-      .get('supplierNameInput')
-      .valueChanges.pipe(
-        debounceTime(1000),
-        tap(() => this.isLoading = true),
-        switchMap(value => {
-          this.SupplierResource.searchQuery = value
-          return this.supplierChemicalService.searchSupplier(this.SupplierResource)
-            .pipe(tap(() => { this.isLoading = false }))
-        }
-        ),
-        finalize(() => { this.isLoading = false })
-      );
+    this.suppliers$ = this.supplierChemicalForm.get('supplierNameInput').valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => (this.isLoading = true)),
+      switchMap((value) => {
+        this.SupplierResource.searchQuery = value;
+        return this.supplierChemicalService.searchSupplier(this.SupplierResource).pipe(
+          tap(() => {
+            this.isLoading = false;
+          }),
+        );
+      }),
+      finalize(() => {
+        this.isLoading = false;
+      }),
+    );
 
-    this.chemicals$ = this.supplierChemicalForm
-      .get('chemicalNameInput')
-      .valueChanges.pipe(
-        debounceTime(1000),
-        tap(() => this.isLoading = true),
-        switchMap(value =>
-          this.chemicalService.getChemicalsForDropDown('all', value)
-            .pipe(tap(() => { this.isLoading = false }))
+    this.chemicals$ = this.supplierChemicalForm.get('chemicalNameInput').valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => (this.isLoading = true)),
+      switchMap((value) =>
+        this.chemicalService.getChemicalsForDropDown('all', value).pipe(
+          tap(() => {
+            this.isLoading = false;
+          }),
         ),
-        finalize(() => { this.isLoading = false })
-      );
+      ),
+      finalize(() => {
+        this.isLoading = false;
+      }),
+    );
   }
 
   get supplierChemicalsArray(): UntypedFormArray {
@@ -92,7 +149,7 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
     return this.fb.group({
       id: [chemical.id],
       name: [chemical.name],
-      casNumber: [chemical.casNumber]
+      casNumber: [chemical.casNumber],
     });
   }
 
@@ -107,12 +164,12 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
       this.paginator.firstPage();
     }
     this.skip = 0;
-    this.pageSize = 10
+    this.pageSize = 10;
     this.getChemicalsList();
-  }
+  };
 
   removeChemical(index: number) {
-    this.supplierChemicalsArray.removeAt(index)
+    this.supplierChemicalsArray.removeAt(index);
   }
 
   getChemicalsList() {
@@ -120,13 +177,16 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.sub$.sink = this.supplierService
       .getChemicalsBySupplierId(supplierId, this.skip, this.pageSize, '', '')
-      .subscribe((c) => {
-        this.supplierChemicals = c.chemicals;
-        this.totalChemicals = c.totalCount;
-        this.isLoading = false;
-      }, () => {
-        this.isLoading = false;
-      });
+      .subscribe(
+        (c) => {
+          this.supplierChemicals = c.chemicals;
+          this.totalChemicals = c.totalCount;
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        },
+      );
   }
 
   public pageChange(event: PageEvent): void {
@@ -135,42 +195,52 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
   }
 
   saveSupplierChemicals() {
-    var chemicalIdList = (this.supplierChemicalsArray.value as Chemical[]).map(c => c.id);
+    var chemicalIdList = (this.supplierChemicalsArray.value as Chemical[]).map((c) => c.id);
     if (chemicalIdList.length == 0) {
-      this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_ATLEASE_ONE_CHEMICAL'))
+      this.toastrService.error(
+        this.translationService.getValue('PLEASE_SELECT_ATLEASE_ONE_CHEMICAL'),
+      );
       return;
     }
     this.isLoading = true;
     var supplierChemicals: SupplierChemicals = {
       supplierId: this.selectedSupplier.id,
-      chemicalIdList
+      chemicalIdList,
     };
 
-    this.sub$.sink = this.supplierChemicalService.addChemicalSupplier(supplierChemicals)
-      .subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('SUPPLIER_CHEMICAL_SAVED_SUCCESSFULLY'));
+    this.sub$.sink = this.supplierChemicalService.addChemicalSupplier(supplierChemicals).subscribe(
+      () => {
+        this.toastrService.success(
+          this.translationService.getValue('SUPPLIER_CHEMICAL_SAVED_SUCCESSFULLY'),
+        );
         while (this.supplierChemicalsArray.length !== 0) {
-          this.supplierChemicalsArray.removeAt(0)
+          this.supplierChemicalsArray.removeAt(0);
         }
         this.isLoading = false;
         this.getChemicalsList();
-      }, () => {
+      },
+      () => {
         this.isLoading = false;
-      });
+      },
+    );
   }
 
   removeChemicalFromSupplier(chemical: Chemical) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.supplierChemicalService.deleteSupplierChemcial(chemical.id, this.selectedSupplier.id)
+          this.sub$.sink = this.supplierChemicalService
+            .deleteSupplierChemcial(chemical.id, this.selectedSupplier.id)
             .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('CHEMICAL_REMOVED_SUCCESSFULLY'));
+              this.toastrService.success(
+                this.translationService.getValue('CHEMICAL_REMOVED_SUCCESSFULLY'),
+              );
               this.getChemicalsList();
-            })
+            });
         }
       });
-
   }
 }

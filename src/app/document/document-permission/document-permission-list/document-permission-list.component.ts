@@ -1,7 +1,19 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { DocumentInfo } from '@core/domain-classes/document-info';
@@ -18,24 +30,55 @@ import { DocumentService } from '../../document.service';
 import { DocumentPermissionService } from '../document-permission.service';
 import { ManageRolePermissionComponent } from '../manage-role-permission/manage-role-permission.component';
 import { ManageUserPermissionComponent } from '../manage-user-permission/manage-user-permission.component';
+import { NgIf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { UTCToLocalTime } from '../../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-permission-list',
   templateUrl: './document-permission-list.component.html',
-  styleUrls: ['./document-permission-list.component.scss']
+  styleUrls: ['./document-permission-list.component.scss'],
+  imports: [
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
-
 export class DocumentPermissionListComponent extends BaseComponent implements OnInit {
   documentPermissions: DocumentPermission[] = [];
   document: DocumentInfo;
   users: User[] = [];
   roles: Role[] = [];
-  documentPermissionsColumns = ['action', 'type', 'isAllowDownload', 'name', 'email', 'startDate', 'endDate'];
+  documentPermissionsColumns = [
+    'action',
+    'type',
+    'isAllowDownload',
+    'name',
+    'email',
+    'startDate',
+    'endDate',
+  ];
   permissionsDataSource: MatTableDataSource<DocumentPermission>;
   @ViewChild('userPermissionsPaginator') userPermissionsPaginator: MatPaginator;
 
-  constructor(private documentService: DocumentService,
+  constructor(
+    private documentService: DocumentService,
     private documentPermissionService: DocumentPermissionService,
     private route: ActivatedRoute,
     private commonDialogService: CommonDialogService,
@@ -44,13 +87,14 @@ export class DocumentPermissionListComponent extends BaseComponent implements On
     private commonService: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: DocumentInfo,
     private dialogRef: MatDialogRef<DocumentPermissionListComponent>,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
     this.document = data;
   }
 
   ngOnInit(): void {
-    this.sub$.sink = this.route.params.subscribe(params => {
+    this.sub$.sink = this.route.params.subscribe((params) => {
       this.getDocumentPrmission();
       this.getUsers();
       this.getRoles();
@@ -58,7 +102,8 @@ export class DocumentPermissionListComponent extends BaseComponent implements On
   }
 
   getDocumentPrmission() {
-    this.sub$.sink = this.documentPermissionService.getDoucmentPermission(this.document.id)
+    this.sub$.sink = this.documentPermissionService
+      .getDoucmentPermission(this.document.id)
       .subscribe((permission: DocumentPermission[]) => {
         this.documentPermissions = permission;
         this.permissionsDataSource = new MatTableDataSource(this.documentPermissions);
@@ -67,23 +112,30 @@ export class DocumentPermissionListComponent extends BaseComponent implements On
   }
 
   getUsers() {
-    this.sub$.sink = this.commonService.getUsers()
-      .subscribe((users: User[]) => this.users = users);
+    this.sub$.sink = this.commonService
+      .getUsers()
+      .subscribe((users: User[]) => (this.users = users));
   }
 
   getRoles() {
-    this.sub$.sink = this.commonService.getRoles()
-      .subscribe((roles: Role[]) => this.roles = roles);
+    this.sub$.sink = this.commonService
+      .getRoles()
+      .subscribe((roles: Role[]) => (this.roles = roles));
   }
 
   deleteDocumentUserPermission(permission: DocumentUserPermission) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PERMISSION'))
+      .deleteConformationDialog(
+        this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PERMISSION'),
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.documentPermissionService.deleteDocumentUserPermission(permission.id)
+          this.sub$.sink = this.documentPermissionService
+            .deleteDocumentUserPermission(permission.id)
             .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('PERMISSION_DELETED_SUCCESSFULLY'));
+              this.toastrService.success(
+                this.translationService.getValue('PERMISSION_DELETED_SUCCESSFULLY'),
+              );
               this.getDocumentPrmission();
             });
         }
@@ -92,12 +144,17 @@ export class DocumentPermissionListComponent extends BaseComponent implements On
 
   deleteDocumentRolePermission(permission: DocumentRolePermission) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PERMISSION'))
+      .deleteConformationDialog(
+        this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PERMISSION'),
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.documentPermissionService.deleteDocumentRolePermission(permission.id)
+          this.sub$.sink = this.documentPermissionService
+            .deleteDocumentRolePermission(permission.id)
             .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('PERMISSION_DELETED_SUCCESSFULLY'));
+              this.toastrService.success(
+                this.translationService.getValue('PERMISSION_DELETED_SUCCESSFULLY'),
+              );
               this.getDocumentPrmission();
             });
         }
@@ -107,35 +164,38 @@ export class DocumentPermissionListComponent extends BaseComponent implements On
   addDocumentUserPermission(): void {
     const dialogRef = this.dialog.open(ManageUserPermissionComponent, {
       width: '600px',
-      data: Object.assign({ users: this.users, documentId: this.document.id })
+      data: Object.assign({ users: this.users, documentId: this.document.id }),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe((result: Screen) => {
-        if (result) {
-          this.getDocumentPrmission();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result: Screen) => {
+      if (result) {
+        this.getDocumentPrmission();
+      }
+    });
   }
 
   addDocumentRolePermission(): void {
     const dialogRef = this.dialog.open(ManageRolePermissionComponent, {
       width: '600px',
-      data: Object.assign({ roles: this.roles, documentId: this.document.id })
+      data: Object.assign({ roles: this.roles, documentId: this.document.id }),
     });
 
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe((result: Screen) => {
-        if (result) {
-          this.getDocumentPrmission();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result: Screen) => {
+      if (result) {
+        this.getDocumentPrmission();
+      }
+    });
   }
 
   applyPermissionFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim();
-    var userPermissions = this.documentPermissions.filter(d => (d.type == 'User' && (d.user.firstName.toLocaleLowerCase().includes(filterValue)
-      || d.user.lastName.toLocaleLowerCase().includes(filterValue) || d.user.email.toLocaleLowerCase().includes(filterValue)))
-      || (d.type == 'Role' && d.role.name.toLocaleLowerCase().includes(filterValue)))
+    var userPermissions = this.documentPermissions.filter(
+      (d) =>
+        (d.type == 'User' &&
+          (d.user.firstName.toLocaleLowerCase().includes(filterValue) ||
+            d.user.lastName.toLocaleLowerCase().includes(filterValue) ||
+            d.user.email.toLocaleLowerCase().includes(filterValue))) ||
+        (d.type == 'Role' && d.role.name.toLocaleLowerCase().includes(filterValue)),
+    );
     this.permissionsDataSource = new MatTableDataSource(userPermissions);
     this.permissionsDataSource.paginator = this.userPermissionsPaginator;
   }

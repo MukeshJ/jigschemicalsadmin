@@ -4,12 +4,15 @@ import { TranslationService } from '@core/services/translation.service';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { DashboardService } from '../dashboard.service';
+import { FormsModule } from '@angular/forms';
+import { NgFor } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-chart',
   templateUrl: './inquiry-chart.component.html',
-  styleUrls: ['./inquiry-chart.component.scss']
+  styleUrls: ['./inquiry-chart.component.scss'],
+  imports: [FormsModule, NgFor, BaseChartDirective, TranslatePipe],
 })
 export class InquiryChartComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
@@ -17,41 +20,52 @@ export class InquiryChartComponent implements OnInit {
   months = [
     {
       id: 1,
-      name: 'January'
-    }, {
+      name: 'January',
+    },
+    {
       id: 2,
-      name: 'February'
-    }, {
+      name: 'February',
+    },
+    {
       id: 3,
-      name: 'March'
-    }, {
+      name: 'March',
+    },
+    {
       id: 4,
-      name: 'April'
-    }, {
+      name: 'April',
+    },
+    {
       id: 5,
-      name: 'May'
-    }, {
+      name: 'May',
+    },
+    {
       id: 6,
-      name: 'June'
-    }, {
+      name: 'June',
+    },
+    {
       id: 7,
-      name: 'July'
-    }, {
+      name: 'July',
+    },
+    {
       id: 8,
-      name: 'August'
-    }, {
+      name: 'August',
+    },
+    {
       id: 9,
-      name: 'September'
-    }, {
+      name: 'September',
+    },
+    {
       id: 10,
-      name: 'October'
-    }, {
+      name: 'October',
+    },
+    {
       id: 11,
-      name: 'November'
-    }, {
+      name: 'November',
+    },
+    {
       id: 12,
-      name: 'December'
-    }
+      name: 'December',
+    },
   ];
   years = [];
   selectedMonth = new Date().getMonth() + 1;
@@ -77,31 +91,35 @@ export class InquiryChartComponent implements OnInit {
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
 
-  constructor(private dashboardService: DashboardService,
-    private translationService: TranslationService) { }
+  constructor(
+    private dashboardService: DashboardService,
+    private translationService: TranslationService,
+  ) {}
 
   ngOnInit(): void {
     for (let index = 1995; index < 2050; index++) {
       this.years.push(index);
     }
     this.getMonthlyInquiryStatistic();
-  };
+  }
 
   getMonthlyInquiryStatistic() {
-    this.dashboardService.getMonthlyInquiryStatistic(this.selectedMonth, this.selectedYear).subscribe((data: MonthlyInquiry[]) => {
-      const inquiriesCount = data.map(c => c.noOfInquiry);
-      this.lineChartData = {
-        labels: data.map(c => c.date),
-        datasets: [
-          {
-            data: inquiriesCount,
-            label: this.translationService.getValue('INQUIRY'),
-            borderColor: '#3b1f91',
-            backgroundColor: '#6d48dd',
-          },
-        ],
-      };
-      this.chart?.update();
-    })
+    this.dashboardService
+      .getMonthlyInquiryStatistic(this.selectedMonth, this.selectedYear)
+      .subscribe((data: MonthlyInquiry[]) => {
+        const inquiriesCount = data.map((c) => c.noOfInquiry);
+        this.lineChartData = {
+          labels: data.map((c) => c.date),
+          datasets: [
+            {
+              data: inquiriesCount,
+              label: this.translationService.getValue('INQUIRY'),
+              borderColor: '#3b1f91',
+              backgroundColor: '#6d48dd',
+            },
+          ],
+        };
+        this.chart?.update();
+      });
   }
 }

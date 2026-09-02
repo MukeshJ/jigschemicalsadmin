@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '@core/domain-classes/user';
 import { SecurityService } from '@core/security/security.service';
@@ -9,12 +15,26 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { UserService } from '../user.service';
+import { NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.scss']
+  styleUrls: ['./my-profile.component.scss'],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardActions,
+    TranslatePipe,
+  ],
 })
 export class MyProfileComponent extends BaseComponent implements OnInit {
   userForm: UntypedFormGroup;
@@ -27,7 +47,8 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private dialog: MatDialog,
     private translationService: TranslationService,
-    private securityService: SecurityService) {
+    private securityService: SecurityService,
+  ) {
     super();
   }
 
@@ -42,7 +63,6 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
         this.userForm.patchValue(this.user);
       }
     });
-
   }
 
   fileEvent($event) {
@@ -61,19 +81,23 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
       const formData = new FormData();
       formData.append(this.fileSelected.name, this.fileSelected);
       this.userService.updateProfilePhoto(formData).subscribe((user: User) => {
-        this.toastrService.success(this.translationService.getValue('PROFILE_PHOTO_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('PROFILE_PHOTO_UPDATED_SUCCESSFULLY'),
+        );
         this.imgURL = reader.result;
         this.securityService.updateUserProfile(user);
         $event.target.value = '';
       });
-    }
+    };
   }
 
   removeImage() {
     const formData = new FormData();
     this.userService.updateProfilePhoto(formData).subscribe((user: User) => {
-      this.toastrService.success(this.translationService.getValue('PROFILE_PHOTO_REMOVED_SUCCESSFULLY'));
-      this.imgURL = "";
+      this.toastrService.success(
+        this.translationService.getValue('PROFILE_PHOTO_REMOVED_SUCCESSFULLY'),
+      );
+      this.imgURL = '';
       this.securityService.updateUserProfile(user);
     });
   }
@@ -85,20 +109,21 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required]],
-      address: ['']
+      address: [''],
     });
   }
 
   updateProfile() {
     if (this.userForm.valid) {
       const user = this.createBuildObject();
-      this.sub$.sink = this.userService.updateUserProfile(user)
-        .subscribe((user: User) => {
-          this.toastrService.success(this.translationService.getValue('PROFILE_UPDATED_SUCCESSFULLY'));
-          this.securityService.updateUserProfile(user);
-        });
+      this.sub$.sink = this.userService.updateUserProfile(user).subscribe((user: User) => {
+        this.toastrService.success(
+          this.translationService.getValue('PROFILE_UPDATED_SUCCESSFULLY'),
+        );
+        this.securityService.updateUserProfile(user);
+      });
     } else {
-      this.toastrService.error(this.translationService.getValue('PLEASE_ENTER_PROPER_DATA'))
+      this.toastrService.error(this.translationService.getValue('PLEASE_ENTER_PROPER_DATA'));
     }
   }
 
@@ -110,15 +135,15 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
       email: this.userForm.get('email').value,
       phoneNumber: this.userForm.get('phoneNumber').value,
       userName: this.userForm.get('email').value,
-      address: this.userForm.get('address').value
-    }
+      address: this.userForm.get('address').value,
+    };
     return user;
   }
 
   changePassword(): void {
     this.dialog.open(ChangePasswordComponent, {
       width: '350px',
-      data: Object.assign({}, this.user)
+      data: Object.assign({}, this.user),
     });
   }
 }

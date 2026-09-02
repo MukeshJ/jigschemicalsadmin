@@ -3,16 +3,16 @@ import { CurrencyPipe } from '@angular/common';
 import { SecurityService } from '@core/security/security.service';
 
 @Pipe({
-  standalone: false,
-    name: 'customCurrency',
-    pure: true
+  name: 'customCurrency',
+  pure: true,
 })
 export class CustomCurrencyPipe implements PipeTransform {
-    constructor(private currencyPipe: CurrencyPipe, private securityService: SecurityService) {
-    }
-    transform(value: any, args?: any): any {
-        value = value ?? 0;
-        return this.currencyPipe.transform(value, this.securityService.currencyCode);
-    }
-
+  constructor(
+    private currencyPipe: CurrencyPipe,
+    private securityService: SecurityService,
+  ) {}
+  transform(value: any, args?: any): any {
+    value = value ?? 0;
+    return this.currencyPipe.transform(value, this.securityService.currencyCode);
+  }
 }

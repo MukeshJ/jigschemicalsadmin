@@ -1,7 +1,13 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Expense } from '@core/domain-classes/expense';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
 import { User } from '@core/domain-classes/user';
@@ -11,12 +17,30 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { NgIf, NgFor } from '@angular/common';
+import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-expense',
   templateUrl: './manage-expense.component.html',
-  styleUrls: ['./manage-expense.component.scss']
+  styleUrls: ['./manage-expense.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    NgIf,
+    MatDatepicker,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgFor,
+    RouterLink,
+    MatProgressSpinner,
+    TranslatePipe,
+  ],
 })
 export class ManageExpenseComponent implements OnInit {
   expenseForm: UntypedFormGroup;
@@ -28,14 +52,16 @@ export class ManageExpenseComponent implements OnInit {
   public get ReceiptName(): string {
     return this.expenseForm.get('receiptName').value;
   }
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private fb: UntypedFormBuilder,
     private expenseCategoryService: ExpenseCategoryService,
     private userService: UserService,
     private expenseService: ExpenseService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.createExpenseForm();
@@ -43,7 +69,7 @@ export class ManageExpenseComponent implements OnInit {
     this.getUsers();
     this.activatedRoute.data.subscribe((data: { expense: Expense }) => {
       this.expenseForm.patchValue(data.expense);
-    })
+    });
   }
 
   createExpenseForm() {
@@ -57,24 +83,23 @@ export class ManageExpenseComponent implements OnInit {
       expenseDate: [new Date(), [Validators.required]],
       receiptName: [''],
       documentData: [],
-      isReceiptChange: [false]
+      isReceiptChange: [false],
     });
   }
 
   getExpenseCategories() {
-    this.expenseCategoryService.getAll().subscribe(categories => {
+    this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
-    })
+    });
   }
 
   getUsers() {
     let userResource = new UserResource();
     userResource.pageSize = 10;
-    userResource.orderBy = 'firstName desc'
-    this.userService.getUsers(userResource)
-      .subscribe((resp: HttpResponse<User[]>) => {
-        this.users = resp.body;
-      });
+    userResource.orderBy = 'firstName desc';
+    this.userService.getUsers(userResource).subscribe((resp: HttpResponse<User[]>) => {
+      this.users = resp.body;
+    });
   }
 
   removeReceipt() {
@@ -96,7 +121,7 @@ export class ManageExpenseComponent implements OnInit {
       this.expenseForm.get('documentData').setValue(reader.result.toString());
       this.expenseForm.get('receiptName').setValue(file.name);
       this.expenseForm.get('isReceiptChange').setValue(true);
-    }
+    };
   }
 
   onExpenseSubmit() {
@@ -107,34 +132,45 @@ export class ManageExpenseComponent implements OnInit {
     const expense: Expense = this.expenseForm.getRawValue();
     this.isLoading = true;
     if (expense.id) {
-      this.expenseService.updateExpense(expense.id, expense).subscribe(data => {
-        this.isLoading = false;
-        this.toastrService.success(this.translationService.getValue('EXPENSE_SAVED_SUCCESSFULLY'))
-        this.router.navigate(['expense']);
-      }, () => this.isLoading = false);
+      this.expenseService.updateExpense(expense.id, expense).subscribe(
+        (data) => {
+          this.isLoading = false;
+          this.toastrService.success(
+            this.translationService.getValue('EXPENSE_SAVED_SUCCESSFULLY'),
+          );
+          this.router.navigate(['expense']);
+        },
+        () => (this.isLoading = false),
+      );
     } else {
-      this.expenseService.addExpense(expense).subscribe(data => {
-        this.isLoading = false;
-        this.toastrService.success(this.translationService.getValue('EXPENSE_SAVED_SUCCESSFULLY'))
-        this.router.navigate(['expense']);
-      }, () => this.isLoading = false);
+      this.expenseService.addExpense(expense).subscribe(
+        (data) => {
+          this.isLoading = false;
+          this.toastrService.success(
+            this.translationService.getValue('EXPENSE_SAVED_SUCCESSFULLY'),
+          );
+          this.router.navigate(['expense']);
+        },
+        () => (this.isLoading = false),
+      );
     }
   }
 
   downloadReceipt() {
     const expenseId = this.expenseForm.get('id').value;
     if (!expenseId) return;
-    this.expenseService.downloadReceipt(expenseId)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, this.ReceiptName);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.expenseService.downloadReceipt(expenseId).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, this.ReceiptName);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {

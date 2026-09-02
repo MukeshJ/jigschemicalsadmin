@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Tax } from '@core/domain-classes/tax';
 import { TaxService } from '@core/services/tax.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-tax',
   templateUrl: './manage-tax.component.html',
-  styleUrls: ['./manage-tax.component.scss']
+  styleUrls: ['./manage-tax.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageTaxComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageTaxComponent extends BaseComponent implements OnInit {
     private taxService: TaxService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -37,8 +46,8 @@ export class ManageTaxComponent extends BaseComponent implements OnInit {
   createForm() {
     this.taxForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required], 
-      percentage: ['', [Validators.required,Validators.max(100)]]
+      name: ['', Validators.required],
+      percentage: ['', [Validators.required, Validators.max(100)]],
     });
   }
 
@@ -65,5 +74,4 @@ export class ManageTaxComponent extends BaseComponent implements OnInit {
       });
     }
   }
-
 }

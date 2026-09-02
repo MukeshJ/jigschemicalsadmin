@@ -1,17 +1,41 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { User } from '@core/domain-classes/user';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.scss']
+  styleUrls: ['./reset-password.component.scss'],
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatDialogActions,
+    TranslatePipe,
+  ],
 })
 export class ResetPasswordComponent extends BaseComponent implements OnInit {
   resetPasswordForm: UntypedFormGroup;
@@ -21,7 +45,8 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     public dialogRef: MatDialogRef<ResetPasswordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: User,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -31,27 +56,30 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
   }
 
   createResetPasswordForm() {
-    this.resetPasswordForm = this.fb.group({
-      email: [],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-    }, {
-      validator: this.checkPasswords
-    });
+    this.resetPasswordForm = this.fb.group(
+      {
+        email: [],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validator: this.checkPasswords,
+      },
+    );
   }
 
   checkPasswords(group: UntypedFormGroup) {
     let pass = group.get('password').value;
     let confirmPass = group.get('confirmPassword').value;
-    return pass === confirmPass ? null : { notSame: true }
+    return pass === confirmPass ? null : { notSame: true };
   }
 
   resetPassword() {
     if (this.resetPasswordForm.valid) {
-      this.sub$.sink = this.userService.resetPassword(this.createBuildObject()).subscribe(d => {
-        this.toastrService.success(this.translationService.getValue('SUCCESSFULLY_RESET_PASSWORD'))
+      this.sub$.sink = this.userService.resetPassword(this.createBuildObject()).subscribe((d) => {
+        this.toastrService.success(this.translationService.getValue('SUCCESSFULLY_RESET_PASSWORD'));
         this.dialogRef.close();
-      })
+      });
     }
   }
 
@@ -60,7 +88,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
       email: '',
       password: this.resetPasswordForm.get('password').value,
       userName: this.resetPasswordForm.get('email').value,
-    }
+    };
   }
 
   onNoClick(): void {

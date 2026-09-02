@@ -8,10 +8,7 @@ import { SharedModule } from '@shared/shared.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
-
 @NgModule({
-  declarations: [EmailSendComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,7 +17,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     EmailSendRoutingModule,
     AngularEditorModule,
     SharedModule,
-    MatProgressSpinnerModule
-  ]
+    MatProgressSpinnerModule,
+    EmailSendComponent,
+  ],
 })
-export class EmailSendModule { }
+export class EmailSendModule {}

@@ -12,15 +12,16 @@ import { Router } from '@angular/router';
 import { DocumentAuditTrail } from '@core/domain-classes/document-audit-trail';
 import { DocumentOperation } from '@core/domain-classes/document-operation';
 import { CommonService } from '@core/services/common.service';
+import { DocumentManagePresentationComponent } from '../document-manage-presentation/document-manage-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-document-manage',
   templateUrl: './document-manage.component.html',
-  styleUrls: ['./document-manage.component.scss']
+  styleUrls: ['./document-manage.component.scss'],
+  imports: [DocumentManagePresentationComponent, AsyncPipe],
 })
 export class DocumentManageComponent extends BaseComponent implements OnInit {
-
   documentForm: UntypedFormGroup;
   categories$: Observable<Category[]>;
   loading$: Observable<boolean>;
@@ -31,19 +32,19 @@ export class DocumentManageComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private documentService: DocumentService,
     private router: Router,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.loading$ = this.categoryService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getCategories();
-          }
-        })
-      )
+    this.loading$ = this.categoryService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getCategories();
+        }
+      }),
+    );
     this.categories$ = this.categoryService.entities$;
   }
   getCategories(): void {
@@ -51,8 +52,9 @@ export class DocumentManageComponent extends BaseComponent implements OnInit {
   }
 
   saveDocument(document: DocumentInfo) {
-    this.sub$.sink = this.documentService.addDocument(document)
-      .subscribe((documentInfo:DocumentInfo) => {
+    this.sub$.sink = this.documentService
+      .addDocument(document)
+      .subscribe((documentInfo: DocumentInfo) => {
         this.addDocumentTrail(documentInfo.id);
         this.toastrService.success('Document save successfully.');
         this.router.navigate(['/documents']);
@@ -61,11 +63,10 @@ export class DocumentManageComponent extends BaseComponent implements OnInit {
   addDocumentTrail(id: string) {
     const objDocumentAuditTrail: DocumentAuditTrail = {
       documentId: id,
-      operationName: DocumentOperation.Created.toString()
-    }
-    this.sub$.sink = this.commonService.addDocumentAuditTrail(objDocumentAuditTrail)
-      .subscribe(c => {
-      })
+      operationName: DocumentOperation.Created.toString(),
+    };
+    this.sub$.sink = this.commonService
+      .addDocumentAuditTrail(objDocumentAuditTrail)
+      .subscribe((c) => {});
   }
-
 }

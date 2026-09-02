@@ -10,10 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EmailSMTPSettingDetailResolver } from './email-settting-detail.resolver';
 import { SharedModule } from '@shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [EmailSmtpSettingListComponent, ManageEmailSmtpSettingComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -21,8 +18,10 @@ import { SharedModule } from '@shared/shared.module';
     EmailSmtpSettingRoutingModule,
     MatTableModule,
     MatProgressSpinnerModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    EmailSmtpSettingListComponent,
+    ManageEmailSmtpSettingComponent,
   ],
-  providers: [EmailSMTPSettingDetailResolver]
+  providers: [EmailSMTPSettingDetailResolver],
 })
-export class EmailSmtpSettingModule { }
+export class EmailSmtpSettingModule {}

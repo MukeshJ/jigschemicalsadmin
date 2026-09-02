@@ -6,6 +6,8 @@ import {
   UntypedFormArray,
   ValidatorFn,
   AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { BaseComponent } from 'src/app/base.component';
 import { SupplierService } from '../supplier.service';
@@ -22,7 +24,13 @@ import { Guid } from 'guid-typescript';
 import { environment } from '@environments/environment';
 import { TranslationService } from '@core/services/translation.service';
 import { EditorConfig } from '@shared/editor.config';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
+import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/select';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export class AlreadyExistValidator {
   static exist(flag: boolean): ValidatorFn {
@@ -36,10 +44,26 @@ export class AlreadyExistValidator {
 }
 
 @Component({
-  standalone: false,
   selector: 'app-supplier-detail',
   templateUrl: './supplier-detail.component.html',
   styleUrls: ['./supplier-detail.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatError,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    MatProgressSpinner,
+    TranslatePipe,
+  ],
 })
 export class SupplierDetailComponent extends BaseComponent implements OnInit {
   supplierForm: UntypedFormGroup;
@@ -74,7 +98,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private location: Location
+    private location: Location,
   ) {
     super();
   }
@@ -83,27 +107,25 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     this.createSupplierForm();
     this.getCountry();
     this.getCityByName();
-    const routeSub$ = this.route.data.subscribe(
-      (data: { supplier: Supplier }) => {
-        if (data.supplier) {
-          this.supplier = { ...data.supplier };
-          this.titlePage = 'Update Supplier';
-          this.patchSupplier();
-          if (this.supplier.imageUrl) {
-            this.imgSrc = `${environment.apiUrl}${this.supplier.imageUrl}`;
-          }
-          this.pushValuesSupplierEmailArray();
-        } else {
-          this.titlePage = 'Add Supplier';
-          if (this.supplier) {
-            this.imgSrc = '';
-            this.supplier = Object.assign({}, null);
-          }
-          this.addSupplierAddress();
-          this.supplierEmailsArray.push(this.buildSupplierEmail());
+    const routeSub$ = this.route.data.subscribe((data: { supplier: Supplier }) => {
+      if (data.supplier) {
+        this.supplier = { ...data.supplier };
+        this.titlePage = 'Update Supplier';
+        this.patchSupplier();
+        if (this.supplier.imageUrl) {
+          this.imgSrc = `${environment.apiUrl}${this.supplier.imageUrl}`;
         }
+        this.pushValuesSupplierEmailArray();
+      } else {
+        this.titlePage = 'Add Supplier';
+        if (this.supplier) {
+          this.imgSrc = '';
+          this.supplier = Object.assign({}, null);
+        }
+        this.addSupplierAddress();
+        this.supplierEmailsArray.push(this.buildSupplierEmail());
       }
-    );
+    });
     this.sub$.add(routeSub$);
   }
 
@@ -116,14 +138,14 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
         switchMap((c: string) => {
           var strArray = c.split(':');
           return this.commonService.getCityByName(strArray[0], strArray[1]);
-        })
+        }),
       )
       .subscribe(
         (c: City[]) => {
           this.cities = [...c];
           this.isLoadingCity = false;
         },
-        (err) => (this.isLoadingCity = false)
+        (err) => (this.isLoadingCity = false),
       );
   }
 
@@ -151,7 +173,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       website: [''],
       description: [''],
       supplierAddresses: this.fb.array([]),
-      supplierEmails: this.fb.array([])
+      supplierEmails: this.fb.array([]),
     });
   }
 
@@ -164,8 +186,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     if (!email) {
       return;
     }
-    const supplierId =
-      this.supplier && this.supplier.id ? this.supplier.id : Guid.create();
+    const supplierId = this.supplier && this.supplier.id ? this.supplier.id : Guid.create();
     this.sub$.sink = this.supplierService
       .checkEmailOrPhoneExist(email, '', supplierId)
       .subscribe((c) => {
@@ -188,17 +209,13 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     if (!mobileno) {
       return;
     }
-    const supplierId =
-      this.supplier && this.supplier.id ? this.supplier.id : Guid.create();
+    const supplierId = this.supplier && this.supplier.id ? this.supplier.id : Guid.create();
     this.sub$.sink = this.supplierService
       .checkEmailOrPhoneExist('', mobileno, supplierId)
       .subscribe((c) => {
         const mobileNoControl = this.supplierForm.get('mobileNo');
         if (c) {
-          mobileNoControl.setValidators([
-            Validators.required,
-            AlreadyExistValidator.exist(true),
-          ]);
+          mobileNoControl.setValidators([Validators.required, AlreadyExistValidator.exist(true)]);
         } else {
           mobileNoControl.setValidators([Validators.required]);
         }
@@ -207,11 +224,14 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
   }
 
   buildSupplierAddress(): UntypedFormGroup {
-    if (this.supplier && this.supplier.supplierAddresses && this.supplier.supplierAddresses.length > 0) {
+    if (
+      this.supplier &&
+      this.supplier.supplierAddresses &&
+      this.supplier.supplierAddresses.length > 0
+    ) {
       const supplierAddress = this.supplier.supplierAddresses[0];
       if (supplierAddress.countryName) {
-        const strCountryCity =
-          supplierAddress.countryName + ':' + supplierAddress.cityName;
+        const strCountryCity = supplierAddress.countryName + ':' + supplierAddress.cityName;
         this.filterCityObservable$.next(strCountryCity);
       }
       return this.fb.group({
@@ -234,7 +254,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     return this.fb.group({
       id: [''],
       supplierId: [''],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -242,21 +262,21 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     return this.fb.group({
       id: [supplierEmail.id],
       supplierId: [supplierEmail.supplierId],
-      email: [supplierEmail.email, [Validators.email]]
+      email: [supplierEmail.email, [Validators.email]],
     });
   }
 
   pushValuesSupplierEmailArray() {
     if (this.supplier.supplierEmails && this.supplier.supplierEmails.length > 0) {
-      this.supplier.supplierEmails.map(supplierEmail => {
+      this.supplier.supplierEmails.map((supplierEmail) => {
         this.supplierEmailsArray.push(this.editSupplierEmail(supplierEmail));
-      })
+      });
     } else {
       const supplierEmail: SupplierEmail = {
         id: '',
         supplierId: this.supplier.id,
-        email: ''
-      }
+        email: '',
+      };
       this.supplierEmailsArray.push(this.editSupplierEmail(supplierEmail));
     }
   }
@@ -277,7 +297,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -293,7 +313,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
   }
 
   handleFilterCity(cityName: string, index: number) {
-    cityName = this.supplierAddress.at(index).get('cityName').value
+    cityName = this.supplierAddress.at(index).get('cityName').value;
     const country = this.supplierAddress.at(index).get('countryName').value;
     if (cityName && country) {
       const strCountryCity = country + ':' + cityName;
@@ -324,22 +344,28 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       supObj.isImageUpload = this.isImageUpload;
       if (this.supplier) {
         this.isLoading = true;
-        this.sub$.sink = this.supplierService
-          .updateSupplier(this.supplier.id, supObj)
-          .subscribe((c) => {
+        this.sub$.sink = this.supplierService.updateSupplier(this.supplier.id, supObj).subscribe(
+          (c) => {
             this.isLoading = false;
-            this.toastrService.success(this.translationService.getValue('SUPPLIER_UPDATE_SUCCESSFULLY'));
+            this.toastrService.success(
+              this.translationService.getValue('SUPPLIER_UPDATE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/supplier']);
-          }, () => this.isLoading = false);
+          },
+          () => (this.isLoading = false),
+        );
       } else {
         this.isLoading = true;
-        this.sub$.sink = this.supplierService
-          .saveSupplier(supObj)
-          .subscribe((c) => {
+        this.sub$.sink = this.supplierService.saveSupplier(supObj).subscribe(
+          (c) => {
             this.isLoading = false;
-            this.toastrService.success(this.translationService.getValue('SUPPLIER_SAVE_SUCCESSFULLY'));
+            this.toastrService.success(
+              this.translationService.getValue('SUPPLIER_SAVE_SUCCESSFULLY'),
+            );
             this.router.navigate(['/supplier']);
-          }, () => this.isLoading = false);
+          },
+          () => (this.isLoading = false),
+        );
       }
     } else {
       this.markFormGroupTouched(this.supplierForm);
@@ -372,7 +398,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       isUnsubscribe: false,
       supplierProfile: '',
       supplierAddresses: [...supplierAddress],
-      supplierEmails: [...supplierEmails]
+      supplierEmails: [...supplierEmails],
     };
     return supplierObj;
   }
@@ -381,8 +407,8 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     const supplierEmail: SupplierEmail = {
       id: '',
       supplierId: this.supplier && this.supplier.id ? this.supplier.id : '',
-      email: ''
-    }
+      email: '',
+    };
     this.supplierEmailsArray.insert(0, this.editSupplierEmail(supplierEmail));
   }
 

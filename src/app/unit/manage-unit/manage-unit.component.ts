@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Unit } from '@core/domain-classes/unit';
 import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-unit',
   templateUrl: './manage-unit.component.html',
-  styleUrls: ['./manage-unit.component.scss']
+  styleUrls: ['./manage-unit.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageUnitComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageUnitComponent extends BaseComponent implements OnInit {
     private unitService: UnitService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class ManageUnitComponent extends BaseComponent implements OnInit {
   createForm() {
     this.unitForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -63,5 +72,4 @@ export class ManageUnitComponent extends BaseComponent implements OnInit {
       });
     }
   }
-
 }

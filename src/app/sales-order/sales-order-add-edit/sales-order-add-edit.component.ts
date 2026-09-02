@@ -1,6 +1,13 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -30,13 +37,48 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from '../sales-order.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatDivider } from '@angular/material/divider';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardSubtitle } from '@angular/material/card';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
+import { QuantitiesUnitPricePipe as QuantitiesUnitPricePipe_1 } from '../../shared/pipes/quantities-unitprice.pipe';
+import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../../shared/pipes/quantities-unitprice-tax.pipe';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-order-add-edit',
   templateUrl: './sales-order-add-edit.component.html',
   styleUrls: ['./sales-order-add-edit.component.scss'],
-  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe]
+  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatSelect,
+    MatDivider,
+    NgFor,
+    MatOption,
+    MatIconButton,
+    MatIcon,
+    MatCard,
+    MatCardSubtitle,
+    HasClaimDirective,
+    MatProgressSpinner,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+    QuantitiesUnitPricePipe_1,
+    QuantitiesUnitPriceTaxPipe_1,
+  ],
 })
 export class SalesOrderAddEditComponent extends BaseComponent {
   _validFileExtensions = environment.allowFileExtension;
@@ -62,8 +104,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   salesOrder: SalesOrder;
   isEdit: boolean = false;
   salesOrderAttachment: SalesOrderAttachment[] = [];
-  
-
 
   get salesOrderItemsArray(): UntypedFormArray {
     return <UntypedFormArray>this.salesOrderForm.get('salesOrderItems');
@@ -108,51 +148,49 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   }
 
   createSalesOrder() {
-    this.route.data
-      .pipe(
-      )
-      .subscribe((salesOrderData: { 'salesorder': SalesOrder }) => {
-        this.salesOrder = salesOrderData.salesorder;
-        if (this.salesOrder) {
-          this.isEdit = true;
-          this.salesOrderForm = this.fb.group({
-            orderNumber: [this.salesOrder.orderNumber, [Validators.required]],
-            filerCustomer: [''],
-            soCreatedDate: [this.salesOrder.soCreatedDate, [Validators.required]],
-            deliveryStatus: [this.salesOrder.deliveryStatus],
-            customerId: [this.salesOrder.customerId, [Validators.required]],
-            paymentTermId: [this.salesOrder.paymentTermId],
-            deliveryMethodId: [this.salesOrder.deliveryMethodId],
-            note: [this.salesOrder.note],
-            termAndCondition: [this.salesOrder.termAndCondition],
-            salesOrderItems: this.fb.array([]),
-            deliveryDate: [this.salesOrder.deliveryDate]
-          });
-          this.salesOrder.salesOrderItems.forEach(c => {
-            this.salesOrderItemsArray.push(this.createSalesOrderItemPatch(this.salesOrderItemsArray.length, c));
-          });
-          this.getCustomers();
-          this.getAllTotal();
-        } else {
-          this.isEdit = false;
-          this.getCustomers();
-          this.salesOrderForm = this.fb.group({
-            orderNumber: ['', [Validators.required]],
-            filerCustomer: [''],
-            deliveryDate: [new Date(), [Validators.required]],
-            soCreatedDate: [new Date(), [Validators.required]],
-            deliveryStatus: [1],
-            customerId: ['', [Validators.required]],
-            paymentTermId: [''],
-            deliveryMethodId: [''],
-            note: [''],
-            termAndCondition: [''],
-            salesOrderItems: this.fb.array([])
-
-          });
-          this.salesOrderItemsArray.push(this.createSalesOrderItem(this.salesOrderItemsArray.length));
-        }
-      });
+    this.route.data.pipe().subscribe((salesOrderData: { salesorder: SalesOrder }) => {
+      this.salesOrder = salesOrderData.salesorder;
+      if (this.salesOrder) {
+        this.isEdit = true;
+        this.salesOrderForm = this.fb.group({
+          orderNumber: [this.salesOrder.orderNumber, [Validators.required]],
+          filerCustomer: [''],
+          soCreatedDate: [this.salesOrder.soCreatedDate, [Validators.required]],
+          deliveryStatus: [this.salesOrder.deliveryStatus],
+          customerId: [this.salesOrder.customerId, [Validators.required]],
+          paymentTermId: [this.salesOrder.paymentTermId],
+          deliveryMethodId: [this.salesOrder.deliveryMethodId],
+          note: [this.salesOrder.note],
+          termAndCondition: [this.salesOrder.termAndCondition],
+          salesOrderItems: this.fb.array([]),
+          deliveryDate: [this.salesOrder.deliveryDate],
+        });
+        this.salesOrder.salesOrderItems.forEach((c) => {
+          this.salesOrderItemsArray.push(
+            this.createSalesOrderItemPatch(this.salesOrderItemsArray.length, c),
+          );
+        });
+        this.getCustomers();
+        this.getAllTotal();
+      } else {
+        this.isEdit = false;
+        this.getCustomers();
+        this.salesOrderForm = this.fb.group({
+          orderNumber: ['', [Validators.required]],
+          filerCustomer: [''],
+          deliveryDate: [new Date(), [Validators.required]],
+          soCreatedDate: [new Date(), [Validators.required]],
+          deliveryStatus: [1],
+          customerId: ['', [Validators.required]],
+          paymentTermId: [''],
+          deliveryMethodId: [''],
+          note: [''],
+          termAndCondition: [''],
+          salesOrderItems: this.fb.array([]),
+        });
+        this.salesOrderItemsArray.push(this.createSalesOrderItem(this.salesOrderItemsArray.length));
+      }
+    });
   }
 
   onAddAnotherProduct() {
@@ -160,7 +198,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   }
 
   createSalesOrderItemPatch(index: number, salesOrderItem: SalesOrderItem) {
-    const taxs = salesOrderItem.salesOrderItemTaxes.map(c => c.taxId);
+    const taxs = salesOrderItem.salesOrderItemTaxes.map((c) => c.taxId);
     const formGroup = this.fb.group({
       chemicalId: [salesOrderItem.chemicalId, [Validators.required]],
       filterChemicalValue: [''],
@@ -168,10 +206,10 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       quantity: [salesOrderItem.quantity, [Validators.required]],
       taxValue: [taxs],
       unitId: [{ value: salesOrderItem.chemical.unitId, disabled: true }, [Validators.required]],
-      discountPercentage: [salesOrderItem.discountPercentage]
+      discountPercentage: [salesOrderItem.discountPercentage],
     });
-    this.unitsMap[index] = [... this.route.snapshot.data['units']];
-    this.taxsMap[index] = [... this.route.snapshot.data['taxs']];
+    this.unitsMap[index] = [...this.route.snapshot.data['units']];
+    this.taxsMap[index] = [...this.route.snapshot.data['taxs']];
     this.filterChemicalsMap[index.toString()] = [salesOrderItem.chemical];
     return formGroup;
   }
@@ -180,14 +218,14 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     const formGroup = this.fb.group({
       chemicalId: ['', [Validators.required]],
       filterChemicalValue: [''],
-      unitPrice: [0, [Validators.required,Validators.min(1)]],
-      quantity: [1, [Validators.required,Validators.min(1)]],
+      unitPrice: [0, [Validators.required, Validators.min(1)]],
+      quantity: [1, [Validators.required, Validators.min(1)]],
       taxValue: [null],
       unitId: [{ value: null, disabled: true }],
-      discountPercentage: [0,[Validators.min(0)]]
+      discountPercentage: [0, [Validators.min(0)]],
     });
-    this.unitsMap[index] = [... this.route.snapshot.data['units']];
-    this.taxsMap[index] = [... this.route.snapshot.data['taxs']];
+    this.unitsMap[index] = [...this.route.snapshot.data['units']];
+    this.taxsMap[index] = [...this.route.snapshot.data['taxs']];
     this.filterChemicalsMap[index.toString()] = [...this.route.snapshot.data['chemicals']];
     this.getChemicalsByNameValue(formGroup, index);
     return formGroup;
@@ -197,22 +235,24 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     if (this.salesOrder) {
       this.getChemicals(index);
     }
-    this.sub$.sink = formGroup.get('filterChemicalValue').valueChanges
-      .pipe(
+    this.sub$.sink = formGroup
+      .get('filterChemicalValue')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.chemicalResource.name = c;
           return this.chemicalService.getChemicals(this.chemicalResource);
-        })
-      ).subscribe((resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
-        }
-      }, (err) => {
-
-      });
-
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
+          if (resp && resp.headers) {
+            this.filterChemicalsMap[index.toString()] = [...resp.body];
+          }
+        },
+        (err) => {},
+      );
   }
 
   getAllTotal() {
@@ -222,18 +262,48 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     this.totalDiscount = 0;
     this.totalTax = 0;
     if (salesOrderItems && salesOrderItems.length > 0) {
-      salesOrderItems.forEach(so => {
+      salesOrderItems.forEach((so) => {
         if (so.unitPrice && so.quantity) {
-          const totalBeforeDiscount = this.totalBeforeDiscount + parseFloat(this.quantitiesUnitPricePipe.transform(so.quantity, so.unitPrice));
+          const totalBeforeDiscount =
+            this.totalBeforeDiscount +
+            parseFloat(this.quantitiesUnitPricePipe.transform(so.quantity, so.unitPrice));
           this.totalBeforeDiscount = parseFloat(totalBeforeDiscount.toFixed(2));
-          const gradTotal = this.grandTotal + parseFloat(this.quantitiesUnitPricePipe.transform(so.quantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0]));
+          const gradTotal =
+            this.grandTotal +
+            parseFloat(
+              this.quantitiesUnitPricePipe.transform(
+                so.quantity,
+                so.unitPrice,
+                so.discountPercentage,
+                so.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.grandTotal = parseFloat(gradTotal.toFixed(2));
-          const totalTax = this.totalTax + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.quantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0]));
+          const totalTax =
+            this.totalTax +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                so.quantity,
+                so.unitPrice,
+                so.discountPercentage,
+                so.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.totalTax = parseFloat(totalTax.toFixed(2));
-          const totalDiscount = this.totalDiscount + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.quantity, so.unitPrice, so.discountPercentage));
+          const totalDiscount =
+            this.totalDiscount +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                so.quantity,
+                so.unitPrice,
+                so.discountPercentage,
+              ),
+            );
           this.totalDiscount = parseFloat(totalDiscount.toFixed(2));
         }
-      })
+      });
     }
   }
 
@@ -252,55 +322,55 @@ export class SalesOrderAddEditComponent extends BaseComponent {
 
   onRemoveSalesOrderItem(index: number) {
     this.salesOrderItemsArray.removeAt(index);
-    this.salesOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number)=>{
-      const chemicalId= c.get('chemicalId').value;
-      if(chemicalId){
-    this.salesOrder.salesOrderItems.map(pi => {
-          if(pi.chemical.id=== chemicalId){
-          if(this.chemicals.find(c=> c.id=== chemicalId)){
-            this.getChemicals(index);
-          } else {
-            this.getChemicals(index, chemicalId);
+    this.salesOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number) => {
+      const chemicalId = c.get('chemicalId').value;
+      if (chemicalId) {
+        this.salesOrder.salesOrderItems.map((pi) => {
+          if (pi.chemical.id === chemicalId) {
+            if (this.chemicals.find((c) => c.id === chemicalId)) {
+              this.getChemicals(index);
+            } else {
+              this.getChemicals(index, chemicalId);
+            }
           }
-          }
-      });
-    } else {
-      this.getChemicals(index);
-    }
+        });
+      } else {
+        this.getChemicals(index);
+      }
     });
     this.getAllTotal();
   }
 
   getPaymentTerms() {
-    this.paymentTermService.getAll().subscribe(c => this.paymentTerms = c);
+    this.paymentTermService.getAll().subscribe((c) => (this.paymentTerms = c));
   }
 
   getDeliveryMethod() {
-    this.deliveryMethodService.getAll().subscribe(methods => {
+    this.deliveryMethodService.getAll().subscribe((methods) => {
       this.deliveryMethods = methods;
-    })
+    });
   }
 
   getChemicals(index: number, chemicalId?: string) {
     if (this.chemicals.length === 0 || chemicalId) {
       this.chemicalResource.name = '';
-      this.chemicalResource.chemicalId= chemicalId? chemicalId:'';
-      this.chemicalService.getChemicals(this.chemicalResource)
-        .subscribe((resp: HttpResponse<Chemical[]>) => {
+      this.chemicalResource.chemicalId = chemicalId ? chemicalId : '';
+      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
           this.chemicals = [...resp.body];
           this.filterChemicalsMap[index.toString()] = [...resp.body];
-        }, (err) => {
-        });
+        },
+        (err) => {},
+      );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemicals];
     }
-
   }
 
   onProductSelectionChange(value: any, index: number) {
     this.salesOrderItemsArray.controls[index].patchValue({
       filterChemicalValue: '',
-      unitPrice:'',
+      unitPrice: '',
     });
     const chemical = this.filterChemicalsMap[index].find((c: Chemical) => c.id === value.value);
     if (chemical) {
@@ -311,51 +381,53 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   }
 
   getNewSalesOrderNumber() {
-    this.salesOrderService.getNewSalesOrderNumber().subscribe(salesOrder => {
+    this.salesOrderService.getNewSalesOrderNumber().subscribe((salesOrder) => {
       if (!this.salesOrder) {
         this.salesOrderForm.patchValue({
-          orderNumber: salesOrder.orderNumber
+          orderNumber: salesOrder.orderNumber,
         });
       }
     });
   }
 
-
   customerNameChangeValue() {
-    this.sub$.sink = this.salesOrderForm.get('filerCustomer').valueChanges
-      .pipe(
-        tap(c => this.isCustomerLoading = true),
+    this.sub$.sink = this.salesOrderForm
+      .get('filerCustomer')
+      .valueChanges.pipe(
+        tap((c) => (this.isCustomerLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.customerResource.customerName = c;
           this.customerResource.id = null;
           return this.customerService.getCustomers(this.customerResource);
-        })
-      ).subscribe((resp: HttpResponse<Customer[]>) => {
-        this.isCustomerLoading = false;
-        if (resp && resp.headers) {
-          this.customers = [...resp.body];
-        }
-      }, (err) => {
-        this.isCustomerLoading = false;
-      });
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Customer[]>) => {
+          this.isCustomerLoading = false;
+          if (resp && resp.headers) {
+            this.customers = [...resp.body];
+          }
+        },
+        (err) => {
+          this.isCustomerLoading = false;
+        },
+      );
   }
 
   getCustomers() {
-
     if (this.salesOrder) {
       this.customerResource.id = this.salesOrder.customerId;
     } else {
       this.customerResource.customerName = '';
       this.customerResource.id = null;
     }
-    this.customerService.getCustomers(this.customerResource)
-      .subscribe(resp => {
-        if (resp && resp.headers) {
-          this.customers = [...resp.body];
-        }
-      });
+    this.customerService.getCustomers(this.customerResource).subscribe((resp) => {
+      if (resp && resp.headers) {
+        this.customers = [...resp.body];
+      }
+    });
   }
 
   onSalesOrderSubmit() {
@@ -363,24 +435,27 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       this.salesOrderForm.markAllAsTouched();
     } else {
       if (this.salesOrder && this.salesOrder.salesOrderStatus === SalesOrderStatusEnum.Return) {
-        this.toastrService.error(this.translationService.getValue('RETURN_SALES_ORDER_CANT_BE_EDIT'));
+        this.toastrService.error(
+          this.translationService.getValue('RETURN_SALES_ORDER_CANT_BE_EDIT'),
+        );
         return;
       }
       const salesOrder = this.buildSalesOrder();
       if (salesOrder.id) {
-        this.salesOrderService.updateSalesOrder(salesOrder)
-          .subscribe((c: SalesOrder) => {
-            this.toastrService.success(this.translationService.getValue("SALES_ORDER_SAVED_SUCCESSFULLY"));
-            this.router.navigate(['/sales-order/list']);
-          })
+        this.salesOrderService.updateSalesOrder(salesOrder).subscribe((c: SalesOrder) => {
+          this.toastrService.success(
+            this.translationService.getValue('SALES_ORDER_SAVED_SUCCESSFULLY'),
+          );
+          this.router.navigate(['/sales-order/list']);
+        });
       } else {
-        this.salesOrderService.createSalesOrder(salesOrder)
-          .subscribe((c: SalesOrder) => {
-            this.toastrService.success(this.translationService.getValue("SALES_ORDER_SAVED_SUCCESSFULLY"));
-            this.router.navigate(['/sales-order/list']);
-          });
+        this.salesOrderService.createSalesOrder(salesOrder).subscribe((c: SalesOrder) => {
+          this.toastrService.success(
+            this.translationService.getValue('SALES_ORDER_SAVED_SUCCESSFULLY'),
+          );
+          this.router.navigate(['/sales-order/list']);
+        });
       }
-
     }
   }
 
@@ -403,34 +478,48 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       salesOrderItems: [],
       salesOrderAttachments: [],
     };
-    this.salesOrderAttachment.forEach(attachement => {
+    this.salesOrderAttachment.forEach((attachement) => {
       salesOrder.salesOrderAttachments.push({
         documentData: attachement.documentData,
-        name: attachement.name
+        name: attachement.name,
       });
-    })
+    });
 
     const salesOrderItems = this.salesOrderForm.get('salesOrderItems').value;
     if (salesOrderItems && salesOrderItems.length > 0) {
-      salesOrderItems.forEach(so => {
-        salesOrder.salesOrderItems.push(
-          {
-            discount: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.quantity, so.unitPrice, so.discountPercentage)),
-            discountPercentage: so.discountPercentage,
-            chemicalId: so.chemicalId,
-            quantity: so.quantity,
-            taxValue: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.quantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0])),
-            unitPrice: parseFloat(so.unitPrice),
-            salesOrderItemTaxes: [
-              ...so.taxValue ? so.taxValue.map(element => {
-                const salesOrderItemTaxes: SalesOrderItemTax = {
-                  taxId: element
-                };
-                return salesOrderItemTaxes;
-              }) : []
-            ]
-          }
-        )
+      salesOrderItems.forEach((so) => {
+        salesOrder.salesOrderItems.push({
+          discount: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              so.quantity,
+              so.unitPrice,
+              so.discountPercentage,
+            ),
+          ),
+          discountPercentage: so.discountPercentage,
+          chemicalId: so.chemicalId,
+          quantity: so.quantity,
+          taxValue: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              so.quantity,
+              so.unitPrice,
+              so.discountPercentage,
+              so.taxValue,
+              this.taxsMap[0],
+            ),
+          ),
+          unitPrice: parseFloat(so.unitPrice),
+          salesOrderItemTaxes: [
+            ...(so.taxValue
+              ? so.taxValue.map((element) => {
+                  const salesOrderItemTaxes: SalesOrderItemTax = {
+                    taxId: element,
+                  };
+                  return salesOrderItemTaxes;
+                })
+              : []),
+          ],
+        });
       });
     }
     return salesOrder;
@@ -442,7 +531,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   getSalesOrderById() {
     this.salesOrder = this.route.snapshot.data['salesorder'];
     if (this.salesOrder) {
-
     }
   }
 
@@ -459,15 +547,15 @@ export class SalesOrderAddEditComponent extends BaseComponent {
         reader.onload = (_event) => {
           this.salesOrderAttachment.push({
             name: file.name,
-            documentData: reader.result.toString()
-          })
-        }
+            documentData: reader.result.toString(),
+          });
+        };
       }
     }
   }
 
   removeAttachemet(fileName) {
-    this.salesOrderAttachment = this.salesOrderAttachment.filter(c => c.name != fileName);
+    this.salesOrderAttachment = this.salesOrderAttachment.filter((c) => c.name != fileName);
   }
 
   Validate(fileName: string) {
@@ -476,13 +564,21 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       var blnValid = false;
       for (var j = 0; j < this._validFileExtensions.length; j++) {
         var sCurExtension = this._validFileExtensions[j];
-        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+        if (
+          sFileName
+            .substr(sFileName.length - sCurExtension.length, sCurExtension.length)
+            .toLowerCase() == sCurExtension.toLowerCase()
+        ) {
           blnValid = true;
           break;
         }
       }
       if (!blnValid) {
-        this.toastrService.error(sFileName + this.translationService.getValue('IS_INVALID_ALLOWED_EXTENSIONS_ARE') + this._validFileExtensions.join(", "));
+        this.toastrService.error(
+          sFileName +
+            this.translationService.getValue('IS_INVALID_ALLOWED_EXTENSIONS_ARE') +
+            this._validFileExtensions.join(', '),
+        );
         return false;
       }
     }
@@ -490,19 +586,20 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   }
 
   downloadAttachment(attachement: SalesOrderAttachment) {
-    this.sub$.sink = this.salesOrderService.downloadAttachment(attachement.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, attachement.name);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.salesOrderService.downloadAttachment(attachement.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, attachement.name);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
-  
+
   private downloadFile(data: HttpResponse<Blob>, name: string) {
     const downloadedFile = new Blob([data.body], { type: data.body.type });
     const a = document.createElement('a');

@@ -7,15 +7,47 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { RoleService } from '../role.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
-  styleUrls: ['./role-list.component.scss']
+  styleUrls: ['./role-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    TranslatePipe,
+  ],
 })
 export class RoleListComponent extends BaseComponent implements OnInit {
-
   roles: Role[] = [];
   displayedColumns: string[] = ['action', 'name'];
   isLoadingResults = true;
@@ -25,7 +57,8 @@ export class RoleListComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
     private commonService: CommonService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -35,11 +68,15 @@ export class RoleListComponent extends BaseComponent implements OnInit {
 
   deleteRole(role: Role) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${role.name}`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${role.name}`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
           this.sub$.sink = this.roleService.deleteRole(role.id).subscribe(() => {
-            this.toastrService.success(this.translationService.getValue('ROLE_DELETED_SUCCESSFULLY'));
+            this.toastrService.success(
+              this.translationService.getValue('ROLE_DELETED_SUCCESSFULLY'),
+            );
             this.getRoles();
           });
         }
@@ -48,15 +85,16 @@ export class RoleListComponent extends BaseComponent implements OnInit {
 
   getRoles(): void {
     this.isLoadingResults = true;
-    this.sub$.sink = this.commonService.getRoles()
-      .subscribe((data: Role[]) => {
+    this.sub$.sink = this.commonService.getRoles().subscribe(
+      (data: Role[]) => {
         this.isLoadingResults = false;
         this.roles = data;
-      }, (err: CommonError) => {
-        err.messages.forEach(msg => {
-          this.toastrService.error(msg)
+      },
+      (err: CommonError) => {
+        err.messages.forEach((msg) => {
+          this.toastrService.error(msg);
         });
-      });
+      },
+    );
   }
-
 }

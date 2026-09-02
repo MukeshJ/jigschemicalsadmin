@@ -1,13 +1,12 @@
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { UserAuth } from '@core/domain-classes/user-auth';
 import { SecurityService } from '@core/security/security.service';
@@ -22,9 +21,16 @@ import { debounceTime, tap, switchMap, map, catchError } from 'rxjs/operators';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
+import { NgIf, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { DateAgoPipe } from '../../shared/pipes/date-ago.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -34,17 +40,37 @@ import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resourc
         'in',
         style({
           transform: 'translate3d(0,0,0)',
-        })
+        }),
       ),
       state(
         'out',
         style({
           transform: 'translate3d(100%, 0, 0)',
-        })
+        }),
       ),
       transition('in => out', animate('400ms ease-in-out')),
       transition('out => in', animate('400ms ease-in-out')),
     ]),
+  ],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    RouterLink,
+    HasClaimDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    RouterLinkActive,
+    AsyncPipe,
+    DateAgoPipe,
+    UTCToLocalTime,
+    TranslatePipe,
   ],
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
@@ -72,7 +98,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     private signalrService: SignalrService,
     private translationService: TranslationService,
     private commonService: CommonService,
-    private chemicalService: ChemicalService
+    private chemicalService: ChemicalService,
   ) {
     super();
   }
@@ -88,7 +114,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   }
 
   companyProfileSubscription() {
-    this.securityService.companyProfile.subscribe(profile => {
+    this.securityService.companyProfile.subscribe((profile) => {
       if (profile) {
         this.logoImage = profile.logoUrl;
       }
@@ -99,25 +125,21 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.chemicalSearchForm = this.fb.group({
       chemicalNameInput: [''],
     });
-    this.chemicals$ = this.chemicalSearchForm
-      .get('chemicalNameInput')!
-      .valueChanges.pipe(
-        debounceTime(1000),
-        tap(() => this.loadingSubject.next(true)),
-        switchMap((value) => {
-          this.chemicalResourceParameter.searchQuery = value || '';
-          return this.chemicalService
-            .getChemicalsDropDown(this.chemicalResourceParameter)
-            .pipe(
-              map((resp) => resp.body || []),
-              tap(() => this.loadingSubject.next(false)),
-              catchError(() => {
-                this.loadingSubject.next(false);
-                return of([] as Chemical[]);
-              })
-            );
-        })
-      );
+    this.chemicals$ = this.chemicalSearchForm.get('chemicalNameInput')!.valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => this.loadingSubject.next(true)),
+      switchMap((value) => {
+        this.chemicalResourceParameter.searchQuery = value || '';
+        return this.chemicalService.getChemicalsDropDown(this.chemicalResourceParameter).pipe(
+          map((resp) => resp.body || []),
+          tap(() => this.loadingSubject.next(false)),
+          catchError(() => {
+            this.loadingSubject.next(false);
+            return of([] as Chemical[]);
+          }),
+        );
+      }),
+    );
   }
 
   selectChemical = (chemical: Chemical) => {
@@ -128,30 +150,27 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.chemicalSearchForm.get('chemicalNameInput')!.setValue('', { emitEvent: false });
     this.router.navigate(['/chemical/', chemical.id]).then(
       () => (this.isRedirecting = false),
-      () => (this.isRedirecting = false)
+      () => (this.isRedirecting = false),
     );
   };
 
   getUserNotification() {
-    this.sub$.sink = this.signalrService.userNotification$
-      .subscribe(c => {
-        this.getUserNotificationCount();
-        this.getNotificationList();
-      });
+    this.sub$.sink = this.signalrService.userNotification$.subscribe((c) => {
+      this.getUserNotificationCount();
+      this.getNotificationList();
+    });
   }
 
   getUserNotificationCount() {
-    this.sub$.sink = this.commonService.getUserNotificationCount()
-      .subscribe(c => {
-        this.notificationCount = c;
-      });
+    this.sub$.sink = this.commonService.getUserNotificationCount().subscribe((c) => {
+      this.notificationCount = c;
+    });
   }
 
   getNotificationList() {
-    this.sub$.sink = this.commonService.getTop10UserNotification()
-      .subscribe(c => {
-        this.notificationUserList = c;
-      });
+    this.sub$.sink = this.commonService.getTop10UserNotification().subscribe((c) => {
+      this.notificationUserList = c;
+    });
   }
 
   setDefaultLanguage() {
@@ -172,11 +191,9 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   }
 
   setNewLanguageRefresh(lang: string) {
-    this.sub$.sink = this.translationService
-      .setLanguage(lang)
-      .subscribe((response) => {
-        this.setLanguageWithRefresh(response['LANGUAGE'] as string);
-      });
+    this.sub$.sink = this.translationService.setLanguage(lang).subscribe((response) => {
+      this.setLanguageWithRefresh(response['LANGUAGE'] as string);
+    });
   }
 
   setTopLogAndName() {

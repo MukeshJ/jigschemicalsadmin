@@ -11,10 +11,6 @@ import { ActionListPresentationComponent } from './action-list-presentation/acti
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [
-    ActionListComponent,
-    ManageActionComponent,
-    ActionListPresentationComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -22,8 +18,10 @@ import { SharedModule } from '@shared/shared.module';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SharedModule
-  ]
-
+    SharedModule,
+    ActionListComponent,
+    ManageActionComponent,
+    ActionListPresentationComponent,
+  ],
 })
-export class ActionModule { }
+export class ActionModule {}

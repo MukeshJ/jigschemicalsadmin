@@ -12,9 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-
 @NgModule({
-  declarations: [NotificationComponent],
   imports: [
     CommonModule,
     NotificationRoutingModule,
@@ -26,7 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatDialogModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+    NotificationComponent,
+  ],
 })
-export class NotificationModule { }
+export class NotificationModule {}

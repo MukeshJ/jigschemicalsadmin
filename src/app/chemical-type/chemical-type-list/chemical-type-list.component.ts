@@ -8,15 +8,44 @@ import { Observable } from 'rxjs';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalTypeAddComponent } from '../chemical-type-add/chemical-type-add.component';
 import { ChemicalTypeService } from '../chemical-type.service';
+import { NgIf, AsyncPipe } from '@angular/common';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-type-list',
   templateUrl: './chemical-type-list.component.html',
-  styleUrls: ['./chemical-type-list.component.scss']
+  styleUrls: ['./chemical-type-list.component.scss'],
+  imports: [
+    NgIf,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatSlideToggle,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class ChemicalTypeListComponent extends BaseComponent implements OnInit {
-
   chemicalTypes$: Observable<ChemicalType[]>;
   displayedColumns: string[] = ['action', 'name', 'isShowFront'];
   constructor(
@@ -24,7 +53,8 @@ export class ChemicalTypeListComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private dialog: MatDialog,
     private translationService: TranslationService,
-    private commonDialogService: CommonDialogService) {
+    private commonDialogService: CommonDialogService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -37,13 +67,17 @@ export class ChemicalTypeListComponent extends BaseComponent implements OnInit {
 
   deleteChemicalType(chemicalType: ChemicalType): void {
     const areU = this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE');
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${areU}`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(`${areU}`)
+      .subscribe((isTrue) => {
         if (isTrue) {
-          this.sub$.sink = this.chemicalTypeService.deleteChemicalType(chemicalType.id)
+          this.sub$.sink = this.chemicalTypeService
+            .deleteChemicalType(chemicalType.id)
             .subscribe(() => {
               this.getChemicalTypes();
-              this.toastrService.success(this.translationService.getValue('CHEMICAL_TYPE_DELETED_SUCCESSFULLY'));
+              this.toastrService.success(
+                this.translationService.getValue('CHEMICAL_TYPE_DELETED_SUCCESSFULLY'),
+              );
             });
         }
       });
@@ -52,14 +86,12 @@ export class ChemicalTypeListComponent extends BaseComponent implements OnInit {
   manageChemicalType(chemicalType: ChemicalType): void {
     const dialogRef = this.dialog.open(ChemicalTypeAddComponent, {
       width: '80vw',
-      data: Object.assign({}, chemicalType)
+      data: Object.assign({}, chemicalType),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe((isUpdated: boolean) => {
-        if (isUpdated) {
-          this.getChemicalTypes();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((isUpdated: boolean) => {
+      if (isUpdated) {
+        this.getChemicalTypes();
+      }
+    });
   }
-
 }

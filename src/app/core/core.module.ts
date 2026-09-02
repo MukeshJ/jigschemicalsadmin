@@ -21,14 +21,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [
-    LayoutComponent,
-    HeaderComponent,
-    FooterComponent,
-    SidebarComponent,
-    ControlSidebarComponent,
-    CommonDialogComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -41,17 +33,22 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NgbModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LayoutComponent,
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    ControlSidebarComponent,
+    CommonDialogComponent,
   ],
-  exports: [
-    LayoutComponent
-  ],
+  exports: [LayoutComponent],
   providers: [
     CommonDialogService,
     {
-      provide: ErrorHandler, useClass: CommonErrorHandlerService,
-      deps: [HttpClient]
-    }
-  ]
+      provide: ErrorHandler,
+      useClass: CommonErrorHandlerService,
+      deps: [HttpClient],
+    },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}

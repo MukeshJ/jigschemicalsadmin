@@ -17,7 +17,6 @@ import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [CustomerChemicalComponent],
   imports: [
     CommonModule,
     CustomerChemicalRoutingModule,
@@ -33,7 +32,8 @@ import { SharedModule } from '@shared/shared.module';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCardModule
-  ]
+    MatCardModule,
+    CustomerChemicalComponent,
+  ],
 })
-export class CustomerChemicalModule { }
+export class CustomerChemicalModule {}

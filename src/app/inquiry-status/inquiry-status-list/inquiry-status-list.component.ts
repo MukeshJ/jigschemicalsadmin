@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
+import { InquiryStatusListPresentationComponent } from '../inquiry-status-list-presentation/inquiry-status-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-status-list',
   templateUrl: './inquiry-status-list.component.html',
-  styleUrls: ['./inquiry-status-list.component.scss']
+  styleUrls: ['./inquiry-status-list.component.scss'],
+  imports: [InquiryStatusListPresentationComponent, AsyncPipe],
 })
 export class InquiryStatusListComponent extends BaseComponent implements OnInit {
   inquiryStatuses$: Observable<InquiryStatus[]>;
@@ -19,20 +21,19 @@ export class InquiryStatusListComponent extends BaseComponent implements OnInit 
   constructor(
     private inquiryStatusService: InquiryStatusService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.inquiryStatusService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getInquiryStatuses();
-          }
-        })
-      )
-    this.inquiryStatuses$ = this.inquiryStatusService.entities$
+    this.loading$ = this.inquiryStatusService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getInquiryStatuses();
+        }
+      }),
+    );
+    this.inquiryStatuses$ = this.inquiryStatusService.entities$;
   }
 
   getInquiryStatuses(): void {
@@ -41,7 +42,9 @@ export class InquiryStatusListComponent extends BaseComponent implements OnInit 
 
   deleteInquiryStatus(id: string): void {
     this.sub$.sink = this.inquiryStatusService.delete(id).subscribe(() => {
-      this.toastrService.success(this.translationService.getValue('INQUIRY_STATUS_DELETED_SUCCESSFULLY'));
+      this.toastrService.success(
+        this.translationService.getValue('INQUIRY_STATUS_DELETED_SUCCESSFULLY'),
+      );
     });
   }
   // manageInquiryStatus(inquiryStatus: InquiryStatus): void {

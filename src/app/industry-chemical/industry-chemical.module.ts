@@ -15,10 +15,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 
-
-
 @NgModule({
-  declarations: [IndustryChemicalComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -34,7 +31,8 @@ import { MatCardModule } from '@angular/material/card';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCardModule
-  ]
+    MatCardModule,
+    IndustryChemicalComponent,
+  ],
 })
-export class IndustryChemicalModule { }
+export class IndustryChemicalModule {}

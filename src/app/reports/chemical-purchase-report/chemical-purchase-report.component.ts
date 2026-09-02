@@ -1,10 +1,16 @@
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -27,18 +33,86 @@ import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.serv
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import * as XLSX from 'xlsx';
 import { ChemicalPurchaseReportDataSource } from './chemical-purchase-report.datasource';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatDivider } from '@angular/material/divider';
+import { NgFor, NgIf } from '@angular/common';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { CustomCurrencyPipe as CustomCurrencyPipe_1 } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime as UTCToLocalTime_1 } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-purchase-report',
   templateUrl: './chemical-purchase-report.component.html',
   styleUrls: ['./chemical-purchase-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe]
+  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatSelect,
+    MatDivider,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    CustomCurrencyPipe_1,
+    UTCToLocalTime_1,
+    TranslatePipe,
+  ],
 })
 export class ChemicalPurchaseReportComponent extends BaseComponent {
   dataSource: ChemicalPurchaseReportDataSource;
   purchaseOrderItems: PurchaseOrderItem[] = [];
-  displayedColumns: string[] = ['chemicalName', 'purchaseOrderNumber', 'supplierName', 'pOCreatedDate', 'unitName', 'unitPrice', 'quantity', 'totalDiscount', 'taxes', 'totalTax', 'totalAmount'];
+  displayedColumns: string[] = [
+    'chemicalName',
+    'purchaseOrderNumber',
+    'supplierName',
+    'pOCreatedDate',
+    'unitName',
+    'unitPrice',
+    'quantity',
+    'totalDiscount',
+    'taxes',
+    'totalTax',
+    'totalAmount',
+  ];
   footerToDisplayed: string[] = ['footer'];
   isLoadingResults = true;
   purchaseOrderResource: PurchaseOrderResourceParameter;
@@ -89,7 +163,8 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
     private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
-    private customCurrencyPipe: CustomCurrencyPipe) {
+    private customCurrencyPipe: CustomCurrencyPipe,
+  ) {
     super();
     this.chemcialResource = new ChemicalResourceParameter();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
@@ -107,9 +182,7 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
     this.dataSource.loadData(this.purchaseOrderResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.purchaseOrderResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -123,14 +196,17 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
   }
 
   createSearchFormGroup() {
-    this.searchForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
-      filterChemicalValue: [''],
-      chemicalId: ['']
-    }, {
-      validators: dateCompare()
-    });
+    this.searchForm = this.fb.group(
+      {
+        fromDate: [''],
+        toDate: [''],
+        filterChemicalValue: [''],
+        chemicalId: [''],
+      },
+      {
+        validators: dateCompare(),
+      },
+    );
   }
 
   onSearch() {
@@ -151,48 +227,50 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
   }
 
   getChemcialByNameValue() {
-    this.sub$.sink = this.searchForm.get('filterChemicalValue').valueChanges
-      .pipe(
+    this.sub$.sink = this.searchForm
+      .get('filterChemicalValue')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.chemcialResource.name = c;
           return this.chemicalService.getChemicals(this.chemcialResource);
-        })
-      ).subscribe((resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-        }
-      }, (err) => {
-
-      });
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
+          if (resp && resp.headers) {
+            this.chemicals = [...resp.body];
+          }
+        },
+        (err) => {},
+      );
   }
 
   getChemicals() {
     this.chemcialResource.name = '';
-    return this.chemicalService.getChemicals(this.chemcialResource)
-      .subscribe((resp: HttpResponse<Chemical[]>) => {
+    return this.chemicalService.getChemicals(this.chemcialResource).subscribe(
+      (resp: HttpResponse<Chemical[]>) => {
         if (resp && resp.headers) {
           this.chemicals = [...resp.body];
         }
-      }, (err) => {
-
-      });;
+      },
+      (err) => {},
+    );
   }
-
 
   supplierNameControlOnChange() {
     this.supplierList$ = this.supplierNameControl.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
-      switchMap(c => {
+      switchMap((c) => {
         return this.supplierService.getSuppliersForDropDown(c);
-      })
+      }),
     );
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -201,62 +279,83 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
           this.purchaseOrderResource.pageSize = this.paginator.pageSize;
           this.purchaseOrderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.purchaseOrderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.purchaseOrderResource.pageSize = c.pageSize;
-          this.purchaseOrderResource.skip = c.skip;
-          this.purchaseOrderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.purchaseOrderResource.pageSize = c.pageSize;
+        this.purchaseOrderResource.skip = c.skip;
+        this.purchaseOrderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   onDownloadReport() {
-    this.purchaseOrderService.getAllPurchaseOrderItemReport(this.purchaseOrderResource)
+    this.purchaseOrderService
+      .getAllPurchaseOrderItemReport(this.purchaseOrderResource)
       .subscribe((c: HttpResponse<PurchaseOrderItem[]>) => {
         this.purchaseOrderItems = [...c.body];
-        let heading = [[
-          this.translationService.getValue('CHEMICAL_NAME'),
-          this.translationService.getValue('ORDER_NUMBER'),
-          this.translationService.getValue('SUPPLIER'),
-          this.translationService.getValue('PURCHASE_DATE'),
-          this.translationService.getValue('UNIT'),
-          this.translationService.getValue('UNIT_PER_PRICE'),
-          this.translationService.getValue('QUANTITY'),
-          this.translationService.getValue('TOTAL_DISCOUNT'),
-          this.translationService.getValue('TAX'),
-          this.translationService.getValue('TOTAL_TAX'),
-          this.translationService.getValue('TOTAL')
-        ]];
+        let heading = [
+          [
+            this.translationService.getValue('CHEMICAL_NAME'),
+            this.translationService.getValue('ORDER_NUMBER'),
+            this.translationService.getValue('SUPPLIER'),
+            this.translationService.getValue('PURCHASE_DATE'),
+            this.translationService.getValue('UNIT'),
+            this.translationService.getValue('UNIT_PER_PRICE'),
+            this.translationService.getValue('QUANTITY'),
+            this.translationService.getValue('TOTAL_DISCOUNT'),
+            this.translationService.getValue('TAX'),
+            this.translationService.getValue('TOTAL_TAX'),
+            this.translationService.getValue('TOTAL'),
+          ],
+        ];
 
         let purchaseOrderReport = [];
         this.purchaseOrderItems.forEach((purchaseOrderItem: PurchaseOrderItem) => {
           purchaseOrderReport.push({
-            'CHEMICAL_NAME': purchaseOrderItem.chemicalName,
-            'ORDER_NUMBER': purchaseOrderItem.purchaseOrderNumber,
-            'SUPPLIER': purchaseOrderItem.supplierName,
-            'PURCHASE_DATE': this.utcToLocalTime.transform(purchaseOrderItem.poCreatedDate, 'shortDate'),
-            'UNIT': purchaseOrderItem.unitName,
-            'UNIT_PER_PRICE': this.customCurrencyPipe.transform(purchaseOrderItem.unitPrice),
-            'QUANTITY': purchaseOrderItem.quantity,
-            'TOTAL_DISCOUNT': this.customCurrencyPipe.transform(purchaseOrderItem.discount),
-            'TAX': purchaseOrderItem.purchaseOrderItemTaxes.map(c => c.taxName + '(' + c.taxPercentage + ' %)',),
-            'TOTAL_TAX': this.customCurrencyPipe.transform(purchaseOrderItem.taxValue),
-            'TOTAL': this.customCurrencyPipe.transform((purchaseOrderItem.unitPrice * purchaseOrderItem.quantity) - purchaseOrderItem.discount + purchaseOrderItem.taxValue)
+            CHEMICAL_NAME: purchaseOrderItem.chemicalName,
+            ORDER_NUMBER: purchaseOrderItem.purchaseOrderNumber,
+            SUPPLIER: purchaseOrderItem.supplierName,
+            PURCHASE_DATE: this.utcToLocalTime.transform(
+              purchaseOrderItem.poCreatedDate,
+              'shortDate',
+            ),
+            UNIT: purchaseOrderItem.unitName,
+            UNIT_PER_PRICE: this.customCurrencyPipe.transform(purchaseOrderItem.unitPrice),
+            QUANTITY: purchaseOrderItem.quantity,
+            TOTAL_DISCOUNT: this.customCurrencyPipe.transform(purchaseOrderItem.discount),
+            TAX: purchaseOrderItem.purchaseOrderItemTaxes.map(
+              (c) => c.taxName + '(' + c.taxPercentage + ' %)',
+            ),
+            TOTAL_TAX: this.customCurrencyPipe.transform(purchaseOrderItem.taxValue),
+            TOTAL: this.customCurrencyPipe.transform(
+              purchaseOrderItem.unitPrice * purchaseOrderItem.quantity -
+                purchaseOrderItem.discount +
+                purchaseOrderItem.taxValue,
+            ),
           });
         });
 
         let workBook = XLSX.utils.book_new();
         XLSX.utils.sheet_add_aoa(workBook, heading);
-        let workSheet = XLSX.utils.sheet_add_json(workBook, purchaseOrderReport, { origin: "A2", skipHeader: true });
-        XLSX.utils.book_append_sheet(workBook, workSheet, this.translationService.getValue('CHEMCIAL_PURCHASE_REPORT'));
-        XLSX.writeFile(workBook, this.translationService.getValue('CHEMCIAL_PURCHASE_REPORT') + ".xlsx");
+        let workSheet = XLSX.utils.sheet_add_json(workBook, purchaseOrderReport, {
+          origin: 'A2',
+          skipHeader: true,
+        });
+        XLSX.utils.book_append_sheet(
+          workBook,
+          workSheet,
+          this.translationService.getValue('CHEMCIAL_PURCHASE_REPORT'),
+        );
+        XLSX.writeFile(
+          workBook,
+          this.translationService.getValue('CHEMCIAL_PURCHASE_REPORT') + '.xlsx',
+        );
       });
   }
 }

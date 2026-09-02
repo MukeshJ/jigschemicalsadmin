@@ -11,13 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DocumentCategoryListPresentationComponent } from './document-category-list-presentation/document-category-list-presentation.component';
 import { SharedModule } from '@shared/shared.module';
 
-
 @NgModule({
-  declarations: [
-    DocumentCategoryListComponent,
-    ManageDocumentCategoryComponent,
-    DocumentCategoryListPresentationComponent
-  ],
   imports: [
     CommonModule,
     DocumentCategoryRoutingModule,
@@ -27,6 +21,9 @@ import { SharedModule } from '@shared/shared.module';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-  ]
+    DocumentCategoryListComponent,
+    ManageDocumentCategoryComponent,
+    DocumentCategoryListPresentationComponent,
+  ],
 })
-export class DocumentCategoryModule { }
+export class DocumentCategoryModule {}

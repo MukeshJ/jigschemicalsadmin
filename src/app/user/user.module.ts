@@ -19,7 +19,7 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
@@ -27,17 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-
 @NgModule({
-  declarations: [
-    UserListComponent,
-    ManageUserComponent,
-    UserPermissionComponent,
-    UserPermissionPresentationComponent,
-    ResetPasswordComponent,
-    MyProfileComponent,
-    ChangePasswordComponent
-  ],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -57,10 +47,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatInputModule,
     MatIconModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    UserListComponent,
+    ManageUserComponent,
+    UserPermissionComponent,
+    UserPermissionPresentationComponent,
+    ResetPasswordComponent,
+    MyProfileComponent,
+    ChangePasswordComponent,
   ],
-  providers: [
-    UserDetailResolverService
-  ]
+  providers: [UserDetailResolverService],
 })
-export class UserModule { }
+export class UserModule {}

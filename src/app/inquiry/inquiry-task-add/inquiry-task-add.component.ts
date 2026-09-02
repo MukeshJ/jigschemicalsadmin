@@ -1,6 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquiryTask } from '@core/domain-classes/inquiry-task';
 import { InquiryTaskEdit } from '@core/domain-classes/inquiry-task-edit';
@@ -11,15 +17,37 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryTaskService } from '../inquiry-task/inquiry-task.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatSuffix, MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-task-add',
   templateUrl: './inquiry-task-add.component.html',
-  styleUrls: ['./inquiry-task-add.component.scss']
+  styleUrls: ['./inquiry-task-add.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatSelect,
+    NgFor,
+    MatOption,
+    TranslatePipe,
+  ],
 })
 export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
-
   inquiryTaskForm: UntypedFormGroup;
   users: User[] = [];
   userResource: UserResource;
@@ -35,8 +63,8 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
     },
     {
       name: 'Normal',
-      value: 'Normal'
-    }
+      value: 'Normal',
+    },
   ];
 
   constructor(
@@ -46,12 +74,12 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
     private userService: UserService,
     private inquiryTaskService: InquiryTaskService,
     private toastrService: ToastrService,
-    private translationService:TranslationService
+    private translationService: TranslationService,
   ) {
     super();
     this.userResource = new UserResource();
     this.userResource.pageSize = 10;
-    this.userResource.orderBy = 'firstName desc'
+    this.userResource.orderBy = 'firstName desc';
   }
 
   ngOnInit(): void {
@@ -67,7 +95,7 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
       dueDate: [null],
       isOpen: [true],
       assignTo: [],
-      priority: []
+      priority: [],
     });
   }
   patchInquiryTask() {
@@ -78,8 +106,8 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
         dueDate: this.data.inquiryTask.dueDate,
         isOpen: this.data.inquiryTask.isOpen,
         assignTo: this.data.inquiryTask.assignTo,
-        priority: this.data.inquiryTask.priority
-      })
+        priority: this.data.inquiryTask.priority,
+      });
     }
   }
 
@@ -96,12 +124,13 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
       isOpen: this.inquiryTaskForm.get('isOpen').value,
       assignTo: this.inquiryTaskForm.get('assignTo').value,
       priority: this.inquiryTaskForm.get('priority').value,
-    }
+    };
     return inquiryTask;
   }
 
   getUsers() {
-    this.sub$.sink = this.userService.getUsers(this.userResource)
+    this.sub$.sink = this.userService
+      .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
       });
@@ -109,19 +138,19 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
   onInquiryTaskSave() {
     const inquiryTask = this.buildInquiryTask();
     if (this.data.inquiryTask) {
-      this.sub$.sink = this.inquiryTaskService.updateInquiryActivity(this.data.inquiryTask.id, inquiryTask)
-        .subscribe(c => {
+      this.sub$.sink = this.inquiryTaskService
+        .updateInquiryActivity(this.data.inquiryTask.id, inquiryTask)
+        .subscribe((c) => {
           this.toastrService.success(this.translationService.getValue('INQUIRY_TASK_UPDATED'));
           this.dialogRef.close();
         });
     } else {
-      this.sub$.sink = this.inquiryTaskService.saveInquiryActivity(inquiryTask)
-        .subscribe(c => {
-          this.toastrService.success(this.translationService.getValue('INQUIRY_TASK_SAVE_SUCCESSFULLY'));
-          this.dialogRef.close();
-        });
+      this.sub$.sink = this.inquiryTaskService.saveInquiryActivity(inquiryTask).subscribe((c) => {
+        this.toastrService.success(
+          this.translationService.getValue('INQUIRY_TASK_SAVE_SUCCESSFULLY'),
+        );
+        this.dialogRef.close();
+      });
     }
-
   }
-
 }

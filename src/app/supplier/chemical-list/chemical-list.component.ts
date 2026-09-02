@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -12,12 +20,56 @@ import { BaseComponent } from 'src/app/base.component';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
 import { AddSupplierChemicalComponent } from '../add-supplier-chemical/add-supplier-chemical.component';
 import { SupplierService } from '../supplier.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
-  styleUrls: ['./chemical-list.component.scss']
+  styleUrls: ['./chemical-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    NgIf,
+    MatProgressSpinner,
+    TranslatePipe,
+  ],
 })
 export class ChemicalListComponent extends BaseComponent implements OnInit {
   chemicals: Chemical[] = [];
@@ -57,18 +109,16 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     public dialogRef: MatDialogRef<ChemicalListComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Supplier,
     private dialog: MatDialog,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
-        if (this.paginator)
-          this.paginator.firstPage();
+        if (this.paginator) this.paginator.firstPage();
         this.getChemicalsList();
       });
     if (this.data) {
@@ -80,24 +130,40 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   getChemicalsList() {
     this.isLoading = true;
     this.sub$.sink = this.supplierService
-      .getChemicalsBySupplierId(this.data.id, this.skip, this.pageSize, this.NameFilter, this.CasNumberFilter)
-      .subscribe((c) => {
-        this.chemicals = c.chemicals;
-        this.totalChemicals = c.totalCount;
-        this.isLoading = false;
-      }, () => {
-        this.isLoading = false;
-      });
+      .getChemicalsBySupplierId(
+        this.data.id,
+        this.skip,
+        this.pageSize,
+        this.NameFilter,
+        this.CasNumberFilter,
+      )
+      .subscribe(
+        (c) => {
+          this.chemicals = c.chemicals;
+          this.totalChemicals = c.totalCount;
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        },
+      );
   }
 
   removeChemialFromSupplier(chemical: Chemical) {
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog( this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE') + `${chemical.name} ?`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(
+        this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE') + `${chemical.name} ?`,
+      )
+      .subscribe((isTrue) => {
         if (isTrue) {
-          this.sub$.sink = this.supplierChemicalService.deleteSupplierChemcial(chemical.id, this.data.id).subscribe(data => {
-            this.toasterService.success(this.translationService.getValue('CHEMICAL_DELETED_SUCCESSFULLY'));
-            this.getChemicalsList();
-          });
+          this.sub$.sink = this.supplierChemicalService
+            .deleteSupplierChemcial(chemical.id, this.data.id)
+            .subscribe((data) => {
+              this.toasterService.success(
+                this.translationService.getValue('CHEMICAL_DELETED_SUCCESSFULLY'),
+              );
+              this.getChemicalsList();
+            });
         }
       });
   }
@@ -110,18 +176,16 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
-  addChemicalSupplier(){
+  addChemicalSupplier() {
     const dialogRef = this.dialog.open(AddSupplierChemicalComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, this.data)
+      data: Object.assign({}, this.data),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"]) {
-          this.getChemicalsList();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) {
+        this.getChemicalsList();
+      }
+    });
   }
 }
-

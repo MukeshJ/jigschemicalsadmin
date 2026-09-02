@@ -11,11 +11,6 @@ import { PageListPresentationComponent } from './page-list-presentation/page-lis
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [
-    PageListComponent,
-    ManagePageComponent,
-    PageListPresentationComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -23,7 +18,10 @@ import { SharedModule } from '@shared/shared.module';
     MatTableModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    SharedModule
-  ]
+    SharedModule,
+    PageListComponent,
+    ManagePageComponent,
+    PageListPresentationComponent,
+  ],
 })
-export class PageModule { }
+export class PageModule {}

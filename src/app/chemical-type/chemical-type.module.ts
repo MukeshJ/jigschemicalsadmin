@@ -15,10 +15,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
-  declarations: [
-    ChemicalTypeListComponent,
-    ChemicalTypeAddComponent
-  ],
   imports: [
     CommonModule,
     TranslatePipe,
@@ -31,7 +27,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     ChemicalTypeRoutingModule,
     MatCardModule,
     MatCheckboxModule,
-    MatSlideToggleModule
-  ]
+    MatSlideToggleModule,
+    ChemicalTypeListComponent,
+    ChemicalTypeAddComponent,
+  ],
 })
-export class ChemicalTypeModule { }
+export class ChemicalTypeModule {}

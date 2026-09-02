@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -24,18 +31,46 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
-
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatDivider } from '@angular/material/divider';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
+import { QuantitiesUnitPricePipe as QuantitiesUnitPricePipe_1 } from '../../shared/pipes/quantities-unitprice.pipe';
+import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../../shared/pipes/quantities-unitprice-tax.pipe';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-order-return',
   templateUrl: './sales-order-return.component.html',
   styleUrls: ['./sales-order-return.component.scss'],
-  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe]
+  viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelect,
+    MatDivider,
+    NgFor,
+    MatOption,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatIconButton,
+    MatIcon,
+    HasClaimDirective,
+    MatProgressSpinner,
+    CustomCurrencyPipe,
+    TranslatePipe,
+    QuantitiesUnitPricePipe_1,
+    QuantitiesUnitPriceTaxPipe_1,
+  ],
 })
-export class SaleOrderReturnComponent  extends BaseComponent {
+export class SaleOrderReturnComponent extends BaseComponent {
   taxes$: Observable<Tax[]>;
   salesOrderForm: UntypedFormGroup;
   salesOrderReturnForm: UntypedFormGroup;
@@ -63,8 +98,8 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   paymentTerms: any[] = [];
   deliveryMethods: any[] = [];
 
-  onDiscountChange(): void { }
-  onTaxSelectionChange(): void { }
+  onDiscountChange(): void {}
+  onTaxSelectionChange(): void {}
 
   get salesOrderItemsArray(): UntypedFormArray {
     return <UntypedFormArray>this.salesOrderForm.get('salesOrderItems');
@@ -82,7 +117,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private location: Location,
-    private cloneService: ClonerService
+    private cloneService: ClonerService,
   ) {
     super();
     this.salesResouce = new SalesOrderResourceParameter();
@@ -110,7 +145,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
       filerCustomer: [''],
       customerId: [''],
       salesOrderId: [''],
-      filerSalesOrder: ['']
+      filerSalesOrder: [''],
     });
     this.getCustomers();
     this.customerNameForSearchChangeValue();
@@ -120,16 +155,18 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   }
 
   subscribeCustomerChangeEvent() {
-    this.salesOrderReturnForm.get('customerId').valueChanges
-      .pipe(
+    this.salesOrderReturnForm
+      .get('customerId')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.salesResouce.customerId = c;
           this.salesResouce.status = SalesOrderStatusEnum.Not_Return;
           return this.salesOrderService.getAllSalesOrder(this.salesResouce);
-        })
-      ).subscribe((resp: HttpResponse<SalesOrder[]>) => {
+        }),
+      )
+      .subscribe((resp: HttpResponse<SalesOrder[]>) => {
         if (resp && resp.headers) {
           this.salesorders = [...resp.body];
         }
@@ -137,15 +174,17 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   }
 
   subscribeSalesOrderFilterChangeEvent() {
-    this.salesOrderReturnForm.get('filerSalesOrder').valueChanges
-      .pipe(
+    this.salesOrderReturnForm
+      .get('filerSalesOrder')
+      .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.salesResouce.orderNumber = c;
           return this.salesOrderService.getAllSalesOrder(this.salesResouce);
-        })
-      ).subscribe((resp: HttpResponse<SalesOrder[]>) => {
+        }),
+      )
+      .subscribe((resp: HttpResponse<SalesOrder[]>) => {
         if (resp && resp.headers) {
           this.salesorders = [...resp.body];
         }
@@ -153,113 +192,123 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   }
 
   onSalesOrderChange() {
-    this.salesOrderReturnForm.get('salesOrderId').valueChanges
-      .subscribe(id => {
-        if (id) {
-          this.router.navigate(['/sales-order-return', id]);
-        }
-      });
+    this.salesOrderReturnForm.get('salesOrderId').valueChanges.subscribe((id) => {
+      if (id) {
+        this.router.navigate(['/sales-order-return', id]);
+      }
+    });
   }
 
-
   createSalesOrder() {
-    this.route.data
-      .pipe(
-      )
-      .subscribe((salesOrderData: { 'salesorder': SalesOrder }) => {
-        this.salesOrder = salesOrderData.salesorder;
-        if (this.salesOrder) {
-          this.isEdit = true;
-          this.salesOrderForm = this.fb.group({
-            orderNumber: [{ value: this.salesOrder.orderNumber, disabled: true }],
-            filerCustomer: [{ value: '', disabled: true }],
-            deliveryDate: [{ value: this.salesOrder.deliveryDate, disabled: true }],
-            soCreatedDate: [{ value: this.salesOrder.soCreatedDate, disabled: true }],
-            paymentTermId: [{value: this.salesOrder.soCreatedDate, disabled: true }],
-            deliveryMethodId: [{value: this.salesOrder.soCreatedDate, disabled: true }],
-            deliveryStatus: [{ value: SalesOrderStatusEnum.Return, disabled: true }],
-            customerId: [{ value: this.salesOrder.customerId, disabled: true }],
-            note: [{ value: '', disabled: false }],
-            salesOrderItems: this.fb.array([])
+    this.route.data.pipe().subscribe((salesOrderData: { salesorder: SalesOrder }) => {
+      this.salesOrder = salesOrderData.salesorder;
+      if (this.salesOrder) {
+        this.isEdit = true;
+        this.salesOrderForm = this.fb.group({
+          orderNumber: [{ value: this.salesOrder.orderNumber, disabled: true }],
+          filerCustomer: [{ value: '', disabled: true }],
+          deliveryDate: [{ value: this.salesOrder.deliveryDate, disabled: true }],
+          soCreatedDate: [{ value: this.salesOrder.soCreatedDate, disabled: true }],
+          paymentTermId: [{ value: this.salesOrder.soCreatedDate, disabled: true }],
+          deliveryMethodId: [{ value: this.salesOrder.soCreatedDate, disabled: true }],
+          deliveryStatus: [{ value: SalesOrderStatusEnum.Return, disabled: true }],
+          customerId: [{ value: this.salesOrder.customerId, disabled: true }],
+          note: [{ value: '', disabled: false }],
+          salesOrderItems: this.fb.array([]),
+        });
+        this.salesOrder.salesOrderItems.forEach((c) => {
+          this.salesOrderItemsArray.push(
+            this.createSalesOrderItemPatch(this.salesOrderItemsArray.length, c),
+          );
+        });
+        this.customerNameChangeValue();
+        this.getCustomers();
+        this.getAllTotal();
+      } else {
+        this.createSalesOrderReturnOrder();
+        this.salesResouce.pageSize = 10;
+        this.salesResouce.status = SalesOrderStatusEnum.Not_Return;
+        this.salesOrderService
+          .getAllSalesOrder(this.salesResouce)
+          .subscribe((resp: HttpResponse<SalesOrder[]>) => {
+            if (resp && resp.headers) {
+              this.salesorders = [...resp.body];
+            }
           });
-          this.salesOrder.salesOrderItems.forEach(c => {
-            this.salesOrderItemsArray.push(this.createSalesOrderItemPatch(this.salesOrderItemsArray.length, c));
-          });
-          this.customerNameChangeValue();
-          this.getCustomers();
-          this.getAllTotal();
-        } else {
-          this.createSalesOrderReturnOrder();
-          this.salesResouce.pageSize = 10;
-          this.salesResouce.status = SalesOrderStatusEnum.Not_Return;
-          this.salesOrderService.getAllSalesOrder(this.salesResouce)
-            .subscribe((resp: HttpResponse<SalesOrder[]>) => {
-              if (resp && resp.headers) {
-                this.salesorders = [...resp.body];
-              }
-            })
-        }
-      });
+      }
+    });
   }
 
   createSalesOrderItemPatch(index: number, salesOrderItem: SalesOrderItem) {
-    const taxs = salesOrderItem.salesOrderItemTaxes.map(c => c.taxId);
+    const taxs = salesOrderItem.salesOrderItemTaxes.map((c) => c.taxId);
     const formGroup = this.fb.group({
       chemicalId: [{ value: salesOrderItem.chemicalId, disabled: true }],
       unitPrice: [{ value: salesOrderItem.unitPrice, disabled: true }],
       quantity: [{ value: salesOrderItem.quantity, disabled: true }],
-      returnquantity: [{ value: salesOrderItem.quantity, disabled: false }, [Validators.required, Validators.max(salesOrderItem.quantity), Validators.min(1)]],
+      returnquantity: [
+        { value: salesOrderItem.quantity, disabled: false },
+        [Validators.required, Validators.max(salesOrderItem.quantity), Validators.min(1)],
+      ],
       taxValue: [{ value: taxs, disabled: true }],
       unitId: [{ value: salesOrderItem.chemical.unitId, disabled: true }],
-      discountPercentage: [{ value: salesOrderItem.discountPercentage, disabled: true }]
+      discountPercentage: [{ value: salesOrderItem.discountPercentage, disabled: true }],
     });
-    this.unitsMap[index] = [... this.route.snapshot.data['units']];
-    this.taxsMap[index] = [... this.route.snapshot.data['taxs']];
+    this.unitsMap[index] = [...this.route.snapshot.data['units']];
+    this.taxsMap[index] = [...this.route.snapshot.data['taxs']];
     this.filterChemicalsMap[index.toString()] = [salesOrderItem.chemical];
     return formGroup;
   }
 
   customerNameForSearchChangeValue() {
-    this.sub$.sink = this.salesOrderReturnForm.get('filerCustomer').valueChanges
-      .pipe(
-        tap(c => this.isCustomerLoading = true),
+    this.sub$.sink = this.salesOrderReturnForm
+      .get('filerCustomer')
+      .valueChanges.pipe(
+        tap((c) => (this.isCustomerLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.customerResource.customerName = c;
           this.customerResource.id = null;
           return this.customerService.getCustomers(this.customerResource);
-        })
-      ).subscribe((resp: HttpResponse<Customer[]>) => {
-        this.isCustomerLoading = false;
-        if (resp && resp.headers) {
-          this.customersForSearch = [...resp.body];
-        }
-      }, (err) => {
-        this.isCustomerLoading = false;
-      });
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Customer[]>) => {
+          this.isCustomerLoading = false;
+          if (resp && resp.headers) {
+            this.customersForSearch = [...resp.body];
+          }
+        },
+        (err) => {
+          this.isCustomerLoading = false;
+        },
+      );
   }
 
-
   customerNameChangeValue() {
-    this.sub$.sink = this.salesOrderForm.get('filerCustomer').valueChanges
-      .pipe(
-        tap(c => this.isCustomerLoading = true),
+    this.sub$.sink = this.salesOrderForm
+      .get('filerCustomer')
+      .valueChanges.pipe(
+        tap((c) => (this.isCustomerLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(c => {
+        switchMap((c) => {
           this.customerResource.customerName = c;
           this.customerResource.id = null;
           return this.customerService.getCustomers(this.customerResource);
-        })
-      ).subscribe((resp: HttpResponse<Customer[]>) => {
-        this.isCustomerLoading = false;
-        if (resp && resp.headers) {
-          this.customers = [...resp.body];
-        }
-      }, (err) => {
-        this.isCustomerLoading = false;
-      });
+        }),
+      )
+      .subscribe(
+        (resp: HttpResponse<Customer[]>) => {
+          this.isCustomerLoading = false;
+          if (resp && resp.headers) {
+            this.customers = [...resp.body];
+          }
+        },
+        (err) => {
+          this.isCustomerLoading = false;
+        },
+      );
   }
 
   getAllTotal() {
@@ -270,18 +319,48 @@ export class SaleOrderReturnComponent  extends BaseComponent {
     this.totalDiscount = 0;
     this.totalTax = 0;
     if (salesOrderItems && salesOrderItems.length > 0) {
-      salesOrderItems.forEach(so => {
+      salesOrderItems.forEach((so) => {
         if (so.unitPrice && so.returnquantity) {
-          const totalBeforeDiscount = this.totalBeforeDiscount + parseFloat(this.quantitiesUnitPricePipe.transform(so.returnquantity, so.unitPrice));
+          const totalBeforeDiscount =
+            this.totalBeforeDiscount +
+            parseFloat(this.quantitiesUnitPricePipe.transform(so.returnquantity, so.unitPrice));
           this.totalBeforeDiscount = parseFloat(totalBeforeDiscount.toFixed(2));
-          const gradTotal = this.grandTotal + parseFloat(this.quantitiesUnitPricePipe.transform(so.returnquantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0]));
+          const gradTotal =
+            this.grandTotal +
+            parseFloat(
+              this.quantitiesUnitPricePipe.transform(
+                so.returnquantity,
+                so.unitPrice,
+                so.discountPercentage,
+                so.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.grandTotal = parseFloat(gradTotal.toFixed(2));
-          const totalTax = this.totalTax + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.returnquantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0]));
+          const totalTax =
+            this.totalTax +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                so.returnquantity,
+                so.unitPrice,
+                so.discountPercentage,
+                so.taxValue,
+                this.taxsMap[0],
+              ),
+            );
           this.totalTax = parseFloat(totalTax.toFixed(2));
-          const totalDiscount = this.totalDiscount + parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.returnquantity, so.unitPrice, so.discountPercentage));
+          const totalDiscount =
+            this.totalDiscount +
+            parseFloat(
+              this.quantitiesUnitPriceTaxPipe.transform(
+                so.returnquantity,
+                so.unitPrice,
+                so.discountPercentage,
+              ),
+            );
           this.totalDiscount = parseFloat(totalDiscount.toFixed(2));
         }
-      })
+      });
     }
   }
 
@@ -294,7 +373,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
 
     this.salesOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number) => {
       const chemicalId = c.get('chemicalId').value;
-      this.salesOrder.salesOrderItems.map(pi => {
+      this.salesOrder.salesOrderItems.map((pi) => {
         if (pi.chemical.id === chemicalId) {
           this.filterChemicalsMap[index.toString()] = this.cloneService.deepClone([pi.chemical]);
         }
@@ -307,21 +386,21 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   getChemicals(index: number) {
     if (this.chemicals.length === 0) {
       this.chemicalResource.name = '';
-      this.chemicalService.getChemicals(this.chemicalResource)
-        .subscribe((resp: HttpResponse<Chemical[]>) => {
+      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
+        (resp: HttpResponse<Chemical[]>) => {
           this.chemicals = [...resp.body];
           this.filterChemicalsMap[index.toString()] = [...resp.body];
-        }, (err) => {
-        });
+        },
+        (err) => {},
+      );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemicals];
     }
-
   }
 
   onChemicalSelectionChange(value: any, index: number) {
     this.salesOrderItemsArray.controls[index].patchValue({
-      filterChemicalValue: ''
+      filterChemicalValue: '',
     });
     const chemical = this.filterChemicalsMap[index].find((c: Chemical) => c.id === value.value);
     if (chemical) {
@@ -332,15 +411,14 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   }
 
   getNewSalesOrderNumber() {
-    this.salesOrderService.getNewSalesOrderNumber().subscribe(salesOrder => {
+    this.salesOrderService.getNewSalesOrderNumber().subscribe((salesOrder) => {
       if (!this.salesOrder) {
         this.salesOrderForm.patchValue({
-          orderNumber: salesOrder.orderNumber
+          orderNumber: salesOrder.orderNumber,
         });
       }
     });
   }
-
 
   getCustomers() {
     if (this.salesOrder) {
@@ -349,13 +427,12 @@ export class SaleOrderReturnComponent  extends BaseComponent {
       this.customerResource.customerName = '';
       this.customerResource.id = null;
     }
-    this.customerService.getCustomers(this.customerResource)
-      .subscribe(resp => {
-        if (resp && resp.headers) {
-          this.customers = [...resp.body];
-          this.customersForSearch = [...resp.body];
-        }
-      });
+    this.customerService.getCustomers(this.customerResource).subscribe((resp) => {
+      if (resp && resp.headers) {
+        this.customers = [...resp.body];
+        this.customersForSearch = [...resp.body];
+      }
+    });
   }
 
   onSalesOrderSubmit() {
@@ -368,11 +445,10 @@ export class SaleOrderReturnComponent  extends BaseComponent {
       }
       const salesOrder = this.buildSalesOrder();
       if (salesOrder.id) {
-        this.salesOrderService.updateSalesOrderReturn(salesOrder)
-          .subscribe((c: SalesOrder) => {
-            this.toastrService.success('Sales order return added.');
-            this.router.navigate(['/sales-order/list']);
-          })
+        this.salesOrderService.updateSalesOrderReturn(salesOrder).subscribe((c: SalesOrder) => {
+          this.toastrService.success('Sales order return added.');
+          this.router.navigate(['/sales-order/list']);
+        });
       }
     }
   }
@@ -391,32 +467,46 @@ export class SaleOrderReturnComponent  extends BaseComponent {
       totalDiscount: this.totalDiscount,
       totalTax: this.totalTax,
       note: this.salesOrderForm.get('note').value,
-      salesOrderItems: []
+      salesOrderItems: [],
     };
 
     const salesOrderItemsArray = this.salesOrderForm.get('salesOrderItems') as UntypedFormArray;
     const salesOrderItems = salesOrderItemsArray.getRawValue();
     if (salesOrderItems && salesOrderItems.length > 0) {
-      salesOrderItems.forEach(so => {
-        salesOrder.salesOrderItems.push(
-          {
-            discount: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.returnquantity, so.unitPrice, so.discountPercentage)),
-            discountPercentage: so.discountPercentage,
-            chemicalId: so.chemicalId,
-            quantity: so.returnquantity,
-            taxValue: parseFloat(this.quantitiesUnitPriceTaxPipe.transform(so.returnquantity, so.unitPrice, so.discountPercentage, so.taxValue, this.taxsMap[0])),
-            unitPrice: parseFloat(so.unitPrice),
-            salesOrderItemTaxes: so.taxValue ? [
-              ...so.taxValue.map(element => {
-                const salesOrderItemTaxes: SalesOrderItemTax = {
-                  taxId: element
-                };
-                return salesOrderItemTaxes;
-              })
-            ] : []
-          }
-        )
-      })
+      salesOrderItems.forEach((so) => {
+        salesOrder.salesOrderItems.push({
+          discount: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              so.returnquantity,
+              so.unitPrice,
+              so.discountPercentage,
+            ),
+          ),
+          discountPercentage: so.discountPercentage,
+          chemicalId: so.chemicalId,
+          quantity: so.returnquantity,
+          taxValue: parseFloat(
+            this.quantitiesUnitPriceTaxPipe.transform(
+              so.returnquantity,
+              so.unitPrice,
+              so.discountPercentage,
+              so.taxValue,
+              this.taxsMap[0],
+            ),
+          ),
+          unitPrice: parseFloat(so.unitPrice),
+          salesOrderItemTaxes: so.taxValue
+            ? [
+                ...so.taxValue.map((element) => {
+                  const salesOrderItemTaxes: SalesOrderItemTax = {
+                    taxId: element,
+                  };
+                  return salesOrderItemTaxes;
+                }),
+              ]
+            : [],
+        });
+      });
     }
     return salesOrder;
   }

@@ -24,12 +24,6 @@ import { CustomerSOListComponent } from './customer-list/customer-so-list/custom
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-  declarations: [
-    CustomerListComponent,
-    CustomerDetailComponent,
-    ChemicalListComponent,
-    AddCustomerChemicalComponent,
-    CustomerSOListComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule,
@@ -48,12 +42,13 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatMenuModule,
     MatDialogModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    CustomerListComponent,
+    CustomerDetailComponent,
+    ChemicalListComponent,
+    AddCustomerChemicalComponent,
+    CustomerSOListComponent,
   ],
-  providers:[
-    CustomerResolverService
-  ]
+  providers: [CustomerResolverService],
 })
-export class CustomerModule {
-
-}
+export class CustomerModule {}

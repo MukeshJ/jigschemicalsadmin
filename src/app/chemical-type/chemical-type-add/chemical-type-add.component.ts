@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChemicalType } from '@core/domain-classes/chemical-type';
 import { TranslationService } from '@core/services/translation.service';
@@ -8,15 +14,28 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalTypeService } from '../chemical-type.service';
+import { NgIf } from '@angular/common';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-type-add',
   templateUrl: './chemical-type-add.component.html',
-  styleUrls: ['./chemical-type-add.component.scss']
+  styleUrls: ['./chemical-type-add.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatSlideToggle,
+    AngularEditorModule,
+    MatCard,
+    MatCardActions,
+    TranslatePipe,
+  ],
 })
 export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
-
   isEdit: boolean = false;
   chemicalTypeForm: UntypedFormGroup;
   imgSrc: any = null;
@@ -28,7 +47,7 @@ export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
     private chemicalTypeService: ChemicalTypeService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
   ) {
     super();
   }
@@ -68,7 +87,7 @@ export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
       this.imgSrc = reader.result;
       this.isImageUpload = true;
       $event.target.value = '';
-    }
+    };
   }
 
   onRemoveImage() {
@@ -79,27 +98,30 @@ export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
   saveChemicalType(): void {
     if (this.chemicalTypeForm.valid) {
       const chemicalType: ChemicalType = this.chemicalTypeForm.value;
-      chemicalType.imageData = this.imgSrc
+      chemicalType.imageData = this.imgSrc;
       chemicalType.isImageUpload = this.isImageUpload;
       if (this.data.id) {
-        this.sub$.sink = this.chemicalTypeService.updateChemicalType(this.data.id, chemicalType)
+        this.sub$.sink = this.chemicalTypeService
+          .updateChemicalType(this.data.id, chemicalType)
           .subscribe(() => {
-            this.toastrService.success(this.translationService.getValue('CHEMICALTYPE_UPDATED_SUCCESSFULLY'));
+            this.toastrService.success(
+              this.translationService.getValue('CHEMICALTYPE_UPDATED_SUCCESSFULLY'),
+            );
             this.dialogRef.close(true);
           });
       } else {
         this.sub$.sink = this.chemicalTypeService.saveChemicalType(chemicalType).subscribe(() => {
-          this.toastrService.success(this.translationService.getValue('CHEMICALTYPE_SAVED_SUCCESSFULLY'));
+          this.toastrService.success(
+            this.translationService.getValue('CHEMICALTYPE_SAVED_SUCCESSFULLY'),
+          );
           this.dialogRef.close(true);
         });
       }
-    }
-    else {
+    } else {
       this.chemicalTypeForm.markAllAsTouched();
     }
   }
   onNoClick() {
     this.dialogRef.close();
   }
-
 }

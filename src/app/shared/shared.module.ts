@@ -34,7 +34,7 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
     QuantitiesUnitPricePipe,
     QuantitiesUnitPriceTaxPipe,
     PurchaseOrderInvoiceComponent,
-    SalesOrderInvoiceComponent
+    SalesOrderInvoiceComponent,
   ],
   imports: [
     CommonModule,
@@ -51,9 +51,7 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
     MatSelectModule,
     MatCheckboxModule,
     MatTableModule,
-    MatProgressSpinnerModule
-  ],
-  declarations: [
+    MatProgressSpinnerModule,
     HasClaimDirective,
     DragDropDirective,
     DocumentViewComponent,
@@ -61,6 +59,7 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
     QuantitiesUnitPricePipe,
     QuantitiesUnitPriceTaxPipe,
     PurchaseOrderInvoiceComponent,
-    SalesOrderInvoiceComponent],
+    SalesOrderInvoiceComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

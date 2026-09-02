@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from '../base.component';
+import { PaymentTermPresentationComponent } from './payment-term-presentation/payment-term-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-payment-term',
   templateUrl: './payment-term.component.html',
-  styleUrls: ['./payment-term.component.scss']
+  styleUrls: ['./payment-term.component.scss'],
+  imports: [PaymentTermPresentationComponent, AsyncPipe],
 })
 export class PaymentTermComponent extends BaseComponent implements OnInit {
   paymentTerms$: Observable<PaymentTerm[]>;
@@ -19,20 +21,19 @@ export class PaymentTermComponent extends BaseComponent implements OnInit {
   constructor(
     private paymentTermService: PaymentTermService,
     private toastrService: ToastrService,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.paymentTermService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getPaymentTerms();
-          }
-        })
-      )
-    this.paymentTerms$ = this.paymentTermService.entities$
+    this.loading$ = this.paymentTermService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getPaymentTerms();
+        }
+      }),
+    );
+    this.paymentTerms$ = this.paymentTermService.entities$;
   }
 
   getPaymentTerms(): void {
@@ -40,12 +41,16 @@ export class PaymentTermComponent extends BaseComponent implements OnInit {
   }
 
   deletePaymentTerm(id: string): void {
-    this.sub$.sink = this.paymentTermService.delete(id)
-      .subscribe((success: number | string) => {
-        this.toastrService.success(this.translationService.getValue('PAYMENT_TERM_DELETED_SUCCESSFULLY'));
-      }, (err) => {
+    this.sub$.sink = this.paymentTermService.delete(id).subscribe(
+      (success: number | string) => {
+        this.toastrService.success(
+          this.translationService.getValue('PAYMENT_TERM_DELETED_SUCCESSFULLY'),
+        );
+      },
+      (err) => {
         this.paymentTermService.getAll();
-      });
+      },
+    );
   }
 
   // managePaymentTerm(paymentTerm: PaymentTerm): void {

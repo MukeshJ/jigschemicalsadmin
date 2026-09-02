@@ -6,12 +6,14 @@ import { PageService } from '@core/services/page.service';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { TranslationService } from '@core/services/translation.service';
+import { PageListPresentationComponent } from '../page-list-presentation/page-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-page-list',
   templateUrl: './page-list.component.html',
-  styleUrls: ['./page-list.component.scss']
+  styleUrls: ['./page-list.component.scss'],
+  imports: [PageListPresentationComponent, AsyncPipe],
 })
 export class PageListComponent extends BaseComponent implements OnInit {
   pages$: Observable<Page[]>;
@@ -21,31 +23,30 @@ export class PageListComponent extends BaseComponent implements OnInit {
   constructor(
     private pageService: PageService,
     private toastrServoce: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.loading$ = this.pageService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getPages();
-          }
-        })
-      );
+    this.loading$ = this.pageService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getPages();
+        }
+      }),
+    );
 
     this.pages$ = this.pageService.entities$;
-
   }
 
   deletePage(pageId: string) {
     this.sub$.sink = this.pageService.delete(pageId).subscribe(() => {
       this.toastrServoce.success(this.translationService.getValue('PAGE_DELETED_SUCCESSFULLY'));
-    })
+    });
   }
 
   getPages(): void {
-    this.pageService.getAll()
+    this.pageService.getAll();
   }
 }

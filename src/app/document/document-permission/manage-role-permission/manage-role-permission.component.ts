@@ -1,6 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentRolePermission } from '@core/domain-classes/document-role-permission';
 import { Role } from '@core/domain-classes/role';
@@ -8,12 +15,47 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { DocumentPermissionService } from '../document-permission.service';
+import {
+  MatLabel,
+  MatSelect,
+  MatSelectTrigger,
+  MatOption,
+  MatFormField,
+  MatSuffix,
+  MatError,
+} from '@angular/material/select';
+import { NgIf, NgFor } from '@angular/common';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-role-permission',
   templateUrl: './manage-role-permission.component.html',
-  styleUrls: ['./manage-role-permission.component.scss']
+  styleUrls: ['./manage-role-permission.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatLabel,
+    MatSelect,
+    MatSelectTrigger,
+    NgIf,
+    NgFor,
+    MatOption,
+    MatCheckbox,
+    MatFormField,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatError,
+    TranslatePipe,
+  ],
 })
 export class ManageRolePermissionComponent extends BaseComponent implements OnInit {
   selectedRoles: Role[] = [];
@@ -22,10 +64,11 @@ export class ManageRolePermissionComponent extends BaseComponent implements OnIn
   constructor(
     private documentPermissionService: DocumentPermissionService,
     private toastrService: ToastrService,
-    @Inject(MAT_DIALOG_DATA) public data: { roles: Role[], documentId: string },
+    @Inject(MAT_DIALOG_DATA) public data: { roles: Role[]; documentId: string },
     private dialogRef: MatDialogRef<ManageRolePermissionComponent>,
     private fb: UntypedFormBuilder,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
     this.minDate = new Date();
   }
@@ -46,7 +89,7 @@ export class ManageRolePermissionComponent extends BaseComponent implements OnIn
   timeBoundChange(event: MatCheckboxChange) {
     if (event.checked) {
       this.permissionForm.get('startDate').setValidators([Validators.required]);
-      this.permissionForm.get('endDate').setValidators([Validators.required])
+      this.permissionForm.get('endDate').setValidators([Validators.required]);
     } else {
       this.permissionForm.get('startDate').clearValidators();
       this.permissionForm.get('startDate').updateValueAndValidity();
@@ -62,21 +105,29 @@ export class ManageRolePermissionComponent extends BaseComponent implements OnIn
     }
     if (this.selectedRoles.length == 0) {
       this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_ATLEAST_ONE_ROLE'));
-      return
+      return;
     }
 
-    let documentRolePermission: DocumentRolePermission[] = this.selectedRoles.map(role => {
-      return Object.assign({}, {
-        id: '',
-        documentId: this.data.documentId,
-        roleId: role.id,
-      }, this.permissionForm.value)
+    let documentRolePermission: DocumentRolePermission[] = this.selectedRoles.map((role) => {
+      return Object.assign(
+        {},
+        {
+          id: '',
+          documentId: this.data.documentId,
+          roleId: role.id,
+        },
+        this.permissionForm.value,
+      );
     });
 
-    this.sub$.sink = this.documentPermissionService.addDocumentRolePermission(documentRolePermission).subscribe(() => {
-      this.toastrService.success(this.translationService.getValue('PERMISSION_ADDED_SUCCESSFULLY'));
-      this.dialogRef.close(true);
-    });
+    this.sub$.sink = this.documentPermissionService
+      .addDocumentRolePermission(documentRolePermission)
+      .subscribe(() => {
+        this.toastrService.success(
+          this.translationService.getValue('PERMISSION_ADDED_SUCCESSFULLY'),
+        );
+        this.dialogRef.close(true);
+      });
   }
 
   onNoClick() {

@@ -1,6 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderPayment } from '@core/domain-classes/sales-order-payment';
@@ -8,12 +20,35 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderPaymentService } from '../sales-order-payment.service';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf } from '@angular/common';
+import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-view-sales-order-payment',
   templateUrl: './view-sales-order-payment.component.html',
-  styleUrls: ['./view-sales-order-payment.component.scss']
+  styleUrls: ['./view-sales-order-payment.component.scss'],
+  imports: [
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    HasClaimDirective,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    NgIf,
+    PaymentMethodPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class ViewSalesOrderPaymentComponent extends BaseComponent implements OnInit {
   dataSource = new MatTableDataSource<SalesOrderPayment>();
@@ -25,7 +60,8 @@ export class ViewSalesOrderPaymentComponent extends BaseComponent implements OnI
     private salesOrderPaymentService: SalesOrderPaymentService,
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -35,15 +71,21 @@ export class ViewSalesOrderPaymentComponent extends BaseComponent implements OnI
     }
   }
 
-  displayedColumns: string[] = ['action', 'paymentDate', 'referenceNumber', 'amount', 'paymentMethod'];
-  footerToDisplayed = ['footer']
+  displayedColumns: string[] = [
+    'action',
+    'paymentDate',
+    'referenceNumber',
+    'amount',
+    'paymentMethod',
+  ];
+  footerToDisplayed = ['footer'];
 
   onCancel(): void {
     this.dialogRef.close(this.isDeleted);
   }
 
   getAllSalesOrderPaymentById() {
-    this.salesOrderPaymentService.getAllSalesOrderPaymentById(this.data.id).subscribe(data => {
+    this.salesOrderPaymentService.getAllSalesOrderPaymentById(this.data.id).subscribe((data) => {
       this.dataSource = data;
       if (data.length == 0) {
         this.isData = true;
@@ -53,10 +95,13 @@ export class ViewSalesOrderPaymentComponent extends BaseComponent implements OnI
 
   deletePayment(payment: SalesOrderPayment) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${payment.amount}`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${payment.amount}`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.salesOrderPaymentService.deleteSalesOrderPayment(payment.id)
+          this.sub$.sink = this.salesOrderPaymentService
+            .deleteSalesOrderPayment(payment.id)
             .subscribe(() => {
               this.isDeleted = true;
               this.toastrService.success('Payment is deleted.');

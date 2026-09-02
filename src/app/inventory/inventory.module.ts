@@ -22,15 +22,7 @@ import { InventorySourcePipe } from './inventory-source.pipe';
 import { MatDividerModule } from '@angular/material/divider';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
-
 @NgModule({
-  declarations: [
-    InventoryListComponent,
-    ManageInventoryComponent,
-    InventoryHistoryListComponent,
-    InventorySourcePipe
-  ],
   imports: [
     CommonModule,
     InventoryRoutingModule,
@@ -50,7 +42,11 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatDividerModule
-  ]
+    MatDividerModule,
+    InventoryListComponent,
+    ManageInventoryComponent,
+    InventoryHistoryListComponent,
+    InventorySourcePipe,
+  ],
 })
-export class InventoryModule { }
+export class InventoryModule {}

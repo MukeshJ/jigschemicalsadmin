@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
+import { InquirySourceListPresentationComponent } from '../inquiry-source-list-presentation/inquiry-source-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-source-list',
   templateUrl: './inquiry-source-list.component.html',
-  styleUrls: ['./inquiry-source-list.component.scss']
+  styleUrls: ['./inquiry-source-list.component.scss'],
+  imports: [InquirySourceListPresentationComponent, AsyncPipe],
 })
 export class InquirySourceListComponent extends BaseComponent implements OnInit {
   inquirySources$: Observable<InquirySource[]>;
@@ -19,20 +21,19 @@ export class InquirySourceListComponent extends BaseComponent implements OnInit 
   constructor(
     private inquirySourcesService: InquirySourceService,
     private toastrService: ToastrService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.inquirySourcesService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getInquirySources();
-          }
-        })
-      )
-    this.inquirySources$ = this.inquirySourcesService.entities$
+    this.loading$ = this.inquirySourcesService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getInquirySources();
+        }
+      }),
+    );
+    this.inquirySources$ = this.inquirySourcesService.entities$;
   }
 
   getInquirySources(): void {
@@ -41,7 +42,9 @@ export class InquirySourceListComponent extends BaseComponent implements OnInit 
 
   deleteInquirySource(id: string): void {
     this.sub$.sink = this.inquirySourcesService.delete(id).subscribe(() => {
-      this.toastrService.success(this.translationService.getValue('INQUIRY_SOURCE_DELETED_SUCCESSFULLY'));
+      this.toastrService.success(
+        this.translationService.getValue('INQUIRY_SOURCE_DELETED_SUCCESSFULLY'),
+      );
     });
   }
 }

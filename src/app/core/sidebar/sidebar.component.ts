@@ -5,9 +5,12 @@ import { SecurityService } from '@core/security/security.service';
 import { CommonService } from '@core/services/common.service';
 import { environment } from '@environments/environment';
 import { BaseComponent } from 'src/app/base.component';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { RouterLinkActive, RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
@@ -15,17 +18,19 @@ import { BaseComponent } from 'src/app/base.component';
     trigger('slide', [
       state('up', style({ height: 0 })),
       state('down', style({ height: '*' })),
-      transition('up <=> down', animate(200))
-    ])
-  ]
+      transition('up <=> down', animate(200)),
+    ]),
+  ],
+  imports: [HasClaimDirective, RouterLinkActive, RouterLink, NgClass, TranslatePipe],
 })
 export class SidebarComponent extends BaseComponent implements OnInit {
   appUserAuth: UserAuth = null;
-  currentUrl: string="dashboard";
+  currentUrl: string = 'dashboard';
 
   constructor(
     private securityService: SecurityService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     super();
   }
 
@@ -35,19 +40,18 @@ export class SidebarComponent extends BaseComponent implements OnInit {
   }
 
   setTopLogAndName() {
-    this.sub$.sink = this.securityService.securityObject$
-    .subscribe(c => {
+    this.sub$.sink = this.securityService.securityObject$.subscribe((c) => {
       if (c) {
         this.appUserAuth = c;
         if (this.appUserAuth.profilePhoto) {
-          this.appUserAuth.profilePhoto = `${environment.apiUrl}${this.appUserAuth.profilePhoto}`
+          this.appUserAuth.profilePhoto = `${environment.apiUrl}${this.appUserAuth.profilePhoto}`;
         }
       }
-    })
+    });
   }
-  routerNavigate(){
-    this.sub$.sink= this.commonService.currentUrl$.subscribe(c=>{
-      this.currentUrl= c;
+  routerNavigate() {
+    this.sub$.sink = this.commonService.currentUrl$.subscribe((c) => {
+      this.currentUrl = c;
     });
   }
 

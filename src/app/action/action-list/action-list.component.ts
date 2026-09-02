@@ -5,33 +5,33 @@ import { Action } from '@core/domain-classes/action';
 import { ActionService } from '@core/services/action.service';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-
+import { ActionListPresentationComponent } from '../action-list-presentation/action-list-presentation.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'app-action-list',
   templateUrl: './action-list.component.html',
-  styleUrls: ['./action-list.component.scss']
+  styleUrls: ['./action-list.component.scss'],
+  imports: [ActionListPresentationComponent, AsyncPipe],
 })
 export class ActionListComponent extends BaseComponent implements OnInit {
   actions$: Observable<Action[]>;
   loading$: Observable<boolean>;
   constructor(
     private actionService: ActionService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+  ) {
     super();
   }
   ngOnInit(): void {
-
-    this.loading$ = this.actionService.loaded$
-      .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.getActions();
-          }
-        })
-      )
-    this.actions$ = this.actionService.entities$
+    this.loading$ = this.actionService.loaded$.pipe(
+      tap((loaded) => {
+        if (!loaded) {
+          this.getActions();
+        }
+      }),
+    );
+    this.actions$ = this.actionService.entities$;
   }
 
   getActions(): void {
@@ -54,7 +54,5 @@ export class ActionListComponent extends BaseComponent implements OnInit {
         this.toastrService.success(`Action Saved Successfully.`);
       });
     }
-
   }
 }
-

@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DeliveryMethod } from '@core/domain-classes/delivery-method';
 import { DeliveryMethodService } from '@core/services/delivery-method.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-delivery-method',
   templateUrl: './manage-delivery-method.component.html',
-  styleUrls: ['./manage-delivery-method.component.scss']
+  styleUrls: ['./manage-delivery-method.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageDeliveryMethodComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageDeliveryMethodComponent extends BaseComponent implements OnIn
     private deliveryMethodService: DeliveryMethodService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class ManageDeliveryMethodComponent extends BaseComponent implements OnIn
   createForm() {
     this.deliveryMethodForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -53,15 +62,18 @@ export class ManageDeliveryMethodComponent extends BaseComponent implements OnIn
 
     if (this.data.id) {
       this.deliveryMethodService.update(deliveryMethod).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('DELIVERY_METHOD_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('DELIVERY_METHOD_UPDATED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     } else {
       this.deliveryMethodService.add(deliveryMethod).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('DELIVERY_METHOD_SAVED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('DELIVERY_METHOD_SAVED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     }
   }
 }
-

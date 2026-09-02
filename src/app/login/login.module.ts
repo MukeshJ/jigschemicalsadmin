@@ -7,18 +7,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 
-
 @NgModule({
-  declarations: [
-    LoginComponent
-  ],
   imports: [
     CommonModule,
     LoginRoutingModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     TranslatePipe,
-    TranslateDirective
-  ]
+    TranslateDirective,
+    LoginComponent,
+  ],
 })
-export class LoginModule { }
+export class LoginModule {}

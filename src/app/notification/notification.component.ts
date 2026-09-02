@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ReminderResourceParameter } from '@core/domain-classes/reminder-resource-parameter';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -9,12 +9,62 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { BaseComponent } from '../base.component';
 import { NotificationDataSource } from './notification-datasource';
 import { NotificationService } from './notification.service';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { NgSwitch, NgSwitchCase, NgSwitchDefault, NgIf, AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { UTCToLocalTime } from '../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    NgSwitch,
+    NgSwitchCase,
+    RouterLink,
+    NgSwitchDefault,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    NgIf,
+    MatProgressSpinner,
+    AsyncPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class NotificationComponent extends BaseComponent implements OnInit {
   dataSource: NotificationDataSource;
@@ -41,7 +91,6 @@ export class NotificationComponent extends BaseComponent implements OnInit {
     this.filterObservable$.next(subjectFilter);
   }
 
-
   public get MessageFilter(): string {
     return this._messageFilter;
   }
@@ -51,9 +100,7 @@ export class NotificationComponent extends BaseComponent implements OnInit {
     this.filterObservable$.next(messageFilter);
   }
 
-  constructor(
-    private notificationService: NotificationService
-  ) {
+  constructor(private notificationService: NotificationService) {
     super();
     this.reminderResource = new ReminderResourceParameter();
     this.reminderResource.pageSize = 15;
@@ -66,9 +113,7 @@ export class NotificationComponent extends BaseComponent implements OnInit {
     this.getResourceParameter();
     this.markAsReadNotification();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.reminderResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -82,24 +127,21 @@ export class NotificationComponent extends BaseComponent implements OnInit {
   }
 
   markAsReadNotification() {
-    this.sub$.sink = this.notificationService.markAsReadNotifications()
-      .subscribe(c => {
-      });
+    this.sub$.sink = this.notificationService.markAsReadNotifications().subscribe((c) => {});
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.reminderResource.pageSize = c.pageSize;
-          this.reminderResource.skip = c.skip;
-          this.reminderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.reminderResource.pageSize = c.pageSize;
+        this.reminderResource.skip = c.skip;
+        this.reminderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   ngAfterViewInit() {
-    this.sub$.sink = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sub$.sink = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -107,7 +149,7 @@ export class NotificationComponent extends BaseComponent implements OnInit {
           this.reminderResource.pageSize = this.paginator.pageSize;
           this.reminderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.reminderResource);
-        })
+        }),
       )
       .subscribe();
   }

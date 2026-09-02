@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { ContactUs } from '@core/domain-classes/contact-us';
@@ -17,15 +17,65 @@ import { ContactUsDetailComponent } from './contact-us-detail/contact-us-detail.
 import { ContactUsService } from './contact-us.service';
 import { ContactRequestTypePipe } from '@shared/pipes/contact-request-type-pipe';
 import { ContactRequestType } from '@core/domain-classes/contact-request-type-enum';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { UTCToLocalTime } from '../shared/pipes/utc-to-localtime.pipe';
+import { ContactRequestTypePipe as ContactRequestTypePipe_1 } from '../shared/pipes/contact-request-type-pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.scss']
+  styleUrls: ['./contact-us.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatSortHeader,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    UTCToLocalTime,
+    ContactRequestTypePipe_1,
+    TranslatePipe,
+  ],
 })
 export class ContactUsComponent extends BaseComponent implements OnInit {
-
   dataSource: ContactUsDataSource;
   contactUsList: ContactUs[] = [];
   displayedColumns: string[] = ['action', 'createdDate', 'name', 'email', 'phone', 'type'];
@@ -41,7 +91,7 @@ export class ContactUsComponent extends BaseComponent implements OnInit {
   _cityFilter: string;
   _typeFilter: number | null = null;
   public filterObservable$: Subject<string> = new Subject<string>();
-  contactRequestTypes: { id: number, name: string }[] = [];
+  contactRequestTypes: { id: number; name: string }[] = [];
 
   public get NameFilter(): string {
     return this._nameFilter;
@@ -102,22 +152,25 @@ export class ContactUsComponent extends BaseComponent implements OnInit {
     super();
     this.contactUsResource = new ContactUsResource();
     this.contactUsResource.pageSize = 10;
-    this.contactUsResource.orderBy = 'createdDate desc'
+    this.contactUsResource.orderBy = 'createdDate desc';
     this.contactRequestTypes = [
-      { id: ContactRequestType.ContactUs, name: this.contactRequestTypePipe.transform(ContactRequestType.ContactUs) },
-      { id: ContactRequestType.Careers, name: this.contactRequestTypePipe.transform(ContactRequestType.Careers) }
+      {
+        id: ContactRequestType.ContactUs,
+        name: this.contactRequestTypePipe.transform(ContactRequestType.ContactUs),
+      },
+      {
+        id: ContactRequestType.Careers,
+        name: this.contactRequestTypePipe.transform(ContactRequestType.Careers),
+      },
     ];
   }
 
   ngOnInit(): void {
-
     this.dataSource = new ContactUsDataSource(this.contactUsService);
     this.dataSource.loadData(this.contactUsResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.contactUsResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -128,14 +181,15 @@ export class ContactUsComponent extends BaseComponent implements OnInit {
         } else if (strArray[0] === 'phone') {
           this.contactUsResource.phone = strArray[1];
         } else if (strArray[0] === 'type') {
-          this.contactUsResource.type = strArray[1] === 'null' || strArray[1] === '' ? null : +strArray[1];
+          this.contactUsResource.type =
+            strArray[1] === 'null' || strArray[1] === '' ? null : +strArray[1];
         }
         this.dataSource.loadData(this.contactUsResource);
       });
   }
 
   ngAfterViewInit() {
-    this.sub$.sink = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sub$.sink = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -143,44 +197,46 @@ export class ContactUsComponent extends BaseComponent implements OnInit {
           this.contactUsResource.pageSize = this.paginator.pageSize;
           this.contactUsResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.contactUsResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   deleteContactUs(contactUs: ContactUs) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.contactUsService.delectContactUs(contactUs.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('CONTACT_US_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.contactUsResource);
-            });
+          this.sub$.sink = this.contactUsService.delectContactUs(contactUs.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('CONTACT_US_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.contactUsResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.contactUsResource.pageSize = c.pageSize;
-          this.contactUsResource.skip = c.skip;
-          this.contactUsResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.contactUsResource.pageSize = c.pageSize;
+        this.contactUsResource.skip = c.skip;
+        this.contactUsResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editContactUs(contactId: string) {
-    this.router.navigate(['/contact', contactId])
+    this.router.navigate(['/contact', contactId]);
   }
   viewDetail(contactUs: ContactUs): void {
     this.dialog.open(ContactUsDetailComponent, {
-      width: '80vh', 
-      data: Object.assign({}, contactUs)
+      width: '80vh',
+      data: Object.assign({}, contactUs),
     });
   }
 }

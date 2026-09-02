@@ -9,18 +9,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
 @NgModule({
-  declarations: [
-    EmailTemplateManageComponent,
-    EmailTemplateListComponent],
   imports: [
     CommonModule,
     EmailTemplateRoutingModule,
     AngularEditorModule,
     SharedModule,
     ReactiveFormsModule,
-    MatTableModule
-  ]
+    MatTableModule,
+    EmailTemplateManageComponent,
+    EmailTemplateListComponent,
+  ],
 })
-export class EmailTemplateModule { }
+export class EmailTemplateModule {}

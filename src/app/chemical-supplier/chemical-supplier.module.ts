@@ -20,15 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-  declarations: [
-    ChemicalSuppliersComponent,
-    AddChemicalSupplierComponent,
-    SendEmailComponent
-  ],
-  exports: [
-    ChemicalSuppliersComponent,
-    AddChemicalSupplierComponent
-  ],
+  exports: [ChemicalSuppliersComponent, AddChemicalSupplierComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -47,7 +39,10 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     TranslatePipe,
     TranslateDirective,
     AngularEditorModule,
-    MatChipsModule
-  ]
+    MatChipsModule,
+    ChemicalSuppliersComponent,
+    AddChemicalSupplierComponent,
+    SendEmailComponent,
+  ],
 })
-export class ChemicalSupplierModule { }
+export class ChemicalSupplierModule {}

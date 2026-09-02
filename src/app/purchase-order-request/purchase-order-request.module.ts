@@ -24,14 +24,7 @@ import { SharedModule } from '@shared/shared.module';
 import { PurchaseOrderRequestRoutingModule } from './purchase-order-request-routing.module';
 import { PurchaseOrderRequestItemsComponent } from './purchase-order-request-list/purchase-order-request-items/purchase-order-request-items.component';
 
-
-
 @NgModule({
-  declarations: [
-    PurchaseOrderRequestListComponent,
-    PurchaseOrderRequestAddEditComponent,
-    PurchaseOrderRequestItemsComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -54,7 +47,10 @@ import { PurchaseOrderRequestItemsComponent } from './purchase-order-request-lis
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatDividerModule
-  ]
+    MatDividerModule,
+    PurchaseOrderRequestListComponent,
+    PurchaseOrderRequestAddEditComponent,
+    PurchaseOrderRequestItemsComponent,
+  ],
 })
-export class PurchaseOrderRequestModule { }
+export class PurchaseOrderRequestModule {}

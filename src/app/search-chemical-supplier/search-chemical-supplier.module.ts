@@ -15,10 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { SearchSupplierByChemicalComponent } from './search-supplier-by-chemical/search-supplier-by-chemical.component';
 
-
-
 @NgModule({
-  declarations: [SearchChemicalBySupplierComponent, SearchSupplierByChemicalComponent],
   imports: [
     CommonModule,
     SearchChemicalSupplierRoutingModule,
@@ -33,7 +30,9 @@ import { SearchSupplierByChemicalComponent } from './search-supplier-by-chemical
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCardModule
-  ]
+    MatCardModule,
+    SearchChemicalBySupplierComponent,
+    SearchSupplierByChemicalComponent,
+  ],
 })
-export class SearchChemicalSupplierModule { }
+export class SearchChemicalSupplierModule {}

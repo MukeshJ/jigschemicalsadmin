@@ -7,19 +7,15 @@ import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { SharedModule } from '@shared/shared.module';
 import { BaseChartDirective } from 'ng2-charts';
 
-
-
 @NgModule({
-  declarations: [
-    SalesPurchaseReportComponent
-  ],
   imports: [
     CommonModule,
     SalesPurchaseRoutingModule,
     FormsModule,
     SharedModule,
-    BaseChartDirective
+    BaseChartDirective,
+    SalesPurchaseReportComponent,
   ],
-  providers: [UTCToLocalTime]
+  providers: [UTCToLocalTime],
 })
-export class SalesPurchaseReportModule { }
+export class SalesPurchaseReportModule {}

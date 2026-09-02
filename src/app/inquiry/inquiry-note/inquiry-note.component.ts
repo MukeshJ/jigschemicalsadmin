@@ -1,19 +1,27 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { InquiryNote } from '@core/domain-classes/inquiry-note';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { InquiryNoteService } from './inquiry-note.service';
+import { NgFor, NgIf } from '@angular/common';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-inquiry-note',
   templateUrl: './inquiry-note.component.html',
-  styleUrls: ['./inquiry-note.component.scss']
+  styleUrls: ['./inquiry-note.component.scss'],
+  imports: [NgFor, FormsModule, ReactiveFormsModule, NgIf, UTCToLocalTime, TranslatePipe],
 })
 export class InquiryNoteComponent extends BaseComponent implements OnInit {
-
   @Input() inquiryId: string;
   commentForm: UntypedFormGroup;
   inquiryNotes: InquiryNote[] = [];
@@ -22,7 +30,8 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private inquiryNoteService: InquiryNoteService,
     private commonDialogService: CommonDialogService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -33,18 +42,19 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
 
   createForm() {
     this.commentForm = this.fb.group({
-      note: ['', [Validators.required]]
+      note: ['', [Validators.required]],
     });
   }
   getNotes() {
-    this.sub$.sink = this.inquiryNoteService.getInquiryNotes(this.inquiryId)
+    this.sub$.sink = this.inquiryNoteService
+      .getInquiryNotes(this.inquiryId)
       .subscribe((c: InquiryNote[]) => {
         this.inquiryNotes = c;
-      })
+      });
   }
   patchNote(note: string) {
     this.commentForm.patchValue({
-      note: note
+      note: note,
     });
   }
   addComment() {
@@ -54,9 +64,10 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
     }
     const inquiryNote: InquiryNote = {
       inquiryId: this.inquiryId,
-      note: this.commentForm.get('note').value
+      note: this.commentForm.get('note').value,
     };
-    this.sub$.sink = this.inquiryNoteService.saveInquiryNote(inquiryNote)
+    this.sub$.sink = this.inquiryNoteService
+      .saveInquiryNote(inquiryNote)
       .subscribe((c: InquiryNote) => {
         this.patchNote('');
         this.commentForm.markAsUntouched();
@@ -65,15 +76,15 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
   }
   onDelete(id: string) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.inquiryNoteService.deleteInquiryNote(id)
-            .subscribe(() => {
-              this.getNotes();
-            });
+          this.sub$.sink = this.inquiryNoteService.deleteInquiryNote(id).subscribe(() => {
+            this.getNotes();
+          });
         }
       });
   }
-
 }

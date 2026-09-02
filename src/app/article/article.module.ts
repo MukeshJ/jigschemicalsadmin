@@ -14,16 +14,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 
-
-
 @NgModule({
-  declarations: [ArticleListComponent, ArticleDetailComponent],
   imports: [
     CommonModule,
     ArticleRoutingModule,
@@ -42,10 +39,10 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    ArticleListComponent,
+    ArticleDetailComponent,
   ],
-  providers:[
-    ArticleDetailResolverService
-  ]
+  providers: [ArticleDetailResolverService],
 })
-export class ArticleModule { }
+export class ArticleModule {}

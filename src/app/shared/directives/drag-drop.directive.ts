@@ -1,10 +1,6 @@
 import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
 
-
-@Directive({
-  standalone: false,
-  selector: '[appDragDrop]'
-})
+@Directive({ selector: '[appDragDrop]' })
 export class DragDropDirective {
   @Input() appDragDrop: string;
   @Output() onFileDropped = new EventEmitter<Array<any>>();
@@ -17,7 +13,6 @@ export class DragDropDirective {
   }
 
   @HostListener('dragleave', ['$event']) public onDragLeave(evt) {
-
     // Dragleave listener @HostListener('dragleave', ['$event']) public onDragLeave (evt) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -33,7 +28,6 @@ export class DragDropDirective {
     if (files.length > 0) {
       this.onFileDropped.emit(files);
       // Do Some stuff here console.log('You dropped ${files.length} files. );
-
     }
   }
 }

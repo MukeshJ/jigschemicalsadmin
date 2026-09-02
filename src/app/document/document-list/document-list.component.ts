@@ -3,7 +3,7 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Category } from '@core/domain-classes/category';
 import { DocumentCategories } from '@core/domain-classes/document-categories';
@@ -24,17 +24,96 @@ import { DocumentPermissionListComponent } from '../document-permission/document
 import { DocumentPermissionMultipleComponent } from '../document-permission/document-permission-multiple/document-permission-multiple.component';
 import { DocumentService } from '../document.service';
 import { DocumentDataSource } from './document-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { RouterLink } from '@angular/router';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect, MatOption, MatSuffix } from '@angular/material/select';
+import {
+  MatDatepickerInput,
+  MatDatepicker,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-list',
   templateUrl: './document-list.component.html',
-  styleUrls: ['./document-list.component.scss']
+  styleUrls: ['./document-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCheckbox,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class DocumentListComponent extends BaseComponent implements OnInit, AfterViewInit {
   dataSource: DocumentDataSource;
   documents: DocumentInfo[] = [];
-  displayedColumns: string[] = ['select', 'action', 'name', 'categoryName', 'createdDate', 'createdBy'];
+  displayedColumns: string[] = [
+    'select',
+    'action',
+    'name',
+    'categoryName',
+    'createdDate',
+    'createdBy',
+  ];
   footerToDisplayed: Array<string> = ['footer'];
   isLoadingResults = true;
   documentResource: DocumentResource;
@@ -52,13 +131,12 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
     private dialog: MatDialog,
     public overlay: OverlayPanel,
     private documentLibraryService: DocumentLibraryService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
     this.documentResource = new DocumentResource();
     this.documentResource.pageSize = 10;
-    this.documentResource.orderBy = "CreatedDate desc";
-
+    this.documentResource.orderBy = 'CreatedDate desc';
   }
 
   ngOnInit(): void {
@@ -67,24 +145,23 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
 
     this.sub$.sink = this.categoryService.loaded$
       .pipe(
-        tap(loaded => {
+        tap((loaded) => {
           if (!loaded) {
             this.getCategories();
           }
         }),
-        filter(loaded => !!loaded)
-      ).subscribe();
+        filter((loaded) => !!loaded),
+      )
+      .subscribe();
 
-    this.sub$.sink = this.categoryService.entities$
-      .subscribe(c => {
-        this.categories = [...c];
-      });
+    this.sub$.sink = this.categoryService.entities$.subscribe((c) => {
+      this.categories = [...c];
+    });
     this.getResourceParameter();
   }
 
   ngAfterViewInit() {
-
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -93,7 +170,7 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
           this.documentResource.pageSize = this.paginator.pageSize;
           this.documentResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadDocuments(this.documentResource);
-        })
+        }),
       )
       .subscribe();
 
@@ -105,7 +182,7 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
           this.paginator.pageIndex = 0;
           this.documentResource.name = this.input.nativeElement.value;
           this.dataSource.loadDocuments(this.documentResource);
-        })
+        }),
       )
       .subscribe();
   }
@@ -118,10 +195,9 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
   }
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   onCategoryChange(filtervalue: any) {
@@ -149,79 +225,75 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.documentResource.pageSize = c.pageSize;
-          this.documentResource.skip = c.skip;
-          this.documentResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.documentResource.pageSize = c.pageSize;
+        this.documentResource.skip = c.skip;
+        this.documentResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   deleteDocument(document: DocumentInfo) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${document.name}`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${document.name}`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.documentService.deleteDocument(document.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('DOCUMENT_DELETED_SUCCESSFULLY'));
-              this.dataSource.loadDocuments(this.documentResource);
-            });
+          this.sub$.sink = this.documentService.deleteDocument(document.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('DOCUMENT_DELETED_SUCCESSFULLY'),
+            );
+            this.dataSource.loadDocuments(this.documentResource);
+          });
         }
       });
   }
 
   getDocuments(): void {
     this.isLoadingResults = true;
-    this.sub$.sink = this.documentService.getDocuments(this.documentResource)
-      .subscribe(
-        (resp: HttpResponse<DocumentInfo[]>) => {
-          const paginationParam = JSON.parse(
-            resp.headers.get('X-Pagination')
-          ) as ResponseHeader;
-          this.documentResource.pageSize = paginationParam.pageSize;
-          this.documentResource.skip = paginationParam.skip;
-          this.documents = [...resp.body];
-          this.isLoadingResults = false;
-        },
-        () => (this.isLoadingResults = false)
-      );
+    this.sub$.sink = this.documentService.getDocuments(this.documentResource).subscribe(
+      (resp: HttpResponse<DocumentInfo[]>) => {
+        const paginationParam = JSON.parse(resp.headers.get('X-Pagination')) as ResponseHeader;
+        this.documentResource.pageSize = paginationParam.pageSize;
+        this.documentResource.skip = paginationParam.skip;
+        this.documents = [...resp.body];
+        this.isLoadingResults = false;
+      },
+      () => (this.isLoadingResults = false),
+    );
   }
 
   editDocument(documentInfo: DocumentInfo) {
     const documentCategories: DocumentCategories = {
       document: documentInfo,
-      categories: this.categories
-    }
+      categories: this.categories,
+    };
     const dialogRef = this.dialog.open(DocumentEditComponent, {
       width: '600px',
-      data: Object.assign({}, documentCategories)
+      data: Object.assign({}, documentCategories),
     });
 
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe((result: string) => {
-        if (result === 'loaded') {
-          this.dataSource.loadDocuments(this.documentResource);
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result: string) => {
+      if (result === 'loaded') {
+        this.dataSource.loadDocuments(this.documentResource);
+      }
+    });
   }
 
   manageDocumentPermission(documentInfo: DocumentInfo) {
-    this.dialog.open(DocumentPermissionListComponent,
-      {
-        data: documentInfo,
-        width: '80vw',
-        height: '80vh'
-      });
+    this.dialog.open(DocumentPermissionListComponent, {
+      data: documentInfo,
+      width: '80vw',
+      height: '80vh',
+    });
   }
   onSharedSelectDocument() {
-    this.dialog.open(DocumentPermissionMultipleComponent,
-      {
-        data: this.selection.selected,
-        width: '80vw',
-      });
+    this.dialog.open(DocumentPermissionMultipleComponent, {
+      data: this.selection.selected,
+      width: '80vw',
+    });
   }
 
   downloadDocument(documentInfo: DocumentInfo) {
@@ -232,8 +304,10 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
         }
       },
       (error) => {
-        this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
-      }
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
     );
   }
 
@@ -242,7 +316,7 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
       position: 'center',
       origin: 'global',
       panelClass: ['file-preview-overlay-container', 'white-background'],
-      data: { documentId: document.id, isRestricted: false }
+      data: { documentId: document.id, isRestricted: false },
     });
   }
 

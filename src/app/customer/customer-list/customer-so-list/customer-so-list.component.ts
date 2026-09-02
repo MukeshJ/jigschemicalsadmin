@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderResource } from '@core/domain-classes/sales-order-resource';
@@ -9,27 +9,84 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderDataSource } from 'src/app/sales-order/sales-order-list/sales-order-datasource';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { PaymentStatusPipe } from '../../../shared/pipes/purchase-order-paymentStatus.pipe';
+import { CustomCurrencyPipe } from '../../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-customer-so-list',
   templateUrl: './customer-so-list.component.html',
-  styleUrls: ['./customer-so-list.component.css']
+  styleUrls: ['./customer-so-list.component.css'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    NgClass,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    PaymentStatusPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class CustomerSOListComponent extends BaseComponent implements OnChanges {
   @Input() customerId: string;
   dataSource: SalesOrderDataSource;
-  displayedColumns: string[] =  ['soCreatedDate', 'orderNumber', 'paymentStatus','totalDiscount', 'totalTax','totalAmount'];
+  displayedColumns: string[] = [
+    'soCreatedDate',
+    'orderNumber',
+    'paymentStatus',
+    'totalDiscount',
+    'totalTax',
+    'totalAmount',
+  ];
   footerToDisplayed: string[] = ['footer'];
   salesOrderResource: SalesOrderResource;
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(
-    private salesOrderService: SalesOrderService) {
+  constructor(private salesOrderService: SalesOrderService) {
     super();
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -42,14 +99,14 @@ export class CustomerSOListComponent extends BaseComponent implements OnChanges 
     this.salesOrderResource = new SalesOrderResource();
     this.salesOrderResource.pageSize = 5;
     this.salesOrderResource.customerId = this.customerId;
-    this.salesOrderResource.orderBy = 'soCreatedDate asc'
+    this.salesOrderResource.orderBy = 'soCreatedDate asc';
     this.dataSource = new SalesOrderDataSource(this.salesOrderService);
     this.dataSource.loadData(this.salesOrderResource);
     this.getResourceParameter();
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap(() => {
@@ -57,20 +114,18 @@ export class CustomerSOListComponent extends BaseComponent implements OnChanges 
           this.salesOrderResource.pageSize = this.paginator.pageSize;
           this.salesOrderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.salesOrderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.salesOrderResource.pageSize = c.pageSize;
-          this.salesOrderResource.skip = c.skip;
-          this.salesOrderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.salesOrderResource.pageSize = c.pageSize;
+        this.salesOrderResource.skip = c.skip;
+        this.salesOrderResource.totalCount = c.totalCount;
+      }
+    });
   }
 }
-

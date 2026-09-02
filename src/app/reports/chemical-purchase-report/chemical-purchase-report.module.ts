@@ -20,12 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
 import { ChemicalPurchaseReportRoutingModule } from './chemical-purchase-report-routing.module';
 
-
-
 @NgModule({
-  declarations: [
-    ChemicalPurchaseReportComponent
-  ],
   imports: [
     CommonModule,
     ChemicalPurchaseReportRoutingModule,
@@ -50,7 +45,8 @@ import { ChemicalPurchaseReportRoutingModule } from './chemical-purchase-report-
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDividerModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    ChemicalPurchaseReportComponent,
+  ],
 })
-export class ChemicalPurchaseReportModule { }
+export class ChemicalPurchaseReportModule {}

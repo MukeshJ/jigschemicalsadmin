@@ -1,5 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentMethod } from '@core/domain-classes/payment-method';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -8,12 +14,30 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderPaymentService } from '../purchase-order-payment.service';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { NgIf, NgFor } from '@angular/common';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-add-purchase-order-payments',
   templateUrl: './add-purchase-order-payments.component.html',
-  styleUrls: ['./add-purchase-order-payments.component.scss']
+  styleUrls: ['./add-purchase-order-payments.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    NgIf,
+    MatDatepicker,
+    MatSelect,
+    NgFor,
+    MatOption,
+    HasClaimDirective,
+    PaymentMethodPipe,
+    TranslatePipe,
+  ],
 })
 export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements OnInit {
   paymentMethodslist: PaymentMethod[] = [];
@@ -25,7 +49,8 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
     private purchaseOrderPaymentService: PurchaseOrderPaymentService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
 
@@ -33,9 +58,8 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
     this.createForm();
     this.paymentMethodsList();
     if (this.data.id) {
-      this.paymentsForm.get('amount').setValue((this.data.totalAmount-this.data.totalPaidAmount));
+      this.paymentsForm.get('amount').setValue(this.data.totalAmount - this.data.totalPaidAmount);
       this.paymentsForm.get('purchaseOrderId').setValue(this.data.id);
-
     }
   }
 
@@ -67,13 +91,13 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
     reader.readAsDataURL(file);
     reader.onload = (_event) => {
       this.paymentsForm.get('attachmentData').setValue(reader.result.toString());
-    }
+    };
   }
 
   paymentMethodsList() {
-    this.sub$.sink = this.purchaseOrderPaymentService.getPaymentMethod()
-      .subscribe(f => this.paymentMethodslist = [...f]
-      );
+    this.sub$.sink = this.purchaseOrderPaymentService
+      .getPaymentMethod()
+      .subscribe((f) => (this.paymentMethodslist = [...f]));
   }
 
   savePurchaseOrderPayment(): void {
@@ -83,10 +107,12 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
     }
     const purchaseOrderpayment: PurchaseOrderPayment = this.paymentsForm.value;
     if (this.data.id) {
-      this.purchaseOrderPaymentService.addPurchaseOrderPayments(purchaseOrderpayment).subscribe(() => {
-        this.toastrService.success('Payment Add Successfully');
-        this.dialogRef.close(true);
-      });
+      this.purchaseOrderPaymentService
+        .addPurchaseOrderPayments(purchaseOrderpayment)
+        .subscribe(() => {
+          this.toastrService.success('Payment Add Successfully');
+          this.dialogRef.close(true);
+        });
     }
   }
 }

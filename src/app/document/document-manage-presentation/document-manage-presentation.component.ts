@@ -1,21 +1,51 @@
 import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Category } from '@core/domain-classes/category';
 import { DocumentInfo } from '@core/domain-classes/document-info';
 import { FileInfo } from '@core/domain-classes/file-info';
 import { environment } from '@environments/environment';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect, MatOption } from '@angular/material/select';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-document-manage-presentation',
   templateUrl: './document-manage-presentation.component.html',
   styleUrls: ['./document-manage-presentation.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatProgressBar,
+    RouterLink,
+    TranslatePipe,
+  ],
 })
 export class DocumentManagePresentationComponent extends BaseComponent implements OnInit {
-
   documentForm: UntypedFormGroup;
   extension: string = '';
   @Input() categories: Category[];
@@ -31,7 +61,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
   constructor(
     private fb: UntypedFormBuilder,
     private httpClient: HttpClient,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
   ) {
     super();
   }
@@ -49,7 +79,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
       reader.onload = (e: any) => {
         this.documentSource = e.target.result;
         this.fileUploadValidation('upload');
-      }
+      };
       reader.readAsDataURL(file_url);
     } else {
       this.documentSource = null;
@@ -59,30 +89,30 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
 
   fileUploadValidation(fileName: string) {
     this.documentForm.patchValue({
-      url: fileName
-    })
+      url: fileName,
+    });
     this.documentForm.get('url').markAsTouched();
     this.documentForm.updateValueAndValidity();
   }
 
   fileUploadSizeValidation(fileSize: string) {
     this.documentForm.patchValue({
-      fileSize: fileSize
-    })
+      fileSize: fileSize,
+    });
     this.documentForm.get('fileSize').markAsTouched();
     this.documentForm.updateValueAndValidity();
   }
   fileUploadExtensionValidation(extension: string) {
     this.documentForm.patchValue({
-      extension: extension
-    })
+      extension: extension,
+    });
     this.documentForm.get('extension').markAsTouched();
     this.documentForm.updateValueAndValidity();
   }
 
   fileExtesionValidation(extesion: string): string {
     const allowExtesions = environment.allowExtesions;
-    return allowExtesions.find(c => c === extesion);
+    return allowExtesions.find((c) => c === extesion);
   }
 
   createDocumentForm() {
@@ -92,7 +122,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
       categoryId: ['', [Validators.required]],
       url: ['', [Validators.required]],
       fileSize: ['', [Validators.required]],
-      extension: ['', [Validators.required]]
+      extension: ['', [Validators.required]],
     });
   }
 
@@ -120,14 +150,13 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
       categoryId: this.documentForm.get('categoryId').value,
       description: this.documentForm.get('description').value,
       name: this.documentForm.get('name').value,
-      url: this.fileInfo.fileName
+      url: this.fileInfo.fileName,
     };
     return document;
   }
 
   upload(files) {
-    if (files.length === 0)
-      return;
+    if (files.length === 0) return;
     this.extension = files[0].name.split('.').pop();
     this.showProgress = true;
     if (!this.fileExtesionValidation(this.extension)) {
@@ -148,25 +177,21 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
       this.fileUploadSizeValidation('valid');
     }
     const formData = new FormData();
-    for (let file of files)
-      formData.append(file.name, file);
+    for (let file of files) formData.append(file.name, file);
     const uploadReq = new HttpRequest('POST', `api/document/upload`, formData, {
       reportProgress: true,
     });
 
-    this.sub$.sink = this.httpClient.request(uploadReq)
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.progress = Math.round(100 * event.loaded / event.total);
-          this.cd.markForCheck();
-        }
-        else if (event.type === HttpEventType.Response) {
-          this.fileInfo = event.body as FileInfo;
-          this.fileUploadValidation(this.fileInfo.fileName);
-          this.isFileUpload=true;
-          this.cd.markForCheck();
-        }
-      });
+    this.sub$.sink = this.httpClient.request(uploadReq).subscribe((event) => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.progress = Math.round((100 * event.loaded) / event.total);
+        this.cd.markForCheck();
+      } else if (event.type === HttpEventType.Response) {
+        this.fileInfo = event.body as FileInfo;
+        this.fileUploadValidation(this.fileInfo.fileName);
+        this.isFileUpload = true;
+        this.cd.markForCheck();
+      }
+    });
   }
 }
-

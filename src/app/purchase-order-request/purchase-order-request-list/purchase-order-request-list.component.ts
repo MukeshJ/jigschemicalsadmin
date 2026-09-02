@@ -1,9 +1,9 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderResourceParameter } from '@core/domain-classes/purchase-order/purchase-order-resource-parameter';
@@ -18,9 +18,38 @@ import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import { PurchaseOrderRequestDataSource } from './purchase-order-request-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { PurchaseOrderRequestItemsComponent } from './purchase-order-request-items/purchase-order-request-items.component';
+import { PurchaseOrderInvoiceComponent } from '../../shared/purchase-order-invoice/purchase-order-invoice.component';
+import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-purchase-order-request-list',
   templateUrl: './purchase-order-request-list.component.html',
   styleUrls: ['./purchase-order-request-list.component.scss'],
@@ -31,13 +60,71 @@ import { PurchaseOrderRequestDataSource } from './purchase-order-request-datasou
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    FormsModule,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatAutocomplete,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    PurchaseOrderRequestItemsComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    PurchaseOrderInvoiceComponent,
+    AsyncPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
-
 export class PurchaseOrderRequestListComponent extends BaseComponent {
   dataSource: PurchaseOrderRequestDataSource;
   purchaseOrders: PurchaseOrder[] = [];
-  displayedColumns: string[] = ['action', 'poCreatedDate', 'orderNumber', 'deliveryDate', 'supplierName', 'totalAmount', 'totalDiscount', 'totalTax'];
-  filterColumns: string[] = ['action-search', 'poCreatedDate-search', 'orderNumber-search', 'deliverDate-search', 'supplier-search', 'totalAmount-search', 'totalDiscount-search', 'totalTax-search'];
+  displayedColumns: string[] = [
+    'action',
+    'poCreatedDate',
+    'orderNumber',
+    'deliveryDate',
+    'supplierName',
+    'totalAmount',
+    'totalDiscount',
+    'totalTax',
+  ];
+  filterColumns: string[] = [
+    'action-search',
+    'poCreatedDate-search',
+    'orderNumber-search',
+    'deliverDate-search',
+    'supplier-search',
+    'totalAmount-search',
+    'totalDiscount-search',
+    'totalTax-search',
+  ];
   footerToDisplayed: string[] = ['footer'];
   isLoadingResults = true;
   purchaseOrderResource: PurchaseOrderResourceParameter;
@@ -80,7 +167,8 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
     private toastrService: ToastrService,
     private router: Router,
     private translationService: TranslationService,
-    private cloneService: ClonerService) {
+    private cloneService: ClonerService,
+  ) {
     super();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
     this.purchaseOrderResource.pageSize = 50;
@@ -94,9 +182,7 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
     this.dataSource.loadData(this.purchaseOrderResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.purchaseOrderResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -110,7 +196,9 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
   }
 
   convertToPurchaseOrder(purchaseOrder: PurchaseOrder) {
-    this.router.navigate(['purchase-order/add'], { queryParams: { 'purchase-order-requestId': purchaseOrder.id } });
+    this.router.navigate(['purchase-order/add'], {
+      queryParams: { 'purchase-order-requestId': purchaseOrder.id },
+    });
   }
 
   onDetailPurchaseOrder(purchaseOrder: PurchaseOrder) {
@@ -121,14 +209,14 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
     this.supplierList$ = this.supplierNameControl.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
-      switchMap(c => {
+      switchMap((c) => {
         return this.supplierService.getSuppliersForDropDown(c);
-      })
+      }),
     );
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -137,20 +225,19 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
           this.purchaseOrderResource.pageSize = this.paginator.pageSize;
           this.purchaseOrderResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.purchaseOrderResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.purchaseOrderResource.pageSize = c.pageSize;
-          this.purchaseOrderResource.skip = c.skip;
-          this.purchaseOrderResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.purchaseOrderResource.pageSize = c.pageSize;
+        this.purchaseOrderResource.skip = c.skip;
+        this.purchaseOrderResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   toggleRow(element: PurchaseOrder) {
@@ -163,11 +250,14 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
   }
 
   deletePurchaseOrder(purchaseOrder: PurchaseOrder) {
-    this.commonDialogService.deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE'))
+    this.commonDialogService
+      .deleteConformationDialog(this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE'))
       .subscribe((isYes) => {
         if (isYes) {
           this.purchaseOrderService.deletePurchaseOrder(purchaseOrder.id).subscribe(() => {
-            this.toastrService.success(this.translationService.getValue('PURCHASE_ORDER_REQUEST_DELETED'))
+            this.toastrService.success(
+              this.translationService.getValue('PURCHASE_ORDER_REQUEST_DELETED'),
+            );
             this.dataSource.loadData(this.purchaseOrderResource);
           });
         }
@@ -178,11 +268,10 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
     let poForInvoice = this.cloneService.deepClone<PurchaseOrder>(po);
     const getSupplierRequest = this.supplierService.getSupplier(po.supplierId);
     const getPurchaseOrderItems = this.purchaseOrderService.getPurchaseOrderItems(po.id);
-    forkJoin({ getSupplierRequest, getPurchaseOrderItems }).subscribe(response => {
+    forkJoin({ getSupplierRequest, getPurchaseOrderItems }).subscribe((response) => {
       poForInvoice.supplier = response.getSupplierRequest;
       poForInvoice.purchaseOrderItems = response.getPurchaseOrderItems;
       this.purchaseOrderForInvoice = poForInvoice;
     });
   }
 }
-

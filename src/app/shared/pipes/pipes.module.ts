@@ -8,30 +8,26 @@ import { CustomCurrencyPipe } from './custome-currency.pipe';
 import { UTCToLocalTime } from './utc-to-localtime.pipe';
 import { ContactRequestTypePipe } from './contact-request-type-pipe';
 
-
-
 @NgModule({
-    declarations: [
-        TruncatePipe,
-        DateAgoPipe,
-        PaymentStatusPipe,
-        PaymentMethodPipe,
-        CustomCurrencyPipe,
-        UTCToLocalTime,
-        ContactRequestTypePipe
-    ],
-    imports: [
-        CommonModule
-    ],
-    exports: [
-        TruncatePipe,
-        DateAgoPipe,
-        PaymentStatusPipe,
-        PaymentMethodPipe,
-        CustomCurrencyPipe,
-        UTCToLocalTime,
-        ContactRequestTypePipe
-    ],
-    providers: [CurrencyPipe]
+  imports: [
+    CommonModule,
+    TruncatePipe,
+    DateAgoPipe,
+    PaymentStatusPipe,
+    PaymentMethodPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    ContactRequestTypePipe,
+  ],
+  exports: [
+    TruncatePipe,
+    DateAgoPipe,
+    PaymentStatusPipe,
+    PaymentMethodPipe,
+    CustomCurrencyPipe,
+    UTCToLocalTime,
+    ContactRequestTypePipe,
+  ],
+  providers: [CurrencyPipe],
 })
-export class PipesModule { }
+export class PipesModule {}

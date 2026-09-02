@@ -27,14 +27,6 @@ import { BulkUploadChemicalComponent } from './bulk-upload-chemical/bulk-upload-
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
-  declarations: [
-    ChemicalListComponent,
-    ChemicalDetailComponent,
-    ChemicalComponent,
-    ChemicalCustomersComponent,
-    AddChemicalCustomerComponent,
-    BulkUploadChemicalComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -57,10 +49,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatAutocompleteModule,
     MatCheckboxModule,
-    ChemicalSupplierModule
+    ChemicalSupplierModule,
+    ChemicalListComponent,
+    ChemicalDetailComponent,
+    ChemicalComponent,
+    ChemicalCustomersComponent,
+    AddChemicalCustomerComponent,
+    BulkUploadChemicalComponent,
   ],
-  providers: [
-    ChemicalDetailResolverService
-  ]
+  providers: [ChemicalDetailResolverService],
 })
-export class ChemicalModule { }
+export class ChemicalModule {}

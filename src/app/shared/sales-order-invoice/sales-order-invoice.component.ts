@@ -3,22 +3,25 @@ import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SecurityService } from '@core/security/security.service';
+import { NgIf, NgFor } from '@angular/common';
+import { CustomCurrencyPipe } from '../pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-sales-order-invoice',
   templateUrl: './sales-order-invoice.component.html',
-  styleUrls: ['./sales-order-invoice.component.scss']
+  styleUrls: ['./sales-order-invoice.component.scss'],
+  imports: [NgIf, NgFor, CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
 })
 export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
-
   @Input() salesOrder: SalesOrder;
   salesOrderForInvoice: SalesOrder;
   companyProfile: CompanyProfile;
   salesOrderItems: SalesOrderItem[];
-  salesOrderReturnsItems:SalesOrderItem[];
+  salesOrderReturnsItems: SalesOrderItem[];
 
-  constructor(private securityService: SecurityService) { }
+  constructor(private securityService: SecurityService) {}
 
   ngOnInit(): void {
     this.subScribeCompanyProfile();
@@ -26,9 +29,11 @@ export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['salesOrder']) {
-      this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems.map(item => item.status == 0 ? item.quantity : (-1) * item.quantity).reduce((prev, next) => prev + next);
-      this.salesOrderItems = this.salesOrder.salesOrderItems.filter(c => c.status == 0);
-      this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter(c => c.status == 1);
+      this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems
+        .map((item) => (item.status == 0 ? item.quantity : -1 * item.quantity))
+        .reduce((prev, next) => prev + next);
+      this.salesOrderItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 0);
+      this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 1);
       this.salesOrderForInvoice = this.salesOrder;
       this.salesOrder = null;
     }
@@ -38,7 +43,7 @@ export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
   }
 
   subScribeCompanyProfile() {
-    this.securityService.companyProfile.subscribe(data => {
+    this.securityService.companyProfile.subscribe((data) => {
       this.companyProfile = data;
     });
   }
@@ -93,9 +98,7 @@ export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
           </head>
       <body onload="loadHandler()">${printContents}</body>
         </html>
-    `
-    );
+    `);
     popupWin.document.close();
   }
-
 }

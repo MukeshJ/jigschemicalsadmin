@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -10,12 +15,64 @@ import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rx
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCard } from '@angular/material/card';
+import { MatPrefix, MatOption } from '@angular/material/select';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-search-supplier-by-chemical',
   templateUrl: './search-supplier-by-chemical.component.html',
-  styleUrls: ['./search-supplier-by-chemical.component.scss']
+  styleUrls: ['./search-supplier-by-chemical.component.scss'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatCard,
+    FormsModule,
+    ReactiveFormsModule,
+    MatPrefix,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgFor,
+    MatOption,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class SearchSupplierByChemicalComponent extends BaseComponent implements OnInit {
   supplierChemicalForm: UntypedFormGroup;
@@ -42,9 +99,11 @@ export class SearchSupplierByChemicalComponent extends BaseComponent implements 
     this.filterObservable$.next(nameFilter);
   }
 
-  constructor(private fb: UntypedFormBuilder,
+  constructor(
+    private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
-    private supplierService: SupplierService) {
+    private supplierService: SupplierService,
+  ) {
     super();
     this.chemicalResource = new SupplierResourceParameter();
     this.chemicalResource.pageSize = 10;
@@ -52,22 +111,23 @@ export class SearchSupplierByChemicalComponent extends BaseComponent implements 
 
   ngOnInit(): void {
     this.createSupplierChemicalForm();
-    this.chemicals$ = this.supplierChemicalForm
-      .get('chemicalNameInput')
-      .valueChanges.pipe(
-        debounceTime(1000),
-        tap(() => this.isLoading = true),
-        switchMap(value =>
-          this.chemicalService.getChemicalsForDropDown('all', value)
-            .pipe(tap(() => { this.isLoading = false }))
+    this.chemicals$ = this.supplierChemicalForm.get('chemicalNameInput').valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => (this.isLoading = true)),
+      switchMap((value) =>
+        this.chemicalService.getChemicalsForDropDown('all', value).pipe(
+          tap(() => {
+            this.isLoading = false;
+          }),
         ),
-        finalize(() => { this.isLoading = false })
-      );
+      ),
+      finalize(() => {
+        this.isLoading = false;
+      }),
+    );
 
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.skip = 0;
         if (this.paginator) {
@@ -98,12 +158,16 @@ export class SearchSupplierByChemicalComponent extends BaseComponent implements 
     supplierResourceParameter.pageSize = this.pageSize;
     supplierResourceParameter.supplierName = this.NameFilter;
     this.isLoading = true;
-    this.sub$.sink = this.supplierService.getSuppliersByChemicalId(supplierResourceParameter)
-      .subscribe(supplierList => {
-        this.isLoading = false;
-        this.chemicalSuppliers = supplierList.suppliers;
-        this.totalSuppliers = supplierList.totalCount;
-      }, () => this.isLoading = false)
+    this.sub$.sink = this.supplierService
+      .getSuppliersByChemicalId(supplierResourceParameter)
+      .subscribe(
+        (supplierList) => {
+          this.isLoading = false;
+          this.chemicalSuppliers = supplierList.suppliers;
+          this.totalSuppliers = supplierList.totalCount;
+        },
+        () => (this.isLoading = false),
+      );
   }
 
   public pageChange(event: PageEvent): void {
@@ -111,4 +175,3 @@ export class SearchSupplierByChemicalComponent extends BaseComponent implements 
     this.getSuppliersByChemical();
   }
 }
-

@@ -19,11 +19,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
-  declarations: [
-    RoleListComponent,
-    ManageRoleComponent,
-    ManageRolePresentationComponent,
-    RoleUsersComponent],
   imports: [
     CommonModule,
     RoleRoutingModule,
@@ -36,8 +31,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     SharedModule,
     MatSelectModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    RoleListComponent,
+    ManageRoleComponent,
+    ManageRolePresentationComponent,
+    RoleUsersComponent,
   ],
-  providers: [RoleDetailResolverService]
+  providers: [RoleDetailResolverService],
 })
-export class RoleModule { }
+export class RoleModule {}

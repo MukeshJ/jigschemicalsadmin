@@ -14,12 +14,54 @@ import { BaseComponent } from 'src/app/base.component';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { AddChemicalCustomerComponent } from '../add-chemical-customer/add-chemical-customer.component';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-customers',
   templateUrl: './chemical-customers.component.html',
-  styleUrls: ['./chemical-customers.component.scss']
+  styleUrls: ['./chemical-customers.component.scss'],
+  imports: [
+    HasClaimDirective,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    TranslatePipe,
+  ],
 })
 export class ChemicalCustomersComponent extends BaseComponent implements OnInit {
   customers: Customer[] = [];
@@ -70,18 +112,16 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
     @Inject(MAT_DIALOG_DATA) public data: Chemical,
     private translationService: TranslationService,
     private router: Router,
-    private dialog: MatDialog,) {
+    private dialog: MatDialog,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
-        if (this.paginator)
-          this.paginator.firstPage();
+        if (this.paginator) this.paginator.firstPage();
         this.getCustomersList();
       });
     if (this.data) {
@@ -101,13 +141,16 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
     this.isLoading = true;
     this.sub$.sink = this.customerService
       .getCustomersByChemicalId(customerResourceParameter)
-      .subscribe((c) => {
-        this.customers = c.customers;
-        this.totalCustomers = c.totalCount;
-        this.isLoading = false;
-      }, () => {
-        this.isLoading = false;
-      });
+      .subscribe(
+        (c) => {
+          this.customers = c.customers;
+          this.totalCustomers = c.totalCount;
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        },
+      );
   }
 
   public pageChange(event: PageEvent): void {
@@ -120,12 +163,18 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
   }
 
   removeCustomerFromChemial(customer: Customer) {
-    this.sub$.sink = this.commonDialogService.deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${customer.customerName} ?`)
-      .subscribe(isTrue => {
+    this.sub$.sink = this.commonDialogService
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${customer.customerName} ?`,
+      )
+      .subscribe((isTrue) => {
         if (isTrue) {
-          this.sub$.sink = this.customerChemicalService.deleteCustomerChemcial(this.data.id, customer.id)
-            .subscribe(data => {
-              this.toasterService.success(this.translationService.getValue('CUSTOMER_DELETED_SUCCESSFULLY'));
+          this.sub$.sink = this.customerChemicalService
+            .deleteCustomerChemcial(this.data.id, customer.id)
+            .subscribe((data) => {
+              this.toasterService.success(
+                this.translationService.getValue('CUSTOMER_DELETED_SUCCESSFULLY'),
+              );
               this.getCustomersList();
             });
         }
@@ -135,13 +184,12 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
     const dialogRef = this.dialog.open(AddChemicalCustomerComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, this.data)
+      data: Object.assign({}, this.data),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"]) {
-          this.getCustomersList();
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) {
+        this.getCustomersList();
+      }
+    });
   }
 }

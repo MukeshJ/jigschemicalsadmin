@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Article } from '@core/domain-classes/article';
 import { ArticleResourceParameter } from '@core/domain-classes/article-resource-parameter';
@@ -13,17 +13,73 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
 import { ArticleDataSource } from './article-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.scss']
+  styleUrls: ['./article-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatSortHeader,
+    FormsModule,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    TruncatePipe,
+    UTCToLocalTime,
+    TranslatePipe,
+  ],
 })
 export class ArticleListComponent extends BaseComponent implements OnInit {
   dataSource: ArticleDataSource;
   articles: Article[] = [];
-  displayedColumns: string[] = ['action', 'title', 'shortDescription', 'createdDate', 'publishDate'];
+  displayedColumns: string[] = [
+    'action',
+    'title',
+    'shortDescription',
+    'createdDate',
+    'publishDate',
+  ];
   footerToDisplayed: string[] = ['footer'];
   isLoadingResults = true;
   articleResource: ArticleResourceParameter;
@@ -58,11 +114,12 @@ export class ArticleListComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
     private router: Router,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
     this.articleResource = new ArticleResourceParameter();
     this.articleResource.pageSize = 15;
-    this.articleResource.orderBy = 'createdDate desc'
+    this.articleResource.orderBy = 'createdDate desc';
   }
 
   ngOnInit(): void {
@@ -70,9 +127,7 @@ export class ArticleListComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.articleResource);
     this.getResourceParameter();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.articleResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -86,7 +141,7 @@ export class ArticleListComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -95,38 +150,40 @@ export class ArticleListComponent extends BaseComponent implements OnInit {
           this.articleResource.pageSize = this.paginator.pageSize;
           this.articleResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.articleResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   deleteArticle(article: Article) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.articleService.deleteArticle(article.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('ARTICLE_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.articleResource);
-            });
+          this.sub$.sink = this.articleService.deleteArticle(article.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('ARTICLE_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.articleResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.articleResource.pageSize = c.pageSize;
-          this.articleResource.skip = c.skip;
-          this.articleResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.articleResource.pageSize = c.pageSize;
+        this.articleResource.skip = c.skip;
+        this.articleResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editArticle(articleId: string) {
-    this.router.navigate(['/article/manage', articleId])
+    this.router.navigate(['/article/manage', articleId]);
   }
 }

@@ -22,12 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [
-    PurchasePaymentReportComponent
-  ],
   imports: [
     CommonModule,
     PurchasePaymentReportRoutingModule,
@@ -50,7 +45,8 @@ import { SharedModule } from '@shared/shared.module';
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,
-    MatAutocompleteModule
-  ]
+    MatAutocompleteModule,
+    PurchasePaymentReportComponent,
+  ],
 })
-export class PurchasePaymentReportModule { }
+export class PurchasePaymentReportModule {}

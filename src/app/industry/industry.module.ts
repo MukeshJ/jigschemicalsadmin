@@ -10,10 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCardModule } from '@angular/material/card';
 
-
-
 @NgModule({
-  declarations: [IndustryDetailComponent, IndustryListComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -23,6 +20,8 @@ import { MatCardModule } from '@angular/material/card';
     MatPaginatorModule,
     AngularEditorModule,
     MatCardModule,
-  ]
+    IndustryDetailComponent,
+    IndustryListComponent,
+  ],
 })
-export class IndustryModule { }
+export class IndustryModule {}

@@ -1,10 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Country } from '@core/domain-classes/country';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -20,9 +20,35 @@ import { AddSupplierChemicalComponent } from '../add-supplier-chemical/add-suppl
 import { ChemicalListComponent } from '../chemical-list/chemical-list.component';
 import { SupplierService } from '../supplier.service';
 import { SupplierDataSource } from './supplier-datasource';
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { SupplierPOListComponent } from './supplier-po-list/supplier-po-list.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-supplier-list',
   templateUrl: './supplier-list.component.html',
   styleUrls: ['./supplier-list.component.scss'],
@@ -33,13 +59,58 @@ import { SupplierDataSource } from './supplier-datasource';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgIf,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    NgFor,
+    FormsModule,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatAutocomplete,
+    MatOption,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    SupplierPOListComponent,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    MatProgressSpinner,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
-
 export class SupplierListComponent extends BaseComponent implements OnInit {
   dataSource: SupplierDataSource;
   suppliers: Supplier[] = [];
-  displayedColumns: string[] = [ 'action', 'supplierName', 'chemicalCount', 'email', 'mobileNo', 'country', 'website'];
-  columnsToDisplay: string[] = ["footer"];
+  displayedColumns: string[] = [
+    'action',
+    'supplierName',
+    'chemicalCount',
+    'email',
+    'mobileNo',
+    'country',
+    'website',
+  ];
+  columnsToDisplay: string[] = ['footer'];
   countryList: Country[] = [];
   filteredCountryList: Observable<Country[]>;
   countryControl = new UntypedFormControl();
@@ -113,11 +184,12 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private dialog: MatDialog,
     private commonService: CommonService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+  ) {
     super();
     this.supplierResource = new SupplierResourceParameter();
     this.supplierResource.pageSize = 10;
-    this.supplierResource.orderBy = 'supplierName asc'
+    this.supplierResource.orderBy = 'supplierName asc';
   }
 
   ngOnInit(): void {
@@ -126,9 +198,7 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
     this.getResourceParameter();
     this.getCountries();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.supplierResource.skip = 0;
         const strArray: Array<string> = c.split('##');
@@ -148,17 +218,19 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
 
     this.filteredCountryList = this.countryControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filterCountryForAutoComplete(value)),
+      map((value) => this._filterCountryForAutoComplete(value)),
     );
   }
 
   private _filterCountryForAutoComplete(value: string) {
     const filterValue = value.toLowerCase();
-    return this.countryList.filter(country => country.countryName.toLowerCase().includes(filterValue));
+    return this.countryList.filter((country) =>
+      country.countryName.toLowerCase().includes(filterValue),
+    );
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -167,50 +239,50 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
           this.supplierResource.pageSize = this.paginator.pageSize;
           this.supplierResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.supplierResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getCountries() {
-    this.sub$.sink = this.commonService.getCountry().subscribe(c => this.countryList = c);
+    this.sub$.sink = this.commonService.getCountry().subscribe((c) => (this.countryList = c));
   }
 
   deleteSupplier(supplier: Supplier) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${supplier.supplierName}`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${supplier.supplierName}`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.supplierService.deleteSupplier(supplier.id)
-            .subscribe(() => {
-              this.toastrService.success('Supplier is deleted.');
-              this.paginator.pageIndex = 0;
-              //this.supplierResource.name = this.input.nativeElement.value;
-              this.dataSource.loadData(this.supplierResource);
-            });
+          this.sub$.sink = this.supplierService.deleteSupplier(supplier.id).subscribe(() => {
+            this.toastrService.success('Supplier is deleted.');
+            this.paginator.pageIndex = 0;
+            //this.supplierResource.name = this.input.nativeElement.value;
+            this.dataSource.loadData(this.supplierResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.supplierResource.pageSize = c.pageSize;
-          this.supplierResource.skip = c.skip;
-          this.supplierResource.totalCount = c.totalCount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.supplierResource.pageSize = c.pageSize;
+        this.supplierResource.skip = c.skip;
+        this.supplierResource.totalCount = c.totalCount;
+      }
+    });
   }
 
   editSupplier(supplierId: string) {
-    this.router.navigate(['/supplier/manage', supplierId])
+    this.router.navigate(['/supplier/manage', supplierId]);
   }
 
   viewChemical(supplier: Supplier): void {
     this.dialog.open(ChemicalListComponent, {
       height: 'auto',
-      data: Object.assign({}, supplier)
+      data: Object.assign({}, supplier),
     });
   }
 
@@ -218,19 +290,17 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
     const dialogRef = this.dialog.open(AddSupplierChemicalComponent, {
       width: '40vw',
       height: 'auto',
-      data: Object.assign({}, supplier)
+      data: Object.assign({}, supplier),
     });
-    this.sub$.sink = dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result["flag"]) {
-          this.dataSource.loadData(this.supplierResource);
-        }
-      });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result['flag']) {
+        this.dataSource.loadData(this.supplierResource);
+      }
+    });
   }
 
   toggleRow(supplier: Supplier) {
     this.expandedElement = this.expandedElement === supplier ? null : supplier;
     this.cd.detectChanges();
   }
-
 }

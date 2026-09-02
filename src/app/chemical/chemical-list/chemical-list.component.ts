@@ -3,11 +3,11 @@ import { ChemicalService } from '../chemical.service';
 import { BaseComponent } from 'src/app/base.component';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { merge, Observable, Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { ChemicalDataSource } from './chemical-datasource';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,13 +18,75 @@ import { ChemicalCustomersComponent } from '../chemical-customers/chemical-custo
 import { AddChemicalCustomerComponent } from '../add-chemical-customer/add-chemical-customer.component';
 import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-suppliers/chemical-suppliers.component';
 import { AddChemicalSupplierComponent } from 'src/app/chemical-supplier/add-chemical-supplier/add-chemical-supplier.component';
-
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { NgIf, NgStyle, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss'],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatCheckbox,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    NgStyle,
+    NgFor,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    TranslatePipe,
+  ],
 })
 export class ChemicalListComponent extends BaseComponent implements OnInit {
   dataSource: ChemicalDataSource;
@@ -40,7 +102,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     'customerCount',
     'categories',
     'industries',
-    'isShowFront'
+    'isShowFront',
   ];
   footerToDisplayed: string[] = ['footer'];
   isLoadingResults = true;
@@ -52,8 +114,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   _casNumberFilter: string;
   public filterObservable$: Subject<string> = new Subject<string>();
 
-  selected: string = 'all'
-
+  selected: string = 'all';
 
   private _selectedFrontEnd: string = 'all';
   public get selectedFrontEnd(): string {
@@ -64,7 +125,6 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     const nameFilter = `isFrontend:${v}`;
     this.filterObservable$.next(nameFilter);
   }
-
 
   public get NameFilter(): string {
     return this._nameFilter;
@@ -90,7 +150,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     private commonDialogService: CommonDialogService,
     private dialog: MatDialog,
     private router: Router,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
     this.chemicalResource = new ChemicalResourceParameter();
@@ -111,8 +171,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
           this.chemicalResource.name = escape(strArray[1]);
         } else if (strArray[0] === 'casNumber') {
           this.chemicalResource.casNumber = strArray[1];
-        }
-        else if (strArray[0] === 'isFrontend') {
+        } else if (strArray[0] === 'isFrontend') {
           this.chemicalResource.isShowFront = strArray[1];
         }
         this.dataSource.loadData(this.chemicalResource);
@@ -120,28 +179,24 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   }
 
   onIsShowInFront(checked: boolean, id: string) {
-    this.chemicalService.updateChemicalShowFrontendFlag(id, checked)
-      .subscribe((c: boolean) => {
-        this.dataSource.loadData(this.chemicalResource);
-      });
+    this.chemicalService.updateChemicalShowFrontendFlag(id, checked).subscribe((c: boolean) => {
+      this.dataSource.loadData(this.chemicalResource);
+    });
   }
 
   ngAfterViewInit() {
-    this.paginator.pageIndex =
-      this.chemicalResource.skip / this.chemicalResource.pageSize;
+    this.paginator.pageIndex = this.chemicalResource.skip / this.chemicalResource.pageSize;
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
-          this.chemicalResource.skip =
-            this.paginator.pageIndex * this.paginator.pageSize;
+          this.chemicalResource.skip = this.paginator.pageIndex * this.paginator.pageSize;
           this.chemicalResource.pageSize = this.paginator.pageSize;
-          this.chemicalResource.orderBy =
-            this.sort.active + ' ' + this.sort.direction;
+          this.chemicalResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.checkedChemicalArray = [];
           this.dataSource.loadData(this.chemicalResource);
-        })
+        }),
       )
       .subscribe();
   }
@@ -149,24 +204,18 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   deleteChemical(chemical: Chemical) {
     this.sub$.sink = this.commonDialogService
       .deleteConformationDialog(
-        `${this.translationService.getValue(
-          'ARE_YOU_SURE_YOU_WANT_TO_DELETE'
-        )} ${chemical.name}`
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')} ${chemical.name}`,
       )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.chemicalService
-            .deleteChemical(chemical.id)
-            .subscribe(() => {
-              this.toastrService.success(
-                this.translationService.getValue(
-                  'CHEMICAL_DELETED_SUCCESSFULLY'
-                )
-              );
-              this.paginator.pageIndex = 0;
-              this.chemicalResource.name = '';
-              this.dataSource.loadData(this.chemicalResource);
-            });
+          this.sub$.sink = this.chemicalService.deleteChemical(chemical.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('CHEMICAL_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.chemicalResource.name = '';
+            this.dataSource.loadData(this.chemicalResource);
+          });
         }
       });
   }
@@ -184,9 +233,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     if (this.checkedChemicalArray.length > 0) {
       this.sub$.sink = this.commonDialogService
         .deleteConformationDialog(
-          `${this.translationService.getValue(
-            'ARE_YOU_SURE_YOU_WANT_TO_DELETE'
-          )}`
+          `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}`,
         )
         .subscribe((isTrue: boolean) => {
           if (isTrue) {
@@ -194,15 +241,12 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
               .deleteAllChemical(this.checkedChemicalArray)
               .subscribe(() => {
                 this.toastrService.success(
-                  this.translationService.getValue(
-                    'CHEMICAL_DELETED_SUCCESSFULLY'
-                  )
+                  this.translationService.getValue('CHEMICAL_DELETED_SUCCESSFULLY'),
                 );
                 // this.paginator.pageIndex = 0;
                 this.chemicalResource.name = '';
                 this.checkedChemicalArray = [];
                 this.dataSource.loadData(this.chemicalResource);
-
               });
           }
         });
@@ -211,7 +255,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     }
   }
 
-  selecetAll(event: any): void { }
+  selecetAll(event: any): void {}
 
   // selecetAll(event: MatCheckboxChange) {
   //   if (event.checked) {
@@ -233,7 +277,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   //   }
   // }
   checkPermission(pageId: string): boolean {
-    const pageAction = this.checkedChemicalArray.find(c => c.pageId === pageId);
+    const pageAction = this.checkedChemicalArray.find((c) => c.pageId === pageId);
     if (pageAction) {
       return true;
     } else {
@@ -241,15 +285,13 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     }
   }
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe(
-      (c: ResponseHeader) => {
-        if (c) {
-          this.chemicalResource.pageSize = c.pageSize;
-          this.chemicalResource.skip = c.skip;
-          this.chemicalResource.totalCount = c.totalCount;
-        }
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.chemicalResource.pageSize = c.pageSize;
+        this.chemicalResource.skip = c.skip;
+        this.chemicalResource.totalCount = c.totalCount;
       }
-    );
+    });
   }
 
   editChemical(chemicalId: string) {

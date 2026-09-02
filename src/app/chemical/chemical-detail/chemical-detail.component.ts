@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from '../chemical.service';
 import { CommonService } from '@core/services/common.service';
@@ -15,12 +21,26 @@ import { environment } from '@environments/environment';
 import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
 import { Unit } from '@core/domain-classes/unit';
-
+import { NgIf, NgFor } from '@angular/common';
+import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   templateUrl: './chemical-detail.component.html',
   styleUrls: ['./chemical-detail.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatLabel,
+    MatCard,
+    MatCardActions,
+    TranslatePipe,
+  ],
 })
 export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   chemicalForm: UntypedFormGroup;
@@ -41,7 +61,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private chemicalTypeService: ChemicalTypeService,
     private unitService: UnitService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {
     super();
   }
@@ -51,42 +71,38 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
     this.getChemicalTypes();
     this.getUnits();
     this.createForm();
-    this.sub$.sink = this.route.data.subscribe(
-      (data: { chemical: Chemical }) => {
-        if (data.chemical) {
-          this.chemical = { ...data.chemical };
-          this.patchChemical();
-          if (this.chemical.url) {
-            this.imgSrc = environment.apiUrl + this.chemical.url;
-          }
-        } else {
-          if (this.chemical) {
-            this.imgSrc = null;
-            this.chemical = null;
-          }
+    this.sub$.sink = this.route.data.subscribe((data: { chemical: Chemical }) => {
+      if (data.chemical) {
+        this.chemical = { ...data.chemical };
+        this.patchChemical();
+        if (this.chemical.url) {
+          this.imgSrc = environment.apiUrl + this.chemical.url;
+        }
+      } else {
+        if (this.chemical) {
+          this.imgSrc = null;
+          this.chemical = null;
         }
       }
-    );
+    });
   }
 
   getChemicalTypes() {
-    this.sub$.sink = this.chemicalTypeService.getChemicalTypes()
-      .subscribe(c => {
-        this.categories = c;
-      });
+    this.sub$.sink = this.chemicalTypeService.getChemicalTypes().subscribe((c) => {
+      this.categories = c;
+    });
   }
 
   getIndustries() {
-    this.sub$.sink = this.commonService.getIndustries()
-      .subscribe(c => {
-        this.industries = c;
-      });
+    this.sub$.sink = this.commonService.getIndustries().subscribe((c) => {
+      this.industries = c;
+    });
   }
 
   getUnits() {
-    this.unitService.getAll().subscribe(units => {
+    this.unitService.getAll().subscribe((units) => {
       this.units = units;
-    })
+    });
   }
 
   onRemoveImage() {
@@ -128,11 +144,15 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
       synonyms: this.chemical.synonyms,
       chemicalDetailId: this.chemical.chemicalDetailId,
       chemicalImage: [this.chemicalImages],
-      chemicalIndustries: this.chemical.chemicalIndustries ? this.chemical.chemicalIndustries.map(c => c.industryId) : [],
-      chemicalCategories: this.chemical.chemicalCategories ? this.chemical.chemicalCategories.map(c => c.categoryId) : [],
+      chemicalIndustries: this.chemical.chemicalIndustries
+        ? this.chemical.chemicalIndustries.map((c) => c.industryId)
+        : [],
+      chemicalCategories: this.chemical.chemicalCategories
+        ? this.chemical.chemicalCategories.map((c) => c.categoryId)
+        : [],
       objectState: EntityState.Modified,
       unitId: this.chemical.unitId,
-      isShowInFront: this.chemical.isShowInFront
+      isShowInFront: this.chemical.isShowInFront,
     });
     this.imgSrc = this.chemical.url;
   }
@@ -157,10 +177,10 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
         {
           src: reader.result,
           uid: fileSelected.uid,
-        }
+        },
       );
       $event.target.value = '';
-    }
+    };
   }
 
   buildChemicalObj(): Chemical {
@@ -181,7 +201,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
       url: this.chemical && this.chemical.url ? this.chemical.url : '',
       objectState: this.chemical ? EntityState.Modified : EntityState.Added,
       unitId: this.chemicalForm.get('unitId').value,
-      isShowInFront: this.chemicalForm.get('isShowInFront').value
+      isShowInFront: this.chemicalForm.get('isShowInFront').value,
     };
     return chemicalObj;
   }
@@ -198,16 +218,18 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
         this.sub$.sink = this.chemicalService
           .updateChemical(chemicalObj.id, chemicalObj)
           .subscribe((c) => {
-            this.toastrService.success(this.translationService.getValue('CHEMICAL_UPDATED_SUCCESSFULLY'));
+            this.toastrService.success(
+              this.translationService.getValue('CHEMICAL_UPDATED_SUCCESSFULLY'),
+            );
             this.router.navigate(['/chemical'], { relativeTo: this.route });
           });
       } else {
-        this.sub$.sink = this.chemicalService
-          .saveChemical(chemicalObj)
-          .subscribe((c) => {
-            this.toastrService.success(this.translationService.getValue('CHEMICAL_SAVE_SUCCESSFULLY'));
-            this.router.navigate(['/chemical'], { relativeTo: this.route });
-          });
+        this.sub$.sink = this.chemicalService.saveChemical(chemicalObj).subscribe((c) => {
+          this.toastrService.success(
+            this.translationService.getValue('CHEMICAL_SAVE_SUCCESSFULLY'),
+          );
+          this.router.navigate(['/chemical'], { relativeTo: this.route });
+        });
       }
     } else {
       this.chemicalForm.markAllAsTouched();

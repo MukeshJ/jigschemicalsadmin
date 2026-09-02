@@ -21,23 +21,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SharedModule } from '@shared/shared.module';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { PurchaseOrderItemComponent } from './purchase-order-item/purchase-order-item.component';
-import { AddPurchaseOrderPaymentsComponent } from './add-purchase-order-payments/add-purchase-order-payments.component'
-import {  MatDialogModule } from '@angular/material/dialog';
+import { AddPurchaseOrderPaymentsComponent } from './add-purchase-order-payments/add-purchase-order-payments.component';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ViewPurchaseOrderPaymentComponent } from './view-purchase-order-payment/view-purchase-order-payment.component';
 import { PurchaseOrderDetailComponent } from './purchase-order-detail/purchase-order-detail.component';
 
-
 @NgModule({
-  declarations: [
-    PurchaseOrderAddEditComponent,
-    PurchaseOrderListComponent,
-    PurchaseOrderItemComponent,
-    AddPurchaseOrderPaymentsComponent,
-    ViewPurchaseOrderPaymentComponent,
-    PurchaseOrderDetailComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -61,8 +52,13 @@ import { PurchaseOrderDetailComponent } from './purchase-order-detail/purchase-o
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatDialogModule
-
-  ]
+    MatDialogModule,
+    PurchaseOrderAddEditComponent,
+    PurchaseOrderListComponent,
+    PurchaseOrderItemComponent,
+    AddPurchaseOrderPaymentsComponent,
+    ViewPurchaseOrderPaymentComponent,
+    PurchaseOrderDetailComponent,
+  ],
 })
-export class PurchaseOrderModule { }
+export class PurchaseOrderModule {}

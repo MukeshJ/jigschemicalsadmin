@@ -2,13 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslationService } from '@core/services/translation.service';
 import { GalleryCategoryEnum } from 'src/app/gallery/categories-enum';
 
-@Pipe({
-  standalone: false,
-  name: 'galleryCategory'
-})
-
+@Pipe({ name: 'galleryCategory' })
 export class GalleryCategoryPipe implements PipeTransform {
-  constructor(private translationService: TranslationService) { }
+  constructor(private translationService: TranslationService) {}
 
   transform(value: GalleryCategoryEnum | string): string {
     if (value == null) {

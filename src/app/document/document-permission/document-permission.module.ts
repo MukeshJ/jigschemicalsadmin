@@ -20,11 +20,6 @@ import { DocumentPermissionMultipleComponent } from './document-permission-multi
 import { MatChipsModule } from '@angular/material/chips';
 import { SharedModule } from '@shared/shared.module';
 @NgModule({
-  declarations: [
-    DocumentPermissionListComponent,
-    ManageUserPermissionComponent,
-    ManageRolePermissionComponent,
-    DocumentPermissionMultipleComponent],
   imports: [
     DocumentPermissionRoutingModule,
     FormsModule,
@@ -41,17 +36,18 @@ import { SharedModule } from '@shared/shared.module';
     MatNativeDateModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatChipsModule
+    MatChipsModule,
+    DocumentPermissionListComponent,
+    ManageUserPermissionComponent,
+    ManageRolePermissionComponent,
+    DocumentPermissionMultipleComponent,
   ],
   exports: [
     DocumentPermissionListComponent,
     ManageUserPermissionComponent,
     ManageRolePermissionComponent,
-    DocumentPermissionMultipleComponent
+    DocumentPermissionMultipleComponent,
   ],
-  providers: [
-    DocumentPermissionService,
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
-  ]
+  providers: [DocumentPermissionService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
 })
-export class DocumentPermissionModule { }
+export class DocumentPermissionModule {}

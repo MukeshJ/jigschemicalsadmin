@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { Currency } from '@core/domain-classes/currency';
 import { SecurityService } from '@core/security/security.service';
@@ -9,26 +15,45 @@ import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyProfileService } from './company-profile.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatCard, MatCardActions } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-company-profile',
   templateUrl: './company-profile.component.html',
-  styleUrls: ['./company-profile.component.css']
+  styleUrls: ['./company-profile.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatCard,
+    MatCardActions,
+    RouterLink,
+    MatProgressSpinner,
+    TranslatePipe,
+  ],
 })
 export class CompanyProfileComponent implements OnInit {
   companyProfileForm: UntypedFormGroup;
   imgSrc: string | ArrayBuffer = '';
   isLoading = false;
   currencies: Currency[] = [];
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private fb: UntypedFormBuilder,
     private companyProfileService: CompanyProfileService,
     private router: Router,
     private toastrService: ToastrService,
     private securityService: SecurityService,
     private commonService: CommonService,
-    private translationService: TranslationService) { }
+    private translationService: TranslationService,
+  ) {}
 
   ngOnInit(): void {
     this.createform();
@@ -50,28 +75,32 @@ export class CompanyProfileComponent implements OnInit {
       imageData: [],
       phone: [''],
       email: ['', [Validators.email]],
-      currencyCode: ['', [Validators.required]]
+      currencyCode: ['', [Validators.required]],
     });
   }
 
   getCurrencies() {
-    this.commonService.getCurrencies().subscribe(data => this.currencies = data);
+    this.commonService.getCurrencies().subscribe((data) => (this.currencies = data));
   }
 
   saveCompanyProfile() {
     if (this.companyProfileForm.invalid) {
       this.companyProfileForm.markAllAsTouched();
-      return
+      return;
     }
     const companyProfile: CompanyProfile = this.companyProfileForm.getRawValue();
     this.isLoading = true;
-    this.companyProfileService.updateCompanyProfile(companyProfile)
-      .subscribe((companyProfile: CompanyProfile) => {
+    this.companyProfileService.updateCompanyProfile(companyProfile).subscribe(
+      (companyProfile: CompanyProfile) => {
         this.isLoading = false;
         this.securityService.updateProfile(companyProfile);
-        this.toastrService.success(this.translationService.getValue('COMPANY_PROFILE_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('COMPANY_PROFILE_UPDATED_SUCCESSFULLY'),
+        );
         this.router.navigate(['dashboard']);
-      }, () => this.isLoading = false);
+      },
+      () => (this.isLoading = false),
+    );
   }
 
   onFileSelect($event) {
@@ -90,9 +119,9 @@ export class CompanyProfileComponent implements OnInit {
       this.imgSrc = reader.result;
       this.companyProfileForm.patchValue({
         imageData: reader.result.toString(),
-        logoUrl: fileSelected.name
-      })
+        logoUrl: fileSelected.name,
+      });
       $event.target.value = '';
-    }
+    };
   }
 }

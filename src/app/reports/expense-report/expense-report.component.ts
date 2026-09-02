@@ -1,10 +1,15 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Expense } from '@core/domain-classes/expense';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
@@ -25,21 +30,94 @@ import { ExpenseReportDataSource } from './expense-report.datasource';
 import * as XLSX from 'xlsx';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
-
-
+import { HasClaimDirective } from '../../shared/has-claim.directive';
+import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { CustomCurrencyPipe as CustomCurrencyPipe_1 } from '../../shared/pipes/custome-currency.pipe';
+import { UTCToLocalTime as UTCToLocalTime_1 } from '../../shared/pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   templateUrl: './expense-report.component.html',
   styleUrls: ['./expense-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe]
+  providers: [UTCToLocalTime, CustomCurrencyPipe],
+  imports: [
+    HasClaimDirective,
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    MatDatepicker,
+    NgIf,
+    MatProgressSpinner,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatSortHeader,
+    MatSelect,
+    MatOption,
+    NgFor,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatPaginator,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    AsyncPipe,
+    CustomCurrencyPipe_1,
+    UTCToLocalTime_1,
+    TranslatePipe,
+  ],
 })
 export class ExpenseReportComponent extends BaseComponent implements OnInit {
   dataSource: ExpenseReportDataSource;
   expenses: Expense[] = [];
-  displayedColumns: string[] = ['action', 'createdDate', 'expenseDate', 'amount', 'reference', 'expenseCategoryId', 'expenseBy'];
+  displayedColumns: string[] = [
+    'action',
+    'createdDate',
+    'expenseDate',
+    'amount',
+    'reference',
+    'expenseCategoryId',
+    'expenseBy',
+  ];
   footerToDisplayed = ['footer'];
-  totalAmountDisplayed = ['totalAmountLabel', 'totalAmount']
+  totalAmountDisplayed = ['totalAmountLabel', 'totalAmount'];
   isLoadingResults = true;
   expenseResource: ExpenseResourceParameter;
   loading$: Observable<boolean>;
@@ -52,7 +130,6 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
   expenseCategories: ExpenseCategory[] = [];
   searchForm: UntypedFormGroup;
   totalAmount: number = 0;
-
 
   public filterObservable$: Subject<string> = new Subject<string>();
 
@@ -113,9 +190,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
     this.getExpenseCategories();
     this.getUsers();
     this.sub$.sink = this.filterObservable$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged())
+      .pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((c) => {
         this.expenseResource.skip = 0;
         const strArray: Array<string> = c.split(':');
@@ -130,14 +205,16 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
       });
   }
 
-
   createSearchFormGroup() {
-    this.searchForm = this.fb.group({
-      fromDate: [''],
-      toDate: ['']
-    }, {
-      validators: dateCompare()
-    });
+    this.searchForm = this.fb.group(
+      {
+        fromDate: [''],
+        toDate: [''],
+      },
+      {
+        validators: dateCompare(),
+      },
+    );
   }
 
   onSearch() {
@@ -155,9 +232,8 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
     this.dataSource.loadData(this.expenseResource);
   }
 
-
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.sub$.sink = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         tap((c: any) => {
@@ -165,22 +241,23 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
           this.expenseResource.pageSize = this.paginator.pageSize;
           this.expenseResource.orderBy = this.sort.active + ' ' + this.sort.direction;
           this.dataSource.loadData(this.expenseResource);
-        })
+        }),
       )
       .subscribe();
   }
 
   getExpenseCategories() {
-    this.expenseCategoryService.getAll().subscribe(categories => {
+    this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
-    })
+    });
   }
 
   getUsers() {
     let userResource = new UserResource();
     userResource.pageSize = 10;
-    userResource.orderBy = 'firstName desc'
-    this.sub$.sink = this.userService.getUsers(userResource)
+    userResource.orderBy = 'firstName desc';
+    this.sub$.sink = this.userService
+      .getUsers(userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
       });
@@ -188,47 +265,50 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
 
   deleteExpense(expense: Expense) {
     this.sub$.sink = this.commonDialogService
-      .deleteConformationDialog(`${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`)
+      .deleteConformationDialog(
+        `${this.translationService.getValue('ARE_YOU_SURE_YOU_WANT_TO_DELETE')}?`,
+      )
       .subscribe((isTrue: boolean) => {
         if (isTrue) {
-          this.sub$.sink = this.expenseService.deleteExpense(expense.id)
-            .subscribe(() => {
-              this.toastrService.success(this.translationService.getValue('EXPENSE_DELETED_SUCCESSFULLY'));
-              this.paginator.pageIndex = 0;
-              this.dataSource.loadData(this.expenseResource);
-            });
+          this.sub$.sink = this.expenseService.deleteExpense(expense.id).subscribe(() => {
+            this.toastrService.success(
+              this.translationService.getValue('EXPENSE_DELETED_SUCCESSFULLY'),
+            );
+            this.paginator.pageIndex = 0;
+            this.dataSource.loadData(this.expenseResource);
+          });
         }
       });
   }
 
   getResourceParameter() {
-    this.sub$.sink = this.dataSource.responseHeaderSubject$
-      .subscribe((c: ResponseHeader) => {
-        if (c) {
-          this.expenseResource.pageSize = c.pageSize;
-          this.expenseResource.skip = c.skip;
-          this.expenseResource.totalCount = c.totalCount;
-          this.totalAmount = c.totalAmount;
-        }
-      });
+    this.sub$.sink = this.dataSource.responseHeaderSubject$.subscribe((c: ResponseHeader) => {
+      if (c) {
+        this.expenseResource.pageSize = c.pageSize;
+        this.expenseResource.skip = c.skip;
+        this.expenseResource.totalCount = c.totalCount;
+        this.totalAmount = c.totalAmount;
+      }
+    });
   }
 
   editExpense(expenseId: string) {
-    this.router.navigate(['/expense/manage', expenseId])
+    this.router.navigate(['/expense/manage', expenseId]);
   }
 
   downloadReceipt(expense: Expense) {
-    this.sub$.sink = this.expenseService.downloadReceipt(expense.id)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.Response) {
-            this.downloadFile(event, expense.receiptName);
-          }
-        },
-        (error) => {
-          this.toastrService.error(this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'));
+    this.sub$.sink = this.expenseService.downloadReceipt(expense.id).subscribe(
+      (event) => {
+        if (event.type === HttpEventType.Response) {
+          this.downloadFile(event, expense.receiptName);
         }
-      );
+      },
+      (error) => {
+        this.toastrService.error(
+          this.translationService.getValue('ERROR_WHILE_DOWNLOADING_DOCUMENT'),
+        );
+      },
+    );
   }
 
   private downloadFile(data: HttpResponse<Blob>, name: string) {
@@ -244,29 +324,45 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
   }
 
   onDownloadReport() {
-    this.expenseService.getExpensesReport(this.expenseResource)
+    this.expenseService
+      .getExpensesReport(this.expenseResource)
       .subscribe((c: HttpResponse<Expense[]>) => {
         this.expenses = [...c.body];
-        let heading = [[this.translationService.getValue('EXPENSE_DATE'), this.translationService.getValue('AMOUNT'), this.translationService.getValue('REFERENCE'), this.translationService.getValue('EXPENSE_CATEGORY'), this.translationService.getValue('EXPENSE_BY')]];
+        let heading = [
+          [
+            this.translationService.getValue('EXPENSE_DATE'),
+            this.translationService.getValue('AMOUNT'),
+            this.translationService.getValue('REFERENCE'),
+            this.translationService.getValue('EXPENSE_CATEGORY'),
+            this.translationService.getValue('EXPENSE_BY'),
+          ],
+        ];
 
         let expensesReport = [];
         this.expenses.forEach((expense: Expense) => {
           expensesReport.push({
-            'expenseDate': this.utcToLocalTime.transform(expense.expenseDate, 'shortDate'),
-            'amount': this.customCurrencyPipe.transform(expense.amount),
-            'reference': expense.reference,
-            'category': expense.expenseCategory.name,
-            'expenseBy': expense ? `${expense.expenseBy?.firstName ? expense.expenseBy?.firstName : ''} ${expense.expenseBy?.lastName ? expense.expenseBy?.lastName : ''}` : ''
+            expenseDate: this.utcToLocalTime.transform(expense.expenseDate, 'shortDate'),
+            amount: this.customCurrencyPipe.transform(expense.amount),
+            reference: expense.reference,
+            category: expense.expenseCategory.name,
+            expenseBy: expense
+              ? `${expense.expenseBy?.firstName ? expense.expenseBy?.firstName : ''} ${expense.expenseBy?.lastName ? expense.expenseBy?.lastName : ''}`
+              : '',
           });
         });
 
         let workBook = XLSX.utils.book_new();
         XLSX.utils.sheet_add_aoa(workBook, heading);
-        let workSheet = XLSX.utils.sheet_add_json(workBook, expensesReport, { origin: "A2", skipHeader: true });
-        XLSX.utils.book_append_sheet(workBook, workSheet, this.translationService.getValue('EXPENSE_REPORT'));
-        XLSX.writeFile(workBook, this.translationService.getValue('EXPENSE_REPORT') + ".xlsx");
+        let workSheet = XLSX.utils.sheet_add_json(workBook, expensesReport, {
+          origin: 'A2',
+          skipHeader: true,
+        });
+        XLSX.utils.book_append_sheet(
+          workBook,
+          workSheet,
+          this.translationService.getValue('EXPENSE_REPORT'),
+        );
+        XLSX.writeFile(workBook, this.translationService.getValue('EXPENSE_REPORT') + '.xlsx');
       });
-
-
   }
 }

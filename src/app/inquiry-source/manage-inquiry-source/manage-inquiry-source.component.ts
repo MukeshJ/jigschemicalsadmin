@@ -1,17 +1,25 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquirySource } from '@core/domain-classes/inquiry-source';
 import { InquirySourceService } from '@core/services/inquiry-source.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
+import { NgIf } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-manage-inquiry-source',
   templateUrl: './manage-inquiry-source.component.html',
-  styleUrls: ['./manage-inquiry-source.component.scss']
+  styleUrls: ['./manage-inquiry-source.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
 })
 export class ManageInquirySourceComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
@@ -22,7 +30,8 @@ export class ManageInquirySourceComponent extends BaseComponent implements OnIni
     private inquirySourceService: InquirySourceService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private translationService:TranslationService) {
+    private translationService: TranslationService,
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -36,7 +45,7 @@ export class ManageInquirySourceComponent extends BaseComponent implements OnIni
   createForm() {
     this.inquirySourceForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
     });
   }
 
@@ -53,12 +62,16 @@ export class ManageInquirySourceComponent extends BaseComponent implements OnIni
 
     if (this.data.id) {
       this.inquirySourceService.update(inquirySource).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('INQUIRY_SOURCE_UPDATED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('INQUIRY_SOURCE_UPDATED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     } else {
       this.inquirySourceService.add(inquirySource).subscribe(() => {
-        this.toastrService.success(this.translationService.getValue('INQUIRY_SOURCE_SAVED_SUCCESSFULLY'));
+        this.toastrService.success(
+          this.translationService.getValue('INQUIRY_SOURCE_SAVED_SUCCESSFULLY'),
+        );
         this.dialogRef.close();
       });
     }

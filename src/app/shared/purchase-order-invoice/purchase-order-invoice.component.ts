@@ -3,12 +3,17 @@ import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { SecurityService } from '@core/security/security.service';
+import { NgIf, NgFor } from '@angular/common';
+import { PaymentStatusPipe } from '../pipes/purchase-order-paymentStatus.pipe';
+import { CustomCurrencyPipe } from '../pipes/custome-currency.pipe';
+import { UTCToLocalTime } from '../pipes/utc-to-localtime.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-  standalone: false,
   selector: 'app-purchase-order-invoice',
   templateUrl: './purchase-order-invoice.component.html',
-  styleUrls: ['./purchase-order-invoice.component.scss']
+  styleUrls: ['./purchase-order-invoice.component.scss'],
+  imports: [NgIf, NgFor, PaymentStatusPipe, CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
 })
 export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
   @Input() purchaseOrder: PurchaseOrder;
@@ -17,7 +22,7 @@ export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
   purchaseOrderReturnsItems: PurchaseOrderItem[];
   purchaseOrderItems: PurchaseOrderItem[];
 
-  constructor(private securityService: SecurityService) { }
+  constructor(private securityService: SecurityService) {}
 
   ngOnInit(): void {
     this.subScribeCompanyProfile();
@@ -25,9 +30,13 @@ export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['purchaseOrder']) {
-      this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems.map(item => item.status == 0 ? item.quantity : (-1) * item.quantity).reduce((prev, next) => prev + next);
-      this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter(c => c.status == 0);
-      this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(c => c.status == 1);
+      this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems
+        .map((item) => (item.status == 0 ? item.quantity : -1 * item.quantity))
+        .reduce((prev, next) => prev + next);
+      this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter((c) => c.status == 0);
+      this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(
+        (c) => c.status == 1,
+      );
       this.purchaseOrderForInvoice = this.purchaseOrder;
       this.purchaseOrder = null;
     }
@@ -37,7 +46,7 @@ export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
   }
 
   subScribeCompanyProfile() {
-    this.securityService.companyProfile.subscribe(data => {
+    this.securityService.companyProfile.subscribe((data) => {
       this.companyProfile = data;
     });
   }
@@ -92,9 +101,7 @@ export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
           </head>
       <body onload="loadHandler()">${printContents}</body>
         </html>
-    `
-    );
+    `);
     popupWin.document.close();
   }
-
 }

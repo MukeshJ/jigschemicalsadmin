@@ -23,14 +23,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-
 @NgModule({
-  declarations: [
-    DocumentListComponent,
-    DocumentManageComponent,
-    DocumentManagePresentationComponent,
-    DocumentEditComponent
-  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -50,7 +43,11 @@ import { MatButtonModule } from '@angular/material/button';
     MatCheckboxModule,
     MatMenuModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+    DocumentListComponent,
+    DocumentManageComponent,
+    DocumentManagePresentationComponent,
+    DocumentEditComponent,
+  ],
 })
-export class DocumentModule { }
+export class DocumentModule {}
