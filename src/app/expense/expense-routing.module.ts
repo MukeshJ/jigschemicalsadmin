@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { AuthGuard } from '@core/security/auth.guard';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ManageExpenseComponent } from './manage-expense/manage-expense.component';
 import { ExpenseResolverService } from './manage-expense/expense-resolver.service';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ExpenseListComponent,
@@ -27,9 +26,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ExpenseRoutingModule { }

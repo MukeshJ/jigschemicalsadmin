@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { SalesOrderListComponent } from './sales-order-list/sales-order-list.component';
 import { SalesOrderAddEditComponent } from './sales-order-add-edit/sales-order-add-edit.component';
 import { SalesOrderResolverService } from './sales-order-detail/sales-order-detail.resolver';
@@ -10,7 +9,7 @@ import { SalesOrderByIdResolver } from './sales-order-add-edit/sales-oredr-by-id
 import { ChemicalsResolve } from '@core/services/chemicals.resolve';
 import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-detail.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'list',
     component: SalesOrderListComponent,
@@ -35,9 +34,3 @@ const routes: Routes = [
      canActivate: [AuthGuard]
   } 
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SalesOrderRoutingModule { }

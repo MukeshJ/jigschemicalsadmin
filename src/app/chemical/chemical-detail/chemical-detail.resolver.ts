@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 import { Chemical } from '@core/domain-classes/chemical';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ChemicalDetailResolverService implements Resolve<Chemical> {
   constructor(private cs: ChemicalService, private router: Router) {}
   resolve(

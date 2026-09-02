@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from '@core/security/auth.guard';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { InquirySourceListComponent } from './inquiry-source-list/inquiry-source-list.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: InquirySourceListComponent,
@@ -12,9 +11,3 @@ const routes: Routes = [
     data: { claimType: 'inquiry_manage_inquiry_sources' },
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class InquirySourceRoutingModule { }

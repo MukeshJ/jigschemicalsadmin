@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndustryListComponent } from './industry-list/industry-list.component';
 import { IndustryDetailComponent } from './industry-detail/industry-detail.component';
 import { IndustryResolverService } from './industry-detail/industry-resolver.service';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: IndustryListComponent,
@@ -24,9 +23,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class IndustryRoutingModule { }

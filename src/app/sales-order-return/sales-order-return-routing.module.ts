@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ChemicalsResolve } from '@core/services/chemicals.resolve';
 import { SalesOrderTaxResolver } from '../sales-order/sales-order-add-edit/sales-order-tax-resolve';
 import { SalesOrderUnitResolver } from '../sales-order/sales-order-add-edit/sales-order-unit-resolve';
@@ -9,7 +8,7 @@ import { SaleOrderReturnComponent } from './sales-order-return/sales-order-retur
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'list',
     component: SaleOrderReturnListComponent,
@@ -38,9 +37,3 @@ const routes: Routes = [
     }
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SaleOrderReturnRoutingModule { }

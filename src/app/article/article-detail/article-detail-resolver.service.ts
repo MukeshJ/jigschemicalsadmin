@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 import { ArticleService } from '../article.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ArticleDetailResolverService implements Resolve<Article> {
     constructor(
         private articleService: ArticleService,

@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { PurchaseOrderRequestListComponent } from './purchase-order-request-list/purchase-order-request-list.component';
 import { AuthGuard } from '@core/security/auth.guard';
 import { PurchaseOrderRequestAddEditComponent } from './purchase-order-request-add-edit/purchase-order-request-add-edit.component';
@@ -11,7 +10,7 @@ import { ChemicalsResolve } from '@core/services/chemicals.resolve';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'list',
     component: PurchaseOrderRequestListComponent,
@@ -30,9 +29,3 @@ const routes: Routes = [
     }
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class PurchaseOrderRequestRoutingModule { }

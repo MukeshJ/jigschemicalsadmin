@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 import { SalesPurchaseReportComponent } from './sales-purchase-report.component';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: SalesPurchaseReportComponent,
@@ -13,9 +12,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SalesPurchaseRoutingModule { }

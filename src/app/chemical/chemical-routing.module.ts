@@ -1,7 +1,6 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ChemicalListComponent } from './chemical-list/chemical-list.component';
 import { ChemicalDetailComponent } from './chemical-detail/chemical-detail.component';
-import { NgModule } from '@angular/core';
 import { ChemicalComponent } from './chemical.component';
 import { ChemicalDetailResolverService } from './chemical-detail/chemical-detail.resolver';
 import { AuthGuard } from '@core/security/auth.guard';
@@ -35,8 +34,3 @@ export const routes: Routes = [
     ]
   }
 ];
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ChemicalRoutingModule { }

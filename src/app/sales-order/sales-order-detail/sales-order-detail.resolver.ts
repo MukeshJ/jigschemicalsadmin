@@ -13,7 +13,9 @@ import { SalesOrderService } from '../sales-order.service';
 
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SalesOrderResolverService implements Resolve<SalesOrder> {
     constructor(private salesOrderService: SalesOrderService, private router: Router) { }
     resolve(

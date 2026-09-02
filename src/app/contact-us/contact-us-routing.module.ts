@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 import { ContactUsComponent } from './contact-us.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path:'',
     component: ContactUsComponent,
@@ -11,9 +10,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ContactUsRoutingModule { }

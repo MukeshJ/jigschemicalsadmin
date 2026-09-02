@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { ArticleListComponent } from './article-list/article-list.component';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ArticleDetailComponent } from './article-detail/article-detail.component';
 import { ArticleDetailResolverService } from './article-detail/article-detail-resolver.service';
 import { AuthGuard } from '@core/security/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ArticleListComponent,
@@ -21,9 +20,3 @@ const routes: Routes = [
     },
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ArticleRoutingModule { }

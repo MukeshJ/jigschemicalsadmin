@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 
 import { InquiryService } from '../inquiry.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AddInquiryResolverService implements Resolve<Inquiry> {
     constructor(
         private inquiryService: InquiryService,

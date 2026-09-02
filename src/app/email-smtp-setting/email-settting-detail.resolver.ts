@@ -9,7 +9,9 @@ import { Role } from '@core/domain-classes/role';
 import { Observable } from 'rxjs';
 import { EmailSmtpSettingService } from './email-smtp-setting.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EmailSMTPSettingDetailResolver implements Resolve<EmailSMTPSetting> {
     constructor(private emailSmtpSettingService: EmailSmtpSettingService) { }
     resolve(

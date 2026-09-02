@@ -8,7 +8,9 @@ import { Role } from '@core/domain-classes/role';
 import { Observable } from 'rxjs';
 import { RoleService } from './role.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RoleDetailResolverService implements Resolve<Role> {
     constructor(private roleService: RoleService) { }
     resolve(

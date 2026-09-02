@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { GalleryListComponent } from './gallery-list/gallery-list.component';
 import { GalleryDetailComponent } from './gallery-detail/gallery-detail.component';
 import { GalleryResolverService } from './gallery-detail/gallery-resolver.service';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: GalleryListComponent,
@@ -22,9 +21,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class GalleryRoutingModule { }

@@ -11,11 +11,12 @@ import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
+import { RouterOutlet } from '@angular/router';
 import { BaseComponent } from './base.component';
 
 @Component({
-  standalone: false,
   selector: 'app-root',
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

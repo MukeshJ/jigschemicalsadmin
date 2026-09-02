@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 
 import { CustomerService } from '../customer.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CustomerResolverService implements Resolve<Customer> {
   constructor(
     private customerService: CustomerService,

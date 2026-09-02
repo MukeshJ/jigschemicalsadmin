@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 import { TestimonialService } from '../testimonial.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TestimonialDetailResolverService implements Resolve<Testimonial> {
     constructor(
         private testimonialService: TestimonialService,

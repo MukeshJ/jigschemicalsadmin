@@ -11,7 +11,9 @@ import { take, mergeMap } from 'rxjs/operators';
 import { ExpenseService } from '../expense.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ExpenseResolverService implements Resolve<Expense> {
     constructor(
         private expenseService: ExpenseService,

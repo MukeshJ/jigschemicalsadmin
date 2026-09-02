@@ -12,7 +12,9 @@ import { take, mergeMap } from 'rxjs/operators';
 import { SupplierService } from '../supplier.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SupplierResolverService implements Resolve<Supplier> {
   constructor(private supplierService: SupplierService, private router: Router) {}
   resolve(

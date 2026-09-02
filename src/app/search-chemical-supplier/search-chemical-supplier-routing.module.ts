@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { SearchChemicalBySupplierComponent } from './search-chemical-by-supplier/search-chemical-by-supplier.component';
 import { SearchSupplierByChemicalComponent } from './search-supplier-by-chemical/search-supplier-by-chemical.component';
 import { AuthGuard } from '@core/security/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'chemical',
     component: SearchChemicalBySupplierComponent,
@@ -18,9 +17,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class SearchChemicalSupplierRoutingModule { }

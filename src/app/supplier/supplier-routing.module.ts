@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 import { SupplierDetailComponent } from './supplier-detail/supplier-detail.component';
 import { SupplierResolverService } from './supplier-detail/supplier-detail.resolver';
 import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { UploadChemicalComponent } from './upload-chemical/upload-chemical.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: SupplierListComponent,
@@ -27,9 +26,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SupplierRoutingModule { }

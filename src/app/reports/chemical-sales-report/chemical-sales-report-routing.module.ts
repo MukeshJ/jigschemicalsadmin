@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { ChemicalSalesReportComponent } from './chemical-sales-report.component';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path:'',
     component: ChemicalSalesReportComponent,
@@ -13,9 +12,3 @@ const routes: Routes = [
      canActivate: [AuthGuard],
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ChemicalSalesReportRoutingModule { }

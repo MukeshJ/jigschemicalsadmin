@@ -11,7 +11,9 @@ import { Reminder } from '@core/domain-classes/reminder';
 import { ReminderService } from '../reminder.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReminderDetailResolverService implements Resolve<Reminder> {
     constructor(private cs: ReminderService, private router: Router) { }
     resolve(

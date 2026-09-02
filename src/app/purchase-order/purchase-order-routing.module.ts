@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 import { ChemicalsResolve } from '@core/services/chemicals.resolve';
 import { PurchaseOrderAddEditComponent } from './purchase-order-add-edit/purchase-order-add-edit.component';
@@ -9,7 +8,7 @@ import { PurchaseOrderUnitResolver } from './purchase-order-add-edit/purchase-or
 import { PurchaseOrderDetailComponent } from './purchase-order-detail/purchase-order-detail.component';
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'list',
     component: PurchaseOrderListComponent,
@@ -34,9 +33,3 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class PurchaseOrderRoutingModule { }

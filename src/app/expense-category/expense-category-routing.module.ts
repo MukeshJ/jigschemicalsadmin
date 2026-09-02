@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { ExpenseCategoryListComponent } from './expense-category-list/expense-category-list.component';
 import { AuthGuard } from '@core/security/auth.guard';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ExpenseCategoryListComponent,
@@ -11,9 +10,3 @@ const routes: Routes = [
     data: { claimType: 'expense_manage_expense_category' },
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ExpenseCategoryRoutingModule { }

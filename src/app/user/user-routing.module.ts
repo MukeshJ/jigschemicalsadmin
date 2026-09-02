@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 import { ManageUserComponent } from './manage-user/manage-user.component';
 import { UserDetailResolverService } from './user-detail-resolver';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserPermissionComponent } from './user-permission/user-permission.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: UserListComponent,
@@ -31,9 +30,3 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class UserRoutingModule { }

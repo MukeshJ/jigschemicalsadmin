@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { ActionListComponent } from './action-list/action-list.component';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from '@core/security/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ActionListComponent,
@@ -11,9 +10,3 @@ const routes: Routes = [
     data: { claimType: 'permission' },
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ActionRoutingModule { }

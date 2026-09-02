@@ -9,7 +9,9 @@ import { User } from '@core/domain-classes/user';
 import { Observable } from 'rxjs';
 import { NLogService } from './n-log.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LogDetailResolverService implements Resolve<NLog> {
     constructor(private nLogService: NLogService) { }
     resolve(
