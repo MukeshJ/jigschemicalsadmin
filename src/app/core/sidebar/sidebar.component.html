@@ -15,7 +15,8 @@
           class="collapsed"
           *hasClaim="['chemical_view_chemicals','chemical_add_chemical','chemical_view_chemical_types','chemical_search_suppliers_by_chemical']"
           data-target="#chemical">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'chemical'}" routerLinkActive="active">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'chemical'}" routerLinkActive="active"
+            (click)="toggleMenu('chemical')">
             <i class="fas fa-atom nav-icon"></i>
             <span>{{'CHEMICAL' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -80,7 +81,7 @@
         <li id="SupplierHeading" aria-expanded="true"
           *hasClaim="['supplier_view_suppliers','supplier_add_supplier','supplier_assign_chemical_to_supplier','supplier_search_chemicals_by_supplier']"
           data-toggle="collapse" data-target="#Supplier" aria-controls="collapseOne" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'supplier'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'supplier'}" (click)="toggleMenu('supplier')">
             <i class="nav-icon fas fa-truck"></i>
             <span>{{'SUPPLIER' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -127,7 +128,7 @@
         <li id="CustomerHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['customer_view_customers','customer_add_customer','customer_assign_chemical_to_customer']"
           data-toggle="collapse" data-target="#Customer" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'customer'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'customer'}" (click)="toggleMenu('customer')">
             <i class="nav-icon fas fa-users-cog"></i>
             <span>{{'CUSTOMER' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -160,7 +161,7 @@
         <li id="InquiryHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['inquiry_view_inquiries','inquiry_add_inquiry','inquiry_manage_inquiry_statuses','inquiry_manage_inquiry_sources']"
           data-toggle="collapse" data-target="#Inquiry" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'inquiry'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'inquiry'}" (click)="toggleMenu('inquiry')">
             <i class="nav-icon fas fa-question-circle"></i>
             <span>{{'INQUIRY' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -200,7 +201,7 @@
         <li id="PORHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['purchase_order_request_view_purchase_order_requests','purchase_order_request_add_purchase_order_request']"
           data-toggle="collapse" data-target="#PORHeading" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order-request'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order-request'}" (click)="toggleMenu('purchase-order-request')">
             <i class="nav-icon fas fa-cart-plus"></i>
             <span>{{'PURCHASE_ORDER_REQUEST' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -226,7 +227,7 @@
         <li id="POHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse" data-target="#PO"
           class="collapsed"
           *hasClaim="['purchase_order_view_purchase_orders','purchase_order_add_purchase_order','purchase_order_manage_packaging_types']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order'}" (click)="toggleMenu('purchase-order')">
             <i class="nav-icon fas fa-cart-plus"></i>
             <span>{{'PURCHASE_ORDER' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -258,7 +259,7 @@
         </ul>
         <li id="POREHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse" data-target="#PORE"
           class="collapsed" *hasClaim="['purchase_order_return_purchase_order']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order-return'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'purchase-order-return'}" (click)="toggleMenu('purchase-order-return')">
             <i class="nav-icon fas fa-cart-plus"></i>
             <span>{{'PURCHASE_ORDER_RETURN' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -284,7 +285,7 @@
         <li id="SalesHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse" data-target="#SO"
           class="collapsed"
           *hasClaim="['sales_order_view_sales_orders','sales_order_add_sales_order','sales_order_manage_payment_terms','sales_order_manage_delivery_methods']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'sales-order'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'sales-order'}" (click)="toggleMenu('sales-order')">
             <i class="nav-icon fas fa-cart-plus"></i>
             <span>{{'SALES_ORDER' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -323,7 +324,7 @@
         </ul>
         <li id="SalesReHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse"
           data-target="#SORE" class="collapsed" *hasClaim="['sales_order_return_sales_order']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'sales-order-return'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'sales-order-return'}" (click)="toggleMenu('sales-order-return')">
             <i class="nav-icon fas fa-cart-plus"></i>
             <span>{{'SALES_ORDER_RETURN' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -358,7 +359,7 @@
         <li id="ExpenseHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse"
           data-target="#Expense" class="collapsed"
           *hasClaim="['expense_view_expenses','expense_add_expense','expense_manage_expense_category']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'expense'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'expense'}" (click)="toggleMenu('expense')">
             <i class="fas fa-solid fa-wallet nav-icon"></i>
             <span>{{'EXPENSE' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -400,7 +401,7 @@
           data-toggle="collapse" data-target="#Reports" class="collapsed"
           *hasClaim="['reports_view_purchase_orders_report','reports_view_sales_order_report','reports_view_chemical_purchase_report','reports_view_chemical_sales_report','reports_view_stock_report',
         'reports_view_purchase_payment_report','reports_view_expense_report','reports_view_sales_order_payment_report','reports_view_sales_vs_purchase_report']">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'reports'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'reports'}" (click)="toggleMenu('reports')">
             <i class="nav-icon fas fa-chart-bar"></i>
             <span>{{'REPORTS' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -493,7 +494,7 @@
         <li id="ReminderHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['reminder_view_reminders','reminder_add_reminder']" data-toggle="collapse" data-target="#Reminder"
           class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'reminders'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'reminders'}" (click)="toggleMenu('reminders')">
             <i class="far fa-bell nav-icon"></i>
             <span>{{'REMINDER' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -522,7 +523,7 @@
         </ul>
         <li id="DocumentLibraryHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse"
           data-target="#DocumentsLibrary" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'documents-library'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'documents-library'}" (click)="toggleMenu('documents-library')">
             <i class="fas fa-file nav-icon"></i>
             <span>{{'DOCUMENTS_LIBRARY' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -562,7 +563,7 @@
         <li id="IndustryHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['industry_view_industries','industry_add_industry','industry_assign_chemicals_to_industry']"
           data-toggle="collapse" data-target="#Industry" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'industry'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'industry'}" (click)="toggleMenu('industry')">
             <i class="fas fa-industry nav-icon"></i>
             <span>{{'INDUSTRY' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -613,7 +614,7 @@
         <li id="ArticleHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['article_view_articles','article_add_article']" data-toggle="collapse" data-target="#Article"
           class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'article'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'article'}" (click)="toggleMenu('article')">
             <i class="fas fa-rss nav-icon"></i>
             <span>{{'ARTICLE' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -639,7 +640,7 @@
         <li id="TestimonialHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['testimonial_view_testimonials','testimonial_add_testimonial']" data-toggle="collapse"
           data-target="#Testimonial" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'testimonial'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'testimonial'}" (click)="toggleMenu('testimonial')">
             <i class="fas fa-comment-dots nav-icon"></i>
             <span>{{'TESTIMONIAL' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -665,7 +666,7 @@
         <li *hasClaim="['event_gallery_view_galleries','event_gallery_add_gallery']" id="GalleryHeading" aria-expanded="true" aria-controls="collapseOne"
            data-toggle="collapse"
           data-target="#Gallery" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'gallery'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'gallery'}" (click)="toggleMenu('gallery')">
             <i class="fas fa-images nav-icon"></i>
             <span>{{'EVENT_GALLERY' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -691,7 +692,7 @@
         <li id="RolesHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['roles_view_roles','roles_add_role']" data-toggle="collapse" data-target="#Roles"
           class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'roles'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'roles'}" (click)="toggleMenu('roles')">
             <i class="nav-icon fas fa-users-cog"></i>
             <span>{{'ROLES' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -717,7 +718,7 @@
         <li id="UsersHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['users_view_users','users_add_user','users_assign_roles_to_users','users_view_current_online_users']"
           data-toggle="collapse" data-target="#Users" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'users'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'users'}" (click)="toggleMenu('users')">
             <i class="nav-icon fa fa-users"></i>
             <span>{{'USERS' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -759,7 +760,7 @@
         <li id="EmailHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['email_view_smtp_settings','email_send_email','email_view_email_templates']"
           data-toggle="collapse" data-target="#Email" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'email'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'email'}" (click)="toggleMenu('email')">
             <i class="nav-icon fas fa-envelope-open-text"></i>
             <span>{{'EMAIL' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -791,7 +792,7 @@
         </ul>
         <li id="SettingsHeading" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse"
           *hasClaim="['settings_update_company_profile']" data-target="#Settings" class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'settings'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'settings'}" (click)="toggleMenu('settings')">
             <i class="nav-icon fa fa-tools"></i>
             <span>{{'SETTINGS' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>
@@ -810,7 +811,7 @@
         <li id="LogsHeading" aria-expanded="true" aria-controls="collapseOne"
           *hasClaim="['logs_view_login_audits','logs_view_error_logs']" data-toggle="collapse" data-target="#Logs"
           class="collapsed">
-          <a class="nav-link" [ngClass]="{'active': currentUrl == 'logs'}">
+          <a class="nav-link" [ngClass]="{'active': currentUrl == 'logs'}" (click)="toggleMenu('logs')">
             <i class="fas fa-exclamation-triangle nav-icon"></i>
             <span>{{'LOGS' | translate}}</span>
             <span class="fas fa-angle-down rotate-arrow ml-auto"></span>

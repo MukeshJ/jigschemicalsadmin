@@ -8,7 +8,6 @@ import { SecurityService } from '@core/security/security.service';
 import { CommonService } from '@core/services/common.service';
 import { SignalrService } from '@core/services/signalr.service';
 import { TranslationService } from '@core/services/translation.service';
-import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';

@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { DashboardStaticatics } from '@core/domain-classes/dashboard-staticatics';
 import { Inquiry } from '@core/domain-classes/inquiry';
 import { InquiryResourceParameter } from '@core/domain-classes/inquiry-resource-parameter';
-import { OnlineUser } from '@core/domain-classes/online-user';
-import { User } from '@core/domain-classes/user';
 import { SignalrService } from '@core/services/signalr.service';
 import { BaseComponent } from '../base.component';
 import { InquiryService } from '../inquiry/inquiry.service';

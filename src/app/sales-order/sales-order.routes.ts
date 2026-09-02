@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { SalesOrderListComponent } from './sales-order-list/sales-order-list.component';
 import { SalesOrderAddEditComponent } from './sales-order-add-edit/sales-order-add-edit.component';
-import { SalesOrderResolverService } from './sales-order-detail/sales-order-detail.resolver';
 import { AuthGuard } from '@core/security/auth.guard';
 import { SalesOrderUnitResolver } from './sales-order-add-edit/sales-order-unit-resolve';
 import { SalesOrderTaxResolver } from './sales-order-add-edit/sales-order-tax-resolve';

@@ -1,4 +1,6 @@
 @use "sass:math";
+@use "./color" as *;
+
 $fs-huge: 2.2rem;
 $fs-large: 1.8rem;
 $fs-bigger: 1.3rem;
@@ -7,7 +9,7 @@ $fs-title: 1rem;
 $fs-normal: 0.9375rem;
 $fs-small: 0.875rem;
 @function calculateRem($size) {
-    $remSize: $size / 16px;
+    $remSize: math.div($size, 16px);
     @return $remSize * 1rem;
 }
 
@@ -31,7 +33,7 @@ html {
             $val: parseInt($value);
             @if $unit== "px" {
                 $px: append($px, $value);
-                $rem: append($rem, ($val / 10 + rem));
+                $rem: append($rem, (math.div($val, 10) + rem));
             }
             @if $unit== "rem" {
                 $px: append($px, ($val * 10 + px));
@@ -119,7 +121,6 @@ html {
 .main-icon-menu-pane.active {
     display: block;
 }
-
 .menu-title {
     font-size: $fs-normal;
     font-weight: 600;

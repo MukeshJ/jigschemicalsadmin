@@ -1,7 +1,7 @@
-@import "color";
-@import "login";
-@import "header";
-@import "sidebar";
+@use './color' as *;
+@use './login';
+@use './header';
+@use './sidebar' as *;
 html {
   -webkit-background-size: cover;
   -moz-background-size: cover;

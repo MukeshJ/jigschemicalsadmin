@@ -1,4 +1,10 @@
-@import "../../../assets/styles/color.scss";
+@use '../../../assets/styles/color' as *;
+
+
+.active {
+  border: 1px solid $primary-blue;
+}
+
 .contry-flag {
     width: 17px;
 }

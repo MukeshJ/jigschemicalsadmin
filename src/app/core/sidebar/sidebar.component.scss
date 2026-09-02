@@ -1,0 +1,12 @@
+@use '../../../assets/styles/color' as color;
+
+.sidebar-text {
+  color: color.$gray-text;
+}
+
+:host {
+  display: block;
+}
+.nav-icon {
+  float: right;
+}

@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { UserAuth } from '@core/domain-classes/user-auth';
 import { SecurityService } from '@core/security/security.service';
@@ -14,13 +13,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  animations: [
-    trigger('slide', [
-      state('up', style({ height: 0 })),
-      state('down', style({ height: '*' })),
-      transition('up <=> down', animate(200)),
-    ]),
-  ],
   imports: [HasClaimDirective, RouterLinkActive, RouterLink, NgClass, TranslatePipe],
 })
 export class SidebarComponent extends BaseComponent implements OnInit {
@@ -53,6 +45,12 @@ export class SidebarComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.commonService.currentUrl$.subscribe((c) => {
       this.currentUrl = c;
     });
+  }
+
+  toggleMenu(menuName: string): void {
+    const nextValue = this.currentUrl === menuName ? '' : menuName;
+    this.currentUrl = nextValue;
+    this.commonService.setCurrentUrl(nextValue);
   }
 
   getState(currentMenu) {

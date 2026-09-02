@@ -1,4 +1,3 @@
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -74,13 +73,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sales-order-report',
   templateUrl: './sales-order-report.component.html',
   styleUrls: ['./sales-order-report.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
   providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe],
   imports: [
     HasClaimDirective,

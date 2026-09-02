@@ -12,9 +12,7 @@ import { InquiryStatus } from '@core/domain-classes/inquiry-status';
 export class InquiryService {
     constructor(private httpClient: HttpClient) { }
 
-    getInquiries(
-        resourceParams: InquiryResourceParameter
-    ): Observable<HttpResponse<Inquiry[]>> {
+    getInquiries(  resourceParams: InquiryResourceParameter ): Observable<HttpResponse<Inquiry[]>> {
         const url = 'inquiry';
         const customParams = new HttpParams()
             .set('Fields', resourceParams.fields ? resourceParams.fields : '')
