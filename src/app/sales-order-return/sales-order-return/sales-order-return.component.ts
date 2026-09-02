@@ -60,6 +60,11 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   salesOrder: SalesOrder;
   isEdit: boolean = false;
   salesOrderResource: SalesOrderResourceParameter;
+  paymentTerms: any[] = [];
+  deliveryMethods: any[] = [];
+
+  onDiscountChange(): void { }
+  onTaxSelectionChange(): void { }
 
   get salesOrderItemsArray(): UntypedFormArray {
     return <UntypedFormArray>this.salesOrderForm.get('salesOrderItems');

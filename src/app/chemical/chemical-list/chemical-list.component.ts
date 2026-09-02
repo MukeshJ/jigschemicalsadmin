@@ -211,6 +211,8 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     }
   }
 
+  selecetAll(event: any): void { }
+
   // selecetAll(event: MatCheckboxChange) {
   //   if (event.checked) {
   //     this.pages.forEach(page => {

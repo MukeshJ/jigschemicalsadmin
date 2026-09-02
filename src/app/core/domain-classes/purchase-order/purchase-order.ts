@@ -32,7 +32,7 @@ export interface PurchaseOrder {
   totalQuantity?: number;
   totalDiscount: number;
   totalPaidAmount?: number;
-  paymentStatus?: PaymentStatus;
+  paymentStatus?: number;
   deliveryStatus: DeliveryStatusEnum;
   purchaseOrderAttachments?: PurchaseOrderAttachment[];
   purchaseOrderItems: PurchaseOrderItem[];

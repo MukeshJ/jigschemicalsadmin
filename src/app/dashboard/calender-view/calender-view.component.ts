@@ -13,7 +13,8 @@ import {
   addHours,
   parseISO,
 } from 'date-fns';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
+import { CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -27,9 +28,16 @@ export class CalenderViewComponent implements OnInit {
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = false;
   CalendarView = CalendarView;
+  refresh: Subject<void> = new Subject<void>();
   events: CalendarEvent[] = [
 
   ];
+
+  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.refresh.next();
+  }
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {

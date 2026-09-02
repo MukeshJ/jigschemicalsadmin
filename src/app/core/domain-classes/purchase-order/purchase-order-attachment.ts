@@ -4,4 +4,5 @@ export class PurchaseOrderAttachment {
     path?: string;
     name?: string;
     documentData?: string;
+    createdDate?: Date;
 }

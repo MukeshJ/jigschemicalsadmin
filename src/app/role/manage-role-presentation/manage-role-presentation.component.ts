@@ -2,9 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Action } from '@core/domain-classes/action';
 import { PageAction } from '@core/domain-classes/page-action';
 import { Page } from '@core/domain-classes/page';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Role } from '@core/domain-classes/role';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Role } from '@core/domain-classes/role';
 
 @Component({
   standalone: false,
@@ -88,7 +87,7 @@ export class ManageRolePresentationComponent implements OnInit {
     }
   }
 
-  onPermissionChange(flag: MatSlideToggleChange, page: Page, action: Action) {
+  onPermissionChange(flag: MatCheckboxChange, page: Page, action: Action) {
     if (flag.checked) {
       this.role.roleClaims.push({
         roleId: this.role.id,

@@ -32,5 +32,6 @@ export class  SalesOrder {
   salesOrderItems: SalesOrderItem[];
   isSalesOrderRequest?: boolean;
   status?: number;
-  paymentStatus?: PaymentStatus
+  paymentStatus?: number;
+  salesOrderPayments?: any[];
 }

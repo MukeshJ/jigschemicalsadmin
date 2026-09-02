@@ -55,6 +55,10 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
 
   public filterCityObservable$: Subject<string> = new Subject<string>();
 
+  displayFn(value: any): string {
+    return value ? (value.name ?? value) : value;
+  }
+
   get supplierAddress(): UntypedFormArray {
     return <UntypedFormArray>this.supplierForm.get('supplierAddresses');
   }

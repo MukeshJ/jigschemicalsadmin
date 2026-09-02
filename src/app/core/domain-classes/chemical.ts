@@ -1,5 +1,6 @@
 import { ChemicalTax } from './chemical-tax';
 import { EntityState } from './entity-state';
+import { Unit } from './unit';
 
 export interface Chemical {
   id?: string;
@@ -26,6 +27,7 @@ export interface Chemical {
   isImageUpdate?: boolean;
   unitId?: string;
   unitName?: string;
+  unit?: Unit;
   chemicalTaxes?: ChemicalTax[];
   purchasePrice?: number;
   salesPrice?: number;

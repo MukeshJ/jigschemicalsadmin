@@ -39,7 +39,7 @@ export class PageListComponent extends BaseComponent implements OnInit {
 
   }
 
-  deletePage(pageId: number) {
+  deletePage(pageId: string) {
     this.sub$.sink = this.pageService.delete(pageId).subscribe(() => {
       this.toastrServoce.success(this.translationService.getValue('PAGE_DELETED_SUCCESSFULLY'));
     })

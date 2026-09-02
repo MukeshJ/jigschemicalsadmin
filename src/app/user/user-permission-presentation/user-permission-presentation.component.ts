@@ -3,7 +3,6 @@ import { Action } from '@core/domain-classes/action';
 import { PageAction } from '@core/domain-classes/page-action';
 import { User } from '@core/domain-classes/user';
 import { Page } from '@core/domain-classes/page';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
@@ -46,7 +45,7 @@ export class UserPermissionPresentationComponent implements OnInit {
     }
   }
 
-  onPermissionChange(flag: MatSlideToggleChange, page: Page, action: Action) {
+  onPermissionChange(flag: MatCheckboxChange, page: Page, action: Action) {
     if (flag.checked) {
       this.user.userClaims.push({
         userId: this.user.id,

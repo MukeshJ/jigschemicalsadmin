@@ -94,7 +94,7 @@
                         <div class="col-md-6">
                             <mat-label>{{'COUNTRY' | translate}}</mat-label>
                             <mat-select placeholder="{{'SELECT_COUNTRY' | translate}}" class="form-control"
-                                formControlName="countryId" (selectionChange)="onCountryChange($event)">
+                                formControlName="countryId" (selectionChange)="onCountryChange($any($event))">
                                 <mat-option *ngFor="let country of countries" [value]="country.id">
                                     {{country.countryName}}
                                 </mat-option>
@@ -103,7 +103,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <mat-label>{{'CITY' | translate}}</mat-label>
-                                <input class="form-control" autocomplete="new-city" (input)="handleFilterCity($event)"
+                                <input class="form-control" autocomplete="new-city" (input)="handleFilterCity($any($event))"
                                     type="text" placeholder="{{'SEARCH_CITY' | translate}}" [matAutocomplete]="auto"
                                     formControlName="cityName" />
                                 <mat-autocomplete #auto="matAutocomplete">

@@ -4,4 +4,5 @@ export class SalesOrderAttachment {
     path?: string;
     name?: string;
     documentData?: string;
+    createdDate?: Date;
 }

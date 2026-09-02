@@ -6,10 +6,10 @@ import { Pipe } from '@angular/core';
     name: 'limitTo'
 })
 export class TruncatePipe {
-    transform(value: string, args: string): string {
+    transform(value: string, args: string | number): string {
         if (!value)
             return '';
-        const limit = args ? parseInt(args, 10) : 100;
+        const limit = args ? parseInt(args as string, 10) : 100;
         const trail = '...';
         return value.length > limit ? value.substring(0, limit) + trail : value;
     }
