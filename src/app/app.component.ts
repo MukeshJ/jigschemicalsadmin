@@ -14,6 +14,7 @@ import { filter } from 'rxjs/operators';
 import { BaseComponent } from './base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -30,7 +31,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     private commonService: CommonService) {
     super();
     translate.addLangs(['en', 'es', 'ar', 'ru', 'cn', 'ja', 'ko']);
-    translate.setDefaultLang('en');
+    translate.setFallbackLang('en');
     this.setLanguage();
     this.setProfile();
     this.companyProfileSubscription();

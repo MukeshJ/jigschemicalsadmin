@@ -32,6 +32,7 @@ import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resourc
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-report',
   templateUrl: './purchase-order-report.component.html',
   styleUrls: ['./purchase-order-report.component.scss'],

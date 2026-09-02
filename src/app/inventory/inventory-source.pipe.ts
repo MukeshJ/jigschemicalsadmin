@@ -3,6 +3,7 @@ import { inventorySource } from '@core/domain-classes/inventory/inventory-source
 import { TranslationService } from '@core/services/translation.service';
 
 @Pipe({
+  standalone: false,
   name: 'inventorySource'
 })
 

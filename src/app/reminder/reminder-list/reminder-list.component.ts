@@ -19,6 +19,7 @@ import { ReminderService } from '../reminder.service';
 import { ReminderDataSource } from './reminder-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-reminder-list',
   templateUrl: './reminder-list.component.html',
   styleUrls: ['./reminder-list.component.scss']

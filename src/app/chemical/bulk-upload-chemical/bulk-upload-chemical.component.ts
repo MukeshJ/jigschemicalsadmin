@@ -6,6 +6,7 @@ import { ChemicalService } from '../chemical.service';
 import * as XLSX from 'xlsx';
 
 @Component({
+  standalone: false,
   selector: 'app-bulk-upload-chemical',
   templateUrl: './bulk-upload-chemical.component.html',
   styleUrls: ['./bulk-upload-chemical.component.scss']

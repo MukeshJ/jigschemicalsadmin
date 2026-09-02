@@ -10,6 +10,7 @@ import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-custo
 import { CustomerService } from '../customer.service';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss']

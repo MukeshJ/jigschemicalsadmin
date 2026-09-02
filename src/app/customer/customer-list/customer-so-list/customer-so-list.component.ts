@@ -11,6 +11,7 @@ import { SalesOrderDataSource } from 'src/app/sales-order/sales-order-list/sales
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-customer-so-list',
   templateUrl: './customer-so-list.component.html',
   styleUrls: ['./customer-so-list.component.css']

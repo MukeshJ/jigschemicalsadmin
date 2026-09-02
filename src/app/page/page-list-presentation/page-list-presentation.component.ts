@@ -7,6 +7,7 @@ import { ManagePageComponent } from '../manage-page/manage-page.component';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-page-list-presentation',
   templateUrl: './page-list-presentation.component.html',
   styleUrls: ['./page-list-presentation.component.scss'],

@@ -17,6 +17,7 @@ import { forkJoin } from 'rxjs';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-calender-view',
   templateUrl: './calender-view.component.html',
   styleUrls: ['./calender-view.component.scss']

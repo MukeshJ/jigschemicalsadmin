@@ -40,6 +40,7 @@ export function emailOrMobileValidator(): ValidatorFn {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-detail',
   templateUrl: './inquiry-detail.component.html',
   styleUrls: ['./inquiry-detail.component.scss']

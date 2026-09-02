@@ -11,7 +11,6 @@ import { SharedModule } from '@shared/shared.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingIndicatorModule } from '@shared/loading-indicator/loading-indicator.module';
-import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonErrorHandlerService } from './error-handler/common-error-handler.service';
@@ -20,10 +19,6 @@ import { ControlSidebarComponent } from './control-sidebar/control-sidebar.compo
 import { CommonDialogComponent } from './common-dialog/common-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
 
 @NgModule({
   declarations: [
@@ -42,8 +37,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     MatTooltipModule,
     LoadingIndicatorModule,
-    PerfectScrollbarModule,
-    BsDropdownModule.forRoot(),
+    BsDropdownModule,
     NgbModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
@@ -54,10 +48,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   providers: [
     CommonDialogService,
-    {
-      provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    },
     {
       provide: ErrorHandler, useClass: CommonErrorHandlerService,
       deps: [HttpClient]

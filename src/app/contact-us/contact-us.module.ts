@@ -16,7 +16,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { ContactUsDetailComponent } from './contact-us-detail/contact-us-detail.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { SharedModule } from '@shared/shared.module';
@@ -52,7 +52,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatMenuModule,
     MatDialogModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     MatButtonModule,
     MatNativeDateModule,
     MatIconModule,

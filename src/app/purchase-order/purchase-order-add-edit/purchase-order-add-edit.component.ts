@@ -33,6 +33,7 @@ import { PurchaseOrderItemTax } from '@core/domain-classes/purchase-order/purcha
 import { ResponseHeader } from '@core/domain-classes/response-header';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-add-edit',
   templateUrl: './purchase-order-add-edit.component.html',
   styleUrls: ['./purchase-order-add-edit.component.scss'],

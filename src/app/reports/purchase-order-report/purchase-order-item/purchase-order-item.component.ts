@@ -4,6 +4,7 @@ import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-report-item',
   templateUrl: './purchase-order-item.component.html',
   styleUrls: ['./purchase-order-item.component.scss']

@@ -15,6 +15,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-reminder',
   templateUrl: './add-reminder.component.html',
   styleUrls: ['./add-reminder.component.scss']

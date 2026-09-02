@@ -11,6 +11,7 @@ import { PurchaseOrderDataSource } from 'src/app/purchase-order/purchase-order-l
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-supplier-po-list',
   templateUrl: './supplier-po-list.component.html',
   styleUrls: ['./supplier-po-list.component.scss']

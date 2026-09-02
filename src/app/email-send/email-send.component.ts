@@ -12,6 +12,7 @@ import { EmailTemplateService } from '../email-template/email-template.service';
 import { EmailSendService } from './email-send.service';
 
 @Component({
+  standalone: false,
   selector: 'app-email-send',
   templateUrl: './email-send.component.html',
   styleUrls: ['./email-send.component.scss']

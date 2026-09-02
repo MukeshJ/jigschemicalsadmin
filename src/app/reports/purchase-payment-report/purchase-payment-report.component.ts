@@ -21,6 +21,7 @@ import { PurchasePaymentReportService } from './purchase-payment-report.service'
 import * as XLSX from 'xlsx';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-payment-report',
   templateUrl: './purchase-payment-report.component.html',
   styleUrls: ['./purchase-payment-report.component.scss'],

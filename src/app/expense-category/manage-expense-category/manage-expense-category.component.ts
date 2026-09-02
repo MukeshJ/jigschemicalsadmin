@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-expense-category',
   templateUrl: './manage-expense-category.component.html',
   styleUrls: ['./manage-expense-category.component.scss']

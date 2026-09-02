@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-delivery-method-list',
   templateUrl: './delivery-method-list.component.html',
   styleUrls: ['./delivery-method-list.component.scss']

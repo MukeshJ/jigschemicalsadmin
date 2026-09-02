@@ -8,6 +8,7 @@ import { BaseComponent } from 'src/app/base.component';
 
 
 @Component({
+  standalone: false,
   selector: 'app-manage-document-category',
   templateUrl: './manage-document-category.component.html',
   styleUrls: ['./manage-document-category.component.scss']

@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManagePaymentTermComponent } from '../manage-payment-term/manage-payment-term.component';
 
 @Component({
+  standalone: false,
   selector: 'app-payment-term-presentation',
   templateUrl: './payment-term-presentation.component.html',
   styleUrls: ['./payment-term-presentation.component.scss']

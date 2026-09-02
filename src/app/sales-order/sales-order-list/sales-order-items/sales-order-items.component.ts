@@ -4,6 +4,7 @@ import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderService } from '../../sales-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-items',
   templateUrl: './sales-order-items.component.html',
   styleUrls: ['./sales-order-items.component.scss']

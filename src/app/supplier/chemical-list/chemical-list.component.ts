@@ -14,6 +14,7 @@ import { AddSupplierChemicalComponent } from '../add-supplier-chemical/add-suppl
 import { SupplierService } from '../supplier.service';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss']

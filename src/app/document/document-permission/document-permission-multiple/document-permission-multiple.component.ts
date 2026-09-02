@@ -16,6 +16,7 @@ import { DocumentService } from '../../document.service';
 import { DocumentPermissionService } from '../document-permission.service';
 
 @Component({
+  standalone: false,
   selector: 'app-document-permission-multiple',
   templateUrl: './document-permission-multiple.component.html',
   styleUrls: ['./document-permission-multiple.component.scss']

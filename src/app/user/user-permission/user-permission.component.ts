@@ -15,6 +15,7 @@ import { UserService } from '../user.service';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-user-permission',
   templateUrl: './user-permission.component.html',
   styleUrls: ['./user-permission.component.scss']

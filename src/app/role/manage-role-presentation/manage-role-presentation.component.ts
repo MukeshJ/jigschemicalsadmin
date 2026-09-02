@@ -7,6 +7,7 @@ import { Role } from '@core/domain-classes/role';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-role-presentation',
   templateUrl: './manage-role-presentation.component.html',
   styleUrls: ['./manage-role-presentation.component.scss']

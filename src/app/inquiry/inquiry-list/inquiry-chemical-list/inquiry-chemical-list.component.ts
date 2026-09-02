@@ -8,6 +8,7 @@ import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-s
 import { InquiryService } from '../../inquiry.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-chemical-list',
   templateUrl: './inquiry-chemical-list.component.html',
   styleUrls: ['./inquiry-chemical-list.component.scss']

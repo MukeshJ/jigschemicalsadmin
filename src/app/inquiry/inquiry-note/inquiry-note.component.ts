@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { InquiryNoteService } from './inquiry-note.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-note',
   templateUrl: './inquiry-note.component.html',
   styleUrls: ['./inquiry-note.component.scss']

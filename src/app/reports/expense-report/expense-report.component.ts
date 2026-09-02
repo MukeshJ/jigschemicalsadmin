@@ -29,6 +29,7 @@ import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
 
 
 @Component({
+  standalone: false,
   templateUrl: './expense-report.component.html',
   styleUrls: ['./expense-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe]

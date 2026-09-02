@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { DocumentPermissionService } from '../document-permission.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-user-permission',
   templateUrl: './manage-user-permission.component.html',
   styleUrls: ['./manage-user-permission.component.scss']

@@ -17,6 +17,7 @@ import { DocumentLibraryDataSource } from './document-library-datasource';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
+  standalone: false,
   selector: 'app-document-library-list',
   templateUrl: './document-library-list.component.html',
   styleUrls: ['./document-library-list.component.scss']

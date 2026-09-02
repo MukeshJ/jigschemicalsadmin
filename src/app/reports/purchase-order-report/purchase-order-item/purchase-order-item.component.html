@@ -22,12 +22,12 @@
         <ng-container matColumnDef="source">
           <th mat-header-cell *matHeaderCellDef>{{'SOURCE' | translate}}</th>
           <td mat-cell *matCellDef="let element">
-            <ng-contaner *ngIf="element.status ==1">
+            <ng-container *ngIf="element.status ==1">
                 {{'PURCHASE_ORDER_RETURN' | translate}}  
-            </ng-contaner>
-            <ng-contaner *ngIf="element.status != 1">
+            </ng-container>
+            <ng-container *ngIf="element.status != 1">
                 {{'PURCHASE_ORDER' | translate}}  
-            </ng-contaner>
+            </ng-container>
           </td>
       </ng-container>
         <ng-container matColumnDef="unitName">

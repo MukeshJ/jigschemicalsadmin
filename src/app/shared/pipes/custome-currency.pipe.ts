@@ -3,6 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 import { SecurityService } from '@core/security/security.service';
 
 @Pipe({
+  standalone: false,
     name: 'customCurrency',
     pure: true
 })

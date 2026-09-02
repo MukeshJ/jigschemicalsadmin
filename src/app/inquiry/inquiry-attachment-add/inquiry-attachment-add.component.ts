@@ -10,6 +10,7 @@ import { InquiryAttachmentDialog } from '@core/domain-classes/inquiry-attachment
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-attachment-add',
   templateUrl: './inquiry-attachment-add.component.html',
   styleUrls: ['./inquiry-attachment-add.component.scss']

@@ -28,6 +28,7 @@ import { InquiryChemicalListComponent } from './inquiry-chemical-list/inquiry-ch
 import { InquiryDataSource } from './inquiry-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-list',
   templateUrl: './inquiry-list.component.html',
   styleUrls: ['./inquiry-list.component.scss']

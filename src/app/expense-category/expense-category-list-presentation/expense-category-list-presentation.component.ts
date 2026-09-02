@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageExpenseCategoryComponent } from '../manage-expense-category/manage-expense-category.component';
 
 @Component({
+  standalone: false,
   selector: 'app-expense-category-list-presentation',
   templateUrl: './expense-category-list-presentation.component.html',
   styleUrls: ['./expense-category-list-presentation.component.scss']

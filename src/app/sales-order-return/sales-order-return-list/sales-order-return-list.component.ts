@@ -24,6 +24,7 @@ import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 import { ViewSalesOrderPaymentComponent } from 'src/app/sales-order/view-sales-order-payment/view-sales-order-payment.component';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-return-list',
   templateUrl: './sales-order-return-list.component.html',
   styleUrls: ['./sales-order-return-list.component.scss'], 

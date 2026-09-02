@@ -34,34 +34,34 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <ng-contaner *ngIf="po.status == 0">
+              <ng-container *ngIf="po.status == 0">
                 <button *hasClaim="'purchase_order_update_purchase_order'" mat-menu-item [routerLink]="['/purchase-order/', po.id]">
                   <mat-icon>edit</mat-icon>
                   <span>{{'EDIT' | translate}}</span>
                 </button>
-              </ng-contaner>
+              </ng-container>
               <button *hasClaim="'purchase_order_view_purchase_order_detail'" mat-menu-item
                 [routerLink]="['/purchase-order/detail', po.id]">
                 <mat-icon>info</mat-icon>
                 <span>{{'DETAIL' | translate}}</span>
               </button>
-              <ng-contaner *ngIf="po.status == 0">
+              <ng-container *ngIf="po.status == 0">
                 <button *hasClaim="'purchase_order_return_purchase_order'" mat-menu-item (click)="OnPurchaseOrderReturn(po)">
                   <mat-icon>assignment_return</mat-icon>
                   <span>{{'PURCHASE_ORDER_RETURN' | translate}}</span>
                 </button>
-              </ng-contaner>
+              </ng-container>
               <button *hasClaim="'purchase_order_delete_purchase_order'" mat-menu-item
                 (click)="deletePurchaseOrder(po)">
                 <mat-icon>delete</mat-icon>
                 <span>{{'DELETE' | translate}}</span>
               </button>
-              <ng-contaner *ngIf="po.paymentStatus != 0">
+              <ng-container *ngIf="po.paymentStatus != 0">
                 <button *hasClaim="'purchase_order_add_purchase_order_payment'" mat-menu-item (click)="addPayment(po)">
                   <mat-icon>payment</mat-icon>
                   <span>{{'ADD_PAYMENT' | translate}}</span>
                 </button>
-              </ng-contaner>
+              </ng-container>
               <button *hasClaim="'purchase_order_view_purchase_order_payments'" mat-menu-item (click)="viewPayment(po)">
                 <mat-icon>view_carousel</mat-icon>
                 <span>{{'VIEW_PAYMENT' | translate}}</span>
@@ -136,12 +136,12 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'IS_RETURN' | translate}} </th>
           <td mat-cell *matCellDef="let po">
-            <ng-contaner *ngIf="po.status ==1">
+            <ng-container *ngIf="po.status ==1">
               {{'YES' | translate}}
-            </ng-contaner>
-            <ng-contaner *ngIf="po.status != 1">
+            </ng-container>
+            <ng-container *ngIf="po.status != 1">
               {{'NO' | translate}}
-            </ng-contaner>
+            </ng-container>
           </td>
         </ng-container>
         <ng-container matColumnDef="action-search">

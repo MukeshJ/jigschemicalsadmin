@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageUnitComponent } from '../manage-unit/manage-unit.component';
 
 @Component({
+  standalone: false,
   selector: 'app-unit-list-presentation',
   templateUrl: './unit-list-presentation.component.html',
   styleUrls: ['./unit-list-presentation.component.scss']

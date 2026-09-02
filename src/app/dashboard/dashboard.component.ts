@@ -13,6 +13,7 @@ import { UserService } from '../user/user.service';
 import { DashboardService } from './dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

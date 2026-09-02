@@ -3,6 +3,7 @@ import { paymentMethods } from '@core/domain-classes/payment-method';
 import { TranslationService } from '@core/services/translation.service';
 
 @Pipe({
+  standalone: false,
     name: 'paymentmethod'
 })
 

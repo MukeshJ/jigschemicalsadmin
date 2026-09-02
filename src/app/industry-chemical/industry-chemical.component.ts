@@ -15,6 +15,7 @@ import { IndustryService } from '../industry/industry.service';
 import { IndustryChemicalService } from './industry-chemical.service';
 
 @Component({
+  standalone: false,
   selector: 'app-industry-chemical',
   templateUrl: './industry-chemical.component.html',
   styleUrls: ['./industry-chemical.component.scss']

@@ -38,6 +38,7 @@ export function emailOrMobileValidator(): ValidatorFn {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-inquiry',
   templateUrl: './add-inquiry.component.html',
   styleUrls: ['./add-inquiry.component.scss']

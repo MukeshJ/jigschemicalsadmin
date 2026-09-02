@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderPaymentService } from '../purchase-order-payment.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-purchase-order-payments',
   templateUrl: './add-purchase-order-payments.component.html',
   styleUrls: ['./add-purchase-order-payments.component.scss']

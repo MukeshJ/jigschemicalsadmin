@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical',
   templateUrl: './chemical.component.html',
   styleUrls: ['./chemical.component.scss']

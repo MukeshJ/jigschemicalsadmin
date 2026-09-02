@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-industry-list',
   templateUrl: './industry-list.component.html',
   styleUrls: ['./industry-list.component.scss']

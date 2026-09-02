@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Tax } from '@core/domain-classes/tax';
 
 @Pipe({
+  standalone: false,
   name: 'quantitiesunitpriceTax'
 })
 

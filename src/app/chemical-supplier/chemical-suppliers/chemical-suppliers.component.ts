@@ -21,6 +21,7 @@ import { Country } from '@core/domain-classes/country';
 import { CommonService } from '@core/services/common.service';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical-suppliers',
   templateUrl: './chemical-suppliers.component.html',
   styleUrls: ['./chemical-suppliers.component.scss']

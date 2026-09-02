@@ -64,7 +64,7 @@ export class TranslationService {
       if (localStorage) {
         return (
           localStorage.getItem(LOCALIZATION_LOCAL_STORAGE_KEY) ||
-          this.translate.getDefaultLang()
+          this.translate.getFallbackLang()
         );
       }
     }

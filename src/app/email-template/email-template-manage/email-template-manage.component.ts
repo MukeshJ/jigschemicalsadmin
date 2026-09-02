@@ -9,6 +9,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from '../email-template.service';
 
 @Component({
+  standalone: false,
   selector: 'app-email-template-manage',
   templateUrl: './email-template-manage.component.html',
   styleUrls: ['./email-template-manage.component.scss']

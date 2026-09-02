@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -21,7 +21,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   ],
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     ReactiveFormsModule,
     MatTableModule,
     MatProgressSpinnerModule,

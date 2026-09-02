@@ -22,6 +22,7 @@ import { SupplierService } from '../supplier.service';
 import { SupplierDataSource } from './supplier-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-supplier-list',
   templateUrl: './supplier-list.component.html',
   styleUrls: ['./supplier-list.component.scss'],

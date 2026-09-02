@@ -8,6 +8,7 @@ import { environment } from '@environments/environment';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-document-manage-presentation',
   templateUrl: './document-manage-presentation.component.html',
   styleUrls: ['./document-manage-presentation.component.scss'],

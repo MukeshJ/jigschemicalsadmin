@@ -12,6 +12,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { DocumentLibraryService } from '../../document-library/document-library.service';
 
 @Component({
+  standalone: false,
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
   styleUrls: ['./document-view.component.scss']

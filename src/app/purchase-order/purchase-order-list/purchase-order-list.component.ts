@@ -25,6 +25,7 @@ import { ViewPurchaseOrderPaymentComponent } from '../view-purchase-order-paymen
 import { PurchaseOrderDataSource } from './purchase-order-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-list',
   templateUrl: './purchase-order-list.component.html',
   styleUrls: ['./purchase-order-list.component.scss'],

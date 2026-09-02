@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { TestimonialService } from '../testimonial.service';
 
 @Component({
+  standalone: false,
   selector: 'app-testimonial-detail',
   templateUrl: './testimonial-detail.component.html',
   styleUrls: ['./testimonial-detail.component.scss']

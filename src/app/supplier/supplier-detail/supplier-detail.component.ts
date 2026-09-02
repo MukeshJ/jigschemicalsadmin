@@ -36,6 +36,7 @@ export class AlreadyExistValidator {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-supplier-detail',
   templateUrl: './supplier-detail.component.html',
   styleUrls: ['./supplier-detail.component.scss'],

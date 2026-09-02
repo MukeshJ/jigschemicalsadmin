@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 
 @Component({
+  standalone: false,
   selector: 'app-upload-chemical',
   templateUrl: './upload-chemical.component.html',
   styleUrls: ['./upload-chemical.component.scss']

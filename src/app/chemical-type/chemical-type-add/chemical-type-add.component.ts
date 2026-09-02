@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalTypeService } from '../chemical-type.service';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical-type-add',
   templateUrl: './chemical-type-add.component.html',
   styleUrls: ['./chemical-type-add.component.scss']

@@ -11,6 +11,7 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 import { UserService } from '../user.service';
 
 @Component({
+  standalone: false,
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.scss']

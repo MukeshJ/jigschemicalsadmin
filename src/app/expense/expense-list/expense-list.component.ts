@@ -22,6 +22,7 @@ import { ExpenseService } from '../expense.service';
 import { ExpenseDataSource } from './expense-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.scss']

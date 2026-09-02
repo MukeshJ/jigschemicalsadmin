@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-unit-list',
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss']

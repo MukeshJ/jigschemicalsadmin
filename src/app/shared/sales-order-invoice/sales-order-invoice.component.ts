@@ -5,6 +5,7 @@ import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SecurityService } from '@core/security/security.service';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-invoice',
   templateUrl: './sales-order-invoice.component.html',
   styleUrls: ['./sales-order-invoice.component.scss']

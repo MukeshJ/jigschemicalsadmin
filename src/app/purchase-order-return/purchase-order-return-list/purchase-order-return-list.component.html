@@ -37,12 +37,12 @@
                   <mat-icon>info</mat-icon>
                   <span>{{'DETAIL' | translate}}</span>
                 </button>
-                <ng-contaner *ngIf="po.paymentStatus != 0">
+                <ng-container *ngIf="po.paymentStatus != 0">
                   <button  *hasClaim="'purchase_order_add_purchase_order_payment'" mat-menu-item (click)="addPayment(po)">
                     <mat-icon>payment</mat-icon>
                     <span>{{'ADD_PAYMENT' | translate}}</span>
                   </button>
-                </ng-contaner>
+                </ng-container>
                 <button *hasClaim="'purchase_order_view_purchase_order_payments'" mat-menu-item (click)="viewPayment(po)">
                   <mat-icon>view_carousel</mat-icon>
                   <span>{{'VIEW_PAYMENT' | translate}}</span>

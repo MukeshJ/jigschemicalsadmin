@@ -22,6 +22,7 @@ import { SalesPaymentReportService } from './sales-payment-report.service';
 import * as XLSX from 'xlsx';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-payment-report',
   templateUrl: './sales-payment-report.component.html',
   styleUrls: ['./sales-payment-report.component.scss'],

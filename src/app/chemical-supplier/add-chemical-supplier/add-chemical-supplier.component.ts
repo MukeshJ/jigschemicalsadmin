@@ -13,6 +13,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-chemical-supplier',
   templateUrl: './add-chemical-supplier.component.html',
   styleUrls: ['./add-chemical-supplier.component.scss']

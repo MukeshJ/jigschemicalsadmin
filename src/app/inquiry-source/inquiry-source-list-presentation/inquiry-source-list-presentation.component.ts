@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageInquirySourceComponent } from '../manage-inquiry-source/manage-inquiry-source.component';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-source-list-presentation',
   templateUrl: './inquiry-source-list-presentation.component.html',
   styleUrls: ['./inquiry-source-list-presentation.component.scss']

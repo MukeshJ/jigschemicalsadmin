@@ -9,6 +9,7 @@ import { User } from '@core/domain-classes/user';
 import { CommonService } from '@core/services/common.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-reminder-scheduler',
   templateUrl: './add-reminder-scheduler.component.html',
   styleUrls: ['./add-reminder-scheduler.component.scss']

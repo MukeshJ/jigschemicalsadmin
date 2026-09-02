@@ -18,6 +18,7 @@ import { Unit } from '@core/domain-classes/unit';
 
 
 @Component({
+  standalone: false,
   templateUrl: './chemical-detail.component.html',
   styleUrls: ['./chemical-detail.component.scss'],
 })

@@ -11,6 +11,7 @@ import { InquiryAttachmentAddComponent } from '../inquiry-attachment-add/inquiry
 import { InquiryAttachmentService } from './inquiry-attachment.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-attachment',
   templateUrl: './inquiry-attachment.component.html',
   styleUrls: ['./inquiry-attachment.component.scss']

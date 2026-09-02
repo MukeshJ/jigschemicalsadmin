@@ -20,6 +20,7 @@ import { ManageRolePermissionComponent } from '../manage-role-permission/manage-
 import { ManageUserPermissionComponent } from '../manage-user-permission/manage-user-permission.component';
 
 @Component({
+  standalone: false,
   selector: 'app-document-permission-list',
   templateUrl: './document-permission-list.component.html',
   styleUrls: ['./document-permission-list.component.scss']

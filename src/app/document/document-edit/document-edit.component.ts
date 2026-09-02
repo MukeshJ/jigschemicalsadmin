@@ -13,6 +13,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { DocumentService } from '../document.service';
 
 @Component({
+  standalone: false,
   selector: 'app-document-edit',
   templateUrl: './document-edit.component.html',
   styleUrls: ['./document-edit.component.scss']

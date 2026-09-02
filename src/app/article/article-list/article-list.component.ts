@@ -15,6 +15,7 @@ import { ArticleService } from '../article.service';
 import { ArticleDataSource } from './article-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss']

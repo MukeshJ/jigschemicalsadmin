@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SendEmailComponent } from './send-email/send-email.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { SharedModule } from '@shared/shared.module';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -44,7 +44,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     AngularEditorModule,
     MatChipsModule
   ]

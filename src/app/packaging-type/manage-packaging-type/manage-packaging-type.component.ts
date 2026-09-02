@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-packaging-type',
   templateUrl: './manage-packaging-type.component.html',
   styleUrls: ['./manage-packaging-type.component.scss']

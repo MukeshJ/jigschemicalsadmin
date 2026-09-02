@@ -16,6 +16,7 @@ import { CustomerService } from '../customer/customer.service';
 import { CustomerChemicalService } from './customer-chemical.service';
 
 @Component({
+  standalone: false,
   selector: 'app-customer-chemical',
   templateUrl: './customer-chemical.component.html',
   styleUrls: ['./customer-chemical.component.scss']

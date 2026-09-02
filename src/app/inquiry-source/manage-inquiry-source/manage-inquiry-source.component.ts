@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-inquiry-source',
   templateUrl: './manage-inquiry-source.component.html',
   styleUrls: ['./manage-inquiry-source.component.scss']

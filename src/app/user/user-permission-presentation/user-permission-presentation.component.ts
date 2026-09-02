@@ -7,6 +7,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
+  standalone: false,
   selector: 'app-user-permission-presentation',
   templateUrl: './user-permission-presentation.component.html',
   styleUrls: ['./user-permission-presentation.component.scss']

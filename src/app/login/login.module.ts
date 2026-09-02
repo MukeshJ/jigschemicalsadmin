@@ -5,7 +5,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -17,7 +17,8 @@ import { TranslateModule } from '@ngx-translate/core';
     LoginRoutingModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslatePipe,
+    TranslateDirective
   ]
 })
 export class LoginModule { }

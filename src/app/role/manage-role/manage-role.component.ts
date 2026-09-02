@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-role',
   templateUrl: './manage-role.component.html',
   styleUrls: ['./manage-role.component.scss']

@@ -20,6 +20,7 @@ import { SupplierService } from 'src/app/supplier/supplier.service';
 import { PurchaseOrderRequestDataSource } from './purchase-order-request-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-request-list',
   templateUrl: './purchase-order-request-list.component.html',
   styleUrls: ['./purchase-order-request-list.component.scss'],

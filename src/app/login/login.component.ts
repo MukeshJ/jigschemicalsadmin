@@ -11,6 +11,7 @@ import { OnlineUser } from '@core/domain-classes/online-user';
 import { SignalrService } from '@core/services/signalr.service';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']

@@ -26,6 +26,7 @@ import { DocumentService } from '../document.service';
 import { DocumentDataSource } from './document-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss']

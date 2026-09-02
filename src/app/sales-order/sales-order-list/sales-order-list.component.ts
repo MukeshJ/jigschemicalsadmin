@@ -23,6 +23,7 @@ import { ViewSalesOrderPaymentComponent } from '../view-sales-order-payment/view
 import { SalesOrderDataSource } from './sales-order-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-list',
   templateUrl: './sales-order-list.component.html',
   styleUrls: ['./sales-order-list.component.scss'],

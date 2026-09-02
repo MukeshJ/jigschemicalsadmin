@@ -14,6 +14,7 @@ import { ManageInventoryComponent } from '../manage-inventory/manage-inventory.c
 import { InventoryDataSource } from './inventory-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-inventory-list',
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss'],

@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SalesOrderService } from '../sales-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-po-list',
   templateUrl: './po-list.component.html',
   styleUrls: ['./po-list.component.scss']

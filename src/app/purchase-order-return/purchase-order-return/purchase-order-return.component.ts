@@ -31,6 +31,7 @@ import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-return',
   templateUrl: './purchase-order-return.component.html',
   styleUrls: ['./purchase-order-return.component.scss'],

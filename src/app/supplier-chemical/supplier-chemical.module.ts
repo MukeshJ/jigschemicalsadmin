@@ -14,7 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '@shared/shared.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 
 
 
@@ -36,7 +36,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatSortModule,
     MatTableModule,
     MatCardModule,
-    TranslateModule
+    TranslatePipe,
+    TranslateDirective
   ]
 })
 export class SupplierChemicalModule { }

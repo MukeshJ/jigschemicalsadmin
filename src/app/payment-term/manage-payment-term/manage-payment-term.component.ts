@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-payment-term',
   templateUrl: './manage-payment-term.component.html',
   styleUrls: ['./manage-payment-term.component.scss']

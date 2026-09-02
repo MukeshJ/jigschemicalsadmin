@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageInquiryStatusComponent } from '../manage-inquiry-status/manage-inquiry-status.component';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-status-list-presentation',
   templateUrl: './inquiry-status-list-presentation.component.html',
   styleUrls: ['./inquiry-status-list-presentation.component.scss']

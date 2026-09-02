@@ -5,7 +5,7 @@ import { SalesPurchaseRoutingModule } from './sales-purchase-routing.module';
 import { FormsModule } from '@angular/forms';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { SharedModule } from '@shared/shared.module';
-import { ChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 
 
 
@@ -18,7 +18,7 @@ import { ChartsModule } from 'ng2-charts';
     SalesPurchaseRoutingModule,
     FormsModule,
     SharedModule,
-    ChartsModule
+    BaseChartDirective
   ],
   providers: [UTCToLocalTime]
 })

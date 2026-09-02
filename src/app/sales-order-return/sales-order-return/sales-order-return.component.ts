@@ -29,6 +29,7 @@ import { HttpResponse } from '@angular/common/http';
 
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-return',
   templateUrl: './sales-order-return.component.html',
   styleUrls: ['./sales-order-return.component.scss'],

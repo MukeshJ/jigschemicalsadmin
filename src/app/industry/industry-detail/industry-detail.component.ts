@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { IndustryService } from '../industry.service';
 
 @Component({
+  standalone: false,
   selector: 'app-industry-detail',
   templateUrl: './industry-detail.component.html',
   styleUrls: ['./industry-detail.component.scss']

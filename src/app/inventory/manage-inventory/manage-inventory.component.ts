@@ -12,6 +12,7 @@ import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { InventoryService } from '../inventory.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-inventory',
   templateUrl: './manage-inventory.component.html',
   styleUrls: ['./manage-inventory.component.scss']

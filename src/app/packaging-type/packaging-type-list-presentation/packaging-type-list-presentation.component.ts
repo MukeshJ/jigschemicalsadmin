@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManagePackagingTypeComponent } from '../manage-packaging-type/manage-packaging-type.component';
 
 @Component({
+  standalone: false,
   selector: 'app-packaging-type-list-presentation',
   templateUrl: './packaging-type-list-presentation.component.html',
   styleUrls: ['./packaging-type-list-presentation.component.scss']

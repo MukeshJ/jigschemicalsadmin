@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 
 
 @Component({
+  standalone: false,
   selector: 'app-action-list',
   templateUrl: './action-list.component.html',
   styleUrls: ['./action-list.component.scss']

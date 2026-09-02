@@ -13,6 +13,7 @@ import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-expense',
   templateUrl: './manage-expense.component.html',
   styleUrls: ['./manage-expense.component.scss']

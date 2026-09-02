@@ -4,6 +4,7 @@ import { NLog } from '@core/domain-classes/n-log';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-n-log-detail',
   templateUrl: './n-log-detail.component.html',
   styleUrls: ['./n-log-detail.component.scss']

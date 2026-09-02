@@ -9,6 +9,7 @@ import { InquiryTaskAddComponent } from '../inquiry-task-add/inquiry-task-add.co
 import { InquiryTaskService } from './inquiry-task.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-task',
   templateUrl: './inquiry-task.component.html',
   styleUrls: ['./inquiry-task.component.scss']

@@ -17,6 +17,7 @@ import { InventoryService } from 'src/app/inventory/inventory.service';
 import * as XLSX from 'xlsx';
 
 @Component({
+  standalone: false,
   selector: 'app-stock-report',
   templateUrl: './stock-report.component.html',
   styleUrls: ['./stock-report.component.scss'],

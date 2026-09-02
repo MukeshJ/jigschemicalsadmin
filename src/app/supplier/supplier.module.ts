@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AddSupplierChemicalComponent } from './add-supplier-chemical/add-supplier-chemical.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { SupplierPOListComponent } from './supplier-list/supplier-po-list/supplier-po-list.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { UploadChemicalComponent } from './upload-chemical/upload-chemical.component';
@@ -53,7 +53,8 @@ import { UploadChemicalComponent } from './upload-chemical/upload-chemical.compo
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    TranslateModule
+    TranslatePipe,
+    TranslateDirective
   ],
   providers: [
     SupplierResolverService

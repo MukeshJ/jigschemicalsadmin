@@ -11,6 +11,7 @@ import { NLogDataSource } from '../n-log-datasource';
 import { NLogService } from '../n-log.service';
 
 @Component({
+  standalone: false,
   selector: 'app-n-log-list',
   templateUrl: './n-log-list.component.html',
   styleUrls: ['./n-log-list.component.scss']

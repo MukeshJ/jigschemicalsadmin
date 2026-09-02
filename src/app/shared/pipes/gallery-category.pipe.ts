@@ -3,6 +3,7 @@ import { TranslationService } from '@core/services/translation.service';
 import { GalleryCategoryEnum } from 'src/app/gallery/categories-enum';
 
 @Pipe({
+  standalone: false,
   name: 'galleryCategory'
 })
 

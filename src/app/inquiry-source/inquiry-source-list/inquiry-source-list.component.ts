@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-source-list',
   templateUrl: './inquiry-source-list.component.html',
   styleUrls: ['./inquiry-source-list.component.scss']

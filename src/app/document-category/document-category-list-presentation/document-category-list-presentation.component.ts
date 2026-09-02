@@ -8,6 +8,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageDocumentCategoryComponent } from '../manage-document-category/manage-document-category.component';
 
 @Component({
+  standalone: false,
   selector: 'app-document-category-list-presentation',
   templateUrl: './document-category-list-presentation.component.html',
   styleUrls: ['./document-category-list-presentation.component.scss'],

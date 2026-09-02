@@ -29,6 +29,7 @@ import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.serv
 import { SupplierService } from 'src/app/supplier/supplier.service';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-request-add-edit',
   templateUrl: './purchase-order-request-add-edit.component.html',
   styleUrls: ['./purchase-order-request-add-edit.component.scss'],

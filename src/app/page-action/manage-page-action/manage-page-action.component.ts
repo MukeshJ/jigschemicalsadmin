@@ -9,6 +9,7 @@ import { ActionService } from '@core/services/action.service';
 import { PageActionService } from '@core/services/page-action.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-page-action',
   templateUrl: './manage-page-action.component.html',
   styleUrls: ['./manage-page-action.component.scss']

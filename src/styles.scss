@@ -1,12 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-@import "~bootstrap/scss/bootstrap";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/regular";
-@import "~perfect-scrollbar/css/perfect-scrollbar.css";
-@import "~ng-pick-datetime-ex/assets/style/picker.min.css";
+$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+@import "bootstrap/scss/bootstrap";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 body {

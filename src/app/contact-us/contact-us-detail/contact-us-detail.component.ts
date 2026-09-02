@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ContactUsService } from '../contact-us.service';
 
 @Component({
+  standalone: false,
   selector: 'app-contact-us-detail',
   templateUrl: './contact-us-detail.component.html',
   styleUrls: ['./contact-us-detail.component.scss']

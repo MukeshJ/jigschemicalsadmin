@@ -32,6 +32,7 @@ import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from '../sales-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-add-edit',
   templateUrl: './sales-order-add-edit.component.html',
   styleUrls: ['./sales-order-add-edit.component.scss'],

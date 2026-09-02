@@ -8,6 +8,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
 
 @Component({
+  standalone: false,
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']

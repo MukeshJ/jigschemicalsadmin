@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { EmailSmtpSettingService } from '../email-smtp-setting.service';
 
 @Component({
+  standalone: false,
   selector: 'app-email-smtp-setting-list',
   templateUrl: './email-smtp-setting-list.component.html',
   styleUrls: ['./email-smtp-setting-list.component.scss']

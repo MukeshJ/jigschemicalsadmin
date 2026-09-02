@@ -30,11 +30,9 @@
 </div>
 <div style="display: block;">
     <canvas baseChart
-      [datasets]="barChartData"
-      [labels]="barChartLabels"
+      [data]="barChartData"
       [options]="barChartOptions"
       [legend]="true"
-      [colors]="lineChartColors"
-      chartType="bar">
+      [type]="barChartType">
     </canvas>
   </div>

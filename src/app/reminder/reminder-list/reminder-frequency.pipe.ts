@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { reminderFrequencies } from '@core/domain-classes/reminder-frequency';
 
 @Pipe({
+  standalone: false,
   name: 'frequency'
 })
 

@@ -19,6 +19,7 @@ import { ContactRequestTypePipe } from '@shared/pipes/contact-request-type-pipe'
 import { ContactRequestType } from '@core/domain-classes/contact-request-type-enum';
 
 @Component({
+  standalone: false,
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss']

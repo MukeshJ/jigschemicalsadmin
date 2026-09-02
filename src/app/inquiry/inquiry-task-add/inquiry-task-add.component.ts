@@ -13,6 +13,7 @@ import { UserService } from 'src/app/user/user.service';
 import { InquiryTaskService } from '../inquiry-task/inquiry-task.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-task-add',
   templateUrl: './inquiry-task-add.component.html',
   styleUrls: ['./inquiry-task-add.component.scss']

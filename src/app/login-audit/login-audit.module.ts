@@ -7,7 +7,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { LoginAuditRoutingModule } from './login-audit-routing.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
@@ -21,7 +21,8 @@ import { SharedModule } from '@shared/shared.module';
     MatInputModule,
     LoginAuditRoutingModule,
     SharedModule,
-    TranslateModule
+    TranslatePipe,
+    TranslateDirective
   ]
 })
 export class LoginAuditModule { }

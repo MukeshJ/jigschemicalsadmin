@@ -4,6 +4,7 @@ import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-return-item',
   templateUrl: './sales-order-return-item.component.html',
   styleUrls: ['./sales-order-return-item.component.scss']

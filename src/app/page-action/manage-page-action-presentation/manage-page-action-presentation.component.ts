@@ -7,6 +7,7 @@ import { PageAction } from '@core/domain-classes/page-action';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-page-action-presentation',
   templateUrl: './manage-page-action-presentation.component.html',
   styleUrls: ['./manage-page-action-presentation.component.scss'],

@@ -19,6 +19,7 @@ import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-custo
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],

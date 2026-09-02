@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageTaxComponent } from '../manage-tax/manage-tax.component';
 
 @Component({
+  standalone: false,
   selector: 'app-tax-list-presentation',
   templateUrl: './tax-list-presentation.component.html',
   styleUrls: ['./tax-list-presentation.component.scss']

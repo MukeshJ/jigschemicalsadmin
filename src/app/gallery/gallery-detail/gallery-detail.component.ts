@@ -10,6 +10,7 @@ import { GalleryService } from '../gallery.service';
 import { galleryCategories } from '../categories-enum';
 
 @Component({
+  standalone: false,
   selector: 'app-gallery-detail',
   templateUrl: './gallery-detail.component.html',
   styleUrls: ['./gallery-detail.component.scss']

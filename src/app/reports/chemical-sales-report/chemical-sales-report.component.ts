@@ -29,6 +29,7 @@ import * as XLSX from 'xlsx';
 import { ChemicalSalesReportDataSource } from './chemical-sales-report.datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-chemical-sales-report',
   templateUrl: './chemical-sales-report.component.html',
   styleUrls: ['./chemical-sales-report.component.scss'],

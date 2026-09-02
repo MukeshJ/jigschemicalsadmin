@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderPaymentService } from '../sales-order-payment.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-sales-order-payment',
   templateUrl: './add-sales-order-payment.component.html',
   styleUrls: ['./add-sales-order-payment.component.scss']

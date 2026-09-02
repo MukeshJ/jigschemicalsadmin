@@ -24,6 +24,7 @@ import { ViewPurchaseOrderPaymentComponent } from 'src/app/purchase-order/view-p
 import { SupplierService } from 'src/app/supplier/supplier.service';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-return-list',
   templateUrl: './purchase-order-return-list.component.html',
   styleUrls: ['./purchase-order-return-list.component.scss'],

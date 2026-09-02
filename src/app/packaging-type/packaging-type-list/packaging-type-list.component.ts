@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-packaging-type-list',
   templateUrl: './packaging-type-list.component.html',
   styleUrls: ['./packaging-type-list.component.scss']

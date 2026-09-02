@@ -24,6 +24,7 @@ import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

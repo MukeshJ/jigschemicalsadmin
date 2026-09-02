@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageDeliveryMethodComponent } from '../manage-delivery-method/manage-delivery-method.component';
 
 @Component({
+  standalone: false,
   selector: 'app-delivery-method-list-presentation',
   templateUrl: './delivery-method-list-presentation.component.html',
   styleUrls: ['./delivery-method-list-presentation.component.scss']

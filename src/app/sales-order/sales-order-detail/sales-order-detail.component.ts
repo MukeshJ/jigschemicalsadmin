@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-detail',
   templateUrl: './sales-order-detail.component.html',
   styleUrls: ['./sales-order-detail.component.scss']

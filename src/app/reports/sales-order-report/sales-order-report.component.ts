@@ -32,6 +32,7 @@ import { ViewSalesOrderPaymentComponent } from 'src/app/sales-order/view-sales-o
 import * as XLSX from 'xlsx';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-report',
   templateUrl: './sales-order-report.component.html',
   styleUrls: ['./sales-order-report.component.scss'],

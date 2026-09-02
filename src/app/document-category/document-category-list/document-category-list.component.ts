@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from '../../base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-document-category-list',
   templateUrl: './document-category-list.component.html',
   styleUrls: ['./document-category-list.component.scss']

@@ -9,6 +9,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
 
 @Component({
+  standalone: false,
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']

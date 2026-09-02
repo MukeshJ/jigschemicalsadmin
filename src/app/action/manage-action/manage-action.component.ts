@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-action',
   templateUrl: './manage-action.component.html',
   styleUrls: ['./manage-action.component.scss']

@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from '../base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-payment-term',
   templateUrl: './payment-term.component.html',
   styleUrls: ['./payment-term.component.scss']

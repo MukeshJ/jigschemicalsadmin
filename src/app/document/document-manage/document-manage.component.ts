@@ -14,6 +14,7 @@ import { DocumentOperation } from '@core/domain-classes/document-operation';
 import { CommonService } from '@core/services/common.service';
 
 @Component({
+  standalone: false,
   selector: 'app-document-manage',
   templateUrl: './document-manage.component.html',
   styleUrls: ['./document-manage.component.scss']

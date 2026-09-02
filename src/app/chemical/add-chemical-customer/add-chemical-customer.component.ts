@@ -13,6 +13,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-chemical-customer',
   templateUrl: './add-chemical-customer.component.html',
   styleUrls: ['./add-chemical-customer.component.scss']

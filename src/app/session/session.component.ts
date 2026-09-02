@@ -6,6 +6,7 @@ import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from '../base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-session',
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.scss']

@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ManageActionComponent } from '../manage-action/manage-action.component';
 
 @Component({
+  standalone: false,
   selector: 'app-action-list-presentation',
   templateUrl: './action-list-presentation.component.html',
   styleUrls: ['./action-list-presentation.component.scss'],

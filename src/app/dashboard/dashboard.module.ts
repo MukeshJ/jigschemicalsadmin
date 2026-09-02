@@ -16,7 +16,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalenderViewComponent } from './calender-view/calender-view.component';
 import { InquiryChartComponent } from './inquiry-chart/inquiry-chart.component';
-import { ChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -34,7 +34,7 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatMenuModule,
     SharedModule,
-    ChartsModule,
+    BaseChartDirective,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,

@@ -5,6 +5,7 @@ import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-sales-order-items',
   templateUrl: './sales-order-items.component.html',
   styleUrls: ['./sales-order-items.component.scss']

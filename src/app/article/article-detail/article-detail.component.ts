@@ -11,6 +11,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
 
 @Component({
+  standalone: false,
   selector: 'app-article-detail',
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.scss']

@@ -17,6 +17,7 @@ import { DocumentAuditTrailService } from './document-audit-trail.service';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-document-audit-trail',
   templateUrl: './document-audit-trail.component.html',
   styleUrls: ['./document-audit-trail.component.scss']

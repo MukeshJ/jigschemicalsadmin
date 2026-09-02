@@ -1,33 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SalesVsPurchase } from '@core/domain-classes/sales-purchase';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import { Months } from '@core/domain-classes/months';
 import { SalesPurchaseReportService } from './sales-purchase-report.service';
 
 @Component({
+  standalone: false,
   selector: 'app-sales-purchase-report',
   templateUrl: './sales-purchase-report.component.html',
   styleUrls: ['./sales-purchase-report.component.scss']
 })
 export class SalesPurchaseReportComponent  implements OnInit {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   months = Months;
   years = [];
-  barChartLabels: Label[] = [];
-  barChartData: ChartDataSets[] = [];
+  barChartType: ChartType = 'bar';
   selectedMonth = new Date().getMonth() + 1;
   selectedYear = new Date().getFullYear();
 
-  barChartOptions: ChartOptions = {
-    responsive: true,
+  barChartData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [],
   };
 
-  lineChartColors: any[] = [
-    {
-      backgroundColor: '#2196f3',
-    },
-  ];
+  barChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+  };
 
   constructor(private salesPurchaseReportService: SalesPurchaseReportService,
     private uTCToLocalTime: UTCToLocalTime) { }
@@ -43,11 +44,14 @@ export class SalesPurchaseReportComponent  implements OnInit {
     this.salesPurchaseReportService.getSalesVsPurchaseReport(this.selectedMonth, this.selectedYear).subscribe((data: SalesVsPurchase[]) => {
       const totalSales = data.map(c =>  c.totalSales);
       const totalPurchase = data.map(c => c.totalPurchase);
-      this.barChartData = [
-        { data: totalSales, label: 'Sales' },
-        { data: totalPurchase, label: 'Purchase' }
-      ];
-      this.barChartLabels = data.map(c => this.uTCToLocalTime.transform(c.date, 'shortDate'));
+      this.barChartData = {
+        labels: data.map(c => this.uTCToLocalTime.transform(c.date, 'shortDate')),
+        datasets: [
+          { data: totalSales, label: 'Sales', backgroundColor: '#2196f3' },
+          { data: totalPurchase, label: 'Purchase', backgroundColor: '#3b1f91' }
+        ]
+      };
+      this.chart?.update();
     });
   }
 }

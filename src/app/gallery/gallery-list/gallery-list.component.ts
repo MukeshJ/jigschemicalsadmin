@@ -16,6 +16,7 @@ import { merge, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, tap } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-gallery-list',
   templateUrl: './gallery-list.component.html',
   styleUrls: ['./gallery-list.component.scss']

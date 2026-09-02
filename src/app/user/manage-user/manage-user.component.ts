@@ -13,6 +13,7 @@ import { UserService } from '../user.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
   styleUrls: ['./manage-user.component.scss']

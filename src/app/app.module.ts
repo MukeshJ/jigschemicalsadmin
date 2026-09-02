@@ -4,14 +4,15 @@ import { NgModule } from '@angular/core';
 import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpInterceptorModule } from './http-interceptor.module';
 import { AppStoreModule } from './store/app-store.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PendingInterceptorModule } from '@shared/loading-indicator/pending-interceptor.module';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { createTranslateLoader } from './translater-loader';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 
 
@@ -28,18 +29,21 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
     BrowserAnimationsModule,
     HttpClientModule,
     HttpInterceptorModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    }),
     AppStoreModule,
     PendingInterceptorModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ToastrModule.forRoot()
+  ],
+  providers: [
+    provideTranslateService({
+      fallbackLang: 'en',
+      loader: provideTranslateHttpLoader({
+        prefix: './assets/i18n/',
+        suffix: '.json',
+      }),
+    }),
+    provideCharts(withDefaultRegisterables()),
   ],
   bootstrap: [AppComponent]
 })

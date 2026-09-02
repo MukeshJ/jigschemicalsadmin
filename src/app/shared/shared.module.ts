@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { HasClaimDirective } from './has-claim.directive';
 import { PipesModule } from './pipes/pipes.module';
 import { DragDropDirective } from './directives/drag-drop.directive';
@@ -25,7 +25,8 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
   exports: [
     HasClaimDirective,
     PipesModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     DragDropDirective,
     DocumentViewComponent,
     OverlayModule,
@@ -41,7 +42,8 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
     NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
     MatIconModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     MatDialogModule,
     ReactiveFormsModule,
     OwlDateTimeModule,

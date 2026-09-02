@@ -7,6 +7,7 @@ enum UTCToLocalTimeFormat {
 }
 
 @Pipe({
+  standalone: false,
   name: 'utcToLocalTime'
 })
 

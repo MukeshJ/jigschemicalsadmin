@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CompanyProfileService } from './company-profile.service';
 
 @Component({
+  standalone: false,
   selector: 'app-company-profile',
   templateUrl: './company-profile.component.html',
   styleUrls: ['./company-profile.component.css']

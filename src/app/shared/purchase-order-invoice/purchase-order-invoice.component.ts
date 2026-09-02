@@ -5,6 +5,7 @@ import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-
 import { SecurityService } from '@core/security/security.service';
 
 @Component({
+  standalone: false,
   selector: 'app-purchase-order-invoice',
   templateUrl: './purchase-order-invoice.component.html',
   styleUrls: ['./purchase-order-invoice.component.scss']

@@ -11,6 +11,7 @@ import { InventoryService } from '../../inventory.service';
 import { InventoryHistoryDataSource } from './inventory-history-datasource';
 
 @Component({
+  standalone: false,
   selector: 'app-inventory-history-list',
   templateUrl: './inventory-history-list.component.html',
   styleUrls: ['./inventory-history-list.component.scss']

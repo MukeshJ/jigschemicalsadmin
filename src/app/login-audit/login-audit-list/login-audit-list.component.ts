@@ -11,6 +11,7 @@ import { LoginAuditDataSource } from '../login-audit-datasource';
 import { LoginAuditService } from '../login-audit.service';
 
 @Component({
+  standalone: false,
   selector: 'app-login-audit-list',
   templateUrl: './login-audit-list.component.html',
   styleUrls: ['./login-audit-list.component.scss']

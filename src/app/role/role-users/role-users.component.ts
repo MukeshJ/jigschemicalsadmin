@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { TranslationService } from '@core/services/translation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-role-users',
   templateUrl: './role-users.component.html',
   styleUrls: ['./role-users.component.scss']

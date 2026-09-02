@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-common-dialog',
   templateUrl: './common-dialog.component.html',
   styleUrls: ['./common-dialog.component.scss']

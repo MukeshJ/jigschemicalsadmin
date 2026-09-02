@@ -1,14 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MonthlyInquiry } from '@core/domain-classes/monthly-inquiry';
 import { TranslationService } from '@core/services/translation.service';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inquiry-chart',
   templateUrl: './inquiry-chart.component.html',
   styleUrls: ['./inquiry-chart.component.scss']
 })
 export class InquiryChartComponent implements OnInit {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   months = [
     {
       id: 1,
@@ -52,25 +57,24 @@ export class InquiryChartComponent implements OnInit {
   selectedMonth = new Date().getMonth() + 1;
   selectedYear = new Date().getFullYear();
 
-  public lineChartData: any[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-  ];
+  public lineChartData: ChartData<'line'> = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        data: [65, 59, 80, 81, 56, 55, 40],
+        label: 'Series A',
+        borderColor: '#3b1f91',
+        backgroundColor: '#6d48dd',
+      },
+    ],
+  };
 
-  public lineChartLabels: any[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-  public lineChartOptions = {
+  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
   };
 
-  public lineChartColors: any[] = [
-    {
-      borderColor: '#3b1f91',
-      backgroundColor: '#6d48dd',
-    },
-  ];
-
   public lineChartLegend = true;
-  public lineChartType = 'line';
+  public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
 
   constructor(private dashboardService: DashboardService,
@@ -86,10 +90,18 @@ export class InquiryChartComponent implements OnInit {
   getMonthlyInquiryStatistic() {
     this.dashboardService.getMonthlyInquiryStatistic(this.selectedMonth, this.selectedYear).subscribe((data: MonthlyInquiry[]) => {
       const inquiriesCount = data.map(c => c.noOfInquiry);
-      this.lineChartData = [
-        { data: inquiriesCount, label: this.translationService.getValue('INQUIRY') }
-      ];
-      this.lineChartLabels = data.map(c => c.date);
+      this.lineChartData = {
+        labels: data.map(c => c.date),
+        datasets: [
+          {
+            data: inquiriesCount,
+            label: this.translationService.getValue('INQUIRY'),
+            borderColor: '#3b1f91',
+            backgroundColor: '#6d48dd',
+          },
+        ],
+      };
+      this.chart?.update();
     })
   }
 }
