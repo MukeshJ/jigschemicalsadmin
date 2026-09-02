@@ -27,7 +27,7 @@ import { QuantitiesUnitPriceTaxPipe } from '@shared/pipes/quantities-unitprice-t
 import { QuantitiesUnitPricePipe } from '@shared/pipes/quantities-unitprice.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -54,12 +54,10 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./purchase-order-return.component.scss'],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatDatepickerInput,
     MatDatepicker,

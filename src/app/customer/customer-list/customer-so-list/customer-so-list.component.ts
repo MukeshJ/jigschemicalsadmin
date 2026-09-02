@@ -9,7 +9,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderDataSource } from 'src/app/sales-order/sales-order-list/sales-order-datasource';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
-import { NgIf, NgClass, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -39,7 +39,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './customer-so-list.component.html',
   styleUrls: ['./customer-so-list.component.css'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,

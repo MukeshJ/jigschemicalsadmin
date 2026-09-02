@@ -19,7 +19,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from 'src/app/email-template/email-template.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatChipSet, MatChip } from '@angular/material/chips';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
@@ -31,10 +30,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './send-email.component.html',
   styleUrls: ['./send-email.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatChipSet,
-    NgFor,
     MatChip,
     MatLabel,
     MatSelect,

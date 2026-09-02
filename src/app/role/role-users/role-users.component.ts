@@ -16,24 +16,13 @@ import { BaseComponent } from 'src/app/base.component';
 import { TranslationService } from '@core/services/translation.service';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-role-users',
   templateUrl: './role-users.component.html',
   styleUrls: ['./role-users.component.scss'],
-  imports: [
-    MatLabel,
-    MatSelect,
-    FormsModule,
-    NgFor,
-    MatOption,
-    NgIf,
-    CdkDropList,
-    CdkDrag,
-    TranslatePipe,
-  ],
+  imports: [MatLabel, MatSelect, FormsModule, MatOption, CdkDropList, CdkDrag, TranslatePipe],
 })
 export class RoleUsersComponent extends BaseComponent implements OnInit {
   roles: Role[];

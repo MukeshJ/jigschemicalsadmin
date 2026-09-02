@@ -18,7 +18,6 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { NgIf, NgFor } from '@angular/common';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -31,12 +30,10 @@ import { TranslatePipe } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerInput,
-    NgIf,
     MatDatepicker,
     MatLabel,
     MatSelect,
     MatOption,
-    NgFor,
     RouterLink,
     MatProgressSpinner,
     TranslatePipe,

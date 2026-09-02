@@ -15,7 +15,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { UserService } from '../user.service';
-import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -25,7 +24,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.scss'],
   imports: [
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     RouterLink,

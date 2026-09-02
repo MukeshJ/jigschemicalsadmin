@@ -4,7 +4,6 @@ import { PageAction } from '@core/domain-classes/page-action';
 import { User } from '@core/domain-classes/user';
 import { Page } from '@core/domain-classes/page';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
-import { NgFor, NgIf } from '@angular/common';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -13,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-user-permission-presentation',
   templateUrl: './user-permission-presentation.component.html',
   styleUrls: ['./user-permission-presentation.component.scss'],
-  imports: [MatCheckbox, NgFor, NgIf, HasClaimDirective, RouterLink, TranslatePipe],
+  imports: [MatCheckbox, HasClaimDirective, RouterLink, TranslatePipe],
 })
 export class UserPermissionPresentationComponent implements OnInit {
   @Input() pages: Page[];

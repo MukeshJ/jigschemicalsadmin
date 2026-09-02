@@ -12,7 +12,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailSmtpSettingService } from '../email-smtp-setting.service';
-import { NgIf } from '@angular/common';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -20,7 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-email-smtp-setting',
   templateUrl: './manage-email-smtp-setting.component.html',
   styleUrls: ['./manage-email-smtp-setting.component.scss'],
-  imports: [NgIf, FormsModule, ReactiveFormsModule, MatSlideToggle, RouterLink, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, MatSlideToggle, RouterLink, TranslatePipe],
 })
 export class ManageEmailSmtpSettingComponent extends BaseComponent implements OnInit {
   isEditMode: boolean = false;

@@ -3,7 +3,7 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-9">
         <h4 class="modal-title">
-          {{'MANAGE_CHEMICALTYPE' | translate}}
+          {{ 'MANAGE_CHEMICALTYPE' | translate }}
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
@@ -18,56 +18,91 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <label class="text-danger">{{'CHEMICALTYPE_NAME' | translate}} *:</label>
-            <input formControlName="name" class="form-control" type="text">
-            <div *ngIf="chemicalTypeForm.get('name').touched && chemicalTypeForm.get('name').errors">
-              <div class="text-danger" *ngIf="chemicalTypeForm.get('name').errors?.required">
-                {{'PLEASE_ENTER_NAME' | translate}}
+            <label class="text-danger">{{ 'CHEMICALTYPE_NAME' | translate }} *:</label>
+            <input formControlName="name" class="form-control" type="text" />
+            @if (chemicalTypeForm.get('name').touched && chemicalTypeForm.get('name').errors) {
+              <div>
+                @if (chemicalTypeForm.get('name').errors?.required) {
+                  <div class="text-danger">
+                    {{ 'PLEASE_ENTER_NAME' | translate }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-          <div class="form-group ">
+          <div class="form-group">
             <mat-slide-toggle class="example-margin" formControlName="isShowFront">
               Is Show Frontend
             </mat-slide-toggle>
           </div>
         </div>
-        <div class=" col-md-12">
-          <div class="form-group ">
-            <label>{{'SHORT_DESCRIPTION' | translate}}</label>
-            <textarea formControlName="shortDescription" class="form-control" cols="30" rows="3"></textarea>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>{{ 'SHORT_DESCRIPTION' | translate }}</label>
+            <textarea
+              formControlName="shortDescription"
+              class="form-control"
+              cols="30"
+              rows="3"
+            ></textarea>
           </div>
         </div>
         <div class="col-md-9">
-          <div class="form-group ">
+          <div class="form-group">
             <label>
-              {{'DESCRIPTION' | translate}}
+              {{ 'DESCRIPTION' | translate }}
             </label>
             <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
           </div>
         </div>
         <div class="col-md-3 p-2">
           <label>
-            {{'UPLOAD_LOGO' | translate}}
+            {{ 'UPLOAD_LOGO' | translate }}
           </label>
           <mat-card class="cus-mat-card text-center">
-            <input hidden (change)="onFileSelect($event)" #fileInput name="logo" type="file" name="Profile Image"
-              fxFlex="30">
-            <img *ngIf="imgSrc" class="full-width" [src]="imgSrc" />
-            <img *ngIf="!imgSrc" class="full-width" src="../../../assets/images/company-logo.jpg" />
+            <input
+              hidden
+              (change)="onFileSelect($event)"
+              #fileInput
+              name="logo"
+              type="file"
+              name="Profile Image"
+              fxFlex="30"
+            />
+            @if (imgSrc) {
+              <img class="full-width" [src]="imgSrc" />
+            }
+            @if (!imgSrc) {
+              <img class="full-width" src="../../../assets/images/company-logo.jpg" />
+            }
             <mat-card-actions>
-              <button type="button" *ngIf="!imgSrc" class="btn btn-success btn-sm m-right-15"
-                (click)="fileInput.click()">
-                <i class="far fa-image"></i> {{'ADD_LOGO' | translate}}</button>
-              <button type="button" *ngIf="imgSrc" class="btn btn-success btn-sm m-right-10"
-                (click)="fileInput.click()">
-                <i class="far fa-image"></i> {{'CHANGE_LOGO' | translate}}</button>
-              <button *ngIf="imgSrc" type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash-alt"></i> {{'REMOVE_LOGO' | translate}}</button>
+              @if (!imgSrc) {
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm m-right-15"
+                  (click)="fileInput.click()"
+                >
+                  <i class="far fa-image"></i> {{ 'ADD_LOGO' | translate }}
+                </button>
+              }
+              @if (imgSrc) {
+                <button
+                  type="button"
+                  class="btn btn-success btn-sm m-right-10"
+                  (click)="fileInput.click()"
+                >
+                  <i class="far fa-image"></i> {{ 'CHANGE_LOGO' | translate }}
+                </button>
+              }
+              @if (imgSrc) {
+                <button type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i> {{ 'REMOVE_LOGO' | translate }}
+                </button>
+              }
             </mat-card-actions>
           </mat-card>
         </div>
@@ -76,10 +111,12 @@
     <div class="modal-footer">
       <div class="form-row w-100">
         <div class="col-md-auto col-auto">
-          <button type="submit" class="btn btn-success btn-sm m-right-10"><i class="fas fa-save"></i> {{'SAVE' |
-            translate}}</button>
-          <button type="button" class="btn btn-danger btn-sm" (click)="onCancel()"><i class="fas fa-times-circle"></i>
-            {{'CANCEL' | translate}}</button>
+          <button type="submit" class="btn btn-success btn-sm m-right-10">
+            <i class="fas fa-save"></i> {{ 'SAVE' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="onCancel()">
+            <i class="fas fa-times-circle"></i> {{ 'CANCEL' | translate }}
+          </button>
         </div>
       </div>
     </div>

@@ -5,14 +5,13 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from '../chemical.service';
 import * as XLSX from 'xlsx';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-bulk-upload-chemical',
   templateUrl: './bulk-upload-chemical.component.html',
   styleUrls: ['./bulk-upload-chemical.component.scss'],
-  imports: [HasClaimDirective, NgIf, MatProgressSpinner],
+  imports: [HasClaimDirective, MatProgressSpinner],
 })
 export class BulkUploadChemicalComponent extends BaseComponent implements OnInit {
   formData = new FormData();

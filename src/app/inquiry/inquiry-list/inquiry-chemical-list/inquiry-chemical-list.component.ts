@@ -18,7 +18,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { NgIf } from '@angular/common';
+
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -38,7 +38,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatHeaderRow,
     MatRowDef,
     MatRow,
-    NgIf,
     MatProgressSpinner,
     TruncatePipe,
     TranslatePipe,

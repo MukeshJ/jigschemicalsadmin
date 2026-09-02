@@ -37,7 +37,7 @@ import {
   MatFooterRowDef,
   MatFooterRow,
 } from '@angular/material/table';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
@@ -61,14 +61,12 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatHeaderCell,
     MatCellDef,
     MatCell,
-    NgIf,
     MatIconButton,
     MatMenuTrigger,
     MatIcon,
     MatMenu,
     MatMenuItem,
     MatSortHeader,
-    NgFor,
     FormsModule,
     MatAutocompleteTrigger,
     ReactiveFormsModule,

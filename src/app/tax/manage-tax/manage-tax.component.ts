@@ -12,14 +12,13 @@ import { TaxService } from '@core/services/tax.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-tax',
   templateUrl: './manage-tax.component.html',
   styleUrls: ['./manage-tax.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageTaxComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;

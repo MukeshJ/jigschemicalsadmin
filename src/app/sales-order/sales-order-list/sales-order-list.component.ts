@@ -21,7 +21,7 @@ import { SalesOrderService } from '../sales-order.service';
 import { ViewSalesOrderPaymentComponent } from '../view-sales-order-payment/view-sales-order-payment.component';
 import { SalesOrderDataSource } from './sales-order-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -59,7 +59,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -80,7 +79,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatAutocomplete,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

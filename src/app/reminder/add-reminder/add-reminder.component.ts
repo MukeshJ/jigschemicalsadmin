@@ -20,7 +20,6 @@ import { Quarter } from '@core/domain-classes/quarter.enum';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { TranslationService } from '@core/services/translation.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
@@ -34,11 +33,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatCheckbox,
     MatSelect,
     MatSelectTrigger,
-    NgFor,
     MatOption,
     MatRadioGroup,
     MatRadioButton,

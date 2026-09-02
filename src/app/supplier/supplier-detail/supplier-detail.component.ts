@@ -24,7 +24,7 @@ import { Guid } from 'guid-typescript';
 import { environment } from '@environments/environment';
 import { TranslationService } from '@core/services/translation.service';
 import { EditorConfig } from '@shared/editor.config';
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/select';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -50,8 +50,6 @@ export class AlreadyExistValidator {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
     MatLabel,
     MatSelect,
     MatOption,

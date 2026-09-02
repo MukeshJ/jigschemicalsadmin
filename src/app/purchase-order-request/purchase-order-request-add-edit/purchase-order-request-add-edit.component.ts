@@ -34,7 +34,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
@@ -53,7 +52,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./purchase-order-request-add-edit.component.scss'],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
-    NgIf,
     MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
@@ -61,7 +59,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatDatepicker,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatLabel,
     MatIconButton,

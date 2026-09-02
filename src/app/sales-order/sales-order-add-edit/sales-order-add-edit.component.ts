@@ -37,7 +37,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from '../sales-order.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
@@ -60,12 +59,10 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatDatepickerInput,
     MatDatepicker,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatIconButton,
     MatIcon,

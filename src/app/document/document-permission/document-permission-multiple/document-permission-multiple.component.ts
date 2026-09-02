@@ -21,7 +21,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { DocumentService } from '../../document.service';
 import { DocumentPermissionService } from '../document-permission.service';
 import { MatChipSet, MatChip } from '@angular/material/chips';
-import { NgFor, NgIf } from '@angular/common';
 import { MatLabel, MatSelect, MatOption, MatSuffix, MatError } from '@angular/material/select';
 import {
   MatDatepickerInput,
@@ -36,7 +35,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./document-permission-multiple.component.scss'],
   imports: [
     MatChipSet,
-    NgFor,
     MatChip,
     FormsModule,
     ReactiveFormsModule,
@@ -44,7 +42,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatSelect,
     MatOption,
     MatCheckbox,
-    NgIf,
     MatDatepickerInput,
     MatDatepicker,
     MatDatepickerToggle,

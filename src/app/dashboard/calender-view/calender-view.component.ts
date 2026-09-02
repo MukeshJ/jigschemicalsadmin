@@ -24,7 +24,6 @@ import {
 import { forkJoin, Subject } from 'rxjs';
 import { CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { DashboardService } from '../dashboard.service';
-import { NgSwitch, NgSwitchCase } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -35,8 +34,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     CalendarPreviousViewDirective,
     CalendarTodayDirective,
     CalendarNextViewDirective,
-    NgSwitch,
-    NgSwitchCase,
     CalendarMonthViewComponent,
     TranslatePipe,
     CalendarDatePipe,

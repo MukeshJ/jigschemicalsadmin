@@ -13,7 +13,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageDocumentCategoryComponent } from '../manage-document-category/manage-document-category.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -36,7 +35,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     HasClaimDirective,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

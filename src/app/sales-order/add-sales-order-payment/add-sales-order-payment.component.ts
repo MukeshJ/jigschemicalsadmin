@@ -15,7 +15,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderPaymentService } from '../sales-order-payment.service';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { NgIf, NgFor } from '@angular/common';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
@@ -29,10 +28,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerInput,
-    NgIf,
     MatDatepicker,
     MatSelect,
-    NgFor,
     MatOption,
     HasClaimDirective,
     PaymentMethodPipe,

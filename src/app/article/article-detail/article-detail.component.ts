@@ -15,7 +15,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
@@ -31,11 +30,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatProgressSpinner,
     MatLabel,
     MatSelect,
-    NgFor,
     MatOption,
     MatError,
     MatIcon,

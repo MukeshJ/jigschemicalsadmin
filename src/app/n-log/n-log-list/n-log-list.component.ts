@@ -9,7 +9,7 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { NLogDataSource } from '../n-log-datasource';
 import { NLogService } from '../n-log.service';
-import { NgIf, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption } from '@angular/material/select';
 import {
@@ -34,11 +34,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './n-log-list.component.html',
   styleUrls: ['./n-log-list.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatSelect,
     MatOption,
-    NgFor,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -48,9 +46,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatCell,
     RouterLink,
     MatSortHeader,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,

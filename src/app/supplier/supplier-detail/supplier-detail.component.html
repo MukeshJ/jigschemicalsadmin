@@ -2,7 +2,7 @@
   <div class="row align-items-center justify-content-between">
     <div class="col-md-auto col-sm-auto">
       <div class="content-header">
-        <h1>{{'MANAGE_SUPPLIER' | translate}}</h1>
+        <h1>{{ 'MANAGE_SUPPLIER' | translate }}</h1>
       </div>
     </div>
   </div>
@@ -12,178 +12,262 @@
     <div class="col-md-6">
       <div class="form-row">
         <div class="col-md-6">
-          <div class="form-group ">
-            <label class="text-danger">
-              {{'SUPPLIER_NAME' | translate}} *
-            </label>
-            <input formControlName="supplierName" class="form-control" type="text">
-            <div *ngIf="supplierForm.get('supplierName').touched && supplierForm.get('supplierName').errors">
-              <div class="text-danger" *ngIf="supplierForm.get('supplierName').errors?.required">
-                {{'SUPPLIER_NAME_IS_REQUIRED' | translate}}
+          <div class="form-group">
+            <label class="text-danger"> {{ 'SUPPLIER_NAME' | translate }} * </label>
+            <input formControlName="supplierName" class="form-control" type="text" />
+            @if (
+              supplierForm.get('supplierName').touched && supplierForm.get('supplierName').errors
+            ) {
+              <div>
+                @if (supplierForm.get('supplierName').errors?.required) {
+                  <div class="text-danger">
+                    {{ 'SUPPLIER_NAME_IS_REQUIRED' | translate }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>
-              {{'CONTACT_PERSON' | translate}}
+              {{ 'CONTACT_PERSON' | translate }}
             </label>
-            <input formControlName="contactPerson" class="form-control" type="text">
+            <input formControlName="contactPerson" class="form-control" type="text" />
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="" formArrayName="supplierEmails"
-        *ngFor="let supplierEmail of supplierEmailsArray.controls; let i=index">
-        <ng-container [formGroupName]="i">
-          <label *ngIf="i==0"> {{'EMAIL' | translate}} </label>
-          <div class="form-row">
-            <div class="form-group col-md mb-1 col">
-              <input (change)="onEmailChange($event,i)" formControlName="email" class="form-control" type="text">
+      @for (supplierEmail of supplierEmailsArray.controls; track supplierEmail; let i = $index) {
+        <div class="" formArrayName="supplierEmails">
+          <ng-container [formGroupName]="i">
+            @if (i == 0) {
+              <label> {{ 'EMAIL' | translate }} </label>
+            }
+            <div class="form-row">
+              <div class="form-group col-md mb-1 col">
+                <input
+                  (change)="onEmailChange($event, i)"
+                  formControlName="email"
+                  class="form-control"
+                  type="text"
+                />
+              </div>
+              <div class="form-group col-md-auto col-auto mb-1">
+                @if (i == 0) {
+                  <button
+                    (click)="onAddAnotherEmail()"
+                    class="btn btn-outline-secondary"
+                    type="button"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                }
+                @if (i != 0) {
+                  <button
+                    (click)="onDeleteEmail(i)"
+                    class="btn btn-outline-secondary"
+                    type="button"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                }
+              </div>
             </div>
-            <div class="form-group col-md-auto col-auto mb-1">
-              <button *ngIf="i==0" (click)="onAddAnotherEmail()" class="btn btn-outline-secondary" type="button"><i
-                  class="fas fa-plus"></i>
-              </button>
-              <button *ngIf="i!=0" (click)="onDeleteEmail(i)" class="btn btn-outline-secondary" type="button"><i
-                  class="fas fa-trash-alt"></i>
-              </button>
-            </div>
-          </div>
-          <!-- <div *ngIf="supplierEmail.get('email').touched && supplierEmail.get('email').errors?.required"
-                        class="text-danger">
-                        {{'EMAIL_IS_REQUIRED' | translate}}
-                    </div> -->
-          <div *ngIf="supplierEmail.get('email').touched && supplierEmail.get('email').errors?.email"
-            class="text-danger">
-            {{'PLEASE_ENTER_VALID_EMAIL' | translate}}
-          </div>
-          <div *ngIf="supplierEmail.get('email').touched && supplierEmail.get('email').errors?.exist"
-            class="text-danger">
-            {{'EMAIL_ALREADY_EXIST' | translate}}
-          </div>
-        </ng-container>
-      </div>
+            <!-- <div *ngIf="supplierEmail.get('email').touched && supplierEmail.get('email').errors?.required"
+        class="text-danger">
+        {{'EMAIL_IS_REQUIRED' | translate}}
+      </div> -->
+            @if (supplierEmail.get('email').touched && supplierEmail.get('email').errors?.email) {
+              <div class="text-danger">
+                {{ 'PLEASE_ENTER_VALID_EMAIL' | translate }}
+              </div>
+            }
+            @if (supplierEmail.get('email').touched && supplierEmail.get('email').errors?.exist) {
+              <div class="text-danger">
+                {{ 'EMAIL_ALREADY_EXIST' | translate }}
+              </div>
+            }
+          </ng-container>
+        </div>
+      }
     </div>
     <div class="col-md-6">
-      <div class="form-group ">
-        <label> {{'WEBSITE' | translate}}</label>
-        <input formControlName="website" class="form-control" type="text">
+      <div class="form-group">
+        <label> {{ 'WEBSITE' | translate }}</label>
+        <input formControlName="website" class="form-control" type="text" />
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-row">
         <div class="col-md-6">
-          <div class="form-group ">
-            <label>{{'MOBILE_NUMBER' | translate}} </label>
-            <input formControlName="mobileNo" (change)="onMobileNoChange($event)" class="form-control" type="text">
+          <div class="form-group">
+            <label>{{ 'MOBILE_NUMBER' | translate }} </label>
+            <input
+              formControlName="mobileNo"
+              (change)="onMobileNoChange($event)"
+              class="form-control"
+              type="text"
+            />
             <!-- <div *ngIf="
         supplierForm.get('mobileNo').touched &&
         supplierForm.get('mobileNo').errors?.required" class="text-danger">
-                            {{'MOBILE_IS_REQUIRED' | translate}}
-                        </div> -->
-            <div *ngIf="
-        supplierForm.get('mobileNo').touched &&
-        supplierForm.get('mobileNo').errors?.exist" class="text-danger">
-              {{'MOBILE_NUMBER_ALREADY_EXIST' | translate}}
-            </div>
+        {{'MOBILE_IS_REQUIRED' | translate}}
+      </div> -->
+            @if (
+              supplierForm.get('mobileNo').touched && supplierForm.get('mobileNo').errors?.exist
+            ) {
+              <div class="text-danger">
+                {{ 'MOBILE_NUMBER_ALREADY_EXIST' | translate }}
+              </div>
+            }
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label> {{'PHONE_NUMBER' | translate}}</label>
-            <input formControlName="phoneNo" class="form-control" type="text">
+            <label> {{ 'PHONE_NUMBER' | translate }}</label>
+            <input formControlName="phoneNo" class="form-control" type="text" />
           </div>
         </div>
       </div>
     </div>
     <div class="col-md-12" formArrayName="supplierAddresses">
-      <div [formGroupName]="i" class="row" *ngFor="let address of supplierAddress?.controls; let i = index">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="text-danger"> {{'ADDRESS' | translate}} *</label>
-            <textarea formControlName="address" class="form-control"></textarea>
-            <div *ngIf="
-            address.get('address').touched &&
-            address.get('address').errors?.required" class="text-danger">
-              {{'ADDRESS_IS_REQUIRED' | translate}}
-
+      @for (address of supplierAddress?.controls; track address; let i = $index) {
+        <div [formGroupName]="i" class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="text-danger"> {{ 'ADDRESS' | translate }} *</label>
+              <textarea formControlName="address" class="form-control"></textarea>
+              @if (address.get('address').touched && address.get('address').errors?.required) {
+                <div class="text-danger">
+                  {{ 'ADDRESS_IS_REQUIRED' | translate }}
+                </div>
+              }
             </div>
           </div>
-        </div>
-        <div class="col-md-6 mt-4">
-          <div class="form-row">
-            <div class="col-md-6">
-              <mat-label class="text-danger"> {{'COUNTRY' | translate}} *</mat-label>
-              <mat-select placeholder="{{'COUNTRY' | translate}}" class="form-control" formControlName="countryName"
-                (selectionChange)="onCountryChange($event,i)">
-                <mat-option *ngFor="let country of countries" [value]="country.countryName">
-                  {{country.countryName}}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="
-                address.get('countryName').touched &&
-                address.get('countryName').errors?.required" class="text-danger">
-                {{'PLEASE_SELECT_COUNTRY' | translate}}
-              </mat-error>
-            </div>
-            <div class="col-md-6">
-              <mat-label class="text-danger"> {{'CITY' | translate}} *</mat-label>
-              <input class="form-control" autocomplete="new-city" (input)="handleFilterCity($any($event), i)" type="text"
-                placeholder="{{'CITY' | translate}}" [matAutocomplete]="auto" formControlName="cityName" />
-              <div *ngIf="
-                address.get('cityName').touched &&
-                address.get('cityName').errors?.required
-              " class="text-danger">
-                {{'PLEASE_SELECT_CITY' | translate}}
+          <div class="col-md-6 mt-4">
+            <div class="form-row">
+              <div class="col-md-6">
+                <mat-label class="text-danger"> {{ 'COUNTRY' | translate }} *</mat-label>
+                <mat-select
+                  placeholder="{{ 'COUNTRY' | translate }}"
+                  class="form-control"
+                  formControlName="countryName"
+                  (selectionChange)="onCountryChange($event, i)"
+                >
+                  @for (country of countries; track country) {
+                    <mat-option [value]="country.countryName">
+                      {{ country.countryName }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (
+                  address.get('countryName').touched && address.get('countryName').errors?.required
+                ) {
+                  <mat-error class="text-danger">
+                    {{ 'PLEASE_SELECT_COUNTRY' | translate }}
+                  </mat-error>
+                }
               </div>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let city of cities" [value]="city.cityName">
-                  <span>{{ city.cityName }}</span>
-                </mat-option>
-              </mat-autocomplete>
+              <div class="col-md-6">
+                <mat-label class="text-danger"> {{ 'CITY' | translate }} *</mat-label>
+                <input
+                  class="form-control"
+                  autocomplete="new-city"
+                  (input)="handleFilterCity($any($event), i)"
+                  type="text"
+                  placeholder="{{ 'CITY' | translate }}"
+                  [matAutocomplete]="auto"
+                  formControlName="cityName"
+                />
+                @if (address.get('cityName').touched && address.get('cityName').errors?.required) {
+                  <div class="text-danger">
+                    {{ 'PLEASE_SELECT_CITY' | translate }}
+                  </div>
+                }
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                  @for (city of cities; track city) {
+                    <mat-option [value]="city.cityName">
+                      <span>{{ city.cityName }}</span>
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
     <div class="col-sm-9">
-      <div class="form-group ">
+      <div class="form-group">
         <label>
-          {{'DESCRIPTION' | translate}}
+          {{ 'DESCRIPTION' | translate }}
         </label>
         <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
       </div>
     </div>
     <div class="col-md-3">
       <label>
-        {{'UPLOAD_LOGO' | translate}}
+        {{ 'UPLOAD_LOGO' | translate }}
       </label>
       <mat-card class="cus-mat-card text-center">
-        <input hidden (change)="onFileSelect($event)" #fileInput name="logo" type="file" name="Profile Image"
-          fxFlex="30">
-        <img *ngIf="imgSrc" class="full-width" [src]="imgSrc" />
-        <img *ngIf="!imgSrc" class="full-width" src="../../../assets/images/company-logo.jpg" />
+        <input
+          hidden
+          (change)="onFileSelect($event)"
+          #fileInput
+          name="logo"
+          type="file"
+          name="Profile Image"
+          fxFlex="30"
+        />
+        @if (imgSrc) {
+          <img class="full-width" [src]="imgSrc" />
+        }
+        @if (!imgSrc) {
+          <img class="full-width" src="../../../assets/images/company-logo.jpg" />
+        }
         <mat-card-actions>
-          <button type="button" *ngIf="!imgSrc" class="btn btn-success btn-sm m-right-10" (click)="fileInput.click()">
-            <i class="far fa-image"></i> {{'ADD_LOGO' | translate}}</button>
-          <button type="button" *ngIf="imgSrc" class="btn btn-success btn-sm m-right-10" (click)="fileInput.click()">
-            <i class="far fa-image"></i> {{'CHANGE_LOGO' | translate}}</button>
-          <button *ngIf="imgSrc" type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
-            <i class="fas fa-trash-alt"></i> {{'REMOVE_LOGO' | translate}}</button>
+          @if (!imgSrc) {
+            <button
+              type="button"
+              class="btn btn-success btn-sm m-right-10"
+              (click)="fileInput.click()"
+            >
+              <i class="far fa-image"></i> {{ 'ADD_LOGO' | translate }}
+            </button>
+          }
+          @if (imgSrc) {
+            <button
+              type="button"
+              class="btn btn-success btn-sm m-right-10"
+              (click)="fileInput.click()"
+            >
+              <i class="far fa-image"></i> {{ 'CHANGE_LOGO' | translate }}
+            </button>
+          }
+          @if (imgSrc) {
+            <button type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i> {{ 'REMOVE_LOGO' | translate }}
+            </button>
+          }
         </mat-card-actions>
       </mat-card>
     </div>
     <div class="m-top-10 col-md-12">
-      <button type="submit" class="btn btn-success btn-sm m-right-10"><i class="fas fa-save"></i> {{'SAVE' |
-        translate}}</button>
-      <button type="button" class="btn btn-danger btn-sm" (click)="onSupplierList()"><i class="fas fa-times-circle"></i>
-        {{'CANCEL' | translate}}</button>
+      <button type="submit" class="btn btn-success btn-sm m-right-10">
+        <i class="fas fa-save"></i> {{ 'SAVE' | translate }}
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" (click)="onSupplierList()">
+        <i class="fas fa-times-circle"></i> {{ 'CANCEL' | translate }}
+      </button>
     </div>
   </div>
 </form>
-<div class="loading-shade" *ngIf="isLoading">
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-</div>
+@if (isLoading) {
+  <div class="loading-shade">
+    @if (isLoading) {
+      <mat-spinner></mat-spinner>
+    }
+  </div>
+}

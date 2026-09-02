@@ -41,7 +41,7 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatSelect, MatOption } from '@angular/material/select';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
@@ -71,7 +71,6 @@ import { ReminderFrequencyPipe } from './reminder-frequency.pipe';
     FormsModule,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,
@@ -82,7 +81,6 @@ import { ReminderFrequencyPipe } from './reminder-frequency.pipe';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    NgIf,
     MatProgressSpinner,
     AsyncPipe,
     TruncatePipe,

@@ -32,7 +32,6 @@ import { merge, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, tap } from 'rxjs/operators';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { RouterLink } from '@angular/router';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { MatSelect, MatOption } from '@angular/material/select';
@@ -47,7 +46,6 @@ import { GalleryCategoryPipe } from '@shared/pipes/gallery-category.pipe';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -60,7 +58,6 @@ import { GalleryCategoryPipe } from '@shared/pipes/gallery-category.pipe';
     FormsModule,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalTypeAddComponent } from '../chemical-type-add/chemical-type-add.component';
 import { ChemicalTypeService } from '../chemical-type.service';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   MatTable,
   MatColumnDef,
@@ -29,7 +29,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './chemical-type-list.component.html',
   styleUrls: ['./chemical-type-list.component.scss'],
   imports: [
-    NgIf,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

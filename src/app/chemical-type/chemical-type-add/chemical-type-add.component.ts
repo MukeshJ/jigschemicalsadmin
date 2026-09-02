@@ -14,7 +14,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalTypeService } from '../chemical-type.service';
-import { NgIf } from '@angular/common';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCard, MatCardActions } from '@angular/material/card';
@@ -27,7 +26,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatSlideToggle,
     AngularEditorModule,
     MatCard,

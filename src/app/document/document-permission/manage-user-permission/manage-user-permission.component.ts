@@ -24,7 +24,7 @@ import {
   MatSuffix,
   MatError,
 } from '@angular/material/select';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatInput } from '@angular/material/input';
 import {
   MatDatepickerInput,
@@ -43,8 +43,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatLabel,
     MatSelect,
     MatSelectTrigger,
-    NgIf,
-    NgFor,
     MatOption,
     MatCheckbox,
     MatFormField,

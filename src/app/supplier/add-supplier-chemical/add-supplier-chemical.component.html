@@ -3,7 +3,7 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-10">
         <h4 class="modal-title">
-          {{'ADD_CHEMICAL_FOR' | translate}} <strong> {{data.supplierName}}</strong>
+          {{ 'ADD_CHEMICAL_FOR' | translate }} <strong> {{ data.supplierName }}</strong>
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
@@ -17,13 +17,18 @@
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <input class="form-control" placeholder="{{'SEARCH_CHEMICALS' | translate}}" [matAutocomplete]="autoForChemical"
-            formControlName="chemicalName" />
+          <input
+            class="form-control"
+            placeholder="{{ 'SEARCH_CHEMICALS' | translate }}"
+            [matAutocomplete]="autoForChemical"
+            formControlName="chemicalName"
+          />
           <mat-autocomplete #autoForChemical="matAutocomplete">
-            <mat-option (click)="selectChemical(chemical)" *ngFor="let chemical of chemicals$ | async"
-              [value]="chemical.name">
-              <span>{{ chemical.name }}</span>
-            </mat-option>
+            @for (chemical of chemicals$ | async; track chemical) {
+              <mat-option (click)="selectChemical(chemical)" [value]="chemical.name">
+                <span>{{ chemical.name }}</span>
+              </mat-option>
+            }
           </mat-autocomplete>
         </div>
       </div>
@@ -33,16 +38,20 @@
     <div class="form-row w-100">
       <div class="col-md-auto col-auto">
         <button (click)="saveSupplierChemicals()" type="button" class="btn btn-success btn-sm mr-2">
-          <i class="fas fa-plus"></i> {{'ADD' | translate}}
+          <i class="fas fa-plus"></i> {{ 'ADD' | translate }}
         </button>
         <button (click)="closeDialog()" type="button" class="btn btn-danger btn-sm">
-          <i class="fas fa-times-circle"></i> {{'CANCEL' | translate}}
+          <i class="fas fa-times-circle"></i> {{ 'CANCEL' | translate }}
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="loading-shade" *ngIf="isLoading">
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-</div>
+@if (isLoading) {
+  <div class="loading-shade">
+    @if (isLoading) {
+      <mat-spinner></mat-spinner>
+    }
+  </div>
+}

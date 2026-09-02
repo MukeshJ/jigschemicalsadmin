@@ -11,7 +11,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { DocumentLibraryService } from '../../document-library/document-library.service';
 import { MatIcon } from '@angular/material/icon';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { NgxDocViewerComponent } from 'ngx-doc-viewer';
@@ -20,7 +19,7 @@ import { NgxDocViewerComponent } from 'ngx-doc-viewer';
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
   styleUrls: ['./document-view.component.scss'],
-  imports: [MatIcon, NgIf, MatProgressSpinner, NgxExtendedPdfViewerModule, NgxDocViewerComponent],
+  imports: [MatIcon, MatProgressSpinner, NgxExtendedPdfViewerModule, NgxDocViewerComponent],
 })
 export class DocumentViewComponent extends BaseComponent implements OnInit {
   constructor(

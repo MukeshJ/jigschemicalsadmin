@@ -14,7 +14,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { IndustryService } from '../industry.service';
-import { NgIf } from '@angular/common';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -24,7 +23,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './industry-detail.component.html',
   styleUrls: ['./industry-detail.component.scss'],
   imports: [
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     AngularEditorModule,

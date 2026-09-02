@@ -1,83 +1,119 @@
 <div class="modal-content1">
-    <div class="modal-header">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-            <div class="col-md-10 col">
-                <h4 class="modal-title">
-                    Manage Inventory <span *ngIf="data.chemicalName"> for {{data.chemicalName}}</span>
-                </h4>
-            </div>
-            <div class="col-sm-auto col-auto ml-auto">
-                <button type="button" class="close" (click)="onCancel()" data-dismiss="modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
+  <div class="modal-header">
+    <div class="d-flex w-100 align-items-center justify-content-between">
+      <div class="col-md-10 col">
+        <h4 class="modal-title">
+          Manage Inventory
+          @if (data.chemicalName) {
+            <span> for {{ data.chemicalName }}</span>
+          }
+        </h4>
+      </div>
+      <div class="col-sm-auto col-auto ml-auto">
+        <button type="button" class="close" (click)="onCancel()" data-dismiss="modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
-    <form [formGroup]="inventoryForm">
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-12" *ngIf="!data.chemicalId">
-                    <div class="form-group">
-                        <label class="text-danger">Chemical *</label>
-                        <div class="input-group">
-                            <mat-select formControlName="chemicalId" placeholder="Select Chemical" class="form-control">
-                                <input class="form-control w-100" formControlName="filerChemical" focused="'true'"
-                                    type="text" autocomplete="off" placeholder="Search other chemicals">
-                                <mat-divider></mat-divider>
-                                <mat-option *ngFor="let chemical of chemicals" [value]="chemical.id">
-                                    {{chemical.name}}
-                                </mat-option>
-                            </mat-select>
-                        </div>
-                        <div
-                            *ngIf="inventoryForm.get('chemicalId').touched && inventoryForm.get('chemicalId').errors">
-                            <div class="text-danger" *ngIf="inventoryForm.get('chemicalId').errors?.required">
-                                Please Select Chemical.
-                            </div>
-                        </div>
-                    </div>
+  </div>
+  <form [formGroup]="inventoryForm">
+    <div class="modal-body">
+      <div class="row">
+        @if (!data.chemicalId) {
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="text-danger">Chemical *</label>
+              <div class="input-group">
+                <mat-select
+                  formControlName="chemicalId"
+                  placeholder="Select Chemical"
+                  class="form-control"
+                >
+                  <input
+                    class="form-control w-100"
+                    formControlName="filerChemical"
+                    focused="'true'"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Search other chemicals"
+                  />
+                  <mat-divider></mat-divider>
+                  @for (chemical of chemicals; track chemical) {
+                    <mat-option [value]="chemical.id">
+                      {{ chemical.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </div>
+              @if (
+                inventoryForm.get('chemicalId').touched && inventoryForm.get('chemicalId').errors
+              ) {
+                <div>
+                  @if (inventoryForm.get('chemicalId').errors?.required) {
+                    <div class="text-danger">Please Select Chemical.</div>
+                  }
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="stock" class="text-danger">Stock *</label>
-                        <input formControlName="stock" type="number" class="form-control" id="stock">
-                        <div *ngIf="inventoryForm.get('stock').touched && inventoryForm.get('stock').errors">
-                            <div class="text-danger"
-                                *ngIf="inventoryForm.get('stock').touched && inventoryForm.get('stock').errors?.required">
-                                Stock is Required.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="pricePerUnit" class="text-danger">Unit Per Price *</label>
-                        <input formControlName="pricePerUnit" type="number" class="form-control" id="pricePerUnit">
-                        <div
-                            *ngIf="inventoryForm.get('pricePerUnit').touched && inventoryForm.get('pricePerUnit').errors">
-                            <div class="text-danger"
-                                *ngIf="inventoryForm.get('pricePerUnit').touched && inventoryForm.get('pricePerUnit').errors?.required">
-                                Unit Per Price is Required.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+              }
             </div>
+          </div>
+        }
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="stock" class="text-danger">Stock *</label>
+            <input formControlName="stock" type="number" class="form-control" id="stock" />
+            @if (inventoryForm.get('stock').touched && inventoryForm.get('stock').errors) {
+              <div>
+                @if (
+                  inventoryForm.get('stock').touched && inventoryForm.get('stock').errors?.required
+                ) {
+                  <div class="text-danger">Stock is Required.</div>
+                }
+              </div>
+            }
+          </div>
         </div>
-        <div class="modal-footer">
-            <div class="form-row w-100">
-                <div class="col-md-auto col-auto">
-                    <button class="btn btn-success btn-sm m-right-10" (click)="addInventory()" cdkFocusInitial>
-                        <i class="fas fa-save"></i>
-                        {{"SAVE" | translate}}
-                    </button>
-                    <button class="btn btn-danger btn-sm" (click)="onCancel()">
-                        <i class="fas fa-times-circle"></i>
-                        {{"CANCEL" | translate}}
-                    </button>
-                </div>
-            </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="pricePerUnit" class="text-danger">Unit Per Price *</label>
+            <input
+              formControlName="pricePerUnit"
+              type="number"
+              class="form-control"
+              id="pricePerUnit"
+            />
+            @if (
+              inventoryForm.get('pricePerUnit').touched && inventoryForm.get('pricePerUnit').errors
+            ) {
+              <div>
+                @if (
+                  inventoryForm.get('pricePerUnit').touched &&
+                  inventoryForm.get('pricePerUnit').errors?.required
+                ) {
+                  <div class="text-danger">Unit Per Price is Required.</div>
+                }
+              </div>
+            }
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="form-row w-100">
+        <div class="col-md-auto col-auto">
+          <button
+            class="btn btn-success btn-sm m-right-10"
+            (click)="addInventory()"
+            cdkFocusInitial
+          >
+            <i class="fas fa-save"></i>
+            {{ 'SAVE' | translate }}
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="onCancel()">
+            <i class="fas fa-times-circle"></i>
+            {{ 'CANCEL' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

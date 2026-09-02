@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardStaticatics } from '@core/domain-classes/dashboard-staticatics';
 import { Inquiry } from '@core/domain-classes/inquiry';
@@ -63,7 +63,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class DashboardComponent extends BaseComponent implements OnInit {
   dashboardStaticatics: DashboardStaticatics;
-  inquiries: Inquiry[] = [];
+  inquiries = signal<Inquiry[]>([]);
   displayedInquiryColumns: string[] = [
     'action',
     'createdDate',
@@ -108,7 +108,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.inquiryService
       .getInquiries(this.inquiryResource)
       .subscribe((resp: HttpResponse<Inquiry[]>) => {
-        this.inquiries = [...resp.body];
+        this.inquiries.set([...resp.body]);
       });
   }
 

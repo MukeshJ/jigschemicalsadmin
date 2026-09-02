@@ -19,7 +19,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -32,7 +31,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatDialogContent,
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatDialogActions,
     TranslatePipe,
   ],

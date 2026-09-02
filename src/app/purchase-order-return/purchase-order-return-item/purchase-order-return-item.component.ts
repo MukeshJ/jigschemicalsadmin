@@ -2,7 +2,6 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -24,7 +23,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './purchase-order-return-item.component.html',
   styleUrls: ['./purchase-order-return-item.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,
@@ -32,7 +30,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatHeaderCell,
     MatCellDef,
     MatCell,
-    NgFor,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,

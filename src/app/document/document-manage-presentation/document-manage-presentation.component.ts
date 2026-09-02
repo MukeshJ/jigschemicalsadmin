@@ -20,7 +20,6 @@ import { DocumentInfo } from '@core/domain-classes/document-info';
 import { FileInfo } from '@core/domain-classes/file-info';
 import { environment } from '@environments/environment';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf, NgFor } from '@angular/common';
 import { MatFormField, MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
@@ -34,12 +33,10 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatFormField,
     MatLabel,
     MatSelect,
     MatOption,
-    NgFor,
     MatProgressBar,
     RouterLink,
     TranslatePipe,

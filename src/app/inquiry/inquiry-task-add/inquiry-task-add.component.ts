@@ -17,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryTaskService } from '../inquiry-task/inquiry-task.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatFormField, MatSuffix, MatSelect, MatOption } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import {
@@ -34,7 +33,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatFormField,
     MatInput,
     MatDatepickerInput,
@@ -42,7 +40,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatSuffix,
     MatDatepicker,
     MatSelect,
-    NgFor,
     MatOption,
     TranslatePipe,
   ],

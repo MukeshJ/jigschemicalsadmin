@@ -16,7 +16,6 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { InventoryService } from '../inventory.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -25,16 +24,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-inventory',
   templateUrl: './manage-inventory.component.html',
   styleUrls: ['./manage-inventory.component.scss'],
-  imports: [
-    NgIf,
-    FormsModule,
-    ReactiveFormsModule,
-    MatSelect,
-    MatDivider,
-    NgFor,
-    MatOption,
-    TranslatePipe,
-  ],
+  imports: [FormsModule, ReactiveFormsModule, MatSelect, MatDivider, MatOption, TranslatePipe],
 })
 export class ManageInventoryComponent extends BaseComponent implements OnInit {
   inventoryForm: UntypedFormGroup;

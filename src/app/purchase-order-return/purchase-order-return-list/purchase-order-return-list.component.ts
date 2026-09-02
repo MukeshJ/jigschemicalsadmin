@@ -22,7 +22,7 @@ import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.serv
 import { ViewPurchaseOrderPaymentComponent } from 'src/app/purchase-order/view-purchase-order-payment/view-purchase-order-payment.component';
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -60,7 +60,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -81,7 +80,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatAutocomplete,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

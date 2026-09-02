@@ -9,7 +9,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { RoleService } from '../role.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -32,7 +31,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

@@ -9,7 +9,7 @@ import { ClonerService } from '@core/services/clone.service';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderService } from '../purchase-order.service';
-import { Location, NgIf, NgFor, NgClass } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 import { PurchaseOrderAttachment } from '@core/domain-classes/purchase-order/purchase-order-attachment';
 import { ToastrService } from 'ngx-toastr';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
@@ -28,8 +28,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./purchase-order-detail.component.scss'],
   imports: [
     HasClaimDirective,
-    NgIf,
-    NgFor,
     NgClass,
     MatCard,
     MatCardSubtitle,

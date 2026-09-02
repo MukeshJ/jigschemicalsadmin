@@ -17,7 +17,6 @@ import { environment } from '@environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { UserService } from '../user.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatLabel, MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatCard, MatCardActions } from '@angular/material/card';
@@ -29,13 +28,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './manage-user.component.html',
   styleUrls: ['./manage-user.component.scss'],
   imports: [
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     MatLabel,
     MatSelect,
     MatSelectTrigger,
-    NgFor,
     MatOption,
     MatSlideToggle,
     MatCard,

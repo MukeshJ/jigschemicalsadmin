@@ -19,7 +19,7 @@ import { AddChemicalCustomerComponent } from '../add-chemical-customer/add-chemi
 import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-suppliers/chemical-suppliers.component';
 import { AddChemicalSupplierComponent } from 'src/app/chemical-supplier/add-chemical-supplier/add-chemical-supplier.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgStyle, NgFor, AsyncPipe } from '@angular/common';
+import { NgStyle, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -39,11 +39,13 @@ import {
   MatFooterRow,
 } from '@angular/material/table';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { MatSelect, MatOption } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSelect } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -51,9 +53,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss'],
   imports: [
+    MatSelectModule,
+    MatIconModule,
+    MatButtonModule,
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -63,17 +67,14 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatCellDef,
     MatCell,
     MatCheckbox,
-    MatIconButton,
     MatMenuTrigger,
     MatIcon,
     MatMenu,
     MatMenuItem,
     MatSortHeader,
     NgStyle,
-    NgFor,
     FormsModule,
     MatSelect,
-    MatOption,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

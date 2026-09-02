@@ -17,7 +17,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { DocumentService } from '../document.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatFormField, MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -29,12 +28,10 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatFormField,
     MatLabel,
     MatSelect,
     MatOption,
-    NgFor,
     HasClaimDirective,
     TranslatePipe,
   ],

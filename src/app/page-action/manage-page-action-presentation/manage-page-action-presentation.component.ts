@@ -12,7 +12,6 @@ import { Action } from '@core/domain-classes/action';
 import { Page } from '@core/domain-classes/page';
 import { PageAction } from '@core/domain-classes/page-action';
 import { BaseComponent } from 'src/app/base.component';
-import { NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -20,7 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './manage-page-action-presentation.component.html',
   styleUrls: ['./manage-page-action-presentation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgFor, MatSlideToggle, TranslatePipe],
+  imports: [MatSlideToggle, TranslatePipe],
 })
 export class ManagePageActionPresentationComponent extends BaseComponent implements OnInit {
   @Input() pages: Page[];

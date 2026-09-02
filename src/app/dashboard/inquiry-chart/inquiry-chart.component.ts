@@ -5,14 +5,13 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { DashboardService } from '../dashboard.service';
 import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-inquiry-chart',
   templateUrl: './inquiry-chart.component.html',
   styleUrls: ['./inquiry-chart.component.scss'],
-  imports: [FormsModule, NgFor, BaseChartDirective, TranslatePipe],
+  imports: [FormsModule, BaseChartDirective, TranslatePipe],
 })
 export class InquiryChartComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;

@@ -14,7 +14,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { TestimonialService } from '../testimonial.service';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCard, MatCardActions } from '@angular/material/card';
@@ -28,7 +27,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatProgressSpinner,
     AngularEditorModule,
     MatCard,

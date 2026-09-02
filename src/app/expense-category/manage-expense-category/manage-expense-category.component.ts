@@ -12,14 +12,13 @@ import { ExpenseCategoryService } from '@core/services/expense-category.service'
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-expense-category',
   templateUrl: './manage-expense-category.component.html',
   styleUrls: ['./manage-expense-category.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageExpenseCategoryComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;

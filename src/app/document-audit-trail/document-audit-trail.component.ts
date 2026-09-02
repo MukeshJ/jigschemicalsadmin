@@ -15,7 +15,7 @@ import { BaseComponent } from '../base.component';
 import { DocumentAuditTrialDataSource } from './document-audit-trail-datassource';
 import { DocumentAuditTrailService } from './document-audit-trail.service';
 import { TranslationService } from '@core/services/translation.service';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption } from '@angular/material/select';
 import {
@@ -38,11 +38,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './document-audit-trail.component.html',
   styleUrls: ['./document-audit-trail.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatSelect,
     MatOption,
-    NgFor,
     MatTable,
     MatSort,
     MatColumnDef,

@@ -6,14 +6,13 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Months } from '@core/domain-classes/months';
 import { SalesPurchaseReportService } from './sales-purchase-report.service';
 import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sales-purchase-report',
   templateUrl: './sales-purchase-report.component.html',
   styleUrls: ['./sales-purchase-report.component.scss'],
-  imports: [FormsModule, NgFor, BaseChartDirective, TranslatePipe],
+  imports: [FormsModule, BaseChartDirective, TranslatePipe],
 })
 export class SalesPurchaseReportComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;

@@ -2,86 +2,115 @@
   <div class="row align-items-center justify-content-between">
     <div class="col-md-auto col-sm-auto">
       <div class="content-header">
-        <h1>{{'MY_DOCUMENTS' | translate}}</h1>
+        <h1>{{ 'MY_DOCUMENTS' | translate }}</h1>
       </div>
     </div>
   </div>
 </div>
-<div class="loading-shade" *ngIf="dataSource.loading$ | async">
-  <mat-spinner></mat-spinner>
-</div>
+@if (dataSource.loading$ | async) {
+  <div class="loading-shade">
+    <mat-spinner></mat-spinner>
+  </div>
+}
 <div class="row mb-2">
   <div class="ml-2 col-sm-5">
     <!-- <mat-form-field class="w-100" appearance="fill"> -->
-    <input class="form-control" placeholder="{{'SEARCH_DOCUMENT_BY_NAME' | translate}}" #input>
+    <input class="form-control" placeholder="{{ 'SEARCH_DOCUMENT_BY_NAME' | translate }}" #input />
     <!-- </mat-form-field> -->
   </div>
   <div class="col-sm-6">
     <!-- <mat-form-field class="w-100" appearance="fill"> -->
-    <mat-select class="form-control" placeholder="{{'SELECT_CATEGORY' | translate}}"
-      (selectionChange)="onCategoryChange($event)">
-      <mat-option [value]="">-- {{'NONE' | translate}} --</mat-option>
-      <mat-option *ngFor="let category of categories" [value]="category.id">
-        {{category.name}}
-      </mat-option>
+    <mat-select
+      class="form-control"
+      placeholder="{{ 'SELECT_CATEGORY' | translate }}"
+      (selectionChange)="onCategoryChange($event)"
+    >
+      <mat-option [value]="">-- {{ 'NONE' | translate }} --</mat-option>
+      @for (category of categories; track category) {
+        <mat-option [value]="category.id">
+          {{ category.name }}
+        </mat-option>
+      }
     </mat-select>
     <!-- </mat-form-field> -->
   </div>
 </div>
 <div class="table-responsive">
-  <table mat-table [dataSource]="dataSource" class="table table-bordered table-hover" matSort
-    matSortActive="createdDate" matSortDirection="desc">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="table table-bordered table-hover"
+    matSort
+    matSortActive="createdDate"
+    matSortDirection="desc"
+  >
     <ng-container matColumnDef="action">
-      <th class="table-column-100" mat-header-cell *matHeaderCellDef> {{'ACTION' | translate}} </th>
+      <th class="table-column-100" mat-header-cell *matHeaderCellDef>{{ 'ACTION' | translate }}</th>
       <td class="table-column-100" mat-cell *matCellDef="let document">
         <!-- <button class="btn btn-success btn-sm"  type="button">
-            <i class="las la-eye"></i>
-          </button> -->
+        <i class="las la-eye"></i>
+      </button> -->
         <button mat-icon-button (click)="onDocumentView(document)" aria-label="Action">
           <mat-icon>visibility</mat-icon>
         </button>
       </td>
     </ng-container>
     <ng-container matColumnDef="name">
-      <th class="table-column-300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'NAME' | translate}} </th>
-      <td class="table-column-300" mat-cell *matCellDef="let document"> {{document.name}} </td>
+      <th class="table-column-300" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'NAME' | translate }}
+      </th>
+      <td class="table-column-300" mat-cell *matCellDef="let document">{{ document.name }}</td>
     </ng-container>
     <ng-container matColumnDef="categoryName">
-      <th class="table-column-300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'CATEGORY_NAME' | translate}}
+      <th class="table-column-300" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'CATEGORY_NAME' | translate }}
       </th>
-      <td class="table-column-300" mat-cell *matCellDef="let document"> {{document.categoryName}} </td>
+      <td class="table-column-300" mat-cell *matCellDef="let document">
+        {{ document.categoryName }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="createdDate">
-      <th class="table-column-150" mat-header-cell *matHeaderCellDef mat-sort-header> {{'CREATED_DATE' | translate}}
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'CREATED_DATE' | translate }}
       </th>
-      <td class="table-column-150" mat-cell *matCellDef="let document"> {{document?.createdDate |
-        utcToLocalTime:'shortDate'}}
+      <td class="table-column-150" mat-cell *matCellDef="let document">
+        {{ document?.createdDate | utcToLocalTime: 'shortDate' }}
       </td>
     </ng-container>
     <ng-container matColumnDef="expiredDate">
-      <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'EXPIRED_DATE' | translate}} </th>
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef>
+        {{ 'EXPIRED_DATE' | translate }}
+      </th>
       <td class="table-column-150" class="text-danger" mat-cell *matCellDef="let document">
-        {{document?.expiredDate | utcToLocalTime:'shortDate'}} </td>
+        {{ document?.expiredDate | utcToLocalTime: 'shortDate' }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="createdBy">
-      <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'Created By' | translate}} </th>
-      <td class="table-column-150" mat-cell *matCellDef="let document"> {{document?.createdBy}} </td>
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef>
+        {{ 'Created By' | translate }}
+      </th>
+      <td class="table-column-150" mat-cell *matCellDef="let document">
+        {{ document?.createdBy }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="footer">
       <td mat-footer-cell colspan="6" *matFooterCellDef>
-        <mat-paginator [length]="documentResource.totalCount" [pageSize]="documentResource.pageSize"
-          [pageSizeOptions]="[10, 20, 30]"></mat-paginator>
+        <mat-paginator
+          [length]="documentResource.totalCount"
+          [pageSize]="documentResource.pageSize"
+          [pageSizeOptions]="[10, 20, 30]"
+        ></mat-paginator>
       </td>
     </ng-container>
     <tr *matNoDataRow>
       <td colspan="12">
         <span class="p-4 mt-4">
-          <b> {{'NO_DATA_FOUND' | translate}}</b>
+          <b> {{ 'NO_DATA_FOUND' | translate }}</b>
         </span>
       </td>
     </tr>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    <tr mat-footer-row *matFooterRowDef="footerToDisplayed;sticky: true"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-footer-row *matFooterRowDef="footerToDisplayed; sticky: true"></tr>
   </table>
 </div>

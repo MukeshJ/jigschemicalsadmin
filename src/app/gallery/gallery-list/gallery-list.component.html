@@ -1,108 +1,150 @@
 <div class="page-header-main pt-4">
-    <div class="row align-items-center justify-content-between">
-        <div class="col-md-auto col-sm-auto col">
-            <div class="content-header">
-                <h1>{{'GALLERY' | translate}}</h1>
-            </div>
-        </div>
-        <div class="col-md-auto col-sm-auto col-auto">
-            <button *hasClaim="'event_gallery_add_gallery'" class="btn blue-btn btn-sm m-right-10"
-                [routerLink]="['/gallery/manage/addItem']">
-                <i class="fas fa-plus"></i> {{'ADD_GALLERY' | translate}}
-            </button>
-        </div>
+  <div class="row align-items-center justify-content-between">
+    <div class="col-md-auto col-sm-auto col">
+      <div class="content-header">
+        <h1>{{ 'GALLERY' | translate }}</h1>
+      </div>
     </div>
+    <div class="col-md-auto col-sm-auto col-auto">
+      <button
+        *hasClaim="'event_gallery_add_gallery'"
+        class="btn blue-btn btn-sm m-right-10"
+        [routerLink]="['/gallery/manage/addItem']"
+      >
+        <i class="fas fa-plus"></i> {{ 'ADD_GALLERY' | translate }}
+      </button>
+    </div>
+  </div>
 </div>
 
-<div class="loading-shade" *ngIf="isLoading">
+@if (isLoading) {
+  <div class="loading-shade">
     <mat-spinner></mat-spinner>
-</div>
+  </div>
+}
 
 <div class="table-responsive">
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="createdDate" matSortDirection="desc"
-        class="table table-bordered table-hover">
-        <ng-container matColumnDef="action">
-            <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'ACTION' | translate}} </th>
-            <td class="table-column-150" mat-cell *matCellDef="let gallery">
-                 <button *hasClaim="'event_gallery_update_gallery'" [routerLink]="['/gallery/manage',gallery.id]"
-                    class="btn btn-success btn-sm m-right-10" type="button">
-                    <i class="fas fa-pencil-alt"></i>
-                    <span class="d-none d-sm-inline"> {{'EDIT' | translate}}</span>
-                </button>
-                <button *hasClaim="'event_gallery_delete_gallery'" (click)="deleteGallery(gallery)"
-                    class="btn btn-danger btn-sm" type="button">
-                    <i class="fas fa-trash-alt"></i>
-                    <span class="d-none d-sm-inline"> {{'DELETE' | translate}}</span>
-                </button>
-            </td>
-        </ng-container>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    matSortActive="createdDate"
+    matSortDirection="desc"
+    class="table table-bordered table-hover"
+  >
+    <ng-container matColumnDef="action">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef>{{ 'ACTION' | translate }}</th>
+      <td class="table-column-150" mat-cell *matCellDef="let gallery">
+        <button
+          *hasClaim="'event_gallery_update_gallery'"
+          [routerLink]="['/gallery/manage', gallery.id]"
+          class="btn btn-success btn-sm m-right-10"
+          type="button"
+        >
+          <i class="fas fa-pencil-alt"></i>
+          <span class="d-none d-sm-inline"> {{ 'EDIT' | translate }}</span>
+        </button>
+        <button
+          *hasClaim="'event_gallery_delete_gallery'"
+          (click)="deleteGallery(gallery)"
+          class="btn btn-danger btn-sm"
+          type="button"
+        >
+          <i class="fas fa-trash-alt"></i>
+          <span class="d-none d-sm-inline"> {{ 'DELETE' | translate }}</span>
+        </button>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="name">
-            <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header> {{'NAME' | translate}} </th>
-            <td class="table-column-200" mat-cell *matCellDef="let gallery"> {{gallery.name}} </td>
-        </ng-container>
+    <ng-container matColumnDef="name">
+      <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'NAME' | translate }}
+      </th>
+      <td class="table-column-200" mat-cell *matCellDef="let gallery">{{ gallery.name }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="category">
-            <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'CATEGORY' | translate}} </th>
-            <td class="table-column-200" mat-cell *matCellDef="let gallery"> {{gallery.category | galleryCategory }} </td>
-        </ng-container>
+    <ng-container matColumnDef="category">
+      <th class="table-column-200" mat-header-cell *matHeaderCellDef>
+        {{ 'CATEGORY' | translate }}
+      </th>
+      <td class="table-column-200" mat-cell *matCellDef="let gallery">
+        {{ gallery.category | galleryCategory }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="description">
-            <th class="table-column-350" mat-header-cell *matHeaderCellDef> {{'DESCRIPTION' | translate}} </th>
-            <td class="table-column-350" mat-cell *matCellDef="let gallery"> {{gallery.description }} </td>
-        </ng-container>
+    <ng-container matColumnDef="description">
+      <th class="table-column-350" mat-header-cell *matHeaderCellDef>
+        {{ 'DESCRIPTION' | translate }}
+      </th>
+      <td class="table-column-350" mat-cell *matCellDef="let gallery">{{ gallery.description }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="url">
-            <th class="table-column-250" mat-header-cell *matHeaderCellDef> {{'URL' | translate}} </th>
-            <td class="table-column-250" mat-cell *matCellDef="let gallery">
-                <a [href]="gallery.url" target="_blank" rel="noopener noreferrer">{{gallery.url}}</a>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="url">
+      <th class="table-column-250" mat-header-cell *matHeaderCellDef>{{ 'URL' | translate }}</th>
+      <td class="table-column-250" mat-cell *matCellDef="let gallery">
+        <a [href]="gallery.url" target="_blank" rel="noopener noreferrer">{{ gallery.url }}</a>
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="createdDate">
-            <th class="table-column-150" mat-header-cell *matHeaderCellDef mat-sort-header> {{'CREATED_DATE' | translate}} </th>
-            <td class="table-column-150" mat-cell *matCellDef="let gallery"> {{gallery.createdDate | utcToLocalTime:'shortDate'}} </td>
-        </ng-container>
+    <ng-container matColumnDef="createdDate">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'CREATED_DATE' | translate }}
+      </th>
+      <td class="table-column-150" mat-cell *matCellDef="let gallery">
+        {{ gallery.createdDate | utcToLocalTime: 'shortDate' }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="action-search">
-            <th class="table-column-150" mat-header-cell *matHeaderCellDef> </th>
-        </ng-container>
+    <ng-container matColumnDef="action-search">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
+    </ng-container>
 
-        <ng-container matColumnDef="name-search">
-            <th class="table-column-200" mat-header-cell *matHeaderCellDef>
-                <input type="text" class="form-control w-90" [(ngModel)]="NameFilter">
-            </th>
-        </ng-container>
+    <ng-container matColumnDef="name-search">
+      <th class="table-column-200" mat-header-cell *matHeaderCellDef>
+        <input type="text" class="form-control w-90" [(ngModel)]="NameFilter" />
+      </th>
+    </ng-container>
 
-        <ng-container matColumnDef="category-search">
-            <th class="table-column-200" mat-header-cell *matHeaderCellDef>
-                <mat-select placeholder="{{'CATEGORY' | translate}}" [(ngModel)]="CategoryFilter"
-                    class="form-control">
-                    <mat-option [value]="null">All</mat-option>
-                    <mat-option *ngFor="let category of galleryCategories" [value]="category?.id">
-                        {{category?.id | galleryCategory}}
-                    </mat-option>
-                </mat-select>
-            </th>
-        </ng-container>
+    <ng-container matColumnDef="category-search">
+      <th class="table-column-200" mat-header-cell *matHeaderCellDef>
+        <mat-select
+          placeholder="{{ 'CATEGORY' | translate }}"
+          [(ngModel)]="CategoryFilter"
+          class="form-control"
+        >
+          <mat-option [value]="null">All</mat-option>
+          @for (category of galleryCategories; track category) {
+            <mat-option [value]="category?.id">
+              {{ category?.id | galleryCategory }}
+            </mat-option>
+          }
+        </mat-select>
+      </th>
+    </ng-container>
 
-        <ng-container matColumnDef="createdDate-search">
-            <th class="table-column-150" mat-header-cell *matHeaderCellDef>
-            </th>
-        </ng-container>
+    <ng-container matColumnDef="createdDate-search">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
+    </ng-container>
 
-        <ng-container matColumnDef="footer">
-            <td mat-footer-cell colspan="6" *matFooterCellDef>
-                <mat-paginator [length]="galleryResource.totalCount" [pageSize]="galleryResource.pageSize"
-                    [pageSizeOptions]="[15,20,30]"></mat-paginator>
-            </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
-        <tr mat-header-row
-            *matHeaderRowDef="['action-search','name-search','category-search','createdDate-search'];sticky: true"
-            class="example-second-header-row">
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="footerToDisplayed;sticky: true"></tr>
-    </table>
+    <ng-container matColumnDef="footer">
+      <td mat-footer-cell colspan="6" *matFooterCellDef>
+        <mat-paginator
+          [length]="galleryResource.totalCount"
+          [pageSize]="galleryResource.pageSize"
+          [pageSizeOptions]="[15, 20, 30]"
+        ></mat-paginator>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr
+      mat-header-row
+      *matHeaderRowDef="
+        ['action-search', 'name-search', 'category-search', 'createdDate-search'];
+        sticky: true
+      "
+      class="example-second-header-row"
+    ></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-footer-row *matFooterRowDef="footerToDisplayed; sticky: true"></tr>
+  </table>
 </div>

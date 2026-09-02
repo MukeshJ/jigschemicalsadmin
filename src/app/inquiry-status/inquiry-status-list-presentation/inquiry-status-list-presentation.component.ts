@@ -5,7 +5,6 @@ import { InquiryStatus } from '@core/domain-classes/inquiry-status';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageInquiryStatusComponent } from '../manage-inquiry-status/manage-inquiry-status.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './inquiry-status-list-presentation.component.html',
   styleUrls: ['./inquiry-status-list-presentation.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

@@ -3,7 +3,6 @@ import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { SecurityService } from '@core/security/security.service';
-import { NgIf, NgFor } from '@angular/common';
 import { PaymentStatusPipe } from '../pipes/purchase-order-paymentStatus.pipe';
 import { CustomCurrencyPipe } from '../pipes/custome-currency.pipe';
 import { UTCToLocalTime } from '../pipes/utc-to-localtime.pipe';
@@ -13,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-purchase-order-invoice',
   templateUrl: './purchase-order-invoice.component.html',
   styleUrls: ['./purchase-order-invoice.component.scss'],
-  imports: [NgIf, NgFor, PaymentStatusPipe, CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
+  imports: [PaymentStatusPipe, CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
 })
 export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
   @Input() purchaseOrder: PurchaseOrder;

@@ -6,14 +6,13 @@ import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-page',
   templateUrl: './manage-page.component.html',
   styleUrls: ['./manage-page.component.scss'],
-  imports: [FormsModule, NgIf, TranslatePipe],
+  imports: [FormsModule, TranslatePipe],
 })
 export class ManagePageComponent extends BaseComponent implements OnChanges {
   isEdit: boolean = false;

@@ -7,7 +7,6 @@ import { SalesOrder } from '@core/domain-classes/sales-order';
 import { ClonerService } from '@core/services/clone.service';
 import { ToastrService } from 'ngx-toastr';
 import { SalesOrderService } from '../sales-order.service';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -28,7 +27,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './po-list.component.html',
   styleUrls: ['./po-list.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

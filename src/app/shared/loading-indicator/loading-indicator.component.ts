@@ -2,14 +2,13 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { PendingInterceptorService } from './pending-interceptor.service';
-import { NgIf } from '@angular/common';
 import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-loading-indicator',
   templateUrl: './loading-indicator.component.html',
   styleUrls: ['./loading-indicator.component.scss'],
-  imports: [NgIf, MatProgressBar],
+  imports: [MatProgressBar],
 })
 export class LoadingIndicatorComponent implements OnInit, OnDestroy {
   public isSpinnerVisible: boolean;

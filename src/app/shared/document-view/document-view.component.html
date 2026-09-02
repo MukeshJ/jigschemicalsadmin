@@ -6,27 +6,42 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
     </span>
-    <span class="file-name"> {{documentInfo?.name}}</span>
-    <button (click)="downloadDocument()" *ngIf="documentInfo?.isAllowDownload">
-      <mat-icon>edit</mat-icon>
-    </button>
+    <span class="file-name"> {{ documentInfo?.name }}</span>
+    @if (documentInfo?.isAllowDownload) {
+      <button (click)="downloadDocument()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    }
     <!-- <span (click)="downloadDocument()" class="back-arrow float-right" *ngIf="documentInfo?.isAllowDownload">
-      <i class="las la-arrow-down"></i>
-    </span> -->
+    <i class="las la-arrow-down"></i>
+  </span> -->
   </div>
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <div class="loading-shade" *ngIf="isLoading">
-      <mat-spinner></mat-spinner>
-    </div>
-    <ng-container *ngIf="viewerType=='pdf'">
-      <ngx-extended-pdf-viewer [base64Src]="documentUrl" [showToolbar]="true"
-        [showSidebarButton]="true" [showFindButton]="false" [showPagingButtons]="false" [showZoomButtons]="true"
-        [showPresentationModeButton]="true" [showOpenFileButton]="false" [showPrintButton]="false"
-        [showDownloadButton]="false" [showSecondaryToolbarButton]="true"
-        [showRotateButton]="true" [showHandToolButton]="false" [showSpreadButton]="false"
-        [showPropertiesButton]="false">
+    @if (isLoading) {
+      <div class="loading-shade">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+    @if (viewerType == 'pdf') {
+      <ngx-extended-pdf-viewer
+        [base64Src]="documentUrl"
+        [showToolbar]="true"
+        [showSidebarButton]="true"
+        [showFindButton]="false"
+        [showPagingButtons]="false"
+        [showZoomButtons]="true"
+        [showPresentationModeButton]="true"
+        [showOpenFileButton]="false"
+        [showPrintButton]="false"
+        [showDownloadButton]="false"
+        [showSecondaryToolbarButton]="true"
+        [showRotateButton]="true"
+        [showHandToolButton]="false"
+        [showSpreadButton]="false"
+        [showPropertiesButton]="false"
+      >
       </ngx-extended-pdf-viewer>
       <ng-template #customCheckboxZoomToolbar>
         <div id="toolbarViewer">
@@ -43,12 +58,12 @@
           </div>
         </div>
       </ng-template>
-    </ng-container>
-    <ng-container *ngIf="viewerType !=='pdf'">
+    }
+    @if (viewerType !== 'pdf') {
       <div class="p-5">
         <ngx-doc-viewer [url]="documentUrl" [viewer]="$any(viewerType)" disableContent="all">
         </ngx-doc-viewer>
       </div>
-    </ng-container>
+    }
   </div>
 </div>

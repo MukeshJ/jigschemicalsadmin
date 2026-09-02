@@ -22,7 +22,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerService } from '../customer.service';
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -47,10 +47,8 @@ export class AlreadyExistValidator {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatLabel,
     MatSelect,
-    NgFor,
     MatOption,
     MatAutocompleteTrigger,
     MatAutocomplete,

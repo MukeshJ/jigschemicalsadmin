@@ -17,7 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChemicalListComponent } from '../chemical-list/chemical-list.component';
 import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-customer-chemical.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -50,7 +50,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,

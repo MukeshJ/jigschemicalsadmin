@@ -21,7 +21,7 @@ import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 import { ExpenseDataSource } from './expense-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -56,7 +56,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -74,7 +73,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     FormsModule,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

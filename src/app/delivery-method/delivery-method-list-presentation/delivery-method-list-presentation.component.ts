@@ -5,7 +5,6 @@ import { DeliveryMethod } from '@core/domain-classes/delivery-method';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageDeliveryMethodComponent } from '../manage-delivery-method/manage-delivery-method.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './delivery-method-list-presentation.component.html',
   styleUrls: ['./delivery-method-list-presentation.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

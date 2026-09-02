@@ -36,7 +36,7 @@ import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption } from '@angular/material/select';
@@ -77,7 +77,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
@@ -85,7 +84,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatDatepicker,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatTable,
     MatSort,

@@ -20,7 +20,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { Country } from '@core/domain-classes/country';
 import { CommonService } from '@core/services/common.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -50,7 +49,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./chemical-suppliers.component.scss'],
   imports: [
     HasClaimDirective,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,
@@ -62,7 +60,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     FormsModule,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

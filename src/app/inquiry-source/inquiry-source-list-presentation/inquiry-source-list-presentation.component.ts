@@ -5,7 +5,6 @@ import { InquirySource } from '@core/domain-classes/inquiry-source';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageInquirySourceComponent } from '../manage-inquiry-source/manage-inquiry-source.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './inquiry-source-list-presentation.component.html',
   styleUrls: ['./inquiry-source-list-presentation.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

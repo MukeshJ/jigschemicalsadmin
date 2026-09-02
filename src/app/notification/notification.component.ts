@@ -26,7 +26,7 @@ import {
   MatFooterRowDef,
   MatFooterRow,
 } from '@angular/material/table';
-import { NgSwitch, NgSwitchCase, NgSwitchDefault, NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { UTCToLocalTime } from '../shared/pipes/utc-to-localtime.pipe';
@@ -45,10 +45,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatSortHeader,
     MatCellDef,
     MatCell,
-    NgSwitch,
-    NgSwitchCase,
     RouterLink,
-    NgSwitchDefault,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,
@@ -59,7 +56,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    NgIf,
     MatProgressSpinner,
     AsyncPipe,
     UTCToLocalTime,

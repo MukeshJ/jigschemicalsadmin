@@ -4,14 +4,13 @@ import { OnlineUser } from '@core/domain-classes/online-user';
 import { SignalrService } from '@core/services/signalr.service';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from '../base.component';
-import { NgIf, NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-session',
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.scss'],
-  imports: [NgIf, NgFor, TranslatePipe],
+  imports: [TranslatePipe],
 })
 export class SessionComponent extends BaseComponent implements OnInit {
   onlineUsers: OnlineUser[] = [];

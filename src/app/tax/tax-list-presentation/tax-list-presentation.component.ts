@@ -5,7 +5,6 @@ import { Tax } from '@core/domain-classes/tax';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageTaxComponent } from '../manage-tax/manage-tax.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './tax-list-presentation.component.html',
   styleUrls: ['./tax-list-presentation.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

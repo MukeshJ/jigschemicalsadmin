@@ -2,108 +2,176 @@
   <div class="row align-items-center justify-content-between">
     <div class="col-md-auto col-sm-auto">
       <div class="content-header">
-        <h1>{{titlePage | translate}}</h1>
+        <h1>{{ titlePage | translate }}</h1>
       </div>
     </div>
   </div>
 </div>
 <form autocomplete="off" [formGroup]="articleForm" (ngSubmit)="onArticleSubmit()">
-  <div class="loading-shade" *ngIf="isLoading">
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
-  </div>
+  @if (isLoading) {
+    <div class="loading-shade">
+      @if (isLoading) {
+        <mat-spinner></mat-spinner>
+      }
+    </div>
+  }
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <label>{{'TITLE' | translate}}</label>
-        <input formControlName="title" class="form-control" type="text">
-        <div *ngIf="articleForm.get('title').touched && articleForm.get('title').errors">
-          <div class="text-danger" *ngIf="articleForm.get('title').errors?.required">
-            {{'PLEASE_ENTER_TITLE' | translate}}
+        <label>{{ 'TITLE' | translate }}</label>
+        <input formControlName="title" class="form-control" type="text" />
+        @if (articleForm.get('title').touched && articleForm.get('title').errors) {
+          <div>
+            @if (articleForm.get('title').errors?.required) {
+              <div class="text-danger">
+                {{ 'PLEASE_ENTER_TITLE' | translate }}
+              </div>
+            }
           </div>
-        </div>
+        }
       </div>
     </div>
     <div class="col-md-6">
-      <mat-label>{{'CATEGORY' | translate}}</mat-label>
-      <mat-select placeholder="{{'SELECT_CATEGORY' | translate}}" class="form-control" formControlName="categoryId">
-        <mat-option *ngFor="let category of categories" [value]="category.id">
-          {{category.name}}
-        </mat-option>
+      <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
+      <mat-select
+        placeholder="{{ 'SELECT_CATEGORY' | translate }}"
+        class="form-control"
+        formControlName="categoryId"
+      >
+        @for (category of categories; track category) {
+          <mat-option [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="
-                articleForm.get('categoryId').touched &&
-                articleForm.get('categoryId').errors?.required" class="text-danger">
-        {{'CATEGORY_IS_REQUIRED' | translate}}
-      </mat-error>
+      @if (
+        articleForm.get('categoryId').touched && articleForm.get('categoryId').errors?.required
+      ) {
+        <mat-error class="text-danger">
+          {{ 'CATEGORY_IS_REQUIRED' | translate }}
+        </mat-error>
+      }
     </div>
     <div class="col-md-6">
       <div class="form-group">
-        <mat-label>{{'PUBLISH_DATE' | translate}}</mat-label>
+        <mat-label>{{ 'PUBLISH_DATE' | translate }}</mat-label>
         <div class="input-group mb-2">
           <div class="input-group-append cursor-pointer" (click)="picker.open()">
             <div class="input-group-text">
               <mat-icon>calendar_today</mat-icon>
             </div>
           </div>
-          <input type="text" class="form-control" id="inlineFormInputGroup" formControlName="publishDate"
-            [matDatepicker]="picker" placeholder="{{'PUBLISH_DATE' | translate}}">
+          <input
+            type="text"
+            class="form-control"
+            id="inlineFormInputGroup"
+            formControlName="publishDate"
+            [matDatepicker]="picker"
+            placeholder="{{ 'PUBLISH_DATE' | translate }}"
+          />
         </div>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="
-                articleForm.get('publishDate').touched &&
-                articleForm.get('publishDate').errors?.required" class="text-danger">
-          {{'PUBLISH_DATE_IS_REQUIRED' | translate}}
-        </mat-error>
+        @if (
+          articleForm.get('publishDate').touched && articleForm.get('publishDate').errors?.required
+        ) {
+          <mat-error class="text-danger">
+            {{ 'PUBLISH_DATE_IS_REQUIRED' | translate }}
+          </mat-error>
+        }
       </div>
     </div>
     <div class="col-md-12">
       <div class="form-group">
-        <label>{{'SHORT_DESCRIPTION' | translate}}</label>
+        <label>{{ 'SHORT_DESCRIPTION' | translate }}</label>
         <textarea formControlName="shortDescription" class="form-control"></textarea>
-        <div *ngIf="articleForm.get('shortDescription').touched && articleForm.get('shortDescription').errors">
-          <div class="text-danger" *ngIf="articleForm.get('shortDescription').errors?.required">
-            {{'PLEASE_ENTER_SHORT_DESCRIPTION' | translate}}
+        @if (
+          articleForm.get('shortDescription').touched && articleForm.get('shortDescription').errors
+        ) {
+          <div>
+            @if (articleForm.get('shortDescription').errors?.required) {
+              <div class="text-danger">
+                {{ 'PLEASE_ENTER_SHORT_DESCRIPTION' | translate }}
+              </div>
+            }
           </div>
-        </div>
+        }
       </div>
     </div>
     <div class="col-sm-12">
-      <div class="form-group ">
+      <div class="form-group">
         <label>
-          {{'DESCRIPTION' | translate}}
+          {{ 'DESCRIPTION' | translate }}
         </label>
         <div>
-          <angular-editor formControlName="longDescription" [config]="editorConfig"></angular-editor>
-          <div *ngIf="articleForm.get('longDescription').touched && articleForm.get('longDescription').errors">
-            <div class="text-danger" *ngIf="articleForm.get('longDescription').errors?.required">
-              {{'PLEASE_ENTER_DESCRIPTION' | translate}}
+          <angular-editor
+            formControlName="longDescription"
+            [config]="editorConfig"
+          ></angular-editor>
+          @if (
+            articleForm.get('longDescription').touched && articleForm.get('longDescription').errors
+          ) {
+            <div>
+              @if (articleForm.get('longDescription').errors?.required) {
+                <div class="text-danger">
+                  {{ 'PLEASE_ENTER_DESCRIPTION' | translate }}
+                </div>
+              }
             </div>
-          </div>
+          }
         </div>
-        
       </div>
     </div>
     <div class="col-md-12">
       <mat-card class="text-center">
-        <input hidden (change)="onFileSelect($event)" #fileInput name="logo" type="file" name="Profile Photo"
-          fxFlex="30">
-        <img *ngIf="imgSrc" [src]="imgSrc" />
-        <img *ngIf="!imgSrc" src="../../../assets/images/banner.png" />
+        <input
+          hidden
+          (change)="onFileSelect($event)"
+          #fileInput
+          name="logo"
+          type="file"
+          name="Profile Photo"
+          fxFlex="30"
+        />
+        @if (imgSrc) {
+          <img [src]="imgSrc" />
+        }
+        @if (!imgSrc) {
+          <img src="../../../assets/images/banner.png" />
+        }
         <mat-card-actions>
-          <button type="button" *ngIf="!imgSrc" class="btn btn-success btn-sm m-right-10" (click)="fileInput.click()">
-            <i class="far fa-image"></i> {{'ADD_BANNER' | translate}}</button>
-          <button type="button" *ngIf="imgSrc" class="btn btn-success btn-sm m-right-10" (click)="fileInput.click()">
-            <i class="far fa-image"></i> {{'CHANGE_BANNER' | translate}}</button>
-          <button *ngIf="imgSrc" type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
-            <i class="fas fa-trash-alt"></i> {{'REMOVE_BANNER' | translate}}</button>
+          @if (!imgSrc) {
+            <button
+              type="button"
+              class="btn btn-success btn-sm m-right-10"
+              (click)="fileInput.click()"
+            >
+              <i class="far fa-image"></i> {{ 'ADD_BANNER' | translate }}
+            </button>
+          }
+          @if (imgSrc) {
+            <button
+              type="button"
+              class="btn btn-success btn-sm m-right-10"
+              (click)="fileInput.click()"
+            >
+              <i class="far fa-image"></i> {{ 'CHANGE_BANNER' | translate }}
+            </button>
+          }
+          @if (imgSrc) {
+            <button type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i> {{ 'REMOVE_BANNER' | translate }}
+            </button>
+          }
         </mat-card-actions>
       </mat-card>
     </div>
     <div class="m-top-10 col-md-12">
-      <button type="submit" class="btn btn-success btn-sm m-right-10"><i class="fas fa-save"></i> {{'SAVE' |
-        translate}}</button>
-      <button type="button" class="btn btn-danger btn-sm" [routerLink]="['/article']"><i
-          class="fas fa-times-circle"></i> {{'CANCEL' | translate}}</button>
+      <button type="submit" class="btn btn-success btn-sm m-right-10">
+        <i class="fas fa-save"></i> {{ 'SAVE' | translate }}
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" [routerLink]="['/article']">
+        <i class="fas fa-times-circle"></i> {{ 'CANCEL' | translate }}
+      </button>
     </div>
   </div>
 </form>

@@ -21,7 +21,6 @@ import { environment } from '@environments/environment';
 import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
 import { Unit } from '@core/domain-classes/unit';
-import { NgIf, NgFor } from '@angular/common';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -32,9 +31,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatSelect,
-    NgFor,
     MatOption,
     MatLabel,
     MatCard,

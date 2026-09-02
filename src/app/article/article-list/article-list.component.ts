@@ -14,24 +14,9 @@ import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
 import { ArticleDataSource } from './article-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import {
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatFooterCellDef,
-  MatFooterCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-  MatFooterRowDef,
-  MatFooterRow,
-} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
@@ -44,26 +29,12 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
-    MatTable,
+    MatTableModule,
     MatSort,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
     MatSortHeader,
     FormsModule,
-    MatFooterCellDef,
-    MatFooterCell,
     MatPaginator,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatFooterRowDef,
-    MatFooterRow,
     AsyncPipe,
     TruncatePipe,
     UTCToLocalTime,

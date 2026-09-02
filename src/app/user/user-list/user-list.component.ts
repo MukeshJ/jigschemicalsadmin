@@ -16,25 +16,9 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { UserService } from '../user.service';
 import { UserDataSource } from './user-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import {
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatFooterCellDef,
-  MatFooterCell,
-  MatNoDataRow,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-  MatFooterRowDef,
-  MatFooterRow,
-} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
@@ -48,9 +32,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
-    MatTable,
+    MatTableModule,
     MatSort,
     MatColumnDef,
     MatHeaderCellDef,

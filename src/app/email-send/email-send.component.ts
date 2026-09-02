@@ -17,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../base.component';
 import { EmailTemplateService } from '../email-template/email-template.service';
 import { EmailSendService } from './email-send.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -29,12 +28,10 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './email-send.component.html',
   styleUrls: ['./email-send.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatLabel,
     MatSelect,
     FormsModule,
-    NgFor,
     MatOption,
     ReactiveFormsModule,
     AngularEditorModule,

@@ -17,7 +17,7 @@ import { ContactUsDetailComponent } from './contact-us-detail/contact-us-detail.
 import { ContactUsService } from './contact-us.service';
 import { ContactRequestTypePipe } from '@shared/pipes/contact-request-type-pipe';
 import { ContactRequestType } from '@core/domain-classes/contact-request-type-enum';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -46,7 +46,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -59,7 +58,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     FormsModule,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

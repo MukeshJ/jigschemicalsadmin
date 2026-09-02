@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NLog } from '@core/domain-classes/n-log';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf } from '@angular/common';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -10,7 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-n-log-detail',
   templateUrl: './n-log-detail.component.html',
   styleUrls: ['./n-log-detail.component.scss'],
-  imports: [RouterLink, NgIf, UTCToLocalTime, TranslatePipe],
+  imports: [RouterLink, UTCToLocalTime, TranslatePipe],
 })
 export class NLogDetailComponent extends BaseComponent implements OnInit {
   log: NLog;

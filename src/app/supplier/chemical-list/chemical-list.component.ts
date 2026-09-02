@@ -39,7 +39,6 @@ import {
   MatFooterRow,
 } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -66,7 +65,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    NgIf,
     MatProgressSpinner,
     TranslatePipe,
   ],

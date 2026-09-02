@@ -3,7 +3,7 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
         <h4 class="modal-title">
-          {{'DOCUMENT_CATEGORY' | translate}}
+          {{ 'DOCUMENT_CATEGORY' | translate }}
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
@@ -18,23 +18,36 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">
-            <label class="text-danger" for="screeName"> {{'NAME'| translate}} *</label>
-            <input formControlName="name" type="text" class="form-control" id="unitName">
-            <div *ngIf="documentCategoryForm.get('name').touched && documentCategoryForm.get('name').errors">
-              <div class="text-danger"
-                *ngIf="documentCategoryForm.get('name').touched && documentCategoryForm.get('name').errors?.required">
-                {{'NAME_IS_REQUIRED'| translate}}
+            <label class="text-danger" for="screeName"> {{ 'NAME' | translate }} *</label>
+            <input formControlName="name" type="text" class="form-control" id="unitName" />
+            @if (
+              documentCategoryForm.get('name').touched && documentCategoryForm.get('name').errors
+            ) {
+              <div>
+                @if (
+                  documentCategoryForm.get('name').touched &&
+                  documentCategoryForm.get('name').errors?.required
+                ) {
+                  <div class="text-danger">
+                    {{ 'NAME_IS_REQUIRED' | translate }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">
-            <label for="description">{{'DESCRIPTION' | translate}}:</label>
-            <textarea formControlName="description" type="text" class="form-control" id="description">
-              </textarea>
+            <label for="description">{{ 'DESCRIPTION' | translate }}:</label>
+            <textarea
+              formControlName="description"
+              type="text"
+              class="form-control"
+              id="description"
+            >
+            </textarea>
           </div>
         </div>
       </div>
@@ -42,16 +55,29 @@
     <div class="modal-footer">
       <div class="form-row w-100 justify-content-end">
         <div class="col-md-auto col-auto">
-          <ng-container *ngIf="!isEdit">
-            <button type="submit" (click)="saveCategory()" class="btn btn-success btn-sm m-right-10" cdkFocusInitial><i class="las la-save"></i>
-              {{'SAVE' | translate}}</button>
-          </ng-container>
-          <ng-container *ngIf="isEdit">
-            <button type="submit" (click)="saveCategory()" class="btn btn-success btn-sm m-right-10" cdkFocusInitial><i class="las la-save"></i>
-              {{'SAVE' | translate}}</button>
-          </ng-container>
-          <button type="button" class="btn btn-danger btn-sm" (click)="onCancel()"> <i class="las la-times-circle"></i>
-            {{'CANCEL' | translate}}</button>
+          @if (!isEdit) {
+            <button
+              type="submit"
+              (click)="saveCategory()"
+              class="btn btn-success btn-sm m-right-10"
+              cdkFocusInitial
+            >
+              <i class="las la-save"></i> {{ 'SAVE' | translate }}
+            </button>
+          }
+          @if (isEdit) {
+            <button
+              type="submit"
+              (click)="saveCategory()"
+              class="btn btn-success btn-sm m-right-10"
+              cdkFocusInitial
+            >
+              <i class="las la-save"></i> {{ 'SAVE' | translate }}
+            </button>
+          }
+          <button type="button" class="btn btn-danger btn-sm" (click)="onCancel()">
+            <i class="las la-times-circle"></i> {{ 'CANCEL' | translate }}
+          </button>
         </div>
       </div>
     </div>

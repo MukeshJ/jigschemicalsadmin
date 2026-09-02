@@ -13,7 +13,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from '../email-template.service';
-import { NgIf } from '@angular/common';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -21,7 +20,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-email-template-manage',
   templateUrl: './email-template-manage.component.html',
   styleUrls: ['./email-template-manage.component.scss'],
-  imports: [NgIf, FormsModule, ReactiveFormsModule, AngularEditorModule, RouterLink, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, AngularEditorModule, RouterLink, TranslatePipe],
 })
 export class EmailTemplateManageComponent extends BaseComponent implements OnInit {
   emailTemplateForm: UntypedFormGroup;

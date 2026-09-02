@@ -11,7 +11,6 @@ import { InquiryNote } from '@core/domain-classes/inquiry-note';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { InquiryNoteService } from './inquiry-note.service';
-import { NgFor, NgIf } from '@angular/common';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -19,7 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-note',
   templateUrl: './inquiry-note.component.html',
   styleUrls: ['./inquiry-note.component.scss'],
-  imports: [NgFor, FormsModule, ReactiveFormsModule, NgIf, UTCToLocalTime, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, UTCToLocalTime, TranslatePipe],
 })
 export class InquiryNoteComponent extends BaseComponent implements OnInit {
   @Input() inquiryId: string;

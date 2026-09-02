@@ -19,7 +19,7 @@ import { catchError, debounceTime, finalize, map, switchMap, tap } from 'rxjs/op
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
@@ -32,11 +32,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatProgressSpinner,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
     AsyncPipe,
     TranslatePipe,

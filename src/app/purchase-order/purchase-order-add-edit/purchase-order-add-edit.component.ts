@@ -40,7 +40,6 @@ import { PurchaseOrderItemTax } from '@core/domain-classes/purchase-order/purcha
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
-import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatIconButton } from '@angular/material/button';
@@ -64,9 +63,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     ReactiveFormsModule,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
-    NgIf,
     MatDatepickerInput,
     MatDatepicker,
     MatLabel,

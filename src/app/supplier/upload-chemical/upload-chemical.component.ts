@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -29,9 +29,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
-    NgIf,
     AsyncPipe,
     TranslatePipe,
   ],

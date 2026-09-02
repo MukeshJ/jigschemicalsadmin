@@ -15,7 +15,7 @@ import { CommonError } from '@core/error-handler/common-error';
 import { User } from '@core/domain-classes/user';
 import { OnlineUser } from '@core/domain-classes/online-user';
 import { SignalrService } from '@core/services/signalr.service';
-import { NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -23,7 +23,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [NgIf, MatProgressSpinner, FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
+  imports: [MatProgressSpinner, FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   loginFormGroup: UntypedFormGroup;

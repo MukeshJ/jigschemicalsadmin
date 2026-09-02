@@ -9,7 +9,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { AddCustomerChemicalComponent } from '../add-customer-chemical/add-customer-chemical.component';
 import { CustomerService } from '../customer.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -37,7 +36,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./chemical-list.component.scss'],
   imports: [
     HasClaimDirective,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

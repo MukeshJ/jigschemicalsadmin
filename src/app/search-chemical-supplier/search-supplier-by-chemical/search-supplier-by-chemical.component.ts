@@ -15,7 +15,7 @@ import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rx
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCard } from '@angular/material/card';
 import { MatPrefix, MatOption } from '@angular/material/select';
@@ -44,7 +44,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './search-supplier-by-chemical.component.html',
   styleUrls: ['./search-supplier-by-chemical.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatCard,
     FormsModule,
@@ -52,7 +51,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatPrefix,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
     MatTable,
     MatColumnDef,

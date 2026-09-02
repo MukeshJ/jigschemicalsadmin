@@ -31,7 +31,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
@@ -51,12 +51,10 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./sales-order-return.component.scss'],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatDatepickerInput,
     MatDatepicker,

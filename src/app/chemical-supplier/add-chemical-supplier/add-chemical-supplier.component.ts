@@ -18,7 +18,7 @@ import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
-import { NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -32,9 +32,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
-    NgIf,
     MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,

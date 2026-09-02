@@ -38,7 +38,7 @@ import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption, MatSelect, MatError } from '@angular/material/select';
@@ -67,11 +67,9 @@ export function emailOrMobileValidator(): ValidatorFn {
     HasClaimDirective,
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatProgressSpinner,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
     MatChipSet,
     MatChip,

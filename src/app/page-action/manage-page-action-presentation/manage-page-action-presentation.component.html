@@ -2,37 +2,43 @@
   <div class="row align-items-center justify-content-between">
     <div class="col-md-auto col-sm-auto">
       <div class="content-header">
-        <h1>{{'PAGE_ACTION' | translate}}</h1>
+        <h1>{{ 'PAGE_ACTION' | translate }}</h1>
       </div>
     </div>
   </div>
 </div>
 <table class="table table-bordered">
   <!-- <thead>
-    <tr>
-      <th>#</th>
-      <th *ngFor='let action of actions;' scope="col">
-        {{action.name}}
-      </th>
-    </tr>
-  </thead> -->
+  <tr>
+    <th>#</th>
+    <th *ngFor='let action of actions;' scope="col">
+      {{action.name}}
+    </th>
+  </tr>
+</thead> -->
   <tbody>
-    <tr *ngFor='let page of pages;'>
-      <td>
-        <div class="row">
-          <div class="col-sm-12">
-            <h5> {{page.name}}</h5>
+    @for (page of pages; track page) {
+      <tr>
+        <td>
+          <div class="row">
+            <div class="col-sm-12">
+              <h5>{{ page.name }}</h5>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-2" *ngFor='let action of actions'>
-            <mat-slide-toggle (change)="onPageActionChange($event,page.id,action.id)"
-              [checked]="onCheck(page.id,action.id)">
-              {{action.name}}
-            </mat-slide-toggle>
+          <div class="row">
+            @for (action of actions; track action) {
+              <div class="col-sm-2">
+                <mat-slide-toggle
+                  (change)="onPageActionChange($event, page.id, action.id)"
+                  [checked]="onCheck(page.id, action.id)"
+                >
+                  {{ action.name }}
+                </mat-slide-toggle>
+              </div>
+            }
           </div>
-        </div>
-      </td>
-    </tr>
+        </td>
+      </tr>
+    }
   </tbody>
 </table>

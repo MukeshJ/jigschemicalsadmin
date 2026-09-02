@@ -34,7 +34,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption, MatLabel, MatSelect, MatError } from '@angular/material/select';
@@ -60,11 +60,9 @@ export function emailOrMobileValidator(): ValidatorFn {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatProgressSpinner,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgFor,
     MatOption,
     MatChipSet,
     MatChip,

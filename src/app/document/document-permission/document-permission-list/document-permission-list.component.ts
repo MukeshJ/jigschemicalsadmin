@@ -30,7 +30,6 @@ import { DocumentService } from '../../document.service';
 import { DocumentPermissionService } from '../document-permission.service';
 import { ManageRolePermissionComponent } from '../manage-role-permission/manage-role-permission.component';
 import { ManageUserPermissionComponent } from '../manage-user-permission/manage-user-permission.component';
-import { NgIf } from '@angular/common';
 import { MatFormField, MatLabel } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { UTCToLocalTime } from '../../../shared/pipes/utc-to-localtime.pipe';
@@ -41,7 +40,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './document-permission-list.component.html',
   styleUrls: ['./document-permission-list.component.scss'],
   imports: [
-    NgIf,
     MatFormField,
     MatLabel,
     MatInput,

@@ -15,7 +15,7 @@ import { DocumentLibraryService } from '../document-library.service';
 import { DocumentViewComponent } from '../../shared/document-view/document-view.component';
 import { DocumentLibraryDataSource } from './document-library-datasource';
 import { SelectionModel } from '@angular/cdk/collections';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption } from '@angular/material/select';
 import {
@@ -45,11 +45,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './document-library-list.component.html',
   styleUrls: ['./document-library-list.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatSelect,
     MatOption,
-    NgFor,
     MatTable,
     MatSort,
     MatColumnDef,

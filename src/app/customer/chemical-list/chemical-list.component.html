@@ -2,14 +2,16 @@
   <div class="modal-header">
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
-        <h4 class="modal-title">
-          {{'CHEMICALS_FOR' | translate}} {{data.customerName}}
-        </h4>
+        <h4 class="modal-title">{{ 'CHEMICALS_FOR' | translate }} {{ data.customerName }}</h4>
       </div>
       <div class="col-sm-auto ml-auto">
-        <button *hasClaim="'customer_assign_chemical_to_customer'" (click)="addChemicalCustomer()" type="button"
-          class="btn blue-btn btn-sm mt-0">
-          <i class="fas fa-plus"></i> {{'ADD_CHEMICAL' | translate}}
+        <button
+          *hasClaim="'customer_assign_chemical_to_customer'"
+          (click)="addChemicalCustomer()"
+          type="button"
+          class="btn blue-btn btn-sm mt-0"
+        >
+          <i class="fas fa-plus"></i> {{ 'ADD_CHEMICAL' | translate }}
         </button>
         <button type="button" class="close" (click)="closeDialog()" data-dismiss="modal">
           <i class="fas fa-times"></i>
@@ -18,48 +20,65 @@
     </div>
   </div>
   <div class="modal-body">
-    <div class="loading-shade" *ngIf="isLoading">
-      <mat-spinner *ngIf="isLoading"></mat-spinner>
-    </div>
+    @if (isLoading) {
+      <div class="loading-shade">
+        @if (isLoading) {
+          <mat-spinner></mat-spinner>
+        }
+      </div>
+    }
     <div class="table-responsive">
       <table mat-table [dataSource]="chemicals" class="table table-bordered table-hover">
         <ng-container matColumnDef="name">
-          <th class="table-column-300" mat-header-cell *matHeaderCellDef> {{'NAME' | translate}} </th>
-          <td class="table-column-300" mat-cell *matCellDef="let chemical"> {{chemical.name}} </td>
+          <th class="table-column-300" mat-header-cell *matHeaderCellDef>
+            {{ 'NAME' | translate }}
+          </th>
+          <td class="table-column-300" mat-cell *matCellDef="let chemical">{{ chemical.name }}</td>
         </ng-container>
         <ng-container matColumnDef="casNumber">
-          <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'CAS_NUMBER' | translate}} </th>
-          <td  class="table-column-200"mat-cell *matCellDef="let chemical"> {{chemical.casNumber}} </td>
+          <th class="table-column-200" mat-header-cell *matHeaderCellDef>
+            {{ 'CAS_NUMBER' | translate }}
+          </th>
+          <td class="table-column-200" mat-cell *matCellDef="let chemical">
+            {{ chemical.casNumber }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="name-search">
           <th class="pr-5" mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="casNumber-search">
           <th mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="CasNumberFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="CasNumberFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="footer">
           <td mat-footer-cell colspan="2" *matFooterCellDef>
-            <mat-paginator #paginator [length]="totalChemicals" (page)="pageChange($event)" [pageSize]="10">
+            <mat-paginator
+              #paginator
+              [length]="totalChemicals"
+              (page)="pageChange($event)"
+              [pageSize]="10"
+            >
             </mat-paginator>
           </td>
         </ng-container>
         <tr *matNoDataRow>
           <td colspan="7">
             <span class="p-4 mt-4">
-              <b> {{'NO_DATA_FOUND' | translate}}</b>
+              <b> {{ 'NO_DATA_FOUND' | translate }}</b>
             </span>
           </td>
         </tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-header-row *matHeaderRowDef="['name-search','casNumber-search'];sticky: true"
-          class="example-second-header-row">
-        </tr>
-        <tr mat-footer-row *matFooterRowDef="columnsToDisplay;sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="['name-search', 'casNumber-search']; sticky: true"
+          class="example-second-header-row"
+        ></tr>
+        <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
       </table>
     </div>
   </div>

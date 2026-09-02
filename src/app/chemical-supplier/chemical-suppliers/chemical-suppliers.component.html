@@ -2,14 +2,16 @@
   <div class="modal-header">
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
-        <h4 class="modal-title">
-          {{'SUPPLIERS_FOR' | translate}} : {{data.name}}
-        </h4>
+        <h4 class="modal-title">{{ 'SUPPLIERS_FOR' | translate }} : {{ data.name }}</h4>
       </div>
       <div class="col-sm-auto ml-auto">
-        <button *hasClaim="'chemical_assign_chemical_to_supplier'" (click)="addChemicalSupplier()" type="button"
-          class="btn blue-btn btn-sm mt-0">
-          <i class="fas fa-plus"></i> {{'ADD_SUPPLIER' | translate}}
+        <button
+          *hasClaim="'chemical_assign_chemical_to_supplier'"
+          (click)="addChemicalSupplier()"
+          type="button"
+          class="btn blue-btn btn-sm mt-0"
+        >
+          <i class="fas fa-plus"></i> {{ 'ADD_SUPPLIER' | translate }}
         </button>
         <button type="button" class="close" (click)="closeDialog()" data-dismiss="modal">
           <i class="fas fa-times"></i>
@@ -18,104 +20,154 @@
     </div>
   </div>
   <div class="modal-body">
-    <div class="loading-shade" *ngIf="isLoading">
-      <mat-spinner *ngIf="isLoading"></mat-spinner>
-    </div>
-    <div class="table-responsive dialog-grid-height">
-      <div class="row mb-2" *ngIf="selection.hasValue()">
-        <div class="col-sm-auto text-left">
-          <button (click)="sendEmail()" type="button" class="btn blue-btn btn-sm mt-0">
-            <i class="fas fa-paper-plane"></i> {{'SEND_EMAIL' | translate}}
-          </button>
-        </div>
+    @if (isLoading) {
+      <div class="loading-shade">
+        @if (isLoading) {
+          <mat-spinner></mat-spinner>
+        }
       </div>
+    }
+    <div class="table-responsive dialog-grid-height">
+      @if (selection.hasValue()) {
+        <div class="row mb-2">
+          <div class="col-sm-auto text-left">
+            <button (click)="sendEmail()" type="button" class="btn blue-btn btn-sm mt-0">
+              <i class="fas fa-paper-plane"></i> {{ 'SEND_EMAIL' | translate }}
+            </button>
+          </div>
+        </div>
+      }
       <table class="table table-bordered table-hover" mat-table [dataSource]="suppliers">
         <ng-container matColumnDef="select">
           <th class="table-column-50" mat-header-cell *matHeaderCellDef></th>
           <td class="table-column-50" mat-cell *matCellDef="let supplier">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(supplier) : null" [checked]="selection.isSelected(supplier)">
+            <mat-checkbox
+              color="primary"
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(supplier) : null"
+              [checked]="selection.isSelected(supplier)"
+            >
             </mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th class="table-column-300" mat-header-cell *matHeaderCellDef> {{'NAME' | translate}} </th>
-          <td class="table-column-300" mat-cell *matCellDef="let supplier"> {{supplier.supplierName}} </td>
+          <th class="table-column-300" mat-header-cell *matHeaderCellDef>
+            {{ 'NAME' | translate }}
+          </th>
+          <td class="table-column-300" mat-cell *matCellDef="let supplier">
+            {{ supplier.supplierName }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="email">
-          <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'EMAIL' | translate}} </th>
-          <td class="table-column-200" mat-cell *matCellDef="let supplier"> {{supplier.email}} </td>
+          <th class="table-column-200" mat-header-cell *matHeaderCellDef>
+            {{ 'EMAIL' | translate }}
+          </th>
+          <td class="table-column-200" mat-cell *matCellDef="let supplier">{{ supplier.email }}</td>
         </ng-container>
         <ng-container matColumnDef="mobile">
-          <th class="table-column-100" mat-header-cell *matHeaderCellDef> {{'MOBILE' | translate}} </th>
-          <td class="table-column-100" mat-cell *matCellDef="let supplier"> {{supplier.mobileNo}} </td>
+          <th class="table-column-100" mat-header-cell *matHeaderCellDef>
+            {{ 'MOBILE' | translate }}
+          </th>
+          <td class="table-column-100" mat-cell *matCellDef="let supplier">
+            {{ supplier.mobileNo }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="country">
-          <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'COUNTRY' | translate}} </th>
-          <td class="table-column-150" mat-cell *matCellDef="let supplier"> {{supplier.country}} </td>
+          <th class="table-column-150" mat-header-cell *matHeaderCellDef>
+            {{ 'COUNTRY' | translate }}
+          </th>
+          <td class="table-column-150" mat-cell *matCellDef="let supplier">
+            {{ supplier.country }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="action">
-          <th class="table-column-100" mat-header-cell *matHeaderCellDef> {{'ACTION' | translate}} </th>
+          <th class="table-column-100" mat-header-cell *matHeaderCellDef>
+            {{ 'ACTION' | translate }}
+          </th>
           <td class="table-column-100" mat-cell *matCellDef="let supplier">
-            <button *hasClaim="'chemical_assign_chemical_to_supplier'" (click)="removeSupplierFromChemial(supplier)"
-              class="btn btn-danger btn-sm" type="button">
+            <button
+              *hasClaim="'chemical_assign_chemical_to_supplier'"
+              (click)="removeSupplierFromChemial(supplier)"
+              class="btn btn-danger btn-sm"
+              type="button"
+            >
               <i class="fas fa-trash-alt"></i>
             </button>
           </td>
         </ng-container>
         <ng-container matColumnDef="select-search">
-          <th class="pr-5 table-column-50" mat-header-cell *matHeaderCellDef>
-          </th>
+          <th class="pr-5 table-column-50" mat-header-cell *matHeaderCellDef></th>
         </ng-container>
         <ng-container matColumnDef="name-search">
           <th class="pr-5 table-column-300" mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="email-search">
           <th class="pr-5 table-column-200" mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="EmailFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="EmailFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="mobile-search">
           <th class="pr-5 table-column-100" mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="MobileFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="MobileFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="country-search">
           <th class="table-column-100" mat-header-cell *matHeaderCellDef>
-            <mat-select placeholder="{{'COUNTRY' | translate}}" [(ngModel)]="CountryFilter" class="form-control w-90">
-              <mat-option [value]="''">{{'NONE' | translate}}</mat-option>
-              <mat-option *ngFor="let cont of countryList" [value]="cont.countryName">
-                {{cont.countryName}}
-              </mat-option>
+            <mat-select
+              placeholder="{{ 'COUNTRY' | translate }}"
+              [(ngModel)]="CountryFilter"
+              class="form-control w-90"
+            >
+              <mat-option [value]="''">{{ 'NONE' | translate }}</mat-option>
+              @for (cont of countryList; track cont) {
+                <mat-option [value]="cont.countryName">
+                  {{ cont.countryName }}
+                </mat-option>
+              }
             </mat-select>
           </th>
         </ng-container>
         <ng-container matColumnDef="remove-supplier-search">
-          <th class="table-column-50" mat-header-cell *matHeaderCellDef>
-          </th>
+          <th class="table-column-50" mat-header-cell *matHeaderCellDef></th>
         </ng-container>
         <ng-container matColumnDef="footer">
           <td mat-footer-cell colspan="6" *matFooterCellDef>
-            <mat-paginator #paginator [length]="totalSuppliers" (page)="pageChange($event)" [pageSize]="10">
+            <mat-paginator
+              #paginator
+              [length]="totalSuppliers"
+              (page)="pageChange($event)"
+              [pageSize]="10"
+            >
             </mat-paginator>
           </td>
         </ng-container>
         <tr *matNoDataRow>
           <td colspan="12">
             <span class="p-4 mt-4">
-              <b> {{'NO_DATA_FOUND' | translate}}</b>
+              <b> {{ 'NO_DATA_FOUND' | translate }}</b>
             </span>
           </td>
         </tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-header-row
-          *matHeaderRowDef="['select-search','name-search','email-search','mobile-search','country-search','remove-supplier-search'];sticky: true"
-          class="example-second-header-row">
-        </tr>
-        <tr mat-footer-row *matFooterRowDef="columnsToDisplay;sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            [
+              'select-search',
+              'name-search',
+              'email-search',
+              'mobile-search',
+              'country-search',
+              'remove-supplier-search',
+            ];
+            sticky: true
+          "
+          class="example-second-header-row"
+        ></tr>
+        <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
       </table>
     </div>
   </div>

@@ -11,7 +11,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { InventoryService } from '../inventory.service';
 import { ManageInventoryComponent } from '../manage-inventory/manage-inventory.component';
 import { InventoryDataSource } from './inventory-datasource';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -39,7 +39,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,

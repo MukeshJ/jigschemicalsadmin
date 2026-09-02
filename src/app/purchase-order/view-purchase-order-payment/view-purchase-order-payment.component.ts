@@ -22,7 +22,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderPaymentService } from '../purchase-order-payment.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf } from '@angular/common';
 import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
 import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
@@ -44,7 +43,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatHeaderRow,
     MatRowDef,
     MatRow,
-    NgIf,
     PaymentMethodPipe,
     CustomCurrencyPipe,
     UTCToLocalTime,

@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { InquiryAttachmentAddComponent } from '../inquiry-attachment-add/inquiry-attachment-add.component';
 import { InquiryAttachmentService } from './inquiry-attachment.service';
-import { NgFor } from '@angular/common';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -17,7 +16,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-attachment',
   templateUrl: './inquiry-attachment.component.html',
   styleUrls: ['./inquiry-attachment.component.scss'],
-  imports: [NgFor, UTCToLocalTime, TranslatePipe],
+  imports: [UTCToLocalTime, TranslatePipe],
 })
 export class InquiryAttachmentComponent extends BaseComponent implements OnInit {
   @Input() inquiryId: string;

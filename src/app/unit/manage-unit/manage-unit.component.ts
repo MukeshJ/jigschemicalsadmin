@@ -12,14 +12,13 @@ import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-unit',
   templateUrl: './manage-unit.component.html',
   styleUrls: ['./manage-unit.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageUnitComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;

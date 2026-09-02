@@ -3,7 +3,6 @@ import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SecurityService } from '@core/security/security.service';
-import { NgIf, NgFor } from '@angular/common';
 import { CustomCurrencyPipe } from '../pipes/custome-currency.pipe';
 import { UTCToLocalTime } from '../pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sales-order-invoice',
   templateUrl: './sales-order-invoice.component.html',
   styleUrls: ['./sales-order-invoice.component.scss'],
-  imports: [NgIf, NgFor, CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
+  imports: [CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
 })
 export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
   @Input() salesOrder: SalesOrder;

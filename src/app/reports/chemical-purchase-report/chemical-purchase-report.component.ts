@@ -36,7 +36,6 @@ import { ChemicalPurchaseReportDataSource } from './chemical-purchase-report.dat
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
-import { NgFor, NgIf } from '@angular/common';
 import {
   MatTable,
   MatColumnDef,
@@ -70,9 +69,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatDatepicker,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
-    NgIf,
     MatTable,
     MatSort,
     MatColumnDef,

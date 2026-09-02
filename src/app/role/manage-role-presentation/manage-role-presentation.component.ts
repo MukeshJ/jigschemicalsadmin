@@ -5,7 +5,6 @@ import { Page } from '@core/domain-classes/page';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { Role } from '@core/domain-classes/role';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -13,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-role-presentation',
   templateUrl: './manage-role-presentation.component.html',
   styleUrls: ['./manage-role-presentation.component.scss'],
-  imports: [FormsModule, MatCheckbox, NgFor, NgIf, RouterLink, TranslatePipe],
+  imports: [FormsModule, MatCheckbox, RouterLink, TranslatePipe],
 })
 export class ManageRolePresentationComponent implements OnInit {
   @Input() pages: Page[];

@@ -15,7 +15,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyProfileService } from './company-profile.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -28,9 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatSelect,
-    NgFor,
     MatOption,
     MatCard,
     MatCardActions,

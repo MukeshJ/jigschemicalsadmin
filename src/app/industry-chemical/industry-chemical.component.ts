@@ -20,7 +20,7 @@ import { BaseComponent } from '../base.component';
 import { ChemicalService } from '../chemical/chemical.service';
 import { IndustryService } from '../industry/industry.service';
 import { IndustryChemicalService } from './industry-chemical.service';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCard } from '@angular/material/card';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
@@ -50,13 +50,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './industry-chemical.component.html',
   styleUrls: ['./industry-chemical.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatCard,
     MatLabel,
     MatSelect,
     FormsModule,
-    NgFor,
     MatOption,
     ReactiveFormsModule,
     MatAutocompleteTrigger,

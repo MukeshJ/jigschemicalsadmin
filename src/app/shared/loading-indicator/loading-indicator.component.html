@@ -1,4 +1,5 @@
-<div class="progress"
-     *ngIf="isSpinnerVisible">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</div>
+@if (isSpinnerVisible) {
+  <div class="progress">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+}

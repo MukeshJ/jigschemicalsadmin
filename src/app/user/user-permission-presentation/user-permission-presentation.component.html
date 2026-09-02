@@ -3,8 +3,8 @@
     <div class="col-md-auto col-sm-auto">
       <div class="content-header">
         <h1>
-          {{'USER_PAGE_PERMISSION_TO' | translate }} :
-          <span class="text-info">{{user?.firstName}} {{user?.lastName}}</span>
+          {{ 'USER_PAGE_PERMISSION_TO' | translate }} :
+          <span class="text-info">{{ user?.firstName }} {{ user?.lastName }}</span>
         </h1>
       </div>
     </div>
@@ -12,59 +12,76 @@
 </div>
 <div class="row align-items-center">
   <div class="col-sm-12">
-    <h4 class="widget-title">{{'PERMISSION' | translate}}</h4>
-    <mat-checkbox color="primary" (change)="selecetAll($event)" class="example-margin">Select All</mat-checkbox>
+    <h4 class="widget-title">{{ 'PERMISSION' | translate }}</h4>
+    <mat-checkbox color="primary" (change)="selecetAll($event)" class="example-margin"
+      >Select All</mat-checkbox
+    >
   </div>
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <div fxLayout="row wrap" *ngFor='let page of pages; let i=index'>
-      <div fxFlex="100" fxFlex.sm="100">
-        <mat-checkbox color="primary" (change)="onPageSelect($event,page.name)">
-          <b> {{page.name}}</b>
-        </mat-checkbox>
+    @for (page of pages; track page; let i = $index) {
+      <div fxLayout="row wrap">
+        <div fxFlex="100" fxFlex.sm="100">
+          <mat-checkbox color="primary" (change)="onPageSelect($event, page.name)">
+            <b> {{ page.name }}</b>
+          </mat-checkbox>
+        </div>
+        <div class="row ml-2">
+          @for (action of actions; track action) {
+            @if (checkPageAction(page.id, action.id)) {
+              <div class="col-sm-3">
+                <mat-checkbox
+                  color="primary"
+                  [checked]="checkPermission(page.id, action.id)"
+                  (change)="onPermissionChange($event, page, action)"
+                >
+                  {{ action.name }}
+                </mat-checkbox>
+              </div>
+            }
+          }
+        </div>
       </div>
-      <div class="row ml-2">
-        <ng-container *ngFor='let action of actions'>
-          <div *ngIf="checkPageAction(page.id,action.id)" class="col-sm-3">
-            <mat-checkbox color="primary" [checked]="checkPermission(page.id,action.id)"
-              (change)="onPermissionChange($event,page,action)">
-              {{action.name}}
-            </mat-checkbox>
-          </div>
-        </ng-container>
-      </div>
-    </div>
+    }
   </div>
 </div>
 <!-- <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th *ngFor='let action of actions' scope="col">
-        {{action.name}}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor='let page of pages'>
-      <td>
-        {{page.name}}
-      </td>
-      <td *ngFor='let action of actions'>
-        <div *ngIf="checkPageAction(page.id,action.id)">
-          <mat-slide-toggle [checked]="checkPermission(page.id,action.id)"
-            (change)="onPermissionChange($event,page,action)">
-          </mat-slide-toggle>
-        </div>
-      </td>
-    </tr>
-  </tbody>
+<thead>
+  <tr>
+    <th>#</th>
+    <th *ngFor='let action of actions' scope="col">
+      {{action.name}}
+    </th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor='let page of pages'>
+    <td>
+      {{page.name}}
+    </td>
+    <td *ngFor='let action of actions'>
+      <div *ngIf="checkPageAction(page.id,action.id)">
+        <mat-slide-toggle [checked]="checkPermission(page.id,action.id)"
+          (change)="onPermissionChange($event,page,action)">
+        </mat-slide-toggle>
+      </div>
+    </td>
+  </tr>
+</tbody>
 </table> -->
 <div class="row mt-2">
   <div class="col-sm-12">
-    <button *hasClaim="'users_assign_permission'" class="btn btn-success btn-sm m-right-10" (click)="saveUserClaim()"
-      cdkFocusInitial><i class="fas fa-save"></i> Save</button>
-    <a class="btn btn-danger btn-sm" [routerLink]="['/users']"><i class="fas fa-times-circle"></i> Cancel</a>
+    <button
+      *hasClaim="'users_assign_permission'"
+      class="btn btn-success btn-sm m-right-10"
+      (click)="saveUserClaim()"
+      cdkFocusInitial
+    >
+      <i class="fas fa-save"></i> Save
+    </button>
+    <a class="btn btn-danger btn-sm" [routerLink]="['/users']"
+      ><i class="fas fa-times-circle"></i> Cancel</a
+    >
   </div>
 </div>

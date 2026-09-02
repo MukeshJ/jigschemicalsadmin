@@ -3,14 +3,18 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
         <h4 class="modal-title">
-          {{'CHEMICALS_SUPPLIED_BY' | translate}} : {{data.supplierName}}
+          {{ 'CHEMICALS_SUPPLIED_BY' | translate }} : {{ data.supplierName }}
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
-        <button *hasClaim="'supplier_assign_chemical_to_supplier'" (click)="addChemicalSupplier()" type="button"
-          class="btn blue-btn btn-sm mt-0">
+        <button
+          *hasClaim="'supplier_assign_chemical_to_supplier'"
+          (click)="addChemicalSupplier()"
+          type="button"
+          class="btn blue-btn btn-sm mt-0"
+        >
           <i class="fas fa-plus"></i>
-          {{'ADD_CHEMICAL' | translate}}
+          {{ 'ADD_CHEMICAL' | translate }}
         </button>
         <button type="button" class="close" (click)="closeDialog()" data-dismiss="modal">
           <i class="fas fa-times"></i>
@@ -20,62 +24,82 @@
   </div>
   <div class="modal-body">
     <div class="table-responsive">
-      <table mat-table [dataSource]="chemicals" class="table table-bordered table-hover dialog-grid-height">
+      <table
+        mat-table
+        [dataSource]="chemicals"
+        class="table table-bordered table-hover dialog-grid-height"
+      >
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> {{'NAME' | translate}} </th>
-          <td mat-cell *matCellDef="let chemical"> {{chemical.name}} </td>
+          <th mat-header-cell *matHeaderCellDef>{{ 'NAME' | translate }}</th>
+          <td mat-cell *matCellDef="let chemical">{{ chemical.name }}</td>
         </ng-container>
         <ng-container matColumnDef="casNumber">
-          <th mat-header-cell *matHeaderCellDef> {{'CAS_NUMBER' | translate}} </th>
-          <td mat-cell *matCellDef="let chemical"> {{chemical.casNumber}} </td>
+          <th mat-header-cell *matHeaderCellDef>{{ 'CAS_NUMBER' | translate }}</th>
+          <td mat-cell *matCellDef="let chemical">{{ chemical.casNumber }}</td>
         </ng-container>
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef> {{'ACTION' | translate}} </th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'ACTION' | translate }}</th>
           <td mat-cell *matCellDef="let chemical">
-            <button *hasClaim="'supplier_assign_chemical_to_supplier'" (click)="removeChemialFromSupplier(chemical)"
-              class="btn btn-danger btn-sm" type="button">
+            <button
+              *hasClaim="'supplier_assign_chemical_to_supplier'"
+              (click)="removeChemialFromSupplier(chemical)"
+              class="btn btn-danger btn-sm"
+              type="button"
+            >
               <i class="fas fa-trash-alt"></i>
             </button>
           </td>
         </ng-container>
         <ng-container matColumnDef="name-search">
           <th class="pr-5" mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="NameFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="casNumber-search">
           <th mat-header-cell *matHeaderCellDef>
-            <input type="text" class="form-control w-90" [(ngModel)]="CasNumberFilter">
+            <input type="text" class="form-control w-90" [(ngModel)]="CasNumberFilter" />
           </th>
         </ng-container>
         <ng-container matColumnDef="remove-chemical-search">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
+          <th mat-header-cell *matHeaderCellDef></th>
         </ng-container>
         <ng-container matColumnDef="footer">
           <td mat-footer-cell colspan="3" *matFooterCellDef>
-            <mat-paginator #paginator [length]="totalChemicals" (page)="pageChange($event)" [pageSize]="10">
+            <mat-paginator
+              #paginator
+              [length]="totalChemicals"
+              (page)="pageChange($event)"
+              [pageSize]="10"
+            >
             </mat-paginator>
           </td>
         </ng-container>
         <tr *matNoDataRow>
           <td colspan="7">
             <span class="p-4 mt-4">
-              <b> {{'NO_DATA_FOUND' | translate}}</b>
+              <b> {{ 'NO_DATA_FOUND' | translate }}</b>
             </span>
           </td>
         </tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-header-row *matHeaderRowDef="['name-search','casNumber-search','remove-chemical-search'];sticky: true"
-          class="example-second-header-row">
-        </tr>
-        <tr mat-footer-row *matFooterRowDef="columnsToDisplay;sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            ['name-search', 'casNumber-search', 'remove-chemical-search'];
+            sticky: true
+          "
+          class="example-second-header-row"
+        ></tr>
+        <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
       </table>
     </div>
-    <div class="loading-shade" *ngIf="isLoading">
-      <mat-spinner *ngIf="isLoading"></mat-spinner>
-    </div>
+    @if (isLoading) {
+      <div class="loading-shade">
+        @if (isLoading) {
+          <mat-spinner></mat-spinner>
+        }
+      </div>
+    }
   </div>
-
 </div>

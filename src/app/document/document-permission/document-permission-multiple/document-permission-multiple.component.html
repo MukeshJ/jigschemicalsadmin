@@ -3,7 +3,7 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
         <h4 class="modal-title">
-          {{'SHARE_DOCUMENTS' | translate}}
+          {{ 'SHARE_DOCUMENTS' | translate }}
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
@@ -17,76 +17,116 @@
     <div class="row">
       <div class="col-sm-12">
         <mat-chip-set aria-label="Selected Documents">
-          <mat-chip *ngFor="let document of documents" color="primary">{{document.name}}</mat-chip>
+          @for (document of documents; track document) {
+            <mat-chip color="primary">{{ document.name }}</mat-chip>
+          }
         </mat-chip-set>
       </div>
     </div>
     <div class="row mt-2" [formGroup]="permissionForm">
       <div class="col-md-6 form-group">
-        <mat-label>{{'USERS' | translate}}</mat-label>
+        <mat-label>{{ 'USERS' | translate }}</mat-label>
         <mat-select color="primary" class="form-control" formControlName="users" multiple>
-          <mat-option *ngFor="let user of users" [value]="user.id">
-            {{user.firstName}} {{user.lastName}} ({{user.email}})
-          </mat-option>
+          @for (user of users; track user) {
+            <mat-option [value]="user.id">
+              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+            </mat-option>
+          }
         </mat-select>
       </div>
       <div class="col-md-6 form-group">
-        <mat-label>{{'ROLES' | translate}}</mat-label>
+        <mat-label>{{ 'ROLES' | translate }}</mat-label>
         <mat-select color="primary" class="form-control" formControlName="roles" multiple>
-          <mat-option *ngFor="let role of roles" [value]="role.id">
-            {{role.name}}
-          </mat-option>
+          @for (role of roles; track role) {
+            <mat-option [value]="role.id">
+              {{ role.name }}
+            </mat-option>
+          }
         </mat-select>
       </div>
       <div class="col-md-12">
-        <mat-checkbox (change)="timeBoundChange($event)" color="primary" formControlName="isTimeBound">
-          {{'SPACIFY_THE_PERIOD' | translate}}
+        <mat-checkbox
+          (change)="timeBoundChange($event)"
+          color="primary"
+          formControlName="isTimeBound"
+        >
+          {{ 'SPACIFY_THE_PERIOD' | translate }}
         </mat-checkbox>
       </div>
-      <div class="col-md-12" *ngIf="permissionForm.get('isTimeBound').value">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="input-group">
-              <input placeholder="{{'START_DATE' | translate}}" class="form-control" formControlName="startDate"
-                [min]="minDate" [matDatepicker]="startDatePicker">
-              <mat-datepicker #startDatePicker></mat-datepicker>
-              <div class="input-group-append">
-                <span class="input-group-text">
-                  <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-                </span>
+      @if (permissionForm.get('isTimeBound').value) {
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input
+                  placeholder="{{ 'START_DATE' | translate }}"
+                  class="form-control"
+                  formControlName="startDate"
+                  [min]="minDate"
+                  [matDatepicker]="startDatePicker"
+                />
+                <mat-datepicker #startDatePicker></mat-datepicker>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="startDatePicker"
+                    ></mat-datepicker-toggle>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group">
-              <input placeholder="{{'END_DATE' | translate}}" formControlName="endDate" class="form-control"
-                [min]="permissionForm.get('startDate').value" [matDatepicker]="endDatePicker">
-              <mat-datepicker #endDatePicker></mat-datepicker>
-              <div class="input-group-append">
-                <span class="input-group-text">
-                  <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-                </span>
+            <div class="col-md-6">
+              <div class="input-group">
+                <input
+                  placeholder="{{ 'END_DATE' | translate }}"
+                  formControlName="endDate"
+                  class="form-control"
+                  [min]="permissionForm.get('startDate').value"
+                  [matDatepicker]="endDatePicker"
+                />
+                <mat-datepicker #endDatePicker></mat-datepicker>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                  </span>
+                </div>
               </div>
+              @if (
+                permissionForm.get('endDate').touched &&
+                permissionForm.get('endDate').errors?.required
+              ) {
+                <mat-error>
+                  {{ 'END_DATE_IS_REQUIRED' | translate }}
+                </mat-error>
+              }
+              @if (
+                permissionForm.get('endDate').touched && permissionForm.get('endDate').errors?.min
+              ) {
+                <mat-error>
+                  {{ 'END_DATE_SHOULD_BE_GREATER_THAN_TODAY_TODAY_DATE' | translate }}
+                </mat-error>
+              }
             </div>
-            <mat-error *ngIf="permissionForm.get('endDate').touched && permissionForm.get('endDate').errors?.required">
-              {{'END_DATE_IS_REQUIRED' | translate}}
-            </mat-error>
-            <mat-error *ngIf="permissionForm.get('endDate').touched && permissionForm.get('endDate').errors?.min">
-              {{'END_DATE_SHOULD_BE_GREATER_THAN_TODAY_TODAY_DATE' | translate}}
-            </mat-error>
-
           </div>
         </div>
-      </div>
+      }
       <div class="col-md-12 my-2">
-        <mat-checkbox color="primary" formControlName="isAllowDownload">{{'ALLOW_DOWNLOAD' | translate}}</mat-checkbox>
+        <mat-checkbox color="primary" formControlName="isAllowDownload">{{
+          'ALLOW_DOWNLOAD' | translate
+        }}</mat-checkbox>
       </div>
-      <div class="col-md-12 ">
-        <button class="btn btn-success btn-sm m-right-10" (click)="saveDocumentUserPermission()" cdkFocusInitial><i
-            class="las la-save"></i> {{'SAVE' | translate}}
+      <div class="col-md-12">
+        <button
+          class="btn btn-success btn-sm m-right-10"
+          (click)="saveDocumentUserPermission()"
+          cdkFocusInitial
+        >
+          <i class="las la-save"></i> {{ 'SAVE' | translate }}
         </button>
-        <button class="btn btn-danger btn-sm" (click)="closeDialog()"><i class="las la-times-circle"></i>
-          {{'CANCEL' | translate}}</button>
+        <button class="btn btn-danger btn-sm" (click)="closeDialog()">
+          <i class="las la-times-circle"></i> {{ 'CANCEL' | translate }}
+        </button>
       </div>
     </div>
   </div>

@@ -19,7 +19,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { NgIf } from '@angular/common';
+
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -34,7 +34,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatHeaderCell,
     MatCellDef,
     MatCell,
-    NgIf,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,

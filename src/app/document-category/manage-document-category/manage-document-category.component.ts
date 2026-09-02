@@ -11,14 +11,13 @@ import { DocumentCategory } from '@core/domain-classes/document-category';
 import { DocumentCategoryService } from '@core/services/document-category.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
-import { NgIf } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-document-category',
   templateUrl: './manage-document-category.component.html',
   styleUrls: ['./manage-document-category.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, NgIf, TranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageDocumentCategoryComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;

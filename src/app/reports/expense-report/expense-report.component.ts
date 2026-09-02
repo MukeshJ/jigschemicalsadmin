@@ -32,7 +32,7 @@ import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -70,7 +70,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatDatepickerInput,
     MatDatepicker,
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatSort,
@@ -87,7 +86,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatSortHeader,
     MatSelect,
     MatOption,
-    NgFor,
     MatFooterCellDef,
     MatFooterCell,
     MatPaginator,

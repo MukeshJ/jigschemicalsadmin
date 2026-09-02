@@ -3,7 +3,7 @@
     <div class="d-flex w-100 align-items-center justify-content-between">
       <div class="col-md-8">
         <h4 class="modal-title">
-          {{'EDIT_DOCUMENT' | translate}}
+          {{ 'EDIT_DOCUMENT' | translate }}
         </h4>
       </div>
       <div class="col-sm-auto ml-auto">
@@ -17,46 +17,62 @@
     <form [formGroup]="documentForm">
       <div class="row">
         <div class="col-sm-12">
-          <div class="form-group ">
-            <label  class="text-danger">{{'NAME' | translate}} *</label>
-            <input formControlName="name" class="form-control" type="text">
-            <div *ngIf="documentForm.get('name').touched && documentForm.get('name').errors">
-              <div class="text-danger" *ngIf="documentForm.get('name').errors?.required">
-                {{'NAME_IS_REQUIRED' | translate}}
+          <div class="form-group">
+            <label class="text-danger">{{ 'NAME' | translate }} *</label>
+            <input formControlName="name" class="form-control" type="text" />
+            @if (documentForm.get('name').touched && documentForm.get('name').errors) {
+              <div>
+                @if (documentForm.get('name').errors?.required) {
+                  <div class="text-danger">
+                    {{ 'NAME_IS_REQUIRED' | translate }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
         <div class="col-sm-12">
           <div class="form-group">
             <mat-form-field class="w-50">
-              <mat-label class="text-danger">{{'CATEGORY' | translate}}*</mat-label>
+              <mat-label class="text-danger">{{ 'CATEGORY' | translate }}*</mat-label>
               <mat-select formControlName="categoryId">
-                <mat-option>-- {{'NONE' | translate}} --</mat-option>
-                <mat-option *ngFor="let category of data.categories" [value]="category.id">
-                  {{category.name}}
-                </mat-option>
+                <mat-option>-- {{ 'NONE' | translate }} --</mat-option>
+                @for (category of data.categories; track category) {
+                  <mat-option [value]="category.id">
+                    {{ category.name }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
-            <div *ngIf="documentForm.get('categoryId').touched && documentForm.get('categoryId').errors">
-              <div class="text-danger" *ngIf="documentForm.get('categoryId').errors?.required">
-                {{'CATEGORY_NAME_IS_REQUIRED' | translate}}
+            @if (documentForm.get('categoryId').touched && documentForm.get('categoryId').errors) {
+              <div>
+                @if (documentForm.get('categoryId').errors?.required) {
+                  <div class="text-danger">
+                    {{ 'CATEGORY_NAME_IS_REQUIRED' | translate }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
         <div class="col-sm-12">
-          <div class="form-group ">
-            <label>{{'DESCRIPTION' | translate}}</label>
-            <textarea formControlName="description" class="form-control">
-            </textarea>
+          <div class="form-group">
+            <label>{{ 'DESCRIPTION' | translate }}</label>
+            <textarea formControlName="description" class="form-control"> </textarea>
           </div>
         </div>
         <div class="m-top-10 col-md-12">
-          <button *hasClaim="'documents_update_document'" class="btn btn-success btn-sm m-right-10"
-            (click)="SaveDocument()" cdkFocusInitial><i class="las la-save"></i> {{'SAVE' | translate}}</button>
-          <button type="button" class="btn btn-danger btn-sm" (click)="onDocumentCancel()"><i
-              class="las la-times-circle"></i> {{'CANCEL' | translate}}</button>
+          <button
+            *hasClaim="'documents_update_document'"
+            class="btn btn-success btn-sm m-right-10"
+            (click)="SaveDocument()"
+            cdkFocusInitial
+          >
+            <i class="las la-save"></i> {{ 'SAVE' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="onDocumentCancel()">
+            <i class="las la-times-circle"></i> {{ 'CANCEL' | translate }}
+          </button>
         </div>
       </div>
     </form>

@@ -5,7 +5,6 @@ import { PaymentTerm } from '@core/domain-classes/payment-term';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManagePaymentTermComponent } from '../manage-payment-term/manage-payment-term.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './payment-term-presentation.component.html',
   styleUrls: ['./payment-term-presentation.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

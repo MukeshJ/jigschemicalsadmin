@@ -36,7 +36,7 @@ import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 import { ViewSalesOrderPaymentComponent } from 'src/app/sales-order/view-sales-order-payment/view-sales-order-payment.component';
 import * as XLSX from 'xlsx';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption } from '@angular/material/select';
@@ -77,7 +77,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    NgIf,
     MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
@@ -85,7 +84,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatDatepicker,
     MatSelect,
     MatDivider,
-    NgFor,
     MatOption,
     MatTable,
     MatSort,

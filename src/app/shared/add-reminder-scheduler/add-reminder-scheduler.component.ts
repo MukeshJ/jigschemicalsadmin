@@ -13,7 +13,6 @@ import { ModuleReference } from '@core/domain-classes/module-reference';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { User } from '@core/domain-classes/user';
 import { CommonService } from '@core/services/common.service';
-import { NgIf, NgFor } from '@angular/common';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -39,12 +38,10 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     MatDatepickerInput,
     MatDatepicker,
     MatSelect,
     MatSelectTrigger,
-    NgFor,
     MatOption,
     MatCheckbox,
     MatTable,
