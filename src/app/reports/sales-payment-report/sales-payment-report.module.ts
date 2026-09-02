@@ -20,7 +20,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 import { SalesPaymentReportRoutingModule } from './sales-payment-report-routing.module';
 
 
@@ -48,8 +47,6 @@ import { SalesPaymentReportRoutingModule } from './sales-payment-report-routing.
     MatButtonModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,

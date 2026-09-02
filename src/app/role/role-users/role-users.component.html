@@ -30,7 +30,7 @@
 <div *ngIf="selectedRole" class="row">
   <div class="col-sm-5">
     <h5 class="text-primary">{{'ALL_USERS' | translate}}</h5>
-    <div cdkDropList #doneList="cdkDropList" cdkDropListLockAxis="true" [cdkDropListData]="otherUsers"
+    <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="otherUsers"
       [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="removeUser($event)">
       <div class="example-box" *ngFor="let item of otherUsers" cdkDrag>
         <span>{{item.firstName}} {{item.lastName}} ({{item.userName}}) </span>

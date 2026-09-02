@@ -4,7 +4,7 @@ import { ReminderListComponent } from './reminder-list/reminder-list.component';
 import { ReminderRoutingModule } from './reminder-routing.module';
 import { AddReminderComponent } from './add-reminder/add-reminder.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -35,8 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     ReminderRoutingModule,
     ReactiveFormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDialogModule,

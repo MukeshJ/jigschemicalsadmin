@@ -12,10 +12,11 @@ import { CommonModule } from '@angular/common';
 import { AddReminderSchedulerComponent } from './add-reminder-scheduler/add-reminder-scheduler.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuantitiesUnitPricePipe } from './pipes/quantities-unitprice.pipe';
 import { QuantitiesUnitPriceTaxPipe } from './pipes/quantities-unitprice-tax.pipe';
 import { PurchaseOrderInvoiceComponent } from './purchase-order-invoice/purchase-order-invoice.component';
@@ -46,12 +47,11 @@ import { SalesOrderInvoiceComponent } from './sales-order-invoice/sales-order-in
     TranslateDirective,
     MatDialogModule,
     ReactiveFormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule,
     MatSelectModule,
     MatCheckboxModule,
     MatTableModule,
-
+    MatProgressSpinnerModule
   ],
   declarations: [
     HasClaimDirective,

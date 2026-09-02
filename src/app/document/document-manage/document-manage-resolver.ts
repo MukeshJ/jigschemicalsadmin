@@ -21,7 +21,7 @@ export class DocumentManageResolver implements Resolve<DocumentInfo | CommonErro
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<DocumentInfo> | null {
+  ): Observable<DocumentInfo | CommonError | null> | null {
     const id = route.paramMap.get('id');
     if (id === 'add') {
       return null;

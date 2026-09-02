@@ -15,7 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 
@@ -40,8 +40,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule
   ]
 })
 export class ExpenseReportModule { }

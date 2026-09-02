@@ -4,7 +4,7 @@ import { SalesOrderListComponent } from './sales-order-list/sales-order-list.com
 import { SalesOrderAddEditComponent } from './sales-order-add-edit/sales-order-add-edit.component';
 import { SalesOrderRoutingModule } from './sales-order-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PoListComponent } from './po-list/po-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '@shared/shared.module';
 import { MatDividerModule } from '@angular/material/divider'
 import { ViewSalesOrderPaymentComponent } from './view-sales-order-payment/view-sales-order-payment.component';
@@ -31,7 +32,7 @@ import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-deta
     ViewSalesOrderPaymentComponent,
     AddSalesOrderPaymentComponent,
     SalesOrderItemsComponent,
-    SalesOrderDetailComponent,
+    SalesOrderDetailComponent
   ],
   imports: [
     CommonModule,
@@ -39,8 +40,7 @@ import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-deta
     SharedModule,
     ReactiveFormsModule,
     FormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule,
     MatSelectModule,
     MatAutocompleteModule,
     MatTableModule,
@@ -50,6 +50,7 @@ import { SalesOrderDetailComponent } from './sales-order-detail/sales-order-deta
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatCardModule,
     MatDividerModule
   ],
   providers: [

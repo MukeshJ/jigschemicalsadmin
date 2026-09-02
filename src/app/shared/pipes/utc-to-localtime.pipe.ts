@@ -12,7 +12,7 @@ enum UTCToLocalTimeFormat {
 })
 
 export class UTCToLocalTime implements PipeTransform {
-  transform(utcDate: Date, format: UTCToLocalTimeFormat | string): any {
+  transform(utcDate: Date | string, format: UTCToLocalTimeFormat | string): any {
     const browserLanuges = navigator.language;
     if (!utcDate) {
       return '';

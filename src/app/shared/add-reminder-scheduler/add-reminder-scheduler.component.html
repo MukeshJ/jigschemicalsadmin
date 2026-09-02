@@ -42,9 +42,9 @@
           <div class="row">
             <div class="form-group col-md-3">
               <label for="frequency">{{'REMINDER_DATE' | translate}} </label>
-              <input class="form-control" [owlDateTimeTrigger]="dt4" formControlName="reminderDate" [owlDateTime]="dt4"
+              <input class="form-control" [matDatepicker]="dt4" (click)="dt4.open()" formControlName="reminderDate"
                 placeholder="End Date">
-              <owl-date-time #dt4></owl-date-time>
+              <mat-datepicker #dt4></mat-datepicker>
             </div>
             <div class="col-md-7 form-group ">
               <label for="frequency">{{'SELECT_USERS' | translate}} </label>

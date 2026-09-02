@@ -175,7 +175,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.translationService
       .setLanguage(lang)
       .subscribe((response) => {
-        this.setLanguageWithRefresh(response['LANGUAGE']);
+        this.setLanguageWithRefresh(response['LANGUAGE'] as string);
       });
   }
 

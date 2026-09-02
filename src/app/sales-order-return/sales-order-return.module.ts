@@ -20,7 +20,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 import { SaleOrderReturnRoutingModule } from './sales-order-return-routing.module';
 import { SaleOrderReturnListComponent } from './sales-order-return-list/sales-order-return-list.component';
 import { SaleOrderReturnComponent } from './sales-order-return/sales-order-return.component';
@@ -52,14 +51,12 @@ import { SaleOrderReturnItemComponent } from './sales-order-return-item/sales-or
     MatButtonModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
+    MatSortModule
   ]
 })
 export class SaleOrderReturnModule { }

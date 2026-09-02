@@ -22,14 +22,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from '@shared/shared.module';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 
 
 
 @NgModule({
   declarations: [
     SalesOrderReportComponent,
-    SalesOrderItemsComponent,
+    SalesOrderItemsComponent
   ],
   imports: [
     CommonModule,
@@ -52,8 +51,6 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
     MatButtonModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MatCheckboxModule,
     MatDividerModule
   ]

@@ -23,7 +23,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 import { PurchaseOrderReturnRoutingModule } from './purchase-order-return-routing.module';
 
 
@@ -52,15 +51,13 @@ import { PurchaseOrderReturnRoutingModule } from './purchase-order-return-routin
     MatButtonModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MatCheckboxModule,
     MatDividerModule,
     MatDialogModule,
     PurchaseOrderReturnRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
+    MatSortModule
   ]
 })
 export class PurchaseOrderReturnModule { }

@@ -13,12 +13,13 @@ import { PendingInterceptorModule } from '@shared/loading-indicator/pending-inte
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -31,8 +32,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
     HttpInterceptorModule,
     AppStoreModule,
     PendingInterceptorModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule,
     ToastrModule.forRoot()
   ],
   providers: [
@@ -44,6 +44,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
       }),
     }),
     provideCharts(withDefaultRegisterables()),
+    provideNativeDateAdapter()
   ],
   bootstrap: [AppComponent]
 })

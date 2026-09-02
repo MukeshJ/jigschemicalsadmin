@@ -16,8 +16,6 @@ import { SalesOrderPaymentService } from '../sales-order-payment.service';
   styleUrls: ['./add-sales-order-payment.component.scss']
 })
 export class AddSalesOrderPaymentComponent  extends BaseComponent implements OnInit {
-  sub$: any;
-
   paymentMethodslist: PaymentMethod[] = [];
   paymentsForm: UntypedFormGroup;
   isReceiptDeleted = false;

@@ -72,28 +72,28 @@
         <div class="form-group">
           <label class="text-danger" for="poCreatedDate">{{'ORDER_DATE' | translate}} *</label>
           <input class="form-control" id="poCreatedDate" formControlName="poCreatedDate"
-            [owlDateTimeTrigger]="poCreatedDate" [owlDateTime]="poCreatedDate"
+            [matDatepicker]="poCreatedDate" (click)="poCreatedDate.open()"
             placeholder="{{'DELIVERY_DATE' | translate}}">
           <div *ngIf="purchaseOrderForm.get('poCreatedDate').touched && purchaseOrderForm.get('poCreatedDate').errors">
             <div class="text-danger" *ngIf="purchaseOrderForm.get('poCreatedDate').errors?.required">
               {{'ORDER_DATE_IS_REQUIRED' | translate}}
             </div>
           </div>
-          <owl-date-time [pickerType]="'calendar'" #poCreatedDate></owl-date-time>
+          <mat-datepicker #poCreatedDate></mat-datepicker>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label class="text-danger" for="deliveryDate">{{'DELIVERY_DATE' | translate}} *</label>
           <input class="form-control" id="deliveryDate" formControlName="deliveryDate"
-            [owlDateTimeTrigger]="deliveryDate" [owlDateTime]="deliveryDate"
+            [matDatepicker]="deliveryDate" (click)="deliveryDate.open()"
             placeholder="{{'DELIVERY_DATE' | translate}}">
           <div *ngIf="purchaseOrderForm.get('deliveryDate').touched && purchaseOrderForm.get('deliveryDate').errors">
             <div class="text-danger" *ngIf="purchaseOrderForm.get('deliveryDate').errors?.required">
               {{'DELIVERY_DATE_REQUIRED' | translate}}
             </div>
           </div>
-          <owl-date-time [pickerType]="'calendar'" #deliveryDate></owl-date-time>
+          <mat-datepicker #deliveryDate></mat-datepicker>
         </div>
       </div>
     </div>

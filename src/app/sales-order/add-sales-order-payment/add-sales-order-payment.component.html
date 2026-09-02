@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <label class="text-danger" for="paymentDate"> {{'PAYMENT_DATE' | translate}}*</label>
                                 <input class="form-control" id="paymentDate" formControlName="paymentDate"
-                                    [owlDateTimeTrigger]="paymentDate" [owlDateTime]="paymentDate"
+                                    [matDatepicker]="paymentDate" (click)="paymentDate.open()"
                                     placeholder="{{'PAYMENT_DATE' | translate}}">
                                 <div
                                     *ngIf="paymentsForm.get('paymentDate').touched && paymentsForm.get('paymentDate').errors">
@@ -30,7 +30,7 @@
                                         {{'PAYMENT_DATE_IS_REQUIRED.' | translate}} 
                                     </div>
                                 </div>
-                                <owl-date-time [pickerType]="'calendar'" #paymentDate></owl-date-time>
+                                <mat-datepicker #paymentDate></mat-datepicker>
                             </div>
                         </div>
                         <div class="col-md-6">

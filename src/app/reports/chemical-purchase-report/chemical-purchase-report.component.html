@@ -15,16 +15,16 @@
           <div class="form-group">
             <label for="fromDate">{{'FROM_DATE' | translate}} </label>
             <input class="form-control" id="fromDate" [max]="currentDate" formControlName="fromDate"
-              [owlDateTimeTrigger]="fromDate" [owlDateTime]="fromDate" placeholder="{{'FROM_DATE' | translate}}">
-            <owl-date-time [pickerType]="'calendar'" #fromDate></owl-date-time>
+              [matDatepicker]="fromDate" (click)="fromDate.open()" placeholder="{{'FROM_DATE' | translate}}">
+            <mat-datepicker #fromDate></mat-datepicker>
           </div>
         </div>
         <div class="col-md-2">
           <div class="form-group">
             <label for="toDate">{{'TO_DATE' | translate}} </label>
             <input class="form-control" id="toDate" [max]="currentDate" formControlName="toDate"
-              [owlDateTimeTrigger]="toDate" [owlDateTime]="toDate" placeholder="{{'TO_DATE' | translate}}">
-            <owl-date-time [pickerType]="'calendar'" #toDate></owl-date-time>
+              [matDatepicker]="toDate" (click)="toDate.open()" placeholder="{{'TO_DATE' | translate}}">
+            <mat-datepicker #toDate></mat-datepicker>
           </div>
         </div>
         <div class="col-md-3">

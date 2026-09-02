@@ -13,13 +13,13 @@
             <div class="form-group">
                 <label class="text-danger" for="expenseDate">{{'DATE' | translate}} *</label>
                 <input class="form-control" id="expenseDate" formControlName="expenseDate"
-                    [owlDateTimeTrigger]="expenseDate" [owlDateTime]="expenseDate" placeholder="{{'DATE' | translate}}">
+                    [matDatepicker]="expenseDate" (click)="expenseDate.open()" placeholder="{{'DATE' | translate}}">
                 <div *ngIf="expenseForm.get('expenseDate').touched && expenseForm.get('expenseDate').errors">
                     <div class="text-danger" *ngIf="expenseForm.get('expenseDate').errors?.required">
                         {{'EXPENSE_DATE_IS_REQUIRED' | translate}}
                     </div>
                 </div>
-                <owl-date-time [pickerType]="'calendar'" #expenseDate></owl-date-time>
+                <mat-datepicker #expenseDate></mat-datepicker>
             </div>
         </div>
         <div class="col-md-6">

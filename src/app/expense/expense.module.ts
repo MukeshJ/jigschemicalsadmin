@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ExpenseResolverService } from './manage-expense/expense-resolver.service';
 import { MatMenuModule } from '@angular/material/menu';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 
@@ -43,8 +43,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex'
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    MatDatepickerModule
   ],
   providers: [
     ExpenseResolverService

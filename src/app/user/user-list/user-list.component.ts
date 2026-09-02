@@ -28,7 +28,7 @@ export class UserListComponent extends BaseComponent implements OnInit, AfterVie
   displayedColumns: string[] = ['action', 'email', 'firstName', 'lastName', 'phoneNumber', 'isActive'];
   isLoadingResults = true;
   footerToDisplayed = ['footer'];
-  langDir = 'ltr';
+  langDir: 'ltr' | 'rtl' = 'ltr';
   userResource: UserResource;
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;

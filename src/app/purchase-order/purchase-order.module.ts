@@ -19,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime-ex';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SharedModule } from '@shared/shared.module';
 import {MatDividerModule} from '@angular/material/divider';
@@ -37,7 +36,7 @@ import { PurchaseOrderDetailComponent } from './purchase-order-detail/purchase-o
     PurchaseOrderItemComponent,
     AddPurchaseOrderPaymentsComponent,
     ViewPurchaseOrderPaymentComponent,
-    PurchaseOrderDetailComponent,
+    PurchaseOrderDetailComponent
   ],
   imports: [
     CommonModule,
@@ -60,11 +59,9 @@ import { PurchaseOrderDetailComponent } from './purchase-order-detail/purchase-o
     MatButtonModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatDialogModule,
+    MatDialogModule
 
   ]
 })
