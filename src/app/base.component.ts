@@ -1,11 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import { SubSink } from 'subsink';
 
-@Component({
-  standalone: false,
-    selector: 'app-base',
-    template: ``
-})
+@Directive()
 export class BaseComponent implements OnDestroy {
     sub$: SubSink;
     constructor() {
