@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Testimonial } from '@core/domain-classes/testimonial';
 import { TranslationService } from '@core/services/translation.service';
@@ -16,14 +16,14 @@ import { TestimonialService } from '../testimonial.service';
   styleUrls: ['./testimonial-detail.component.scss']
 })
 export class TestimonialDetailComponent extends BaseComponent implements OnInit {
-  testimonialForm: FormGroup;
+  testimonialForm: UntypedFormGroup;
   testimonial: Testimonial;
   isLoading = false;
   editorConfig= EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private testimonialService: TestimonialService,
     private toastrService: ToastrService,

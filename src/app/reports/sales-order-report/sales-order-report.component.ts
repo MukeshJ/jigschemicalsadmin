@@ -1,7 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -58,12 +58,12 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   _customerFilter: string;
   _orderNumberFilter: string;
-  customerNameControl: FormControl = new FormControl();
+  customerNameControl: UntypedFormControl = new UntypedFormControl();
   customerList$: Observable<Customer[]>;
   expandedElement: SalesOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();
   salesOrderForInvoice: SalesOrder;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   chemicalResource: ChemicalResourceParameter;
   currentDate: Date = new Date();
@@ -98,7 +98,7 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private dialog: MatDialog,
     private clonerService: ClonerService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,

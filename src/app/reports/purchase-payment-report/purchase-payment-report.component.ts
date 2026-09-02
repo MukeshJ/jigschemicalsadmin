@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -32,7 +32,7 @@ export class PurchasePaymentReportComponent extends BaseComponent implements OnI
   isData: boolean = false;
   isDeleted = false;
   purchaseOrderResource: PurchaseOrderResourceParameter;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -41,7 +41,7 @@ export class PurchasePaymentReportComponent extends BaseComponent implements OnI
 
   constructor(
     private purchasePaymentReportService: PurchasePaymentReportService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialog: MatDialog,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,

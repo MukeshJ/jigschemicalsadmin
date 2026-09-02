@@ -1,6 +1,6 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -50,7 +50,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
   _userFilter: string;
   users: User[] = [];
   expenseCategories: ExpenseCategory[] = [];
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   totalAmount: number = 0;
 
 
@@ -95,7 +95,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private expenseCategoryService: ExpenseCategoryService,
     private userService: UserService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
   ) {

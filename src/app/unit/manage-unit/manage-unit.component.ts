@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Unit } from '@core/domain-classes/unit';
 import { TranslationService } from '@core/services/translation.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageUnitComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  unitForm: FormGroup;
+  unitForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageUnitComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Unit,
     private unitService: UnitService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

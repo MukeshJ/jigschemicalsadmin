@@ -1,6 +1,6 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
@@ -46,7 +46,7 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
   @ViewChild(MatSort) sort: MatSort;
   _supplierFilter: string;
   _orderNumberFilter: string;
-  supplierNameControl: FormControl = new FormControl();
+  supplierNameControl: UntypedFormControl = new UntypedFormControl();
   supplierList$: Observable<Supplier[]>;
   expandedElement: PurchaseOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();

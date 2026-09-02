@@ -8,7 +8,7 @@ import { Supplier } from '@core/domain-classes/supplier';
 import { Observable } from 'rxjs';
 import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 
 @Component({
@@ -19,7 +19,7 @@ import { SupplierResourceParameter } from '@core/domain-classes/supplier-resourc
 })
 export class UploadChemicalComponent extends BaseComponent implements OnInit {
   selectedSupplier: Supplier;
-  supplierChemicalForm: FormGroup;
+  supplierChemicalForm: UntypedFormGroup;
   formData = new FormData();
   fileName = '';
   response: UploadChemical;
@@ -31,7 +31,7 @@ export class UploadChemicalComponent extends BaseComponent implements OnInit {
   displayedColumns: string[] = ['action', 'name', 'count'];
   constructor(private supplierService: SupplierService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private supplierChemicalService: SupplierChemicalService) {
     super();
     this.supplierResource = new SupplierResourceParameter();

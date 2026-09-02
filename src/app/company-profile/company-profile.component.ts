@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { Currency } from '@core/domain-classes/currency';
@@ -17,12 +17,12 @@ import { CompanyProfileService } from './company-profile.service';
   styleUrls: ['./company-profile.component.css']
 })
 export class CompanyProfileComponent implements OnInit {
-  companyProfileForm: FormGroup;
+  companyProfileForm: UntypedFormGroup;
   imgSrc: string | ArrayBuffer = '';
   isLoading = false;
   currencies: Currency[] = [];
   constructor(private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private companyProfileService: CompanyProfileService,
     private router: Router,
     private toastrService: ToastrService,

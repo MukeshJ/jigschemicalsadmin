@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -37,7 +37,7 @@ import { SupplierService } from 'src/app/supplier/supplier.service';
 })
 export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   taxes$: Observable<Tax[]>;
-  purchaseOrderForm: FormGroup;
+  purchaseOrderForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   suppliers: Supplier[] = [];
   supplierResource: SupplierResourceParameter;
@@ -57,12 +57,12 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   purchaseOrder: PurchaseOrder;
   packagingTypes: PackagingType[] = [];
 
-  get purchaseOrderItemsArray(): FormArray {
-    return <FormArray>this.purchaseOrderForm.get('purchaseOrderItems');
+  get purchaseOrderItemsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.purchaseOrderForm.get('purchaseOrderItems');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
@@ -195,7 +195,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     return formGroup;
   }
 
-  getChemicalByNameValue(formGroup: FormGroup, index: number) {
+  getChemicalByNameValue(formGroup: UntypedFormGroup, index: number) {
     if (this.purchaseOrder) {
       this.getChemicals(index);
     }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Supplier } from '@core/domain-classes/supplier';
@@ -18,7 +18,7 @@ import { SupplierService } from 'src/app/supplier/supplier.service';
 })
 
 export class SearchChemicalBySupplierComponent extends BaseComponent implements OnInit {
-  supplierChemicalForm: FormGroup;
+  supplierChemicalForm: UntypedFormGroup;
   selectedSupplier: Supplier;
   isLoading = false;
   skip = 0;
@@ -52,7 +52,7 @@ export class SearchChemicalBySupplierComponent extends BaseComponent implements 
     this.filterObservable$.next(casNumberFilter);
   }
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private supplierChemicalService: SupplierChemicalService) {
     super();

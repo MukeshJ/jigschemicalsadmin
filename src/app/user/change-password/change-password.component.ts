@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '@core/domain-classes/user';
 import { SecurityService } from '@core/security/security.service';
@@ -16,10 +16,10 @@ import { UserService } from '../user.service';
 })
 
 export class ChangePasswordComponent extends BaseComponent implements OnInit {
-  changePasswordForm: FormGroup;
+  changePasswordForm: UntypedFormGroup;
   constructor(
     private userService: UserService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ChangePasswordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: User,
     private toastrService: ToastrService,
@@ -44,7 +44,7 @@ export class ChangePasswordComponent extends BaseComponent implements OnInit {
     });
   }
 
-  checkPasswords(group: FormGroup) {
+  checkPasswords(group: UntypedFormGroup) {
     let pass = group.get('password').value;
     let confirmPass = group.get('confirmPassword').value;
     return pass === confirmPass ? null : { notSame: true }

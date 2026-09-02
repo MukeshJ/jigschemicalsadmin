@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Category } from '@core/domain-classes/category';
 import { DocumentAuditTrail } from '@core/domain-classes/document-audit-trail';
@@ -20,14 +20,14 @@ import { DocumentService } from '../document.service';
 })
 export class DocumentEditComponent extends BaseComponent implements OnInit {
 
-  documentForm: FormGroup;
+  documentForm: UntypedFormGroup;
   extension: string = '';
   @Input() categories: Category[];
   @Input() documentInfo: DocumentInfo;
   documentSource: string;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<DocumentEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DocumentCategories,
     private toastrService: ToastrService,
@@ -81,7 +81,7 @@ export class DocumentEditComponent extends BaseComponent implements OnInit {
       })
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (<any>Object).values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
       if (control.controls) {

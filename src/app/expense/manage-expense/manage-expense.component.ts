@@ -1,6 +1,6 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Expense } from '@core/domain-classes/expense';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
@@ -19,7 +19,7 @@ import { ExpenseService } from '../expense.service';
   styleUrls: ['./manage-expense.component.scss']
 })
 export class ManageExpenseComponent implements OnInit {
-  expenseForm: FormGroup;
+  expenseForm: UntypedFormGroup;
   users: User[] = [];
   expenseCategories: ExpenseCategory[] = [];
   isLoading = false;
@@ -29,7 +29,7 @@ export class ManageExpenseComponent implements OnInit {
     return this.expenseForm.get('receiptName').value;
   }
   constructor(private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private expenseCategoryService: ExpenseCategoryService,
     private userService: UserService,
     private expenseService: ExpenseService,

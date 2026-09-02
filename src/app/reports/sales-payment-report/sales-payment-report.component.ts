@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -34,7 +34,7 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
   isData: boolean = false;
   isDeleted = false;
   salesOrderResource: SalesOrderResourceParameter;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -46,7 +46,7 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
     private paymentMethodPipe: PaymentMethodPipe) {

@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -49,7 +49,7 @@ export class SaleOrderReturnListComponent extends BaseComponent implements OnIni
   @ViewChild(MatSort) sort: MatSort;
   _customerFilter: string;
   _orderNumberFilter: string;
-  customerNameControl: FormControl = new FormControl();
+  customerNameControl: UntypedFormControl = new UntypedFormControl();
   customerList$: Observable<Customer[]>;
   expandedElement: SalesOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();

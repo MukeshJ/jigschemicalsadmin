@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -37,8 +37,8 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class SaleOrderReturnComponent  extends BaseComponent {
   taxes$: Observable<Tax[]>;
-  salesOrderForm: FormGroup;
-  salesOrderReturnForm: FormGroup;
+  salesOrderForm: UntypedFormGroup;
+  salesOrderReturnForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   customersForSearch: Customer[] = [];
   customers: Customer[] = [];
@@ -61,12 +61,12 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   isEdit: boolean = false;
   salesOrderResource: SalesOrderResourceParameter;
 
-  get salesOrderItemsArray(): FormArray {
-    return <FormArray>this.salesOrderForm.get('salesOrderItems');
+  get salesOrderItemsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.salesOrderForm.get('salesOrderItems');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private customerService: CustomerService,
     private toastrService: ToastrService,
     private salesOrderService: SalesOrderService,
@@ -258,7 +258,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   }
 
   getAllTotal() {
-    let salesOrderItemsArray = this.salesOrderForm.get('salesOrderItems') as FormArray;
+    let salesOrderItemsArray = this.salesOrderForm.get('salesOrderItems') as UntypedFormArray;
     let salesOrderItems = salesOrderItemsArray.getRawValue();
     this.totalBeforeDiscount = 0;
     this.grandTotal = 0;
@@ -287,7 +287,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
   onRemoveSalesOrderItem(index: number) {
     this.salesOrderItemsArray.removeAt(index);
 
-    this.salesOrderItemsArray.controls.forEach((c: FormGroup, index: number) => {
+    this.salesOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number) => {
       const chemicalId = c.get('chemicalId').value;
       this.salesOrder.salesOrderItems.map(pi => {
         if (pi.chemical.id === chemicalId) {
@@ -389,7 +389,7 @@ export class SaleOrderReturnComponent  extends BaseComponent {
       salesOrderItems: []
     };
 
-    const salesOrderItemsArray = this.salesOrderForm.get('salesOrderItems') as FormArray;
+    const salesOrderItemsArray = this.salesOrderForm.get('salesOrderItems') as UntypedFormArray;
     const salesOrderItems = salesOrderItemsArray.getRawValue();
     if (salesOrderItems && salesOrderItems.length > 0) {
       salesOrderItems.forEach(so => {

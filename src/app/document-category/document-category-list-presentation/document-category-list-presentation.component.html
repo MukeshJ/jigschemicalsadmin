@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="col-md-auto col-sm-auto">
-      <button *hasClaim="'documents_add_document_category'" class="btn blue-btn btn-sm m-right-10" (click)="manageCategory({})">
+      <button *hasClaim="'documents_add_document_category'" class="btn blue-btn btn-sm m-right-10" (click)="manageCategory($any({}))">
         <i class="las la-plus"></i>
         {{'ADD_DOCUMENT_CATEGORY' | translate}}
       </button>

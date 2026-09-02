@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Customer } from '@core/domain-classes/customer';
-import { CustomerChemicals } from '@core/domain-classes/Customer-Chemicals';
+import { CustomerChemicals } from '@core/domain-classes/customer-chemicals';
 import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
@@ -22,7 +22,7 @@ import { CustomerChemicalService } from './customer-chemical.service';
   styleUrls: ['./customer-chemical.component.scss']
 })
 export class CustomerChemicalComponent extends BaseComponent implements OnInit {
-  customerChemicalForm: FormGroup;
+  customerChemicalForm: UntypedFormGroup;
   selectedCustomer: Customer;
   isLoading = false;
   skip = 0;
@@ -37,7 +37,7 @@ export class CustomerChemicalComponent extends BaseComponent implements OnInit {
   customers$: Observable<Customer[]>;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private customerService: CustomerService,
     private customerChemicalService: CustomerChemicalService,
     private chemicalService: ChemicalService,
@@ -78,8 +78,8 @@ export class CustomerChemicalComponent extends BaseComponent implements OnInit {
       );
   }
 
-  get customerChemicalsArray(): FormArray {
-    return <FormArray>this.customerChemicalForm.get('customerChemicals');
+  get customerChemicalsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.customerChemicalForm.get('customerChemicals');
   }
 
   createSupplierChemicalForm() {
@@ -90,7 +90,7 @@ export class CustomerChemicalComponent extends BaseComponent implements OnInit {
     });
   }
 
-  addChemicalToSupplier(chemical: Chemical): FormGroup {
+  addChemicalToSupplier(chemical: Chemical): UntypedFormGroup {
     return this.fb.group({
       id: [chemical.id],
       name: [chemical.name],

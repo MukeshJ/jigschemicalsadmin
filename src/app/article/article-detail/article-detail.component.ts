@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Article } from '@core/domain-classes/article';
 import { ArticleCategory } from '@core/domain-classes/article-category';
@@ -17,7 +17,7 @@ import { ArticleService } from '../article.service';
   styleUrls: ['./article-detail.component.scss']
 })
 export class ArticleDetailComponent extends BaseComponent implements OnInit {
-  articleForm: FormGroup;
+  articleForm: UntypedFormGroup;
   titlePage = 'Add Article';
   article: Article;
   categories: ArticleCategory[] = [];
@@ -25,7 +25,7 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
   editorConfig= EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private articleService: ArticleService,
     private toastrService: ToastrService,

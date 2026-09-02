@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Customer } from '@core/domain-classes/customer';
@@ -20,7 +20,7 @@ import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chem
 })
 export class AddChemicalCustomerComponent extends BaseComponent implements OnInit {
 
-  customerChemicalForm: FormGroup;
+  customerChemicalForm: UntypedFormGroup;
   isLoading = false;
   skip = 0;
   pageSize = 10;
@@ -29,7 +29,7 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
   currentCustomer: Customer;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toastrService: ToastrService,
     private customerChemicalService: CustomerChemicalService,
     @Inject(MAT_DIALOG_DATA) public data: Chemical,

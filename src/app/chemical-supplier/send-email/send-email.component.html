@@ -21,23 +21,22 @@
       <div class="col-md-12">
         <span *ngIf="data?.suppliers.length">Selected Suppliers:</span>
         <br />
-        <mat-chip-list>
-          <mat-chip color="primary" [selected]="supplier.supplierName" [value]="supplier.supplierName"
-            *ngFor="let supplier of data?.suppliers">
+        <mat-chip-set>
+          <mat-chip [highlighted]="true" *ngFor="let supplier of data?.suppliers">
             {{ supplier.supplierName }}({{ supplier?.email }})
           </mat-chip>
-        </mat-chip-list>
+        </mat-chip-set>
       </div>
     </div>
     <div class="row mt-2">
       <div class="col-md-12">
         <span *ngIf="data?.suppliers.length">Selected Chemical:</span>
         <br />
-        <mat-chip-list>
-          <mat-chip [selected]="data.chemicalName" [value]="data.chemicalName" color="primary">
+        <mat-chip-set>
+          <mat-chip [highlighted]="true">
             {{data?.chemicalName}}
           </mat-chip>
-        </mat-chip-list>
+        </mat-chip-set>
       </div>
     </div>
     <div class="row">

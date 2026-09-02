@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { Customer } from '@core/domain-classes/customer';
 import { CustomerService } from '../customer.service';
-import { CustomerResourceParameter } from '@core/domain-classes/Customer-resource-parameter';
+import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 
 export class CustomerDataSource implements DataSource<Customer> {
   private _entities$ = new BehaviorSubject<Customer[]>([]);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Industry } from '@core/domain-classes/industry';
 import { TranslationService } from '@core/services/translation.service';
@@ -17,11 +17,11 @@ import { IndustryService } from '../industry.service';
 })
 export class IndustryDetailComponent extends BaseComponent implements OnInit {
   isEditMode = false;
-  industryForm: FormGroup;
+  industryForm: UntypedFormGroup;
   editorConfig = EditorConfig;
   imgSrc: any = null;
   isImageUpload: boolean = false;
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private activeRoute: ActivatedRoute,
     private industryService: IndustryService,
     private toastrService: ToastrService,

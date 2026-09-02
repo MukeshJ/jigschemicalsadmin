@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentMethod } from '@core/domain-classes/payment-method';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -17,14 +17,14 @@ import { PurchaseOrderPaymentService } from '../purchase-order-payment.service';
 })
 export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements OnInit {
   paymentMethodslist: PaymentMethod[] = [];
-  paymentsForm: FormGroup;
+  paymentsForm: UntypedFormGroup;
   isReceiptDeleted = false;
   constructor(
     public dialogRef: MatDialogRef<AddPurchaseOrderPaymentsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PurchaseOrder,
     private purchaseOrderPaymentService: PurchaseOrderPaymentService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

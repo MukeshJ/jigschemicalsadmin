@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentRolePermission } from '@core/domain-classes/document-role-permission';
@@ -18,13 +18,13 @@ import { DocumentPermissionService } from '../document-permission.service';
 export class ManageRolePermissionComponent extends BaseComponent implements OnInit {
   selectedRoles: Role[] = [];
   minDate: Date;
-  permissionForm: FormGroup;
+  permissionForm: UntypedFormGroup;
   constructor(
     private documentPermissionService: DocumentPermissionService,
     private toastrService: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: { roles: Role[], documentId: string },
     private dialogRef: MatDialogRef<ManageRolePermissionComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService:TranslationService) {
     super();
     this.minDate = new Date();
@@ -36,10 +36,10 @@ export class ManageRolePermissionComponent extends BaseComponent implements OnIn
 
   createUserPermissionForm() {
     this.permissionForm = this.fb.group({
-      isTimeBound: new FormControl(false),
+      isTimeBound: new UntypedFormControl(false),
       startDate: [''],
       endDate: [''],
-      isAllowDownload: new FormControl(false),
+      isAllowDownload: new UntypedFormControl(false),
     });
   }
 

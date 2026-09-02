@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Tax } from '@core/domain-classes/tax';
 import { TaxService } from '@core/services/tax.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageTaxComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  taxForm: FormGroup;
+  taxForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageTaxComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Tax,
     private taxService: TaxService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

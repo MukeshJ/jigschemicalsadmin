@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -49,8 +49,8 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
   _customerFilter: string;
   _chemicalFilter: string;
   _orderNumberFilter: string;
-  customerNameControl: FormControl = new FormControl();
-  chemicalNameControl: FormControl = new FormControl();
+  customerNameControl: UntypedFormControl = new UntypedFormControl();
+  chemicalNameControl: UntypedFormControl = new UntypedFormControl();
   customerList$: Observable<Customer[]>;
   expandedElement: SalesOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();

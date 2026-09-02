@@ -6,7 +6,7 @@ import {
   animate,
 } from '@angular/animations';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { UserAuth } from '@core/domain-classes/user-auth';
@@ -60,14 +60,14 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject.asObservable();
   isRedirecting = false;
-  chemicalSearchForm!: FormGroup;
+  chemicalSearchForm!: UntypedFormGroup;
   chemicalResourceParameter = new ChemicalResourceParameter();
   chemicals$!: Observable<Chemical[]>;
   profilePath = '';
   logoImage = '';
   constructor(
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private securityService: SecurityService,
     private signalrService: SignalrService,
     private translationService: TranslationService,

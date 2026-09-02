@@ -1,7 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -58,11 +58,11 @@ export class PurchaseOrderReportComponent extends BaseComponent {
   @ViewChild(MatSort) sort: MatSort;
   _supplierFilter: string;
   _orderNumberFilter: string;
-  supplierNameControl: FormControl = new FormControl();
+  supplierNameControl: UntypedFormControl = new UntypedFormControl();
   supplierList$: Observable<Supplier[]>;
   expandedElement: PurchaseOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   chemicalResource: ChemicalResourceParameter;
 
@@ -98,7 +98,7 @@ export class PurchaseOrderReportComponent extends BaseComponent {
     private translationService: TranslationService,
     private dialog: MatDialog,
     private clonerService: ClonerService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,

@@ -1,5 +1,5 @@
 import { Component, Inject,  OnInit } from '@angular/core';
-import { FormGroup, Validators ,FormBuilder} from '@angular/forms';
+import { UntypedFormGroup, Validators ,UntypedFormBuilder} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentCategory } from '@core/domain-classes/document-category';
 import { DocumentCategoryService } from '@core/services/document-category.service';
@@ -15,12 +15,12 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageDocumentCategoryComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  documentCategoryForm: FormGroup;
+  documentCategoryForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageDocumentCategoryComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DocumentCategory,
     private toastrService:ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private categoryService: DocumentCategoryService) {
     super();
   }

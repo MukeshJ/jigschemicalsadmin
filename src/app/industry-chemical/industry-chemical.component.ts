@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -22,7 +22,7 @@ import { IndustryChemicalService } from './industry-chemical.service';
 })
 
 export class IndustryChemicalComponent extends BaseComponent implements OnInit {
-  industryChemicalForm: FormGroup;
+  industryChemicalForm: UntypedFormGroup;
   selectedIndustry: Industry;
   isLoading = false;
   skip = 0;
@@ -35,7 +35,7 @@ export class IndustryChemicalComponent extends BaseComponent implements OnInit {
   chemicals$: Observable<Chemical[]>;
   industries: Industry[] = [];
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
@@ -61,8 +61,8 @@ export class IndustryChemicalComponent extends BaseComponent implements OnInit {
       );
   }
 
-  get industryChemicalsArray(): FormArray {
-    return <FormArray>this.industryChemicalForm.get('industryChemicals');
+  get industryChemicalsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.industryChemicalForm.get('industryChemicals');
   }
 
   getIndustries() {
@@ -78,7 +78,7 @@ export class IndustryChemicalComponent extends BaseComponent implements OnInit {
     });
   }
 
-  addChemicalToIndustry(chemical: Chemical): FormGroup {
+  addChemicalToIndustry(chemical: Chemical): UntypedFormGroup {
     return this.fb.group({
       id: [chemical.id],
       name: [chemical.name],

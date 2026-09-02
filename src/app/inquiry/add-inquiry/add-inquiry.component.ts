@@ -1,7 +1,7 @@
 import { C } from '@angular/cdk/keycodes';
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { City } from '@core/domain-classes/city';
@@ -27,7 +27,7 @@ import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
 
 export function emailOrMobileValidator(): ValidatorFn {
-  return (form: FormGroup): ValidationErrors | null => {
+  return (form: UntypedFormGroup): ValidationErrors | null => {
     const email: string = form.get("email").value;
     const mobileNo: string = form.get("mobileNo").value;
     if (email || mobileNo) {
@@ -44,7 +44,7 @@ export function emailOrMobileValidator(): ValidatorFn {
   styleUrls: ['./add-inquiry.component.scss']
 })
 export class AddInquiryComponent extends BaseComponent implements OnInit {
-  inquiryForm: FormGroup;
+  inquiryForm: UntypedFormGroup;
   chemicals$: Observable<Chemical[]>;
   inquiry: Inquiry;
   countries: Country[] = [];
@@ -58,12 +58,12 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
   users: User[] = [];
   sourcesOfInquiry: InquirySource[] = [];
 
-  get inquieryChemicalArray(): FormArray {
-    return <FormArray>this.inquiryForm.get('inquiryChemicals');
+  get inquieryChemicalArray(): UntypedFormArray {
+    return <UntypedFormArray>this.inquiryForm.get('inquiryChemicals');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private inquiryService: InquiryService,
     private commonService: CommonService,
     private router: Router,
@@ -254,7 +254,7 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (<any>Object).values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
 
@@ -285,7 +285,7 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
     return inquiryObj;
   }
 
-  buildInquiryChemical(): FormGroup {
+  buildInquiryChemical(): UntypedFormGroup {
     return this.fb.group({
       chemicalId: [''],
       name: [''],
@@ -293,7 +293,7 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
     });
   }
 
-  editInquiryChemical(chemical: InquiryChemical): FormGroup {
+  editInquiryChemical(chemical: InquiryChemical): UntypedFormGroup {
     return this.fb.group({
       chemicalId: [chemical.chemicalId],
       name: [chemical.name],

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquirySource } from '@core/domain-classes/inquiry-source';
 import { InquirySourceService } from '@core/services/inquiry-source.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageInquirySourceComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  inquirySourceForm: FormGroup;
+  inquirySourceForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageInquirySourceComponent>,
     @Inject(MAT_DIALOG_DATA) public data: InquirySource,
     private inquirySourceService: InquirySourceService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService:TranslationService) {
     super();
   }

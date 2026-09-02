@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
+  UntypedFormGroup,
+  UntypedFormBuilder,
   Validators,
-  FormArray,
+  UntypedFormArray,
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
@@ -42,7 +42,7 @@ export class AlreadyExistValidator {
   styleUrls: ['./supplier-detail.component.scss'],
 })
 export class SupplierDetailComponent extends BaseComponent implements OnInit {
-  supplierForm: FormGroup;
+  supplierForm: UntypedFormGroup;
   titlePage: string = 'Add Supplier';
   imgSrc: any = null;
   isImageUpload: boolean = false;
@@ -55,15 +55,15 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
 
   public filterCityObservable$: Subject<string> = new Subject<string>();
 
-  get supplierAddress(): FormArray {
-    return <FormArray>this.supplierForm.get('supplierAddresses');
+  get supplierAddress(): UntypedFormArray {
+    return <UntypedFormArray>this.supplierForm.get('supplierAddresses');
   }
-  get supplierEmailsArray(): FormArray {
-    return <FormArray>this.supplierForm.get('supplierEmails');
+  get supplierEmailsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.supplierForm.get('supplierEmails');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private commonService: CommonService,
     private router: Router,
@@ -202,7 +202,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       });
   }
 
-  buildSupplierAddress(): FormGroup {
+  buildSupplierAddress(): UntypedFormGroup {
     if (this.supplier && this.supplier.supplierAddresses && this.supplier.supplierAddresses.length > 0) {
       const supplierAddress = this.supplier.supplierAddresses[0];
       if (supplierAddress.countryName) {
@@ -226,7 +226,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     }
   }
 
-  buildSupplierEmail(): FormGroup {
+  buildSupplierEmail(): UntypedFormGroup {
     return this.fb.group({
       id: [''],
       supplierId: [''],
@@ -234,7 +234,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     });
   }
 
-  editSupplierEmail(supplierEmail: SupplierEmail): FormGroup {
+  editSupplierEmail(supplierEmail: SupplierEmail): UntypedFormGroup {
     return this.fb.group({
       id: [supplierEmail.id],
       supplierId: [supplierEmail.supplierId],
@@ -342,7 +342,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (<any>Object).values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
 

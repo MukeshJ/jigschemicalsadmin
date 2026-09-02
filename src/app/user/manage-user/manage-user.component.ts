@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Role } from '@core/domain-classes/role';
 import { User } from '@core/domain-classes/user';
@@ -20,13 +20,13 @@ import { UserService } from '../user.service';
 })
 export class ManageUserComponent extends BaseComponent implements OnInit {
   user: User;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   roleList: Role[];
   isEditMode = false;
   selectedRoles: Role[] = [];
   imgSrc: string | ArrayBuffer;
   isImageUpdate: boolean = false;
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private router: Router,
     private activeRoute: ActivatedRoute,
     private userService: UserService,
@@ -73,11 +73,11 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
     });
   }
 
-  get userAllowedIPs(): FormArray {
-    return this.userForm.get("userAllowedIPs") as FormArray
+  get userAllowedIPs(): UntypedFormArray {
+    return this.userForm.get("userAllowedIPs") as UntypedFormArray
   }
 
-  newIP(): FormGroup {
+  newIP(): UntypedFormGroup {
     return this.fb.group({
       userId: [''],
       ipAddress: ['']
@@ -92,7 +92,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
     this.userAllowedIPs.removeAt(i);
   }
 
-  checkPasswords(group: FormGroup) {
+  checkPasswords(group: UntypedFormGroup) {
     let pass = group.get('password').value;
     let confirmPass = group.get('confirmPassword').value;
     return pass === confirmPass ? null : { notSame: true }

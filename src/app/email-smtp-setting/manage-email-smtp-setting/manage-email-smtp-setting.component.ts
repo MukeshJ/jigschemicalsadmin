@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmailSMTPSetting } from '@core/domain-classes/email-smtp-setting';
 import { TranslationService } from '@core/services/translation.service';
@@ -15,10 +15,10 @@ import { EmailSmtpSettingService } from '../email-smtp-setting.service';
 })
 export class ManageEmailSmtpSettingComponent extends BaseComponent implements OnInit {
   isEditMode: boolean = false;
-  smtpSettingForm: FormGroup;
+  smtpSettingForm: UntypedFormGroup;
   constructor(
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private activeRoute: ActivatedRoute,
     private emailSmtpSettingService: EmailSmtpSettingService,
     private toastrService: ToastrService,

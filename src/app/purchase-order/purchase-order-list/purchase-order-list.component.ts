@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -52,8 +52,8 @@ export class PurchaseOrderListComponent extends BaseComponent {
   _supplierFilter: string;
   _chemicalFilter: string;
   _orderNumberFilter: string;
-  supplierNameControl: FormControl = new FormControl();
-  chemicalNameControl: FormControl = new FormControl();
+  supplierNameControl: UntypedFormControl = new UntypedFormControl();
+  chemicalNameControl: UntypedFormControl = new UntypedFormControl();
   supplierList$: Observable<Supplier[]>;
   expandedElement: PurchaseOrder | null;
   public filterObservable$: Subject<string> = new Subject<string>();

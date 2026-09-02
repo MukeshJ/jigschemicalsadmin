@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { Observable } from 'rxjs';
-import { CustomerChemicals } from '@core/domain-classes/Customer-Chemicals';
+import { CustomerChemicals } from '@core/domain-classes/customer-chemicals';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalList } from '@core/domain-classes/chemical-list';
 import { CustomerChemical } from '@core/domain-classes/customer-chemical';

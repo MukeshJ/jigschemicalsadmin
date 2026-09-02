@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from '../chemical.service';
 import { CommonService } from '@core/services/common.service';
@@ -23,7 +23,7 @@ import { Unit } from '@core/domain-classes/unit';
   styleUrls: ['./chemical-detail.component.scss'],
 })
 export class ChemicalDetailComponent extends BaseComponent implements OnInit {
-  chemicalForm: FormGroup;
+  chemicalForm: UntypedFormGroup;
   chemicalImages: Array<FileInfo>;
   chemical: Chemical;
   imgSrc: any = null;
@@ -35,7 +35,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService,
     private commonService: CommonService,
     private toastrService: ToastrService,

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChemicalType } from '@core/domain-classes/chemical-type';
 import { TranslationService } from '@core/services/translation.service';
@@ -18,7 +18,7 @@ import { ChemicalTypeService } from '../chemical-type.service';
 export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
 
   isEdit: boolean = false;
-  chemicalTypeForm: FormGroup;
+  chemicalTypeForm: UntypedFormGroup;
   imgSrc: any = null;
   editorConfig = EditorConfig;
   isImageUpload: boolean = false;
@@ -28,7 +28,7 @@ export class ChemicalTypeAddComponent extends BaseComponent implements OnInit {
     private chemicalTypeService: ChemicalTypeService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
   }

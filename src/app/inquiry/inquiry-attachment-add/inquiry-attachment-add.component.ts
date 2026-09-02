@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '@environments/environment'
@@ -17,12 +17,12 @@ import { TranslationService } from '@core/services/translation.service';
 })
 export class InquiryAttachmentAddComponent extends BaseComponent implements OnInit {
 
-  inquiryDocumentForm: FormGroup;
+  inquiryDocumentForm: UntypedFormGroup;
   documentForm: string = '';
   _validFileExtensions = environment.allowFileExtension;
   extension: string = '';
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: InquiryAttachmentDialog,
     public dialogRef: MatDialogRef<InquiryAttachmentAddComponent>,
     private toastrService: ToastrService,

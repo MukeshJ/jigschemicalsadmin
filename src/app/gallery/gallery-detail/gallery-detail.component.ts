@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Gallery } from '@core/domain-classes/gallery';
 import { TranslationService } from '@core/services/translation.service';
@@ -18,11 +18,11 @@ import { galleryCategories } from '../categories-enum';
 export class GalleryDetailComponent extends BaseComponent implements OnInit {
   isEditMode = false;
   isLoading = false;
-  galleryForm: FormGroup;
+  galleryForm: UntypedFormGroup;
   imgSrc: any = null;
   isImageUpload = false;
   galleryCategories = galleryCategories;
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private activeRoute: ActivatedRoute,
     private galleryService: GalleryService,
     private toastrService: ToastrService,

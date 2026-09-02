@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="col-md-auto col-sm-auto col-auto">
-            <button class="btn blue-btn btn-sm m-right-10" (click)="manageExpenseCategory({})">
+            <button class="btn blue-btn btn-sm m-right-10" (click)="manageExpenseCategory($any({}))">
                 <i class="fas fa-plus"></i>
                 {{'ADD_EXPENSE_CATEGORY' | translate}}
             </button>

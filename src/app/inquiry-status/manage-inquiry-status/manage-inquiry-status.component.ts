@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquiryStatus } from '@core/domain-classes/inquiry-status';
 import { InquiryStatusService } from '@core/services/inquiry-status.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageInquiryStatusComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  inquiryStatusForm: FormGroup;
+  inquiryStatusForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageInquiryStatusComponent>,
     @Inject(MAT_DIALOG_DATA) public data: InquiryStatus,
     private inquiryStatusService: InquiryStatusService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

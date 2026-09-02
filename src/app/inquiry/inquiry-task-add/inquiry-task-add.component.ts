@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InquiryTask } from '@core/domain-classes/inquiry-task';
 import { InquiryTaskEdit } from '@core/domain-classes/inquiry-task-edit';
@@ -20,7 +20,7 @@ import { InquiryTaskService } from '../inquiry-task/inquiry-task.service';
 })
 export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
 
-  inquiryTaskForm: FormGroup;
+  inquiryTaskForm: UntypedFormGroup;
   users: User[] = [];
   userResource: UserResource;
   minDate = new Date();
@@ -42,7 +42,7 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: InquiryTaskEdit,
     public dialogRef: MatDialogRef<InquiryTaskAddComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private userService: UserService,
     private inquiryTaskService: InquiryTaskService,
     private toastrService: ToastrService,

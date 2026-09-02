@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmailParameter } from '@core/domain-classes/email-parameter';
 import { EmailTemplate } from '@core/domain-classes/email-template';
@@ -20,7 +20,7 @@ import { EmailSendService } from './email-send.service';
 export class EmailSendComponent extends BaseComponent implements OnInit {
   emailTamplates: EmailTemplate[] = [];
   selectedEmailTamplate: EmailTemplate;
-  emailForm: FormGroup;
+  emailForm: UntypedFormGroup;
   editorConfig = EditorConfig;
   isLoading = false;
   files: any = [];
@@ -28,7 +28,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
   extension: string = '';
   fileType: string = '';
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private emailTemplateService: EmailTemplateService,
     private toastrService: ToastrService,
     private emailSendService: EmailSendService,
@@ -52,15 +52,15 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     });
   }
 
-  newParameter(parameter): FormGroup {
+  newParameter(parameter): UntypedFormGroup {
     return this.fb.group({
       parameter: [parameter, [Validators.required]],
       value: ['', [Validators.required]]
     })
   }
 
-  get parameters(): FormArray {
-    return <FormArray>this.emailForm.get('parameters');
+  get parameters(): UntypedFormArray {
+    return <UntypedFormArray>this.emailForm.get('parameters');
   }
 
   setParameterValue() {

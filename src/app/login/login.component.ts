@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '../base.component';
 import { Router } from '@angular/router';
 import { UserAuth } from '@core/domain-classes/user-auth';
@@ -17,7 +17,7 @@ import { SignalrService } from '@core/services/signalr.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends BaseComponent implements OnInit {
-  loginFormGroup: FormGroup;
+  loginFormGroup: UntypedFormGroup;
   isLoading = false;
   userData: User;
   resultMessage: string;
@@ -26,7 +26,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   lng: number;
   logoImage: string;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private securityService: SecurityService,
     private toastr: ToastrService,

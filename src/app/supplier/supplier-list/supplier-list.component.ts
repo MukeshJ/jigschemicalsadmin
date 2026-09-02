@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -42,7 +42,7 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
   columnsToDisplay: string[] = ["footer"];
   countryList: Country[] = [];
   filteredCountryList: Observable<Country[]>;
-  countryControl = new FormControl();
+  countryControl = new UntypedFormControl();
   isLoadingResults = true;
   supplierResource: SupplierResourceParameter;
   loading$: Observable<boolean>;

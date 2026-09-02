@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReminderFrequency } from '@core/domain-classes/reminder-frequency';
 import { User } from '@core/domain-classes/user';
 import { ReminderService } from '../reminder.service';
@@ -22,7 +22,7 @@ import { TranslationService } from '@core/services/translation.service';
 })
 export class AddReminderComponent extends BaseComponent implements OnInit {
   reminderFrequencies: ReminderFrequency[] = [];
-  reminderForm: FormGroup;
+  reminderForm: UntypedFormGroup;
   minDate = new Date();
   users: User[] = [];
   selectedUsers: User[] = [];
@@ -93,20 +93,20 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
   ];
   days: number[] = [];
 
-  get dailyRemindersArray(): FormArray {
-    return <FormArray>this.reminderForm.get('dailyReminders');
+  get dailyRemindersArray(): UntypedFormArray {
+    return <UntypedFormArray>this.reminderForm.get('dailyReminders');
   }
 
-  get quarterlyRemindersArray(): FormArray {
-    return <FormArray>this.reminderForm.get('quarterlyReminders');
+  get quarterlyRemindersArray(): UntypedFormArray {
+    return <UntypedFormArray>this.reminderForm.get('quarterlyReminders');
   }
 
-  get halfYearlyRemindersArray(): FormArray {
-    return <FormArray>this.reminderForm.get('halfYearlyReminders');
+  get halfYearlyRemindersArray(): UntypedFormArray {
+    return <UntypedFormArray>this.reminderForm.get('halfYearlyReminders');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private reminderService: ReminderService,
     private commonService: CommonService,
     private toastrService: ToastrService,
@@ -358,7 +358,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     return new Date().getDate();
   }
 
-  onDateChange(formGrouup: FormGroup) {
+  onDateChange(formGrouup: UntypedFormGroup) {
     const day = formGrouup.get('day').value;
     const month = formGrouup.get('month').value;
     var daysInMonth = new Date(new Date().getFullYear(), Number.parseInt(month), 0).getDate();

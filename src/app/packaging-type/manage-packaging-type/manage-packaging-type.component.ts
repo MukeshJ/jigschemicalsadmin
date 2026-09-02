@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManagePackagingTypeComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  packagingTypeForm: FormGroup;
+  packagingTypeForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManagePackagingTypeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PackagingType,
     private packagingTypeService: PackagingTypeService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService:TranslationService) {
     super();
   }

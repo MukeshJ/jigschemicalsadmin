@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -22,7 +22,7 @@ import { SupplierChemicalService } from './supplier-chemical.service';
   styleUrls: ['./supplier-chemical.component.scss']
 })
 export class SupplierChemicalComponent extends BaseComponent implements OnInit {
-  supplierChemicalForm: FormGroup;
+  supplierChemicalForm: UntypedFormGroup;
   selectedSupplier: Supplier;
   isLoading = false;
   skip = 0;
@@ -35,7 +35,7 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
   chemicals$: Observable<Chemical[]>;
   suppliers$: Observable<Supplier[]>;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private supplierChemicalService: SupplierChemicalService,
     private chemicalService: ChemicalService,
@@ -76,8 +76,8 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
       );
   }
 
-  get supplierChemicalsArray(): FormArray {
-    return <FormArray>this.supplierChemicalForm.get('supplierChemicals');
+  get supplierChemicalsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.supplierChemicalForm.get('supplierChemicals');
   }
 
   createSupplierChemicalForm() {
@@ -88,7 +88,7 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
     });
   }
 
-  addChemicalToSupplier(chemical: Chemical): FormGroup {
+  addChemicalToSupplier(chemical: Chemical): UntypedFormGroup {
     return this.fb.group({
       id: [chemical.id],
       name: [chemical.name],

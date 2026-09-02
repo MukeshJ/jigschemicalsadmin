@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentTerm } from '@core/domain-classes/payment-term';
 import { PaymentTermService } from '@core/services/payment-term.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManagePaymentTermComponent  extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  paymentTermForm: FormGroup;
+  paymentTermForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManagePaymentTermComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PaymentTerm,
     private paymentTermService: PaymentTermService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService:TranslationService) {
     super();
   }

@@ -37,7 +37,7 @@
             <div class="col-md-12 mb-1" formArrayName="inquiryChemicals">
               <span *ngIf="inquieryChemicalArray.controls.length">{{'SELECTED_CHEMICALS' | translate}}:</span>
               <br />
-              <mat-chip-list>
+              <mat-chip-set>
                 <mat-chip *ngFor="let chemical of inquieryChemicalArray.controls; let i=index">
                   <ng-container [formGroupName]="i">
                     <span>{{ chemical.get('name').value }}({{ chemical.get('casNumber').value }})</span>
@@ -46,7 +46,7 @@
                     </i>
                   </ng-container>
                 </mat-chip>
-              </mat-chip-list>
+              </mat-chip-set>
             </div>
             <div class="col-md-6">
               <div class="form-group mt-1">

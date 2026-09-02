@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -39,8 +39,8 @@ import { PackagingType } from '@core/domain-classes/packaging-type';
 })
 export class PurchaseOrderReturnComponent  extends BaseComponent {
   taxes$: Observable<Tax[]>;
-  purchaseOrderForm: FormGroup;
-  purchaseOrderReturnForm: FormGroup;
+  purchaseOrderForm: UntypedFormGroup;
+  purchaseOrderReturnForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   suppliers: Supplier[] = [];
   suppliersForSearch: Supplier[] = [];
@@ -66,12 +66,12 @@ export class PurchaseOrderReturnComponent  extends BaseComponent {
   purchaseOrderResource: PurchaseOrderResourceParameter;
 
 
-  get purchaseOrderItemsArray(): FormArray {
-    return <FormArray>this.purchaseOrderForm.get('purchaseOrderItems');
+  get purchaseOrderItemsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.purchaseOrderForm.get('purchaseOrderItems');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
@@ -259,7 +259,7 @@ export class PurchaseOrderReturnComponent  extends BaseComponent {
     return formGroup;
   }
 
-  getChemicalByNameValue(formGroup: FormGroup, index: number) {
+  getChemicalByNameValue(formGroup: UntypedFormGroup, index: number) {
     if (this.purchaseOrder) {
       this.getChemicals(index);
     }
@@ -282,7 +282,7 @@ export class PurchaseOrderReturnComponent  extends BaseComponent {
   }
 
   getAllTotal() {
-    let purchaseOrderItemsArray = this.purchaseOrderForm.get('purchaseOrderItems') as FormArray;
+    let purchaseOrderItemsArray = this.purchaseOrderForm.get('purchaseOrderItems') as UntypedFormArray;
     let purchaseOrderItems = purchaseOrderItemsArray.getRawValue();
     this.totalBeforeDiscount = 0;
     this.grandTotal = 0;
@@ -319,7 +319,7 @@ export class PurchaseOrderReturnComponent  extends BaseComponent {
 
   onRemovePurchaseOrderItem(index: number) {
     this.purchaseOrderItemsArray.removeAt(index);
-    this.purchaseOrderItemsArray.controls.forEach((c: FormGroup, index: number) => {
+    this.purchaseOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number) => {
       const chemicalId = c.get('chemicalId').value;
       this.purchaseOrder.purchaseOrderItems.map(pi => {
         if (pi.chemical.id === chemicalId) {
@@ -465,7 +465,7 @@ export class PurchaseOrderReturnComponent  extends BaseComponent {
       packagingTypeId:this.purchaseOrderForm.get('packagingTypeId').value,
     };
 
-    const purchaseOrderItemsArray = this.purchaseOrderForm.get('purchaseOrderItems') as FormArray;
+    const purchaseOrderItemsArray = this.purchaseOrderForm.get('purchaseOrderItems') as UntypedFormArray;
     const purchaseOrderItems = purchaseOrderItemsArray.getRawValue();
     if (purchaseOrderItems && purchaseOrderItems.length > 0) {
       purchaseOrderItems.forEach(po => {

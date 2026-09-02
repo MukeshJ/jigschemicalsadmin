@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentMethod } from '@core/domain-classes/payment-method';
 import { SalesOrder } from '@core/domain-classes/sales-order';
@@ -19,7 +19,7 @@ export class AddSalesOrderPaymentComponent  extends BaseComponent implements OnI
   sub$: any;
 
   paymentMethodslist: PaymentMethod[] = [];
-  paymentsForm: FormGroup;
+  paymentsForm: UntypedFormGroup;
   isReceiptDeleted = false;
   constructor(
     public dialogRef: MatDialogRef<AddSalesOrderPaymentComponent>,
@@ -27,7 +27,7 @@ export class AddSalesOrderPaymentComponent  extends BaseComponent implements OnI
     private salesOrderPaymentService: SalesOrderPaymentService,
     // private purchaseOrderPaymentService: PurchaseOrderPaymentService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

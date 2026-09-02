@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { City } from '@core/domain-classes/city';
 import { Country } from '@core/domain-classes/country';
@@ -35,7 +35,7 @@ export class AlreadyExistValidator {
 })
 export class CustomerDetailComponent extends BaseComponent implements OnInit {
 
-  customerForm: FormGroup;
+  customerForm: UntypedFormGroup;
   imgSrc: any = null;
   isImageUpload: boolean = false;
   customer: Customer;
@@ -46,7 +46,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
   public filterCityObservable$: Subject<string> = new Subject<string>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private customerService: CustomerService,
     private commonService: CommonService,
     private router: Router,
@@ -262,7 +262,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (<any>Object).values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
 

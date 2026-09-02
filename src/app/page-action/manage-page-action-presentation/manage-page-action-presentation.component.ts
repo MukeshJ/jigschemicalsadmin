@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Action } from '@core/domain-classes/action';
 import { Page } from '@core/domain-classes/page';
@@ -21,17 +21,17 @@ export class ManagePageActionPresentationComponent extends BaseComponent impleme
   @Input() loading: boolean;
   @Input() loadingPage: boolean;
   @Input() loadingAction: boolean;
-  pageActionForm: FormGroup;
+  pageActionForm: UntypedFormGroup;
 
   @Output() addPageAction: EventEmitter<PageAction> = new EventEmitter<PageAction>();
   @Output() deletePageAction: EventEmitter<PageAction> = new EventEmitter<PageAction>();
 
 
-  get pageActionArray(): FormArray {
-    return <FormArray>this.pageActionForm.get('pageActionArray');
+  get pageActionArray(): UntypedFormArray {
+    return <UntypedFormArray>this.pageActionForm.get('pageActionArray');
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     super();
   }
 

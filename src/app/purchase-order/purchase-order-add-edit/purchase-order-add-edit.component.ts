@@ -1,6 +1,6 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Supplier } from '@core/domain-classes/supplier';
 import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
@@ -43,7 +43,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   _validFileExtensions = environment.allowFileExtension;
   packagingTypes: PackagingType[] = [];
   taxes$: Observable<Tax[]>;
-  purchaseOrderForm: FormGroup;
+  purchaseOrderForm: UntypedFormGroup;
   chemical: Chemical[] = [];
   suppliers: Supplier[] = [];
   supplierResource: SupplierResourceParameter;
@@ -66,12 +66,12 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   purchaseOrderAttachment: PurchaseOrderAttachment[] = [];
 
 
-  get purchaseOrderItemsArray(): FormArray {
-    return <FormArray>this.purchaseOrderForm.get('purchaseOrderItems');
+  get purchaseOrderItemsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.purchaseOrderForm.get('purchaseOrderItems');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
@@ -297,7 +297,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
     return formGroup;
   }
 
-  getChemicalByNameValue(formGroup: FormGroup, index: number) {
+  getChemicalByNameValue(formGroup: UntypedFormGroup, index: number) {
     if (this.purchaseOrder) {
       this.getChemicals(index);
     }
@@ -355,7 +355,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
 
   onRemovePurchaseOrderItem(index: number) {
     this.purchaseOrderItemsArray.removeAt(index);
-    this.purchaseOrderItemsArray.controls.forEach((c: FormGroup, index: number) => {
+    this.purchaseOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number) => {
       const chemicalId = c.get('chemicalId').value;
       if (chemicalId) {
         this.purchaseOrder.purchaseOrderItems.map(pi => {

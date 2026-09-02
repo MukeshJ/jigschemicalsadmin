@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
 import { ConnectedPosition, Overlay, OverlayConfig, PositionStrategy, ScrollStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType, PortalInjector, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayPanelRef } from './overlay-panel-ref';
 import { OVERLAY_PANEL_DATA } from './overlay-panel-data';
 import { OverlayPanelConfig, OverlayPanelPosition } from './overlay-panel-config';
@@ -68,11 +68,14 @@ export class OverlayPanel {
         }
     }
 
-    private createInjector(config: OverlayPanelConfig, dialogRef: OverlayPanelRef<any>): PortalInjector {
-        const injectionTokens = new WeakMap();
-        injectionTokens.set(OverlayPanelRef, dialogRef);
-        injectionTokens.set(OVERLAY_PANEL_DATA, config.data || null);
-        return new PortalInjector(this.injector, injectionTokens);
+    private createInjector(config: OverlayPanelConfig, dialogRef: OverlayPanelRef<any>): Injector {
+        return Injector.create({
+            parent: this.injector,
+            providers: [
+                { provide: OverlayPanelRef, useValue: dialogRef },
+                { provide: OVERLAY_PANEL_DATA, useValue: config.data || null },
+            ],
+        });
     }
 
     private getPositionStrategy(config: OverlayPanelConfig) {

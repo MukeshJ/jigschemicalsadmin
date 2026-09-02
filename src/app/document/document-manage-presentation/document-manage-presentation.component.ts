@@ -1,6 +1,6 @@
 import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Category } from '@core/domain-classes/category';
 import { DocumentInfo } from '@core/domain-classes/document-info';
 import { FileInfo } from '@core/domain-classes/file-info';
@@ -16,7 +16,7 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class DocumentManagePresentationComponent extends BaseComponent implements OnInit {
 
-  documentForm: FormGroup;
+  documentForm: UntypedFormGroup;
   extension: string = '';
   @Input() categories: Category[];
   @Input() loading: boolean;
@@ -29,7 +29,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
   isFileUpload: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private httpClient: HttpClient,
     private cd: ChangeDetectorRef
   ) {
@@ -104,7 +104,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (<any>Object).values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
 

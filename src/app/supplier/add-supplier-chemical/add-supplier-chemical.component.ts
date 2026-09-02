@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -20,7 +20,7 @@ import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chem
   styleUrls: ['./add-supplier-chemical.component.scss']
 })
 export class AddSupplierChemicalComponent extends BaseComponent implements OnInit {
-  supplierChemicalForm: FormGroup;
+  supplierChemicalForm: UntypedFormGroup;
   isLoading = false;
   skip = 0;
   pageSize = 10;
@@ -29,7 +29,7 @@ export class AddSupplierChemicalComponent extends BaseComponent implements OnIni
   currentChemical: Chemical;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toastrService: ToastrService,
     private supplierChemicalService: SupplierChemicalService,
     @Inject(MAT_DIALOG_DATA) public data: Supplier,

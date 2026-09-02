@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-12 mt-2" formArrayName="industryChemicals">
           <span *ngIf="industryChemicalsArray.controls.length">{{'CHEMICALS_TO_ADD' | translate}}:</span>
-          <mat-chip-list>
+          <mat-chip-set>
             <mat-chip *ngFor="let chemical of industryChemicalsArray.controls; let i=index">
               <ng-container [formGroupName]="i">
                 <span>{{ chemical.get('name').value }}({{ chemical.get('casNumber').value }})</span>
@@ -47,7 +47,7 @@
                 </i>
               </ng-container>
             </mat-chip>
-          </mat-chip-list>
+          </mat-chip-set>
         </div>
         <div class="col-md-12">
           <button (click)="saveIndustryChemicals()" type="button" class="btn btn-success btn-sm mt-2">

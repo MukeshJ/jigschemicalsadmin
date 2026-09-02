@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '@core/domain-classes/user';
 import { SecurityService } from '@core/security/security.service';
@@ -17,12 +17,12 @@ import { UserService } from '../user.service';
   styleUrls: ['./my-profile.component.scss']
 })
 export class MyProfileComponent extends BaseComponent implements OnInit {
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   user: User;
   fileSelected: File;
   imgURL: any;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private userService: UserService,
     private toastrService: ToastrService,
     private dialog: MatDialog,

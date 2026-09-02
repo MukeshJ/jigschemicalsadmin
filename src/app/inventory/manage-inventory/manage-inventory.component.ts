@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -18,7 +18,7 @@ import { InventoryService } from '../inventory.service';
   styleUrls: ['./manage-inventory.component.scss']
 })
 export class ManageInventoryComponent extends BaseComponent implements OnInit {
-  inventoryForm: FormGroup;
+  inventoryForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   chemicalResource: ChemicalResourceParameter;
 
@@ -27,7 +27,7 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Inventory,
     private inventoryService: InventoryService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private chemicalService: ChemicalService) {
     super();
     this.chemicalResource = new ChemicalResourceParameter();

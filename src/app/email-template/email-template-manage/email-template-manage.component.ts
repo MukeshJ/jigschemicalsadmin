@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmailTemplate } from '@core/domain-classes/email-template';
 import { TranslationService } from '@core/services/translation.service';
@@ -16,12 +16,12 @@ import { EmailTemplateService } from '../email-template.service';
 })
 export class EmailTemplateManageComponent extends BaseComponent implements OnInit {
 
-  emailTemplateForm: FormGroup;
+  emailTemplateForm: UntypedFormGroup;
   emailTemplate: EmailTemplate;
   editorConfig= EditorConfig;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private emailTemplateService: EmailTemplateService,
     private router: Router,

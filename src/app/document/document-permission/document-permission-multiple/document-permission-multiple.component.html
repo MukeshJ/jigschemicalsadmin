@@ -16,9 +16,9 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-sm-12">
-        <mat-chip-list aria-label="Selected Documents">
+        <mat-chip-set aria-label="Selected Documents">
           <mat-chip *ngFor="let document of documents" color="primary">{{document.name}}</mat-chip>
-        </mat-chip-list>
+        </mat-chip-set>
       </div>
     </div>
     <div class="row mt-2" [formGroup]="permissionForm">

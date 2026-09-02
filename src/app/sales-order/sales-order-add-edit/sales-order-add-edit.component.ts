@@ -1,6 +1,6 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -41,7 +41,7 @@ import { SalesOrderService } from '../sales-order.service';
 export class SalesOrderAddEditComponent extends BaseComponent {
   _validFileExtensions = environment.allowFileExtension;
   taxes$: Observable<Tax[]>;
-  salesOrderForm: FormGroup;
+  salesOrderForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   customers: Customer[] = [];
   paymentTerms: any[] = [];
@@ -65,12 +65,12 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   
 
 
-  get salesOrderItemsArray(): FormArray {
-    return <FormArray>this.salesOrderForm.get('salesOrderItems');
+  get salesOrderItemsArray(): UntypedFormArray {
+    return <UntypedFormArray>this.salesOrderForm.get('salesOrderItems');
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private customerService: CustomerService,
     private toastrService: ToastrService,
     private salesOrderService: SalesOrderService,
@@ -193,7 +193,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     return formGroup;
   }
 
-  getChemicalsByNameValue(formGroup: FormGroup, index: number) {
+  getChemicalsByNameValue(formGroup: UntypedFormGroup, index: number) {
     if (this.salesOrder) {
       this.getChemicals(index);
     }
@@ -252,7 +252,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
 
   onRemoveSalesOrderItem(index: number) {
     this.salesOrderItemsArray.removeAt(index);
-    this.salesOrderItemsArray.controls.forEach((c: FormGroup, index: number)=>{
+    this.salesOrderItemsArray.controls.forEach((c: UntypedFormGroup, index: number)=>{
       const chemicalId= c.get('chemicalId').value;
       if(chemicalId){
     this.salesOrder.salesOrderItems.map(pi => {

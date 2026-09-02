@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { InquiryNote } from '@core/domain-classes/inquiry-note';
 import { TranslationService } from '@core/services/translation.service';
@@ -15,11 +15,11 @@ import { InquiryNoteService } from './inquiry-note.service';
 export class InquiryNoteComponent extends BaseComponent implements OnInit {
 
   @Input() inquiryId: string;
-  commentForm: FormGroup;
+  commentForm: UntypedFormGroup;
   inquiryNotes: InquiryNote[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private inquiryNoteService: InquiryNoteService,
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService) {

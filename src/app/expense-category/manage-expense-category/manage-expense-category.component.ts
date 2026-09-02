@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
 import { ExpenseCategoryService } from '@core/services/expense-category.service';
@@ -15,13 +15,13 @@ import { BaseComponent } from 'src/app/base.component';
 })
 export class ManageExpenseCategoryComponent extends BaseComponent implements OnInit {
   isEdit: boolean = false;
-  expenseCategoryForm: FormGroup;
+  expenseCategoryForm: UntypedFormGroup;
   constructor(
     public dialogRef: MatDialogRef<ManageExpenseCategoryComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ExpenseCategory,
     private expenseCategoryService: ExpenseCategoryService,
     private toastrService: ToastrService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService: TranslationService) {
     super();
   }

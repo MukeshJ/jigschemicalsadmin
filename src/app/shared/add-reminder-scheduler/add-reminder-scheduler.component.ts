@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApplicationEnums } from '@core/domain-classes/application.enum';
 import { CustomReminderScheduler } from '@core/domain-classes/custom-reminder-scheduler';
@@ -16,14 +16,14 @@ import { CommonService } from '@core/services/common.service';
 })
 export class AddReminderSchedulerComponent implements OnInit {
 
-  reminderForm: FormGroup;
+  reminderForm: UntypedFormGroup;
   users: User[] = [];
   selectedUsers: User[] = [];
   reminderSchedulers: ReminderScheduler[] = [];
   displayedColumns: string[] = ['subject', 'createdDate', 'userName'];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private commonService: CommonService,
     public dialogRef: MatDialogRef<AddReminderSchedulerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModuleReference) { }

@@ -7,5 +7,7 @@ export interface ReminderScheduler {
   createdDate: Date
   referenceId?: string;
   applicationEnums?: ApplicationEnums;
+  application?: number;
+  duration?: Date | string;
   userName?: string;
 }

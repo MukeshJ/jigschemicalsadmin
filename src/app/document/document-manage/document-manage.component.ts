@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Category } from '@core/domain-classes/category';
 import { DocumentCategoryService } from '@core/services/document-category.service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,7 +21,7 @@ import { CommonService } from '@core/services/common.service';
 })
 export class DocumentManageComponent extends BaseComponent implements OnInit {
 
-  documentForm: FormGroup;
+  documentForm: UntypedFormGroup;
   categories$: Observable<Category[]>;
   loading$: Observable<boolean>;
   documentSource: string;

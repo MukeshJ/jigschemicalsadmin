@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -26,7 +26,7 @@ export class DocumentPermissionMultipleComponent extends BaseComponent implement
   documents: DocumentInfo[];
   users: User[] = [];
   roles: Role[] = [];
-  permissionForm: FormGroup
+  permissionForm: UntypedFormGroup
   minDate: Date = new Date();
   constructor(
     private documentService: DocumentService,
@@ -37,7 +37,7 @@ export class DocumentPermissionMultipleComponent extends BaseComponent implement
     private commonService: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: DocumentInfo[],
     private dialogRef: MatDialogRef<DocumentPermissionMultipleComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private translationService:TranslationService) {
     super();
   }
