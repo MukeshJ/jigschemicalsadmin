@@ -27,6 +27,6 @@ export const routes: Routes = [
   },{
     path: 'permission',
     loadChildren: () =>
-      import('./document-permission/document-permission-routing.module').then(m => m.routes)
+      import('./document-permission/document-permission.routes').then(m => m.routes)
   }
 ];
