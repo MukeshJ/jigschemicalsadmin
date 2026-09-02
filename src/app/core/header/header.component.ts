@@ -20,7 +20,6 @@ import { debounceTime, tap, switchMap, map, catchError } from 'rxjs/operators';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
-import { NgIf, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
@@ -28,13 +27,13 @@ import { MatOption } from '@angular/material/select';
 import { DateAgoPipe } from '../../shared/pipes/date-ago.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   imports: [
-    NgIf,
     MatProgressSpinner,
     RouterLink,
     HasClaimDirective,
@@ -43,10 +42,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
-    NgFor,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     RouterLinkActive,
     AsyncPipe,
     DateAgoPipe,
