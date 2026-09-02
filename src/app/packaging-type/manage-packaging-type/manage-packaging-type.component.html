@@ -1,0 +1,57 @@
+<div class="modal-content1">
+    <div class="modal-header">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+            <div class="col-md-8 col">
+                <h4 class="modal-title">
+                    {{'MANAGE_PACKAGING_TYPE' | translate}}
+                </h4>
+            </div>
+            <div class="col-sm-auto col-auto ml-auto">
+                <button type="button" class="close" (click)="onCancel()" data-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="packagingTypeForm">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="packagingTypeName">{{'PACKAGING_TYPE_NAME' | translate}}</label>
+                        <input formControlName="name" type="text" class="form-control" id="packagingTypeName">
+                        <div *ngIf="packagingTypeForm.get('name').touched && packagingTypeForm.get('name').errors">
+                            <div class="text-danger"
+                                *ngIf="packagingTypeForm.get('name').touched && packagingTypeForm.get('name').errors?.required">
+                                {{'PACKAGING_TYPE_NAME_IS_REQUIRED' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="form-row w-100">
+                <div class="col-md-auto col-auto">
+                    <ng-container *ngIf="!isEdit">
+                        <button class="btn btn-success btn-sm m-right-10" (click)="savePackagingType()"
+                            cdkFocusInitial>
+                            <i class="fas fa-save"></i>
+                            {{"SAVE" | translate}}
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="isEdit">
+                        <button class="btn btn-success btn-sm m-right-10" (click)="savePackagingType()"
+                            cdkFocusInitial><i class="fas fa-save"></i>
+                            {{"SAVE" | translate}}
+                        </button>
+                    </ng-container>
+                    <button class="btn btn-danger btn-sm" (click)="onCancel()">
+                        <i class="fas fa-times-circle"></i>
+                        {{"CANCEL" | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

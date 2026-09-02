@@ -1,0 +1,4 @@
+<app-user-permission-presentation [pages]="pages$ | async" [actions]="actions$ | async"
+    [pageActions]="pageActions$ | async" [loading]="loading$ | async" [loadingPage]="loadingPage$ | async"
+    [loadingAction]="loadingAction$ | async" [user]="user" (manageUserClaimAction)="manageUserClaimAction($event)">
+</app-user-permission-presentation>

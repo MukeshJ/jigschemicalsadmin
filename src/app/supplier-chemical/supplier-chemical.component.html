@@ -1,0 +1,90 @@
+<div class="page-header-main">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-md-auto col-sm-auto">
+      <div class="content-header">
+        <h1>{{'ASSIGN_CHEMICALS_TO_SUPPLIER' | translate}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="loading-shade" *ngIf="isLoading">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
+<mat-card>
+  <div class="row" [formGroup]="supplierChemicalForm">
+    <div class="col-md-12 mb-3">
+      <input class="form-control" placeholder="{{'SEARCH_SUPPLIER' | translate}}" [matAutocomplete]="autoForSupplier"
+        formControlName="supplierNameInput" />
+      <mat-autocomplete #autoForSupplier="matAutocomplete">
+        <mat-option (click)="selectSupplier(supplier)" *ngFor="let supplier of suppliers$ | async"
+          [value]="supplier.supplierName">
+          <span>{{ supplier.supplierName }}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+    <div class="col-md-12 mb-3">
+      <input class="form-control" placeholder="{{'SEARCH_CHEMICALS' | translate}}" [matAutocomplete]="autoForChemical"
+        formControlName="chemicalNameInput" />
+      <mat-autocomplete #autoForChemical="matAutocomplete">
+        <mat-option (click)="selectChemical(chemical)" *ngFor="let chemical of chemicals$ | async"
+          [value]="chemical.name">
+          <span>{{ chemical.name }}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+
+    <div class="col-md-12" formArrayName="supplierChemicals">
+      <span *ngIf="supplierChemicalsArray.controls.length">{{'CHEMICALS_TO_ADD' | translate}}:</span>
+      <mat-chip-list>
+        <mat-chip *ngFor="let chemical of supplierChemicalsArray.controls; let i=index">
+          <ng-container [formGroupName]="i">
+            <span>{{ chemical.get('name').value }}({{ chemical.get('casNumber').value }})</span>
+            <i class="material-icons cursor-pointer" (click)="removeChemical(i)">
+              clear
+            </i>
+          </ng-container>
+        </mat-chip>
+      </mat-chip-list>
+      <button (click)="saveSupplierChemicals()" *ngIf="selectedSupplier" type="button"
+        class="btn btn-success btn-sm mt-2">
+        <i class="fas fa-plus"></i> {{'ADD_SELECTED_CHEMICALS' | translate}}</button>
+    </div>
+  </div>
+</mat-card>
+<mat-card class="mt-5">
+  <div class="section-title">
+    <h2>{{'CURRENT_CHEMICAL_LIST' | translate}}</h2>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="table-responsive">
+        <table mat-table [dataSource]="supplierChemicals" class="table table-bordered table-hover">
+          <ng-container matColumnDef="action">
+            <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'ACTION' | translate}} </th>
+            <td class="table-column-150" mat-cell *matCellDef="let chemical">
+              <button (click)="removeChemicalFromSupplier(chemical)" class="btn btn-danger btn-sm" type="button">
+                <i class="fas fa-trash-alt"></i>
+                <span class="d-none d-sm-inline"> {{'DELETE' | translate}}</span>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th class="table-column-300" mat-header-cell *matHeaderCellDef> {{'NAME' | translate}} </th>
+            <td class="table-column-300" mat-cell *matCellDef="let chemical"> {{chemical.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="casNumber">
+            <th class="table-column-150" mat-header-cell *matHeaderCellDef> {{'CAS_NUMBER' | translate}} </th>
+            <td class="table-column-150" mat-cell *matCellDef="let chemical"> {{chemical.casNumber}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator class="w-100" #paginator [length]="totalChemicals" (page)="pageChange($event)" [pageSize]="10">
+        </mat-paginator>
+      </div>
+      <div class="container p-2" *ngIf="supplierChemicals && supplierChemicals.length==0">
+        <span>{{'CURRENTY' | translate}}, <strong> {{selectedSupplier?.supplierName}}</strong> {{'IS_NOT_PROVIDING_ANY_CHEMICALS' | translate}}</span>
+      </div>
+    </div>
+  </div>
+</mat-card>

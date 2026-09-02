@@ -1,0 +1,6 @@
+<app-manage-page-action-presentation [pages]="pages$ | async" [actions]="actions$ | async"
+  [pageActions]="pageActions$ | async" [loading]="loading$ | async"
+  (addPageAction)="onAddPageAction($event)"
+  [loadingPage]="loadingPage$ | async" [loadingAction]="loadingAction$ | async"
+   (deletePageAction)="onDeletePageAction($event)">
+</app-manage-page-action-presentation>

@@ -1,0 +1,37 @@
+// The default mat-card elevation (box-shadow) reads as a border around the
+// whole preview block (image + buttons). Strip that here so only the image
+// itself is bordered, without affecting `.cus-mat-card` on any other page.
+:host ::ng-deep .cus-mat-card {
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+.gallery-preview {
+  display: block;
+  border: 1px solid #dcddea;
+  border-radius: 4px;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+// Let the Add/Change/Remove image buttons wrap onto their own lines instead
+// of overflowing the card on narrow screens.
+:host ::ng-deep .cus-mat-card mat-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+
+  button {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .gallery-preview {
+    max-height: 260px;
+    width: 100%;
+  }
+}

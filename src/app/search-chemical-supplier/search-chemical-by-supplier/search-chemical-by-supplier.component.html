@@ -1,0 +1,70 @@
+<div class="row mb-3 align-items-center justify-content-between">
+    <div class="col-md-auto col-sm-auto">
+        <div class="section-title">
+            <h2>{{'SEARCH_CHEMICALS_BY_SUPPLIER' | translate}}</h2>
+        </div>
+    </div>
+</div>
+<div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
+<mat-card>
+    <div class="row" [formGroup]="supplierChemicalForm">
+        <div class="col-md-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <mat-icon class="input-group-text" matPrefix><i class="fas fa-search"></i></mat-icon>
+                </div>
+                <input class="form-control" placeholder="{{'SEARCH_CHEMICALS_BY_SUPPLIER_NAME' | translate}}"
+                    [matAutocomplete]="autoForChemical" formControlName="supplierNameInput" />
+                <mat-autocomplete #autoForChemical="matAutocomplete">
+                    <mat-option (click)="selectSupplier(supplier)" *ngFor="let supplier of suppliers$ | async"
+                        [value]="supplier.supplierName">
+                        <span>{{ supplier.supplierName }}</span>
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+    </div>
+</mat-card>
+<mat-card class="mt-5">
+    <div class="section-title">
+        <h2>{{'CHEMICALS' | translate}}</h2>
+    </div>
+    <div class="table-responsive">
+        <table mat-table [dataSource]="supplierChemicals" class="table table-bordered table-hover">
+            <ng-container matColumnDef="name">
+                <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'NAME' | translate}} </th>
+                <td class="table-column-200" mat-cell *matCellDef="let chemical"> {{chemical.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="casNumber">
+                <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'CAS_NUMBER' | translate}} </th>
+                <td class="table-column-200" mat-cell *matCellDef="let chemical"> {{chemical.casNumber}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name-search">
+                <th mat-header-cell *matHeaderCellDef>
+                    <input placeholder="{{'NAME' | translate}}" type="text" class="form-control w-90" [(ngModel)]="NameFilter">
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="casnumber-search">
+                <th mat-header-cell *matHeaderCellDef>
+                    <input placeholder="{{'CAS_NUMBER' | translate}}" type="text" class="form-control" [(ngModel)]="CasNumberFilter">
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="footer">
+                <td mat-footer-cell colspan="4" *matFooterCellDef>
+                    <mat-paginator #paginator [length]="totalChemicals" (page)="pageChange($event)"
+                        [pageSize]="pageSize">
+                    </mat-paginator>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="['name-search', 'casnumber-search'];sticky: true">
+            </tr>
+            <tr mat-footer-row *matFooterRowDef="footerToDisplayed;sticky: true"></tr>
+        </table>
+
+    </div>
+</mat-card>

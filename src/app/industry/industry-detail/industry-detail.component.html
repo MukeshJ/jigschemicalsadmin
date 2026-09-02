@@ -1,0 +1,70 @@
+<div class="page-header-main">
+    <div class="row align-items-center justify-content-between">
+        <div class="col-md-auto col-sm-auto">
+            <div class="content-header">
+                <h1 *ngIf="!isEditMode">{{'ADD_INDUSTRY' | translate}}</h1>
+                <h1 *ngIf="isEditMode">{{'EDIT_INDUSTRY' | translate}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<form [formGroup]="industryForm" (ngSubmit)="onIndustryubmit()">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group ">
+                <label class="text-danger">{{'NAME' | translate}} *</label>
+                <input formControlName="name" class="form-control" type="text">
+                <div *ngIf="industryForm.get('name').touched && industryForm.get('name').errors">
+                    <div class="text-danger" *ngIf="industryForm.get('name').errors?.required">
+                        {{'NAME_IS_REQUIRED' | translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group ">
+                <label>{{'SHORT_DESCRIPTION' | translate}}</label>
+                <textarea formControlName="shortDescription" class="form-control" cols="30" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="form-group ">
+                <label>
+                    {{'DESCRIPTION' | translate}}
+                </label>
+                <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>
+                {{'UPLOAD_LOGO' | translate}}
+            </label>
+            <mat-card class="cus-mat-card text-center">
+                <input hidden (change)="onFileSelect($event)" #fileInput name="logo" type="file" name="Profile Image"
+                    fxFlex="30">
+                <img *ngIf="imgSrc" class="full-width" [src]="imgSrc" />
+                <img *ngIf="!imgSrc" class="full-width" src="../../../assets/images/company-logo.jpg" />
+                <mat-card-actions>
+                    <button type="button" *ngIf="!imgSrc" class="btn btn-success btn-sm m-right-10"
+                        (click)="fileInput.click()">
+                        <i class="far fa-image"></i> {{'ADD_LOGO' | translate}}</button>
+                    <button type="button" *ngIf="imgSrc" class="btn btn-success btn-sm m-right-10"
+                        (click)="fileInput.click()">
+                        <i class="far fa-image"></i> {{'CHANGE_LOGO' | translate}}</button>
+                    <button *ngIf="imgSrc" type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> {{'REMOVE_LOGO' | translate}}</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div class="m-top-10 col-md-12">
+            <ng-container>
+                <button type="submit" class="btn btn-success btn-sm m-right-10" cdkFocusInitial>
+                    <i class="fas fa-save"></i>
+                    {{'SAVE' | translate}}</button>
+            </ng-container>
+            <button type="button" class="btn btn-danger btn-sm" [routerLink]="['/industry']">
+                <i class="fas fa-times-circle"></i>
+                {{'CANCEL' | translate}}</button>
+        </div>
+    </div>
+</form>

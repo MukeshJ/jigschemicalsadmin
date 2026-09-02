@@ -1,0 +1,93 @@
+<div class="modal-content1">
+  <div class="modal-header">
+    <div class="d-flex w-100 align-items-center justify-content-between">
+      <div class="col-md-8">
+        <h4 class="modal-title">
+          {{'SHARE_DOCUMENTS' | translate}}
+        </h4>
+      </div>
+      <div class="col-sm-auto ml-auto">
+        <button type="button" class="close" (click)="closeDialog()" data-dismiss="modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-chip-list aria-label="Selected Documents">
+          <mat-chip *ngFor="let document of documents" color="primary">{{document.name}}</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <div class="row mt-2" [formGroup]="permissionForm">
+      <div class="col-md-6 form-group">
+        <mat-label>{{'USERS' | translate}}</mat-label>
+        <mat-select color="primary" class="form-control" formControlName="users" multiple>
+          <mat-option *ngFor="let user of users" [value]="user.id">
+            {{user.firstName}} {{user.lastName}} ({{user.email}})
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="col-md-6 form-group">
+        <mat-label>{{'ROLES' | translate}}</mat-label>
+        <mat-select color="primary" class="form-control" formControlName="roles" multiple>
+          <mat-option *ngFor="let role of roles" [value]="role.id">
+            {{role.name}}
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="col-md-12">
+        <mat-checkbox (change)="timeBoundChange($event)" color="primary" formControlName="isTimeBound">
+          {{'SPACIFY_THE_PERIOD' | translate}}
+        </mat-checkbox>
+      </div>
+      <div class="col-md-12" *ngIf="permissionForm.get('isTimeBound').value">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <input placeholder="{{'START_DATE' | translate}}" class="form-control" formControlName="startDate"
+                [min]="minDate" [matDatepicker]="startDatePicker">
+              <mat-datepicker #startDatePicker></mat-datepicker>
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <input placeholder="{{'END_DATE' | translate}}" formControlName="endDate" class="form-control"
+                [min]="permissionForm.get('startDate').value" [matDatepicker]="endDatePicker">
+              <mat-datepicker #endDatePicker></mat-datepicker>
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                </span>
+              </div>
+            </div>
+            <mat-error *ngIf="permissionForm.get('endDate').touched && permissionForm.get('endDate').errors?.required">
+              {{'END_DATE_IS_REQUIRED' | translate}}
+            </mat-error>
+            <mat-error *ngIf="permissionForm.get('endDate').touched && permissionForm.get('endDate').errors?.min">
+              {{'END_DATE_SHOULD_BE_GREATER_THAN_TODAY_TODAY_DATE' | translate}}
+            </mat-error>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 my-2">
+        <mat-checkbox color="primary" formControlName="isAllowDownload">{{'ALLOW_DOWNLOAD' | translate}}</mat-checkbox>
+      </div>
+      <div class="col-md-12 ">
+        <button class="btn btn-success btn-sm m-right-10" (click)="saveDocumentUserPermission()" cdkFocusInitial><i
+            class="las la-save"></i> {{'SAVE' | translate}}
+        </button>
+        <button class="btn btn-danger btn-sm" (click)="closeDialog()"><i class="las la-times-circle"></i>
+          {{'CANCEL' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>

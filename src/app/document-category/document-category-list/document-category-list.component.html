@@ -1,0 +1,4 @@
+<app-document-category-list-presentation
+[categories]="categories$ | async" [loading]="loading$ | async"
+  (addEditCategoryHandler)="manageCategory($event)" (deleteCategoryHandler)="deleteCategory($event)"
+></app-document-category-list-presentation>

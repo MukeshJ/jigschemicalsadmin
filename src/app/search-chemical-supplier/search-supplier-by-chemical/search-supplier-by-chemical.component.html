@@ -1,0 +1,83 @@
+<div class="page-header-main">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-md-auto col-sm-auto">
+      <div class="content-header">
+        <h1>{{'SEARCH_SUPPLIERS_BY_CHEMICAL' | translate}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="loading-shade" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+<mat-card>
+  <div class="row" [formGroup]="supplierChemicalForm">
+    <div class="col-md-12">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <mat-icon class="input-group-text" matPrefix><i class="fas fa-search"></i></mat-icon>
+        </div>
+        <input class="form-control" placeholder="{{'SEARCH_SUPPLIERS_BY_CHEMICAL_NAME_CASNUMBER' | translate}}"
+          [matAutocomplete]="autoForChemical" formControlName="chemicalNameInput" />
+        <mat-autocomplete #autoForChemical="matAutocomplete">
+          <mat-option (click)="selectChemical(chemical)" *ngFor="let chemical of chemicals$ | async"
+            [value]="chemical.name">
+            <span>{{ chemical.name }}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+    </div>
+  </div>
+</mat-card>
+<mat-card class="mt-5">
+  <div class="section-title">
+    <h2>{{'SUPPLIERS' | translate}}</h2>
+  </div>
+  <div class="table-responsive">
+    <table mat-table [dataSource]="chemicalSuppliers" class="table table-bordered table-hover">
+      <ng-container matColumnDef="supplierName">
+        <th  class="table-column-200" mat-header-cell *matHeaderCellDef>
+          {{'NAME' | translate}}
+        </th>
+        <td class="table-column-200" mat-cell *matCellDef="let supplier"><a
+            [routerLink]="['/supplier/manage/',supplier.id]">{{supplier.supplierName}}</a> </td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'EMAIL' | translate}} </th>
+        <td class="table-column-200" mat-cell *matCellDef="let supplier">
+          <span *ngFor="let email of supplier.supplierEmails;last as isLast">
+            {{email.email}} <span *ngIf="!isLast">, </span>
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="mobileNo">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef> {{'MOBILE' | translate}} </th>
+        <td class="table-column-200" mat-cell *matCellDef="let supplier"> {{supplier.mobileNo}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name-search">
+        <th mat-header-cell *matHeaderCellDef>
+          <input placeholder="{{'NAME' | translate}}" type="text" class="form-control w-90" [(ngModel)]="NameFilter">
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="email-search">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="mobileNo-search">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="footer">
+        <td mat-footer-cell colspan="4" *matFooterCellDef>
+          <mat-paginator #paginator [length]="totalSuppliers" (page)="pageChange($event)" [pageSize]="pageSize">
+          </mat-paginator>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row *matHeaderRowDef="['name-search', 'email-search', 'mobileNo-search'];sticky: true">
+      </tr>
+      <tr mat-footer-row *matFooterRowDef="footerToDisplayed;sticky: true"></tr>
+    </table>
+  </div>
+</mat-card>

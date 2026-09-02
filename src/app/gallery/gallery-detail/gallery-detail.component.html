@@ -1,0 +1,77 @@
+<div class="page-header-main pt-4">
+    <div class="row align-items-center justify-content-between">
+        <div class="col-md-auto col-sm-auto">
+            <div class="content-header">
+                <h1 *ngIf="!isEditMode">{{'ADD_GALLERY' | translate}}</h1>
+                <h1 *ngIf="isEditMode">{{'EDIT_GALLERY' | translate}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<form autocomplete="off" [formGroup]="galleryForm" (ngSubmit)="onGallerySubmit()">
+    <div class="loading-shade" *ngIf="isLoading">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="text-danger">{{'NAME' | translate}} *</label>
+                        <input formControlName="name" class="form-control" type="text">
+                        <div *ngIf="galleryForm.get('name').touched && galleryForm.get('name').errors">
+                            <div class="text-danger" *ngIf="galleryForm.get('name').errors?.required">
+                                {{'NAME_IS_REQUIRED' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="text-danger">{{'CATEGORY' | translate}} *</label>
+                        <mat-select placeholder="{{'SELECT_CATEGORY' | translate}}" class="form-control"
+                            formControlName="category">
+                            <mat-option *ngFor="let category of galleryCategories" [value]="category.id">
+                                {{category.value | translate }}
+                            </mat-option>
+                        </mat-select>
+                        <div *ngIf="galleryForm.get('category').touched && galleryForm.get('category').errors">
+                            <div class="text-danger" *ngIf="galleryForm.get('category').errors?.required">
+                                {{'CATEGORY_IS_REQUIRED' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{'DESCRIPTION' | translate}}</label>
+                <textarea formControlName="description" class="form-control" cols="30" rows="3"></textarea>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-12 mt-3 mt-md-0">
+            <mat-card class="cus-mat-card text-center">
+                <input hidden (change)="onFileSelect($event)" #fileInput name="galleryImage" type="file" fxFlex="30">
+                <img *ngIf="imgSrc" class="full-width gallery-preview" [src]="imgSrc" />
+                <img *ngIf="!imgSrc" class="full-width gallery-preview" src="../../../assets/images/chemical-image.jpg" />
+                <mat-card-actions>
+                    <button type="button" *ngIf="!imgSrc" class="btn btn-success btn-sm m-right-10"
+                        (click)="fileInput.click()">
+                        <i class="far fa-image"></i> {{'ADD_IMAGE' | translate}}</button>
+                    <button type="button" *ngIf="imgSrc" class="btn btn-success btn-sm m-right-10" (click)="fileInput.click()">
+                        <i class="far fa-image"></i> {{'CHANGE_IMAGE' | translate}}</button>
+                    <button *ngIf="imgSrc" type="button" (click)="onRemoveImage()" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> {{'REMOVE_IMAGE' | translate}}</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div class="m-top-10 col-md-12">
+            <button type="submit" class="btn btn-success btn-sm m-right-10" cdkFocusInitial>
+                <i class="fas fa-save"></i>
+                {{'SAVE' | translate}}</button>
+            <button type="button" class="btn btn-danger btn-sm" [routerLink]="['/gallery']">
+                <i class="fas fa-times-circle"></i>
+                {{'CANCEL' | translate}}</button>
+        </div>
+    </div>
+</form>

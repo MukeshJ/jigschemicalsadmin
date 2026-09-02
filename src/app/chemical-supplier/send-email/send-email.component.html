@@ -1,0 +1,125 @@
+<div class="modal-content1">
+  <div class="modal-header">
+    <div class="d-flex w-100 align-items-center justify-content-between">
+      <div class="col-md-8">
+        <h4 class="modal-title">
+          {{'SEND_EMAIL' | translate }}
+        </h4>
+      </div>
+      <div class="col-sm-auto ml-auto">
+        <button type="button" class="close" (click)="closeDialog()" data-dismiss="modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="loading-shade" *ngIf="isLoading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <span *ngIf="data?.suppliers.length">Selected Suppliers:</span>
+        <br />
+        <mat-chip-list>
+          <mat-chip color="primary" [selected]="supplier.supplierName" [value]="supplier.supplierName"
+            *ngFor="let supplier of data?.suppliers">
+            {{ supplier.supplierName }}({{ supplier?.email }})
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <span *ngIf="data?.suppliers.length">Selected Chemical:</span>
+        <br />
+        <mat-chip-list>
+          <mat-chip [selected]="data.chemicalName" [value]="data.chemicalName" color="primary">
+            {{data?.chemicalName}}
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <div class="form-group">
+          <mat-label>
+            {{'SELECT_EMAIL_TAMPLATE' | translate }}
+          </mat-label>
+          <mat-select placeholder="{{'SELECT_EMAIL_TAMPLATE' | translate}}" class="form-control" name="selectedEmailTamplate"
+            [(ngModel)]="selectedEmailTamplate" (selectionChange)="onTempateChange()">
+            <mat-option *ngFor="let tamplate of emailTamplates" [value]="tamplate">
+              {{tamplate.name}}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="emailForm">
+      <div class="row">
+        <div class="col-md-12 pb-1">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="subject">
+                {{'SUBJECT' | translate }}
+              </span>
+            </div>
+            <input formControlName="subject" type="text" class="form-control" placeholder="{{'SUBJECT' | translate }}"
+              aria-label="To" aria-describedby="subject">
+          </div>
+          <div *ngIf="emailForm.get('subject').touched && emailForm.get('subject').errors">
+            <div class="text-danger" *ngIf="emailForm.get('subject').errors?.required">
+              {{'SUBJECT_IS_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-weight-bold">
+              {{'BODY' | translate }}
+            </label>
+            <angular-editor formControlName="body" [config]="editorConfig"></angular-editor>
+            <div *ngIf="emailForm.get('body').touched && emailForm.get('body').errors">
+              <div class="text-danger" *ngIf="emailForm.get('body').errors?.required">
+                {{'BODY_IS_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" formArrayName="parameters">
+          <div class="row" *ngIf="parameters.controls.length>0">
+            <div class="col-md-6 font-weight-bold">
+              {{'PARAMETER_NAME' | translate }}
+            </div>
+            <div class="col-md-6 font-weight-bold">
+              {{'PARAMETER_VALUE' | translate }}
+            </div>
+          </div>
+          <div *ngFor="let param of parameters.controls; let i=index" class="row mt-1">
+            <ng-container [formGroupName]="i">
+              <div class="col-md-6">
+                <input readonly class="form-control" type="text" formControlName="parameter">
+              </div>
+              <div class="col-md-6">
+                <input (focusout)="setParameterValue()" class="form-control" type="text" formControlName="value">
+                <div *ngIf="param.get('value').touched && param.get('value').errors">
+                  <div class="text-danger" *ngIf="param.get('value').errors?.required">
+                    {{'PARAMETER_VALUE_IS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-1">
+          <button (click)="sendEmail()" type="submit" class="btn btn-success">
+            <i class="fas fa-paper-plane"></i>
+            {{'SEND' | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>

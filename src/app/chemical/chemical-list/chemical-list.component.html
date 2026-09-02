@@ -1,0 +1,189 @@
+<div class="page-header-main">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-md-auto col-sm-auto">
+      <div class="content-header">
+        <h1>{{'CHEMICAL_LIST' | translate}}</h1>
+      </div>
+    </div>
+    <div class="col-md-auto col-sm-auto">
+      <button *hasClaim="'chemical_add_chemical'" class="btn blue-btn btn-sm m-right-10"
+        [routerLink]="['/chemical/add']">
+        <i class="fas fa-plus"></i> {{'ADD_CHEMICAL' | translate}}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="loading-shade" *ngIf="dataSource.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="table-responsive">
+  <table mat-table [dataSource]="dataSource" class="table table-bordered table-hover grid-height" matSort
+    matSortActive="name">
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="table-column-100">
+      </th>
+      <td mat-cell *matCellDef="let chemical" class="table-column-50">
+        <mat-checkbox color="primary" (change)="onChange(chemical.id, $event)" [checked]="checkPermission(chemical.id)">
+        </mat-checkbox>
+        <button
+          *hasClaim="['chemical_update_chemical','chemical_delete_chemical','chemical_assign_chemical_to_supplier','chemical_assign_chemical_to_customer']"
+          mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button *hasClaim="'chemical_update_chemical'" (click)="editChemical(chemical.id)" mat-menu-item>
+            <mat-icon>edit</mat-icon>
+            <span>{{'EDIT' | translate}}</span>
+          </button>
+          <button *hasClaim="'chemical_delete_chemical'" mat-menu-item (click)="deleteChemical(chemical)">
+            <mat-icon>delete</mat-icon>
+            <span>{{'DELETE' | translate}}</span>
+          </button>
+          <button *hasClaim="'chemical_assign_chemical_to_supplier'" mat-menu-item
+            (click)="addChemicalSupplier(chemical)">
+            <mat-icon>add_circle_outline</mat-icon>
+            <span>{{'ADD_SUPPLIER' | translate}}</span>
+          </button>
+          <button *hasClaim="'chemical_assign_chemical_to_customer'" mat-menu-item
+            (click)="addChemicalCustomer(chemical)">
+            <mat-icon>add_circle_outline</mat-icon>
+            <span>{{'ADD_CUSTOMER' | translate}}</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th class="table-column-300" mat-header-cell *matHeaderCellDef mat-sort-header> {{'NAME' | translate}} </th>
+      <td class="table-column-300" mat-cell *matCellDef="let chemical">
+        <a (click)="editChemical(chemical.id)" [ngStyle]="{'cursor': 'pointer'}" class="link-primary">
+          {{chemical.name}}
+        </a>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="casNumber">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef mat-sort-header> {{'CAS_NUMBER' | translate}} </th>
+      <td class="table-column-150" mat-cell *matCellDef="let chemical"> {{chemical.casNumber}} </td>
+    </ng-container>
+    <ng-container matColumnDef="categories">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef> Categories </th>
+      <td class="table-column-150" mat-cell *matCellDef="let chemical">
+        <ng-container *ngFor="let item of chemical.categories; let i=index">
+          <ng-container *ngIf="i!=0">,</ng-container> {{item}}
+        </ng-container>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="industries">
+      <th class="table-column-150" mat-header-cell *matHeaderCellDef> Industries </th>
+      <td class="table-column-150" mat-cell *matCellDef="let chemical">
+        <ng-container *ngFor="let item of chemical.industries let i=index">
+          <ng-container *ngIf="i!=0">,</ng-container> {{item}}
+        </ng-container>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="synonyms">
+      <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header> Synonyms </th>
+      <td class="table-column-200" mat-cell *matCellDef="let chemical">
+        <div [innerHtml]="chemical.synonyms"></div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="supplierCount">
+      <th mat-header-cell *matHeaderCellDef> {{'SUPPLIERS' | translate}} </th>
+      <td mat-cell *matCellDef="let chemical">
+        <ng-container *ngIf="chemical.supplierCount>0; else noSupplier">
+          <a (click)="viewSuppliers(chemical)" class="btn btn-danger btn-sm">
+            {{'SUPPLIERS' | translate}}({{chemical.supplierCount}})</a>
+        </ng-container>
+        <ng-template #noSupplier>
+          <span>
+            No Supplier</span>
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="isShowFront">
+      <th mat-header-cell *matHeaderCellDef> Is Show in Front</th>
+      <td mat-cell *matCellDef="let chemical">
+        <mat-checkbox class="example-margin" [checked]="chemical.isShowInFront"
+          (change)="onIsShowInFront($event.checked, chemical.id)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="customerCount">
+      <th mat-header-cell *matHeaderCellDef> {{'CUSTOMERS' | translate}} </th>
+      <td mat-cell *matCellDef="let chemical">
+        <ng-container *ngIf="chemical.customerCount>0; else noCustomer">
+          <a (click)="viewCustomers(chemical)" class="btn blue-btn btn-sm">
+            {{'CUSTOMERS' | translate}}({{chemical.customerCount}})</a>
+        </ng-container>
+        <ng-template #noCustomer>
+          <span>
+            No Customers</span>
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="action-search">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox color="primary" (change)="selecetAll($event)" class="example-margin">Select All</mat-checkbox>
+        <button (click)="deleteAllChemical()" class="btn btn-danger btn-sm ml-2" type="button">
+          <i class="fas fa-trash-alt"></i>
+          <span *ngIf="checkedChemicalArray.length >0">({{checkedChemicalArray.length}}) </span>
+        </button>
+      </th>
+    </ng-container>
+    <ng-container matColumnDef="name-search">
+      <th mat-header-cell *matHeaderCellDef>
+        <input placeholder="{{'NAME' | translate}}" type="text" class="form-control" [(ngModel)]="NameFilter">
+      </th>
+    </ng-container>
+    <ng-container matColumnDef="casnumber-search">
+      <th mat-header-cell *matHeaderCellDef>
+        <input placeholder="{{'CAS_NUMBER' | translate}}" type="text" class="form-control"
+          [(ngModel)]="CasNumberFilter">
+      </th>
+    </ng-container>
+
+    <ng-container matColumnDef="synonyms-search">
+      <th mat-header-cell *matHeaderCellDef> </th>
+    </ng-container>
+    <ng-container matColumnDef="supplier-search">
+      <th mat-header-cell *matHeaderCellDef> </th>
+    </ng-container>
+    <ng-container matColumnDef="customer-search">
+      <th mat-header-cell *matHeaderCellDef> </th>
+    </ng-container>
+    <ng-container matColumnDef="categories-search">
+      <th mat-header-cell *matHeaderCellDef> </th>
+    </ng-container>
+    <ng-container matColumnDef="industries-search">
+      <th mat-header-cell *matHeaderCellDef> </th>
+    </ng-container>
+    <ng-container matColumnDef="isShowFront-search">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-select [(ngModel)]="selectedFrontEnd">
+          <mat-option value="all">All</mat-option>
+          <mat-option value="1">FrontEnd</mat-option>
+          <mat-option value="0">Not FrontEnd</mat-option>
+        </mat-select>
+      </th>
+    </ng-container>
+    <ng-container matColumnDef="footer">
+      <td mat-footer-cell colspan="9" *matFooterCellDef>
+        <mat-paginator [length]="chemicalResource.totalCount" [pageSize]="chemicalResource.pageSize"
+          [pageSizeOptions]="[10, 20, 30]">
+        </mat-paginator>
+      </td>
+    </ng-container>
+    <tr *matNoDataRow>
+      <td colspan="12">
+        <span class="p-4 mt-4">
+          <b> {{'NO_DATA_FOUND' | translate}}</b>
+        </span>
+      </td>
+    </tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row
+      *matHeaderRowDef="['action-search','name-search', 'casnumber-search','synonyms-search','supplier-search','customer-search','categories-search','industries-search','isShowFront-search'];sticky: true">
+    </tr>
+    <tr mat-footer-row *matFooterRowDef="footerToDisplayed;sticky: true"></tr>
+  </table>
+</div>
