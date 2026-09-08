@@ -16,10 +16,12 @@
   <table
     class="table table-bordered table-hover"
     mat-table
-    [dataSource]="dataSource"
+    [dataSource]="supplierStore.supplierList()"
     multiTemplateDataRows
     matSort
-    matSortActive="supplierName"
+    [matSortActive]="supplierStore.parameters().sortActive"
+    [matSortDirection]="supplierStore.parameters().sortDirection"
+    (matSortChange)="sortData($event)"
   >
     <ng-container matColumnDef="action" sticky>
       <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
@@ -125,7 +127,13 @@
     </ng-container>
     <ng-container matColumnDef="supplierName-search" sticky>
       <th mat-header-cell *matHeaderCellDef>
-        <input type="text" class="form-control" [(ngModel)]="NameFilter" />
+        <input
+          #nameRef
+          type="text"
+          class="form-control"
+          [value]="supplierStore.parameters().supplierName"
+          (input)="supplierStore.updateParameters({ supplierName: nameRef.value })"
+        />
       </th>
     </ng-container>
     <ng-container matColumnDef="chemicals-search">
@@ -133,12 +141,24 @@
     </ng-container>
     <ng-container matColumnDef="email-search">
       <th mat-header-cell *matHeaderCellDef>
-        <input type="text" class="form-control" [(ngModel)]="EmailFilter" />
+        <input
+          #emailRef
+          type="text"
+          class="form-control"
+          [value]="supplierStore.parameters().email"
+          (input)="supplierStore.updateParameters({ email: emailRef.value })"
+        />
       </th>
     </ng-container>
     <ng-container matColumnDef="mobileNo-search">
       <th mat-header-cell *matHeaderCellDef>
-        <input type="text" class="form-control" [(ngModel)]="MobileOrPhoneFilter" />
+        <input
+          #mobileRef
+          type="text"
+          class="form-control"
+          [value]="supplierStore.parameters().mobileNo"
+          (input)="supplierStore.updateParameters({ mobileNo: mobileRef.value })"
+        />
       </th>
     </ng-container>
     <ng-container matColumnDef="country-search">
@@ -151,7 +171,7 @@
         />
         <mat-autocomplete
           [autoActiveFirstOption]="true"
-          (optionSelected)="CountryFilter = $event.option.value"
+          (optionSelected)="onCountrySelected($event.option.value)"
           #auto="matAutocomplete"
         >
           <mat-option value="">{{ 'NONE' | translate }}</mat-option>
@@ -165,15 +185,23 @@
     </ng-container>
     <ng-container matColumnDef="website-search">
       <th mat-header-cell *matHeaderCellDef>
-        <input type="text" class="form-control" [(ngModel)]="WebsiteFilter" />
+        <input
+          #websiteRef
+          type="text"
+          class="form-control"
+          [value]="supplierStore.parameters().website"
+          (input)="supplierStore.updateParameters({ website: websiteRef.value })"
+        />
       </th>
     </ng-container>
     <ng-container matColumnDef="footer">
       <td mat-footer-cell colspan="8" *matFooterCellDef>
         <mat-paginator
-          [length]="supplierResource.totalCount"
-          [pageSize]="supplierResource.pageSize"
+          [length]="supplierStore.parameters().totalCount"
+          [pageSize]="supplierStore.parameters().pageSize"
+          [pageIndex]="supplierStore.parameters().skip / supplierStore.parameters().pageSize"
           [pageSizeOptions]="[10, 20, 30]"
+          (page)="changePage($event)"
         >
         </mat-paginator>
       </td>
@@ -222,7 +250,7 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   </table>
 </div>
-@if (dataSource.loading$ | async) {
+@if (supplierStore.isLoading()) {
   <div class="loading-shade">
     <mat-spinner></mat-spinner>
   </div>

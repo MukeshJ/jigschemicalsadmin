@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { BaseComponent } from 'src/app/base.component';
 import { SupplierService } from '../supplier.service';
+import { SupplierLocalStore } from '../supplier-store';
 import { CommonService } from '@core/services/common.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -62,8 +63,11 @@ export class AlreadyExistValidator {
     MatProgressSpinner,
     TranslatePipe,
   ],
+  providers: [SupplierLocalStore],
 })
 export class SupplierDetailComponent extends BaseComponent implements OnInit {
+  // Save/update go through the Local Store (mirrors ChemicalDetailComponent).
+  private readonly supplierStore = inject(SupplierLocalStore);
   supplierForm: UntypedFormGroup;
   titlePage: string = 'Add Supplier';
   imgSrc: any = null;
@@ -73,7 +77,10 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
   cities: City[] = [];
   isLoadingCity: boolean = false;
   editorConfig = EditorConfig;
-  isLoading = false;
+  /** save/update spinner — driven by the Local Store */
+  get isLoading(): boolean {
+    return this.supplierStore.isSaving();
+  }
 
   public filterCityObservable$: Subject<string> = new Subject<string>();
 
@@ -341,29 +348,10 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
       supObj.logo = this.imgSrc;
       supObj.isImageUpload = this.isImageUpload;
       if (this.supplier) {
-        this.isLoading = true;
-        this.sub$.sink = this.supplierService.updateSupplier(this.supplier.id, supObj).subscribe(
-          (c) => {
-            this.isLoading = false;
-            this.toastrService.success(
-              this.translationService.getValue('SUPPLIER_UPDATE_SUCCESSFULLY'),
-            );
-            this.router.navigate(['/supplier']);
-          },
-          () => (this.isLoading = false),
-        );
+        supObj.id = this.supplier.id;
+        this.supplierStore.updateSupplier(supObj);
       } else {
-        this.isLoading = true;
-        this.sub$.sink = this.supplierService.saveSupplier(supObj).subscribe(
-          (c) => {
-            this.isLoading = false;
-            this.toastrService.success(
-              this.translationService.getValue('SUPPLIER_SAVE_SUCCESSFULLY'),
-            );
-            this.router.navigate(['/supplier']);
-          },
-          () => (this.isLoading = false),
-        );
+        this.supplierStore.saveSupplier(supObj);
       }
     } else {
       this.markFormGroupTouched(this.supplierForm);

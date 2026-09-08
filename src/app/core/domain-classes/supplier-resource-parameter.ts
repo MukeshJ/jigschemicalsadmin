@@ -8,4 +8,7 @@ export class SupplierResourceParameter extends ResourceParameter {
   email: string = '';
   website?: string = '';
   country?: string = '';
+  // mat-sort state kept alongside the query params (mirrors ChemicalResourceParameter)
+  sortActive?: string = '';
+  sortDirection?: 'asc' | 'desc' | '' = '';
 }
