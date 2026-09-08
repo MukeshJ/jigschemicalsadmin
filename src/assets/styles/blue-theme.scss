@@ -21,7 +21,9 @@ $candy-app-warn:    mat2.define-palette(mat2.$red-palette);
  *  all-component-themes emit the OLD sizes with Poppins — no per-
  *  component overrides needed.
  * ------------------------------------------------------------------ */
-$app-font-family: 'Poppins, "Helvetica Neue", Roboto, "Segoe UI", Arial, sans-serif';
+// Match the Angular 13 Material typography config exactly. Poppins is loaded
+// from Google Fonts in index.html, so `sans-serif` is the only fallback needed.
+$app-font-family: 'Poppins, sans-serif';
 
 $candy-app-typography: mat2.define-typography-config(
   $font-family: $app-font-family,
