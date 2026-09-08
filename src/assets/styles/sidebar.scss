@@ -172,25 +172,59 @@ html {
     position: relative;
     i {
         font-size: 16px;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         vertical-align: middle;
         position: relative;
         top: 0px;
         line-height: 40px;
         transition: all 0.5s ease 0s;
-        margin-right: 15px;
+        // fixed icon track — never shrinks, keeps every row's text aligned
+        // (FA7 glyphs are wider than FA5, so a rigid box is required)
+        flex: 0 0 20px;
+        width: 20px;
+        min-width: 20px;
         height: 40px;
-        width: 16px;
+        margin-right: 14px;
         background: transparent;
         text-align: center;
         padding: 0px;
         border-radius: 50%;
+    }
+    // Parent-item label (leaf items use <p>, which has no caret). Keep it on a
+    // single line so row height — hence the caret's Y position — is identical
+    // for every parent menu item.
+    > span:not(.rotate-arrow) {
+        flex: 1 1 auto;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     p {
         margin-bottom: 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+    // Dropdown caret on parent items. Bootstrap 5 dropped the `.ml-auto`
+    // utility used in the markup, so push it to the right edge here instead.
+    .rotate-arrow {
+        flex: 0 0 16px;
+        width: 16px;
+        margin-left: auto;
+        align-self: center;
+        font-size: 14px;
+        line-height: 40px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        // collapsed state (default) — caret points left, matching the old UI
+        transform: rotate(90deg);
+    }
+    // expanded state — parent <a> gets .active via [ngClass] in the template
+    &.active .rotate-arrow {
+        transform: rotate(0deg);
     }
 }
 
@@ -314,19 +348,10 @@ html {
     margin-top: 200px;
 }
 
-.nav-item {
-    .rotate-arrow {
-        transform: rotate(90deg);
-        transition: all 0.5s;
-    }
-}
-
-.collapsed {
-    .rotate-arrow {
-        transform: rotate(90deg);
-        transition: all 0.5s;
-    }
-}
+// Caret direction is driven by `.nav-link.active` (see the .nav-link block).
+// The old `.nav-item .rotate-arrow` / `.collapsed .rotate-arrow` rules are
+// removed: `.collapsed` is a STATIC class in the template, so those rules
+// pinned the caret at rotate(90deg) permanently regardless of open/closed.
 
 .sub-menu {
     margin-bottom: 15px;
@@ -365,9 +390,12 @@ html {
         i {
             font-size: 20px;
             line-height: 35px;
-            margin-right: 10px;
+            // keep the same icon <-> text gap and a rigid track as the base rule
+            margin-right: 14px;
             height: 35px;
+            flex: 0 0 35px;
             width: 35px;
+            min-width: 35px;
         }
     }
     .left-sidenav,

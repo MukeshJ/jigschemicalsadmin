@@ -3,16 +3,56 @@
 
 @include mat.core();
 
+/* ------------------------------------------------------------------ *
+ *  Palette — kept as the original stock blue / pink / red so component
+ *  COLOURS do not change. Only typography + density are being restored
+ *  to the Angular 13 (legacy Material) values.
+ * ------------------------------------------------------------------ */
 $candy-app-primary: mat2.define-palette(mat2.$blue-palette);
-$candy-app-accent: mat2.define-palette(mat2.$pink-palette, A200, A100, A400);
-$candy-app-warn: mat2.define-palette(mat2.$red-palette);
+$candy-app-accent:  mat2.define-palette(mat2.$pink-palette, A200, A100, A400);
+$candy-app-warn:    mat2.define-palette(mat2.$red-palette);
 
+/* ------------------------------------------------------------------ *
+ *  Typography
+ *  Angular 13 used the legacy px type scale and forced Poppins app-wide.
+ *  MDC's default config is Roboto + larger rem sizes, which is why every
+ *  Material component's text got bigger/heavier after the migration.
+ *  Re-declaring the legacy scale here (via the theming API) makes
+ *  all-component-themes emit the OLD sizes with Poppins — no per-
+ *  component overrides needed.
+ * ------------------------------------------------------------------ */
+$app-font-family: 'Poppins, "Helvetica Neue", Roboto, "Segoe UI", Arial, sans-serif';
+
+$candy-app-typography: mat2.define-typography-config(
+  $font-family: $app-font-family,
+  $headline-5: mat2.define-typography-level(24px, 32px, 400),  // legacy "headline"
+  $headline-6: mat2.define-typography-level(20px, 32px, 500),  // legacy "title" / dialog title
+  $subtitle-1: mat2.define-typography-level(15px, 24px, 400),  // form-field label
+  $subtitle-2: mat2.define-typography-level(14px, 21px, 600),  // table header / sort-header
+  $body-1:     mat2.define-typography-level(14px, 20px, 400),  // inputs / cells
+  $body-2:     mat2.define-typography-level(14px, 20px, 400),
+  $caption:    mat2.define-typography-level(12px, 20px, 400),  // paginator / hints
+  $button:     mat2.define-typography-level(14px, 14px, 500),
+);
+
+/* ------------------------------------------------------------------ *
+ *  Theme
+ *  density -2 pulls MDC's tall defaults back toward Angular 13:
+ *    table row     52px -> ~40px      paginator   56px -> ~40px
+ *    table header  56px -> ~44px      form-field  56px -> ~44px
+ * ------------------------------------------------------------------ */
 $candy-app-theme: mat2.define-light-theme((
   color: (
     primary: $candy-app-primary,
-    accent: $candy-app-accent,
-    warn: $candy-app-warn,
-  )
+    accent:  $candy-app-accent,
+    warn:    $candy-app-warn,
+  ),
+  typography: $candy-app-typography,
+  density: -2,
 ));
 
 @include mat.all-component-themes($candy-app-theme);
+
+/* Enable only if templates use .mat-h1 / .mat-body-1 / .mat-headline-6
+   helper classes (grep first). */
+// @include mat.typography-hierarchy($candy-app-theme);

@@ -3,7 +3,8 @@
     width: 100%;
   }
 
-  table.mat-table {
+  table.mat-table,
+  table.mat-mdc-table {
     display: table;
     width: 100%;
     table-layout: auto;
@@ -11,14 +12,20 @@
 
   .mat-header-row,
   .mat-row,
-  .mat-footer-row {
+  .mat-footer-row,
+  .mat-mdc-header-row,
+  .mat-mdc-row,
+  .mat-mdc-footer-row {
     display: table-row;
     width: 100%;
   }
 
   .mat-header-cell,
   .mat-cell,
-  .mat-footer-cell {
+  .mat-footer-cell,
+  .mat-mdc-header-cell,
+  .mat-mdc-cell,
+  .mat-mdc-footer-cell {
     display: table-cell;
   }
   .mat-column-description {

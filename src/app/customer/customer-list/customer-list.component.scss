@@ -1,5 +1,6 @@
 // table column width helper for mat-tables
-.mat-table {
+.mat-table,
+.mat-mdc-table {
   display: block;
   width: 100%;
   overflow-x: auto;

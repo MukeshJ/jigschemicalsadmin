@@ -1,0 +1,56 @@
+// ===========================================================================
+//  Bootstrap 4 -> 5 utility-class compatibility shim
+// ---------------------------------------------------------------------------
+//  Bootstrap 5 renamed the *directional* spacing / float / text-align
+//  utilities (left|right  ->  start|end). ~50 templates in this project were
+//  written against Bootstrap 4 and still use the old names, e.g.
+//     float-right   ml-auto   ml-2   mr-3   pl-3   text-right
+//  Rather than edit every template, re-create the Bootstrap 4 names here with
+//  Bootstrap 4's exact values. Bidirectional utilities (mt/mb/mx/my, pt/pb…)
+//  were NOT renamed, so they are intentionally not duplicated.
+// ===========================================================================
+
+// Bootstrap 4 spacer scale: 0, .25rem, .5rem, 1rem, 1.5rem, 3rem
+$b4c-spacers: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem);
+
+// --- float (BS5: float-start / float-end) ---
+.float-left  { float: left  !important; }
+.float-right { float: right !important; }
+.float-none  { float: none  !important; }
+
+// --- text-align (BS5: text-start / text-end) ---
+.text-left  { text-align: left  !important; }
+.text-right { text-align: right !important; }
+
+// --- auto margins (BS5: ms-auto / me-auto) ---
+.ml-auto { margin-left:  auto !important; }
+.mr-auto { margin-right: auto !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+
+// --- left/right margin + padding scale (BS5: ms-*/me-*/ps-*/pe-*) ---
+@each $key, $val in $b4c-spacers {
+  .ml-#{$key} { margin-left:   $val !important; }
+  .mr-#{$key} { margin-right:  $val !important; }
+  .pl-#{$key} { padding-left:  $val !important; }
+  .pr-#{$key} { padding-right: $val !important; }
+  .mx-#{$key} { margin-left: $val !important; margin-right: $val !important; }
+  .px-#{$key} { padding-left: $val !important; padding-right: $val !important; }
+}
+
+// --- responsive variants actually used in templates (sm/md/lg/xl) ---
+@each $bp, $min in (sm: 576px, md: 768px, lg: 992px, xl: 1200px) {
+  @media (min-width: $min) {
+    .float-#{$bp}-left  { float: left  !important; }
+    .float-#{$bp}-right { float: right !important; }
+    .text-#{$bp}-left   { text-align: left  !important; }
+    .text-#{$bp}-right  { text-align: right !important; }
+    .ml-#{$bp}-auto     { margin-left:  auto !important; }
+    .mr-#{$bp}-auto     { margin-right: auto !important; }
+    @each $key, $val in $b4c-spacers {
+      .ml-#{$bp}-#{$key} { margin-left:   $val !important; }
+      .mr-#{$bp}-#{$key} { margin-right:  $val !important; }
+      .pl-#{$bp}-#{$key} { padding-left:  $val !important; }
+      .pr-#{$bp}-#{$key} { padding-right: $val !important; }
+    }
+  }
+}

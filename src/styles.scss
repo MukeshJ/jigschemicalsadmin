@@ -1,13 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
 
+// NOTE: the webpack "~" prefix is NOT supported by the Angular esbuild builder.
+// Use bare package specifiers - they resolve from node_modules directly.
+// `perfect-scrollbar` and `ng-pick-datetime-ex` were removed during the
+// Angular 22 migration, so their stylesheets are no longer imported here.
+
+// Font Awesome 7 uses the Sass module system; its webfont path must be set via
+// `@use ... with` (a plain `$fa-font-path` override has no effect on FA 7).
+@use "@fortawesome/fontawesome-free/scss/variables" with (
+  $font-path: "@fortawesome/fontawesome-free/webfonts"
+);
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+@use "@fortawesome/fontawesome-free/scss/solid";
+@use "@fortawesome/fontawesome-free/scss/regular";
+
 @use "./assets/styles/blue-theme";
 @use "./assets/styles/main";
 
-$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+// Bootstrap 4 directional utility aliases (float-right, ml-auto, pl-3, text-right …)
+// still used by ~50 templates written against Bootstrap 4.
+@use "./assets/styles/bootstrap4-compat";
+
+// Angular 13 used Bootstrap 4, whose links are NOT underlined by default.
+// Bootstrap 5 sets $link-decoration: underline — that is why the table name
+// links became underlined. Restore the Angular 13 default.
+$link-decoration: none;
 @import "bootstrap/scss/bootstrap";
-@import "@fortawesome/fontawesome-free/scss/fontawesome";
-@import "@fortawesome/fontawesome-free/scss/solid";
-@import "@fortawesome/fontawesome-free/scss/regular";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 body {
@@ -88,7 +106,8 @@ table {
   width: 100%;
 }
 
-th.mat-header-cell {
+th.mat-header-cell,
+th.mat-mdc-header-cell {
   font-weight: bold !important;
   font-size: medium;
   color: #374664 !important;
@@ -172,22 +191,43 @@ th.mat-header-cell {
   vertical-align: middle !important;
 }
 
-tr.mat-header-row {
+tr.mat-header-row,
+tr.mat-mdc-header-row {
   height: 36px !important;
+  min-height: 36px;
   background-color: #efefef;
+  // MDC drives row height through this custom property
+  --mat-table-header-container-height: 36px;
 }
 
-tr.mat-row {
+tr.mat-row,
+tr.mat-mdc-row {
   height: 40px !important;
+  min-height: 40px;
+  --mat-table-row-item-container-height: 40px;
 }
 
-table.mat-table {
+table.mat-table,
+table.mat-mdc-table {
   border: 1px solid #edeff6;
 }
 
-.table-bordered thead th,
-.table-bordered thead td {
-  border-bottom: 0px !important;
+// Header cell borders — mirror the body-cell treatment below so `<th>` columns
+// get the same vertical separators as `<td>`. Needed because Material's MDC
+// table now renders a real <thead>, which makes Bootstrap 5's `.table-bordered`
+// stop drawing left/right borders on header cells.
+th.mat-header-cell,
+th.mat-mdc-header-cell,
+.table-bordered thead th {
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+}
+
+.table-bordered thead th:last-child,
+.mat-mdc-header-row .mat-mdc-header-cell:last-of-type {
+  border-right: 1px solid #dee2e6;
 }
 
 // th.mat-header-cell {
@@ -313,17 +353,67 @@ mat-form-field {
   z-index: 9999;
 }
 
-.mat-paginator {
+.mat-paginator,
+.mat-mdc-paginator {
   background-color: #efefef !important;
   font-weight: bold;
+  // NOTE: no `float` — the paginator is rendered inside a sticky
+  // `<td mat-footer-cell>`; floating it collapses the cell so the sticky
+  // footer row clips it (the "only half visible" bug).
 }
 
-.mat-footer-row {
+.mat-footer-row,
+.mat-mdc-footer-row {
   background-color: #efefef !important;
 }
 
-.mat-paginator {
-  float: left !important;
+/* -------------------------------------------------------------------------- *
+ *  Paginator lives inside a sticky Material footer row/cell. MDC gives every
+ *  data-table cell `overflow: hidden` and pins the footer row to
+ *  `--mat-table-footer-container-height`, which crops the taller MDC
+ *  paginator. Let this row/cell grow to the paginator and keep the paginator
+ *  itself compact (~ the Angular 13 height).
+ * -------------------------------------------------------------------------- */
+tr.mat-mdc-footer-row {
+  height: auto !important;
+  min-height: 0;
+  --mat-table-footer-container-height: auto;
+}
+
+td.mat-mdc-footer-cell {
+  overflow: visible !important;
+  padding: 0 !important;   // paginator supplies its own padding
+  border-left: 0;
+}
+
+.mat-mdc-footer-cell .mat-mdc-paginator {
+  width: 100%;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container {
+  min-height: 40px;
+  padding: 0 8px;
+}
+
+// page-size <mat-select> inside the paginator: drop the MDC form-field
+// subscript gap so it fits the 40px bar like the old underline select
+.mat-mdc-paginator .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+.mat-mdc-paginator .mat-mdc-form-field-infix {
+  min-height: unset;
+}
+
+/* -------------------------------------------------------------------------- *
+ *  Sort-header text — Angular 13 rendered the header label at 14px / 21px /
+ *  600. MDC's `.mat-sort-header-content` inherits the taller title token
+ *  (~24px line-height), making the header row taller. Pin it back.
+ * -------------------------------------------------------------------------- */
+.mat-sort-header-content {
+  font-family: "Poppins", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 600;
 }
 
 .card {
@@ -393,7 +483,8 @@ mat-form-field {
   background-color: #3b1f91 !important;
 }
 
-.mat-table {
+.mat-table,
+.mat-mdc-table {
   display: block;
   width: 100%;
   overflow-x: auto;
@@ -415,7 +506,8 @@ tr.example-detail-row {
   height: 0 !important;
 }
 
-tr.example-detail-row>td.mat-cell {
+tr.example-detail-row > td.mat-cell,
+tr.example-detail-row > td.mat-mdc-cell {
   border-bottom: 0 !important;
 }
 
@@ -423,7 +515,8 @@ table {
   border-collapse: inherit !important;
 }
 
-td.mat-cell {
+td.mat-cell,
+td.mat-mdc-cell {
   border: 0;
   border-bottom: 1px solid #dee2e6;
   border-left: 1px solid #dee2e6;
@@ -434,7 +527,8 @@ td.mat-cell {
 }
 
 .tbl-expandable {
-  td.mat-cell {
+  td.mat-cell,
+  td.mat-mdc-cell {
     border-bottom-width: 1px !important;
   }
 }
@@ -454,9 +548,9 @@ td.mat-cell {
   width: 100% !important;
 }
 
-.table-bordered thead tr th {
-  border-right: none !important;
-}
+// (Removed `.table-bordered thead tr th { border-right: none !important }` —
+//  it existed to cancel Bootstrap 4's double borders, but with Material's MDC
+//  <thead> it was hiding the header's column separators.)
 
 .bg-warning {
   background-color: blanchedalmond !important;

@@ -548,16 +548,20 @@ body {
   font-size: 11px;
 }
 
-.mat-table {
+.mat-table,
+.mat-mdc-table {
   font-family: "Poppins", sans-serif !important;
 }
 
-.mat-select {
+.mat-select,
+.mat-mdc-select {
   font-family: "Poppins", sans-serif !important;
 }
 
 .mat-paginator,
-.mat-paginator-page-size .mat-select-trigger {
+.mat-mdc-paginator,
+.mat-paginator-page-size .mat-select-trigger,
+.mat-mdc-paginator-page-size .mat-mdc-select-trigger {
   font-family: "Poppins", sans-serif !important;
 }
 
@@ -655,7 +659,8 @@ body {
 }
 
 .mat-progress-spinner circle,
-.mat-spinner circle {
+.mat-spinner circle,
+.mat-mdc-progress-spinner circle {
   stroke: $primary;
 }
 
@@ -684,7 +689,8 @@ body {
       }
     }
   }
-  .mat-paginator-range-label {
+  .mat-paginator-range-label,
+  .mat-mdc-paginator-range-label {
     margin: 0 2px 0 0px !important;
   }
   .mrl-0 {
