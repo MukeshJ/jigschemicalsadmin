@@ -33,7 +33,7 @@ export const initialSupplierState: SupplierGlobalState = {
   suppliers: [],
   parameters: {
     fields: '',
-    orderBy: '',
+    orderBy: 'supplierName asc',
     searchQuery: '',
     pageSize: 10,
     skip: 0,
