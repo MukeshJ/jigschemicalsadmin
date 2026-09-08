@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   UntypedFormBuilder,
@@ -8,22 +8,20 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from '../chemical.service';
 import { CommonService } from '@core/services/common.service';
 import { Industry } from '@core/domain-classes/industry';
 import { FileInfo } from '@core/domain-classes/file-info';
 import { Chemical } from '@core/domain-classes/chemical';
 import { EntityState } from '@core/domain-classes/entity-state';
-import { ToastrService } from 'ngx-toastr';
 import { ChemicalType } from '@core/domain-classes/chemical-type';
 import { ChemicalTypeService } from 'src/app/chemical-type/chemical-type.service';
 import { environment } from '@environments/environment';
-import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
 import { Unit } from '@core/domain-classes/unit';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ChemicalLocalStore } from '../chemical-store';
 
 @Component({
   templateUrl: './chemical-detail.component.html',
@@ -38,8 +36,11 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatCardActions,
     TranslatePipe,
   ],
+  providers: [ChemicalLocalStore],
 })
 export class ChemicalDetailComponent extends BaseComponent implements OnInit {
+  // Save/update go through the Local Store (mirrors ManageCase -> CaseLocalStore).
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   chemicalForm: UntypedFormGroup;
   chemicalImages: Array<FileInfo>;
   chemical: Chemical;
@@ -53,12 +54,9 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService,
     private commonService: CommonService,
-    private toastrService: ToastrService,
     private chemicalTypeService: ChemicalTypeService,
     private unitService: UnitService,
-    private translationService: TranslationService,
   ) {
     super();
   }
@@ -212,21 +210,9 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
       }
 
       if (chemicalObj.id) {
-        this.sub$.sink = this.chemicalService
-          .updateChemical(chemicalObj.id, chemicalObj)
-          .subscribe((c) => {
-            this.toastrService.success(
-              this.translationService.getValue('CHEMICAL_UPDATED_SUCCESSFULLY'),
-            );
-            this.router.navigate(['/chemical'], { relativeTo: this.route });
-          });
+        this.chemicalStore.updateChemical(chemicalObj);
       } else {
-        this.sub$.sink = this.chemicalService.saveChemical(chemicalObj).subscribe((c) => {
-          this.toastrService.success(
-            this.translationService.getValue('CHEMICAL_SAVE_SUCCESSFULLY'),
-          );
-          this.router.navigate(['/chemical'], { relativeTo: this.route });
-        });
+        this.chemicalStore.saveChemical(chemicalObj);
       }
     } else {
       this.chemicalForm.markAllAsTouched();

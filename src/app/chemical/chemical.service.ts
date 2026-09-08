@@ -4,7 +4,6 @@ import {
   HttpClient,
   HttpResponse,
   HttpParams,
-  HttpHeaders
 } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -18,9 +17,7 @@ export class ChemicalService {
   constructor(private http: HttpClient,
     private commonHttpErrorService: CommonHttpErrorService) { }
 
-  getChemicals(
-    resourceParams: ChemicalResourceParameter
-  ): Observable<HttpResponse<Chemical[]>> {
+  getChemicals( resourceParams: ChemicalResourceParameter ): Observable<HttpResponse<Chemical[]>> {
     const url = 'chemical';
     const customParams = new HttpParams()
       .set('Fields', resourceParams.fields)
@@ -37,9 +34,7 @@ export class ChemicalService {
     });
   }
 
-  getChemicalsDropDown(
-    resourceParams: ChemicalResourceParameter
-  ): Observable<HttpResponse<Chemical[]>> {
+  getChemicalsDropDown( resourceParams: ChemicalResourceParameter ): Observable<HttpResponse<Chemical[]>> {
     const url = 'chemical';
     const customParams = new HttpParams()
       .set('Fields', resourceParams.fields)

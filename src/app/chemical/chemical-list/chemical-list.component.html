@@ -16,7 +16,7 @@
     </div>
   </div>
 </div>
-@if (dataSource.loading$ | async) {
+@if (chemicalStore.isLoading()) {
   <div class="loading-shade">
     <mat-spinner></mat-spinner>
   </div>
@@ -24,10 +24,12 @@
 <div class="table-responsive">
   <table
     mat-table
-    [dataSource]="dataSource"
+    [dataSource]="chemicalStore.chemicalList()"
     class="table table-bordered table-hover grid-height"
     matSort
-    matSortActive="name"
+    [matSortActive]="chemicalStore.parameters().sortActive"
+    [matSortDirection]="chemicalStore.parameters().sortDirection"
+    (matSortChange)="sortData($event)"
   >
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef class="table-column-100"></th>
@@ -186,20 +188,24 @@
     <ng-container matColumnDef="name-search">
       <th mat-header-cell *matHeaderCellDef>
         <input
+          #nameSearch
           placeholder="{{ 'NAME' | translate }}"
           type="text"
           class="form-control"
-          [(ngModel)]="NameFilter"
+          [value]="chemicalStore.parameters().name"
+          (input)="chemicalStore.updateParameters({ name: nameSearch.value })"
         />
       </th>
     </ng-container>
     <ng-container matColumnDef="casnumber-search">
       <th mat-header-cell *matHeaderCellDef>
         <input
+          #casSearch
           placeholder="{{ 'CAS_NUMBER' | translate }}"
           type="text"
           class="form-control"
-          [(ngModel)]="CasNumberFilter"
+          [value]="chemicalStore.parameters().casNumber"
+          (input)="chemicalStore.updateParameters({ casNumber: casSearch.value })"
         />
       </th>
     </ng-container>
@@ -221,7 +227,10 @@
     </ng-container>
     <ng-container matColumnDef="isShowFront-search">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-select [(ngModel)]="selectedFrontEnd">
+        <mat-select
+          [value]="chemicalStore.parameters().isShowFront"
+          (selectionChange)="chemicalStore.updateParameters({ isShowFront: $event.value })"
+        >
           <mat-option value="all">All</mat-option>
           <mat-option value="1">FrontEnd</mat-option>
           <mat-option value="0">Not FrontEnd</mat-option>
@@ -231,10 +240,12 @@
     <ng-container matColumnDef="footer">
       <td mat-footer-cell colspan="9" *matFooterCellDef>
         <mat-paginator
-          [length]="chemicalResource.totalCount"
-          [pageSize]="chemicalResource.pageSize"
+          [length]="chemicalStore.parameters().totalCount"
+          [pageSize]="chemicalStore.parameters().pageSize"
+          [pageIndex]="chemicalStore.parameters().skip / chemicalStore.parameters().pageSize"
           [pageSizeOptions]="[10, 20, 30]"
           showFirstLastButtons
+          (page)="changePage($event)"
         >
         </mat-paginator>
       </td>

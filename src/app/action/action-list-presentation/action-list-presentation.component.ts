@@ -12,7 +12,6 @@ import { Action } from '@core/domain-classes/action';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageActionComponent } from '../manage-action/manage-action.component';
-import { NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
@@ -34,7 +33,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./action-list-presentation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgIf,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,

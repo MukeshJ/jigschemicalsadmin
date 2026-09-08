@@ -25,10 +25,10 @@
       <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
       <td class="table-column-150" mat-cell *matCellDef="let supplier">
         @if (supplier != expandedElement) {
-          <i class="fas fa-chevron-right btn" (click)="toggleRow(supplier)"></i>
+          <i class="fas fa-chevron-right expand-icon" (click)="toggleRow(supplier)"></i>
         }
         @if (supplier == expandedElement) {
-          <i class="fas fa-chevron-down btn" (click)="toggleRow(supplier)"></i>
+          <i class="fas fa-chevron-down expand-icon" (click)="toggleRow(supplier)"></i>
         }
 
         <button

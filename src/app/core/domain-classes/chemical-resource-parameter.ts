@@ -8,4 +8,7 @@ export class ChemicalResourceParameter extends ResourceParameter {
   industryId?: string = '';
   industryName?: string = '';
   categoryName?: string = '';
+  // mat-sort state kept alongside the query params (mirrors CaseParameter)
+  sortActive?: string = '';
+  sortDirection?: 'asc' | 'desc' | '' = '';
 }
