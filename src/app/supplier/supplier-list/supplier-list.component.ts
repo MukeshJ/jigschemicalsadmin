@@ -127,33 +127,13 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.supplierStore.refreshSuppliers();
     this.getCountries();
-
     this.filteredCountryList = this.countryControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filterCountryForAutoComplete(value)),
     );
   }
-
-  // ----- filtering / sorting / paging -> store -----
-  // Text filters are wired straight to `supplierStore.updateParameters(...)` in
-  // the template. The country autocomplete goes through this helper.
-
-  onCountrySelected(country: string): void {
-    this.supplierStore.updateParameters({ country });
-  }
-
-  sortData(sort: Sort): void {
-    this.supplierStore.sortData(sort);
-  }
-
-  changePage(event: PageEvent): void {
-    this.supplierStore.changePage(event);
-  }
-
-  // ----- CRUD -----
-
+  
   deleteSupplier(supplier: Supplier): void {
     this.sub$.sink = this.commonDialogService
       .deleteConformationDialog(

@@ -21,7 +21,7 @@
     matSort
     [matSortActive]="supplierStore.parameters().sortActive"
     [matSortDirection]="supplierStore.parameters().sortDirection"
-    (matSortChange)="sortData($event)"
+    (matSortChange)="supplierStore.sortData($event)"
   >
     <ng-container matColumnDef="action" sticky>
       <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
@@ -171,7 +171,7 @@
         />
         <mat-autocomplete
           [autoActiveFirstOption]="true"
-          (optionSelected)="onCountrySelected($event.option.value)"
+          (optionSelected)="supplierStore.updateParameters({ country: $event.option.value } )"
           #auto="matAutocomplete"
         >
           <mat-option value="">{{ 'NONE' | translate }}</mat-option>
@@ -201,7 +201,7 @@
           [pageSize]="supplierStore.parameters().pageSize"
           [pageIndex]="supplierStore.parameters().skip / supplierStore.parameters().pageSize"
           [pageSizeOptions]="[10, 20, 30]"
-          (page)="changePage($event)"
+          (page)="supplierStore.changePage($event)"
         >
         </mat-paginator>
       </td>

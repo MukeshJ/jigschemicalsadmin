@@ -110,23 +110,7 @@ export class ChemicalListComponent extends BaseComponent {
   ) {
     super();
   }
-
-  sortData(sort: Sort): void {
-    this.checkedChemicalArray = [];
-    this.chemicalStore.sortData(sort);
-  }
-
-  changePage(event: PageEvent): void {
-    this.checkedChemicalArray = [];
-    this.chemicalStore.changePage(event);
-  }
-
-  onIsShowInFront(checked: boolean, id: string): void {
-    this.chemicalStore.updateShowFrontendFlag({ id, isShowInFront: checked });
-  }
-
-  // ----- CRUD -----
-
+  
   deleteChemical(chemical: Chemical): void {
     this.sub$.sink = this.commonDialogService
       .deleteConformationDialog(

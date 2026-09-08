@@ -6,7 +6,6 @@ import { Supplier } from '@core/domain-classes/supplier';
 import { Guid } from 'guid-typescript';
 import { ChemicalList } from '@core/domain-classes/chemical-list';
 import { SupplierList } from '@core/domain-classes/supplier-list';
-import { Chemical } from '@core/domain-classes/chemical';
 import { CommonError } from '@core/error-handler/common-error';
 import { catchError } from 'rxjs/operators';
 import { CommonHttpErrorService } from '@core/error-handler/common-http-error.service';
@@ -17,9 +16,7 @@ import { CommonHttpErrorService } from '@core/error-handler/common-http-error.se
 export class SupplierService {
   constructor(private http: HttpClient,private commonHttpErrorService: CommonHttpErrorService) { }
 
-  getSuppliers(
-    resourceParams: SupplierResourceParameter
-  ): Observable<HttpResponse<Supplier[]>> {
+  getSuppliers( resourceParams: SupplierResourceParameter ): Observable<HttpResponse<Supplier[]>> {
     const url = 'supplier';
     const customParams = new HttpParams()
       .set('Fields', resourceParams.fields)
