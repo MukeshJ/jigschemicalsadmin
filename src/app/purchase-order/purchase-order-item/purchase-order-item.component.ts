@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderService } from '../purchase-order.service';
@@ -41,7 +41,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class PurchaseOrderItemComponent implements OnInit, OnChanges {
   @Input() purchaseOrder: PurchaseOrder;
   purchaseOrderItems: PurchaseOrderItem[] = [];
-  isLoading = false;
+  isLoading = signal<boolean>(false);
   displayedColumns: string[] = [
     'chemicalName',
     'source',
@@ -65,13 +65,13 @@ export class PurchaseOrderItemComponent implements OnInit, OnChanges {
   }
 
   getPurchaseOrderItems() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.purchaseOrderService.getPurchaseOrderItems(this.purchaseOrder.id).subscribe(
       (data: PurchaseOrderItem[]) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.purchaseOrderItems = data;
       },
-      () => (this.isLoading = false),
+      () => this.isLoading.set(false),
     );
   }
 }

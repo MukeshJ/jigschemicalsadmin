@@ -48,10 +48,6 @@ export class PoListComponent implements OnInit, OnChanges {
   purchaseOrderList: PurchaseOrderShort[] = [];
   constructor(
     private salesOrderService: SalesOrderService,
-    private clonerService: ClonerService,
-    private dailog: MatDialog,
-    private commonDialogService: CommonDialogService,
-    private toastrService: ToastrService,
     private router: Router,
   ) {}
 
