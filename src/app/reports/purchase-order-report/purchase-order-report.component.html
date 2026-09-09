@@ -375,7 +375,6 @@
             @if (poObject.id == expandedElement?.id) {
               <div
                 class="example-element-detail"
-                [@detailExpand]="poObject.id == expandedElement?.id ? 'expanded' : 'collapsed'"
               >
                 <div class="inner-table mat-elevation-z8">
                   <app-purchase-order-report-item [purchaseOrder]="poObject">

@@ -168,7 +168,6 @@
         @if (customer == expandedElement) {
           <div
             class="example-element-detail"
-            [@detailExpand]="customer == expandedElement ? 'expanded' : 'collapsed'"
           >
             <div class="inner-table mat-elevation-z8">
               <app-customer-so-list [customerId]="customer.id"> </app-customer-so-list>

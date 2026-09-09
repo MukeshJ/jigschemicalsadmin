@@ -248,7 +248,6 @@
             @if (poObject == expandedElement) {
               <div
                 class="example-element-detail"
-                [@detailExpand]="poObject == expandedElement ? 'expanded' : 'collapsed'"
               >
                 <div class="inner-table mat-elevation-z8">
                   <app-purchase-order-return-item [purchaseOrder]="poObject">

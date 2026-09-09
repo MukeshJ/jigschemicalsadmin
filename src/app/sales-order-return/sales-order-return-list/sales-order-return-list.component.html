@@ -244,7 +244,6 @@
             @if (soObject == expandedElement) {
               <div
                 class="example-element-detail"
-                [@detailExpand]="soObject == expandedElement ? 'expanded' : 'collapsed'"
               >
                 <div class="inner-table mat-elevation-z8">
                   <app-sales-order-return-item [salesOrder]="soObject">

@@ -13,6 +13,44 @@
 // Bootstrap 4 spacer scale: 0, .25rem, .5rem, 1rem, 1.5rem, 3rem
 $b4c-spacers: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem);
 
+// --- .form-row (removed in Bootstrap 5; ~28 templates still use it) ---
+// Bootstrap 4's exact definition: a flex row with 5px gutters.
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+
+  > .col,
+  > [class*='col-'] {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+}
+
+// ===========================================================================
+//  Common form spacing
+// ---------------------------------------------------------------------------
+//  Bootstrap 5 removed `.form-group` (it was `margin-bottom: 1rem` in BS4),
+//  which ~72 templates still use to space fields. Restore it so every form has
+//  equal vertical distance between rows, plus a consistent label -> control gap.
+// ===========================================================================
+.form-group {
+  margin-bottom: 1rem;
+
+  // equal gap between the label and its input/select/textarea
+  > label,
+  > .checkbox-label {
+    margin-bottom: 0.25rem;
+    display: inline-block;
+  }
+}
+
+// drop the trailing gap on the last field in a column/card so blocks stay flush
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
 // --- float (BS5: float-start / float-end) ---
 .float-left  { float: left  !important; }
 .float-right { float: right !important; }

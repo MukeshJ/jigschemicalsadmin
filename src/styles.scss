@@ -33,6 +33,13 @@ $link-decoration: none;
 // (The import was lost in the Angular 13 -> 22 migration.)
 @import "ngx-toastr/toastr";
 
+// @kolkov/angular-editor v3 theme. The editor's component CSS is written
+// entirely against CSS custom properties (--ae-toolbar-bg-color,
+// --ae-text-area-border, --ae-gap, …) that are defined ONLY in this file.
+// Without it <angular-editor> renders with no borders/background and collapses
+// to nothing.
+@import "@kolkov/angular-editor/themes/default";
+
 body {
   font-size: 0.9rem !important;
 }

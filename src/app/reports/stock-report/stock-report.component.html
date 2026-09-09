@@ -113,7 +113,6 @@
           @if (inventoryObject == expandedElement) {
             <div
               class="example-element-detail"
-              [@detailExpand]="inventoryObject == expandedElement ? 'expanded' : 'collapsed'"
             >
               <div class="inner-table mat-elevation-z8">
                 <app-inventory-history-report-list [inventory]="inventoryObject">

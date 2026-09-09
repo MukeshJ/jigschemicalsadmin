@@ -211,7 +211,6 @@
         @if (supplier == expandedElement) {
           <div
             class="example-element-detail"
-            [@detailExpand]="supplier == expandedElement ? 'expanded' : 'collapsed'"
           >
             <div class="inner-table mat-elevation-z8">
               <app-supplier-po-list [supplierId]="supplier.id"> </app-supplier-po-list>
