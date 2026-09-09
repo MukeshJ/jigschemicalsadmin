@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -13,7 +13,6 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderResourceParameter } from '@core/domain-classes/purchase-order/purchase-order-resource-parameter';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -28,7 +27,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import * as XLSX from 'xlsx';
@@ -61,7 +60,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-purchase-report',
   templateUrl: './chemical-purchase-report.component.html',
   styleUrls: ['./chemical-purchase-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe],
+  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, ChemicalLocalStore],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -123,7 +122,8 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
   searchForm: UntypedFormGroup;
   currentDate: Date = new Date();
   chemicals: Chemical[] = [];
-  chemcialResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   public filterObservable$: Subject<string> = new Subject<string>();
 
@@ -158,12 +158,10 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
     private dialog: MatDialog,
     private clonerService: ClonerService,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
   ) {
     super();
-    this.chemcialResource = new ChemicalResourceParameter();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
     this.purchaseOrderResource.pageSize = 50;
     this.purchaseOrderResource.orderBy = 'poCreatedDate asc';
@@ -229,28 +227,20 @@ export class ChemicalPurchaseReportComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemcialResource.name = c;
-          return this.chemicalService.getChemicals(this.chemcialResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.chemicals = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
         },
         (err) => {},
       );
   }
 
   getChemicals() {
-    this.chemcialResource.name = '';
-    return this.chemicalService.getChemicals(this.chemcialResource).subscribe(
-      (resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-        }
+    return this.chemicalStore.searchChemicals('').subscribe(
+      (chemicals: Chemical[]) => {
+        this.chemicals = [...(chemicals ?? [])];
       },
       (err) => {},
     );

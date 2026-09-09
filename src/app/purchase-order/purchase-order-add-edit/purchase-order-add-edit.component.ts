@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Supplier } from '@core/domain-classes/supplier';
-import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
 import { CommonService } from '@core/services/common.service';
@@ -22,12 +21,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { SupplierService } from 'src/app/supplier/supplier.service';
+import { SupplierLocalStore } from 'src/app/supplier/supplier-store';
 import { PurchaseOrderService } from '../purchase-order.service';
 import { DeliveryStatusEnum } from '@core/domain-classes/delivery-status-enum';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 import { environment } from '@environments/environment';
@@ -57,6 +55,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   selector: 'app-purchase-order-add-edit',
   templateUrl: './purchase-order-add-edit.component.html',
   styleUrls: ['./purchase-order-add-edit.component.scss'],
+  providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
     FormsModule,
@@ -90,8 +89,10 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   purchaseOrderForm: UntypedFormGroup;
   chemical: Chemical[] = [];
   suppliers: Supplier[] = [];
-  supplierResource: SupplierResourceParameter;
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly supplierStore = inject(SupplierLocalStore);
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   isLoading: boolean = false;
   isSupplierLoading: boolean = false;
   filterChemicalsMap: { [key: string]: Chemical[] } = {};
@@ -115,21 +116,17 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
     private router: Router,
     private translationService: TranslationService,
     private taxService: TaxService,
-    private chemicalService: ChemicalService,
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private packagingTypeService: PackagingTypeService,
   ) {
     super();
-    this.supplierResource = new SupplierResourceParameter();
-    this.chemicalResource = new ChemicalResourceParameter();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
     this.purchaseOrderResource.pageSize = 50;
     this.purchaseOrderResource.orderBy = 'poCreatedDate asc';
@@ -208,13 +205,11 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
           );
         });
 
-        this.supplierResource.id = c.supplierId;
-
-        this.supplierService.getSuppliers(this.supplierResource).subscribe((resp) => {
-          if (resp && resp.headers) {
-            this.suppliers = [...resp.body];
-          }
-        });
+        this.supplierStore
+          .searchSuppliers('', { id: c.supplierId })
+          .subscribe((suppliers) => {
+            this.suppliers = [...(suppliers ?? [])];
+          });
 
         this.getAllTotal();
       }
@@ -230,10 +225,6 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
     });
-  }
-
-  onFilterValue(filterValue: any) {
-    console.log(filterValue);
   }
 
   getTaxes() {
@@ -345,16 +336,11 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.filterChemicalsMap[index.toString()] = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.filterChemicalsMap[index.toString()] = [...(chemicals ?? [])];
         },
         (err) => {},
       );
@@ -447,15 +433,15 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
 
   getChemicals(index: number, chemicalId?: string) {
     if (this.chemical.length === 0 || chemicalId) {
-      this.chemicalResource.name = '';
-      this.chemicalResource.chemicalId = chemicalId ? chemicalId : '';
-      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          this.chemical = [...resp.body];
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
-        },
-        (err) => {},
-      );
+      this.chemicalStore
+        .searchChemicals('', chemicalId ? { chemicalId } : {})
+        .subscribe(
+          (chemicals: Chemical[]) => {
+            this.chemical = [...(chemicals ?? [])];
+            this.filterChemicalsMap[index.toString()] = [...this.chemical];
+          },
+          (err) => {},
+        );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemical];
     }
@@ -489,18 +475,12 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
         tap((c) => (this.isSupplierLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.supplierResource.supplierName = c;
-          this.supplierResource.id = null;
-          return this.supplierService.getSuppliers(this.supplierResource);
-        }),
+        switchMap((c) => this.supplierStore.searchSuppliers(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Supplier[]>) => {
+        (suppliers: Supplier[]) => {
           this.isSupplierLoading = false;
-          if (resp && resp.headers) {
-            this.suppliers = [...resp.body];
-          }
+          this.suppliers = [...(suppliers ?? [])];
         },
         (err) => {
           this.isSupplierLoading = false;
@@ -509,16 +489,11 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    if (this.purchaseOrder) {
-      this.supplierResource.id = this.purchaseOrder.supplierId;
-    } else {
-      this.supplierResource.supplierName = '';
-      this.supplierResource.id = null;
-    }
-    this.supplierService.getSuppliers(this.supplierResource).subscribe((resp) => {
-      if (resp && resp.headers) {
-        this.suppliers = [...resp.body];
-      }
+    const overrides = this.purchaseOrder
+      ? { id: this.purchaseOrder.supplierId }
+      : {};
+    this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
+      this.suppliers = [...(suppliers ?? [])];
     });
   }
 

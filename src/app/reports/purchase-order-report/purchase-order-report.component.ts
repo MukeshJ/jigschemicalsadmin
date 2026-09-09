@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -33,8 +33,7 @@ import { SupplierService } from 'src/app/supplier/supplier.service';
 import { PurchaseOrderReportDataSource } from './purchase-order-report.datasource';
 import * as XLSX from 'xlsx';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -73,7 +72,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-purchase-order-report',
   templateUrl: './purchase-order-report.component.html',
   styleUrls: ['./purchase-order-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe],
+  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, ChemicalLocalStore],
   imports: [
     HasClaimDirective,
     RouterLink,
@@ -163,7 +162,8 @@ export class PurchaseOrderReportComponent extends BaseComponent {
   public filterObservable$: Subject<string> = new Subject<string>();
   searchForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   purchaseOrderForInvoice: PurchaseOrder;
   currentDate: Date = new Date();
@@ -198,13 +198,11 @@ export class PurchaseOrderReportComponent extends BaseComponent {
     private dialog: MatDialog,
     private clonerService: ClonerService,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
     private paymentStatusPipe: PaymentStatusPipe,
   ) {
     super();
-    this.chemicalResource = new ChemicalResourceParameter();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
     this.purchaseOrderResource.pageSize = 50;
     this.purchaseOrderResource.orderBy = 'poCreatedDate asc';
@@ -282,28 +280,20 @@ export class PurchaseOrderReportComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.chemicalId = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals('', { chemicalId: c })),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.chemicals = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
         },
         (err) => {},
       );
   }
 
   getChemicals() {
-    this.chemicalResource.name = '';
-    return this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-      (resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-        }
+    return this.chemicalStore.searchChemicals('').subscribe(
+      (chemicals: Chemical[]) => {
+        this.chemicals = [...(chemicals ?? [])];
       },
       (err) => {},
     );

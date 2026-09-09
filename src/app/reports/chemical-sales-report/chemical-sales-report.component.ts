@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -13,7 +13,6 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
@@ -28,7 +27,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 import * as XLSX from 'xlsx';
@@ -61,7 +60,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-sales-report',
   templateUrl: './chemical-sales-report.component.html',
   styleUrls: ['./chemical-sales-report.component.scss'],
-  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe],
+  providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, ChemicalLocalStore],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -123,7 +122,8 @@ export class ChemicalSalesReportComponent extends BaseComponent {
   searchForm: UntypedFormGroup;
   currentDate: Date = new Date();
   chemicals: Chemical[] = [];
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   public filterObservable$: Subject<string> = new Subject<string>();
 
@@ -158,12 +158,10 @@ export class ChemicalSalesReportComponent extends BaseComponent {
     private dialog: MatDialog,
     private clonerService: ClonerService,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
   ) {
     super();
-    this.chemicalResource = new ChemicalResourceParameter();
     this.salesOrderResource = new SalesOrderResourceParameter();
     this.salesOrderResource.pageSize = 50;
     this.salesOrderResource.orderBy = 'soCreatedDate asc';
@@ -229,28 +227,20 @@ export class ChemicalSalesReportComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.chemicals = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
         },
         (err) => {},
       );
   }
 
   getChemicals() {
-    this.chemicalResource.name = '';
-    return this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-      (resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-        }
+    return this.chemicalStore.searchChemicals('').subscribe(
+      (chemicals: Chemical[]) => {
+        this.chemicals = [...(chemicals ?? [])];
       },
       (err) => {},
     );

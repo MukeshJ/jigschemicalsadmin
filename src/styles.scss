@@ -28,6 +28,11 @@ $link-decoration: none;
 @import "bootstrap/scss/bootstrap";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
+// ngx-toastr styles. Without this the ToastrService still creates the toast
+// element, but it has no positioning / background / z-index and is invisible.
+// (The import was lost in the Angular 13 -> 22 migration.)
+@import "ngx-toastr/toastr";
+
 body {
   font-size: 0.9rem !important;
 }

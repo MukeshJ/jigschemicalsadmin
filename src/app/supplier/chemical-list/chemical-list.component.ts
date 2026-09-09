@@ -1,10 +1,8 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   Inject,
-  Input,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,7 +13,7 @@ import { Supplier } from '@core/domain-classes/supplier';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
 import { AddSupplierChemicalComponent } from '../add-supplier-chemical/add-supplier-chemical.component';
@@ -41,6 +39,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chemical-list',
@@ -67,11 +66,12 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatFooterRow,
     MatProgressSpinner,
     TranslatePipe,
+    MatIconModule 
   ],
 })
 export class ChemicalListComponent extends BaseComponent implements OnInit {
   chemicals: Chemical[] = [];
-  isLoading: boolean = false;
+  isLoadin = signal<boolean>(false);
   skip: number = 0;
   pageSize: number = 10;
   totalChemicals = 0;
@@ -120,32 +120,40 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
         this.getChemicalsList();
       });
     if (this.data) {
-      this.isLoading = true;
+      this.isLoadin.set(true);
       this.getChemicalsList();
     }
   }
 
-  getChemicalsList() {
-    this.isLoading = true;
-    this.sub$.sink = this.supplierService
-      .getChemicalsBySupplierId(
-        this.data.id,
-        this.skip,
-        this.pageSize,
-        this.NameFilter,
-        this.CasNumberFilter,
-      )
-      .subscribe(
-        (c) => {
-          this.chemicals = c.chemicals;
-          this.totalChemicals = c.totalCount;
-          this.isLoading = false;
-        },
-        () => {
-          this.isLoading = false;
-        },
-      );
-  }
+ 
+  getChemicalsList(): void {
+  this.isLoadin.set(true);
+
+  this.sub$.sink = this.supplierService
+    .getChemicalsBySupplierId(
+      this.data.id,
+      this.skip,
+      this.pageSize,
+      this.NameFilter,
+      this.CasNumberFilter
+    )
+    .pipe(
+      finalize(() => {
+        this.isLoadin.set(false);
+      })
+    )
+    .subscribe({
+      next: (response) => {
+        this.chemicals = response?.chemicals ?? [];
+        this.totalChemicals = response?.totalCount ?? 0;
+      },
+      error: (error) => {
+        this.toasterService.error(
+          this.translationService.getValue(`${error}`)
+        );
+      }
+    });
+}
 
   removeChemialFromSupplier(chemical: Chemical) {
     this.sub$.sink = this.commonDialogService

@@ -18,3 +18,52 @@
 .full-width{
   height: 40vh;
 }
+
+.checkbox-input {
+  // custom checkbox: bold blue rounded square with a white tick
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 8px auto 0; // centered under the label
+  border: 2px solid #cfd4dc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    border-color: #1e88e5;
+  }
+
+  &:checked {
+    background: #1e88e5;
+    border-color: #1e88e5;
+  }
+
+  &:checked::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    width: 7px;
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(30, 136, 229, 0.4);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

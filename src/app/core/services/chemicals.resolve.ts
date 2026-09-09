@@ -1,26 +1,16 @@
-import { HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalGlobalStore } from '@shared/global-store/chemical-global-store';
 
 @Injectable({ providedIn: 'root' })
-export class ChemicalsResolve implements Resolve<Chemical[] | null> {
-  /**
-   *
-   */
-  constructor(private chemicalService: ChemicalService) {
+export class ChemicalsResolve implements Resolve<Chemical[]> {
+  private readonly globalStore = inject(ChemicalGlobalStore);
 
-  }
-  resolve(route: ActivatedRouteSnapshot): Observable<Chemical[]> | null  {
-    const productResource= new ChemicalResourceParameter();
-    return  this.chemicalService.getChemicals(productResource)
-    .pipe(
-      map((resp: HttpResponse<Chemical[]>) =>resp.body )
-    )
-
+  // A resolver is not a component, so it goes straight to ChemicalGlobalStore —
+  // still the only thing that calls ChemicalService.getChemicals().
+  resolve(): Observable<Chemical[]> {
+    return this.globalStore.searchChemicals('', { pageSize: 30 });
   }
 }

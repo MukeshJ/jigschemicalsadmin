@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -8,16 +8,15 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { CustomerChemical } from '@core/domain-classes/customer-chemical';
 import { CommonError } from '@core/error-handler/common-error';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { catchError, debounceTime, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
 import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -39,6 +38,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     AsyncPipe,
     TranslatePipe,
   ],
+  providers: [ChemicalLocalStore],
 })
 export class AddCustomerChemicalComponent extends BaseComponent implements OnInit {
   customerChemicalForm: UntypedFormGroup;
@@ -46,8 +46,9 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
   skip = 0;
   pageSize = 10;
   chemicals$: Observable<Chemical[]>;
-  chemicalResource: ChemicalResourceParameter;
   currentChemical: Chemical;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -55,12 +56,9 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
     private customerChemicalService: CustomerChemicalService,
     @Inject(MAT_DIALOG_DATA) public data: Customer,
     public dialogRef: MatDialogRef<AddCustomerChemicalComponent>,
-    private chemicalService: ChemicalService,
     private translationService: TranslationService,
   ) {
     super();
-    this.chemicalResource = new ChemicalResourceParameter();
-    this.chemicalResource.pageSize = 10;
   }
 
   ngOnInit(): void {
@@ -72,16 +70,14 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
     this.chemicals$ = this.customerChemicalForm.get('chemicalName').valueChanges.pipe(
       debounceTime(1000),
       tap(() => (this.isLoading = true)),
-      switchMap((value) => {
-        this.chemicalResource.name = value;
-        return this.chemicalService.getChemicals(this.chemicalResource).pipe(
+      switchMap((value) =>
+        this.chemicalStore.searchChemicals(value).pipe(
           tap(() => {
             this.isLoading = false;
           }),
-          map((c) => c.body),
           catchError((c) => []),
-        );
-      }),
+        ),
+      ),
       finalize(() => {
         this.isLoading = false;
       }),

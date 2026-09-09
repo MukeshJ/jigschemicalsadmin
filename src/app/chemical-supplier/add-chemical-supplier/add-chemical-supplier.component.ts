@@ -6,7 +6,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Supplier } from '@core/domain-classes/supplier';
 import { SupplierChemical } from '@core/domain-classes/supplier-chemical';
@@ -22,6 +22,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-add-chemical-supplier',
@@ -36,7 +37,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
-  ],
+    MatIcon
+],
 })
 export class AddChemicalSupplierComponent extends BaseComponent implements OnInit {
   supplierChemicalForm: UntypedFormGroup;

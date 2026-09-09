@@ -1,5 +1,4 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -9,12 +8,11 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Inventory } from '@core/domain-classes/inventory/inventory';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { InventoryService } from '../inventory.service';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
@@ -25,11 +23,13 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './manage-inventory.component.html',
   styleUrls: ['./manage-inventory.component.scss'],
   imports: [FormsModule, ReactiveFormsModule, MatSelect, MatDivider, MatOption, TranslatePipe],
+  providers: [ChemicalLocalStore],
 })
 export class ManageInventoryComponent extends BaseComponent implements OnInit {
   inventoryForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   constructor(
     public dialogRef: MatDialogRef<ManageInventoryComponent>,
@@ -37,10 +37,8 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
     private inventoryService: InventoryService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
-    private chemicalService: ChemicalService,
   ) {
     super();
-    this.chemicalResource = new ChemicalResourceParameter();
   }
 
   ngOnInit(): void {
@@ -65,11 +63,8 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
   }
 
   getChemicals() {
-    this.chemicalResource.name = '';
-    this.chemicalService.getChemicals(this.chemicalResource).subscribe((resp) => {
-      if (resp && resp.headers) {
-        this.chemicals = [...resp.body];
-      }
+    this.chemicalStore.searchChemicals('').subscribe((chemicals) => {
+      this.chemicals = [...(chemicals ?? [])];
     });
   }
 
@@ -79,17 +74,12 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
-      .subscribe((resp: HttpResponse<Chemical[]>) => {
-        if (resp && resp.headers) {
-          this.chemicals = [...resp.body];
-          if (this.data.id) {
-            this.inventoryForm.get('chemicalId').setValue(this.data.chemicalId);
-          }
+      .subscribe((chemicals: Chemical[]) => {
+        this.chemicals = [...(chemicals ?? [])];
+        if (this.data.id) {
+          this.inventoryForm.get('chemicalId').setValue(this.data.chemicalId);
         }
       });
   }

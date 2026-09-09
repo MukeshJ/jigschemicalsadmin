@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { debounceTime, pipe, switchMap, tap } from 'rxjs';
+import { debounceTime, map, Observable, pipe, switchMap, tap } from 'rxjs';
 import {
   patchState,
   signalStore,
@@ -16,13 +16,6 @@ import { ResponseHeader } from '@core/domain-classes/response-header';
 import { TranslationService } from '@core/services/translation.service';
 import { SupplierService } from '../../supplier/supplier.service';
 
-/**
- * GLOBAL STORE — shared supplier list state (mirrors ChemicalGlobalStore).
- *
- * Holds the loaded supplier list plus the query parameters. Provided in root so
- * the state survives navigation between supplier screens. Module-specific
- * orchestration lives in SupplierLocalStore.
- */
 type SupplierGlobalState = {
   suppliers: Supplier[];
   parameters: SupplierResourceParameter;
@@ -35,7 +28,7 @@ export const initialSupplierState: SupplierGlobalState = {
     fields: '',
     orderBy: '',
     searchQuery: '',
-    pageSize: 10,
+    pageSize: 30,
     skip: 0,
     name: '',
     totalCount: 0,
@@ -104,6 +97,19 @@ export const SupplierGlobalStore = signalStore(
             ...params,
           },
         });
+      },
+
+      searchSuppliers(
+        supplierName: string,
+        overrides: Partial<SupplierResourceParameter> = {},
+      ): Observable<Supplier[]> {
+        const params = new SupplierResourceParameter();
+        params.supplierName = supplierName ?? '';
+        params.pageSize = 10;
+        Object.assign(params, overrides);
+        return supplierService
+          .getSuppliers(params)
+          .pipe(map((response) => response.body ?? []));
       },
     }),
   ),

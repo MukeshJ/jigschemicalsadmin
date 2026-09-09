@@ -22,6 +22,10 @@ import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ChemicalLocalStore } from '../chemical-store';
+import { Subject } from 'rxjs';
+import { Supplier } from 'src/app/core/domain-classes/supplier';
+import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-suppliers/chemical-suppliers.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './chemical-detail.component.html',
@@ -39,7 +43,6 @@ import { ChemicalLocalStore } from '../chemical-store';
   providers: [ChemicalLocalStore],
 })
 export class ChemicalDetailComponent extends BaseComponent implements OnInit {
-  // Save/update go through the Local Store (mirrors ManageCase -> CaseLocalStore).
   private readonly chemicalStore = inject(ChemicalLocalStore);
   chemicalForm: UntypedFormGroup;
   chemicalImages: Array<FileInfo>;
@@ -49,7 +52,17 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   isImageUpdate: boolean = false;
   industries: Industry[] = [];
   units: Unit[] = [];
+  skip: number = 0;
+  pageSize: number = 10;
+  totalSuppliers = 0;
+  _nameFilter = '';
+  _mobileFilter = '';
+  _emailFilter = '';
+  _countryFilter: string;
   categories: ChemicalType[] = [];
+  public filterObservable$: Subject<string> = new Subject<string>();
+  isLoading: boolean = false;
+  suppliers: Supplier[] = [];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -57,6 +70,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
     private commonService: CommonService,
     private chemicalTypeService: ChemicalTypeService,
     private unitService: UnitService,
+    private dialog: MatDialog,
   ) {
     super();
   }
@@ -221,4 +235,12 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   onChemicalList() {
     this.router.navigate(['/chemical'], { relativeTo: this.route });
   }
+  
+    viewSuppliers(chemical: Chemical): void {
+      this.dialog.open(ChemicalSuppliersComponent, {
+        height: 'auto',
+        data: Object.assign({}, chemical),
+      });
+    }
+  
 }

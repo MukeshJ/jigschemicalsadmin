@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 import { PageEvent } from '@angular/material/paginator';
 import {
-  patchState,
   signalStore,
   withComputed,
   withMethods,
@@ -11,7 +10,7 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { distinctUntilChanged, pipe, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged, Observable, pipe, switchMap, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
@@ -37,6 +36,13 @@ export const ChemicalLocalStore = signalStore(
   withMethods((store) => ({
     refreshChemicals() {
       store.globalStore.loadChemicals(store.parameters());
+    },
+    
+    searchChemicals(
+      name: string,
+      overrides: Partial<ChemicalResourceParameter> = {},
+    ): Observable<Chemical[]> {
+      return store.globalStore.searchChemicals(name, overrides);
     },
 
     updateParameters(params: Partial<ChemicalResourceParameter>) {
@@ -75,6 +81,11 @@ export const ChemicalLocalStore = signalStore(
               tapResponse({
                 next: () => {
                   store.globalStore.loadChemicals(store.parameters());
+                  store.toastr.success(
+                    store.translationService.getValue(
+                      'CHEMICAL_SHOW_FRONTEND_FLAG_UPDATED_SUCCESSFULLY',
+                    ),
+                  );
                 },
                 error: (e: any) => {
                   store.toastr.error(
@@ -145,7 +156,8 @@ export const ChemicalLocalStore = signalStore(
           store.chemicalService.saveChemical(chemical).pipe(
             tapResponse({
               next: () => {
-                store.globalStore.loadChemicals(store.parameters());
+                store.globalStore.updateParameters({ name: '', skip: 0 });
+                store.globalStore.loadChemicals(store.globalStore.parameters());
                 store.toastr.success(
                   store.translationService.getValue(
                     'CHEMICAL_SAVE_SUCCESSFULLY',

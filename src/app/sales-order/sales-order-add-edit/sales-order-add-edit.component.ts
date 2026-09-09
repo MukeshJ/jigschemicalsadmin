@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 import { DeliveryMethod } from '@core/domain-classes/delivery-method';
@@ -34,7 +33,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from '../sales-order.service';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
@@ -55,6 +54,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   selector: 'app-sales-order-add-edit',
   templateUrl: './sales-order-add-edit.component.html',
   styleUrls: ['./sales-order-add-edit.component.scss'],
+  providers: [ChemicalLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
     FormsModule,
@@ -86,7 +86,8 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   paymentTerms: any[] = [];
   deliveryMethods: DeliveryMethod[] = [];
   customerResource: CustomerResourceParameter;
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   isLoading: boolean = false;
   isCustomerLoading: boolean = false;
   filterChemicalsMap: { [key: string]: Chemical[] } = {};
@@ -113,7 +114,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     private salesOrderService: SalesOrderService,
     private router: Router,
     private taxService: TaxService,
-    private chemicalService: ChemicalService,
     private route: ActivatedRoute,
     private translationService: TranslationService,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
@@ -123,7 +123,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   ) {
     super();
     this.customerResource = new CustomerResourceParameter();
-    this.chemicalResource = new ChemicalResourceParameter();
   }
 
   ngOnInit(): void {
@@ -134,10 +133,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     this.customerNameChangeValue();
     this.getNewSalesOrderNumber();
     this.getTaxes();
-  }
-
-  onFilterValue(filterValue: any) {
-    console.log(filterValue);
   }
 
   getTaxes() {
@@ -237,16 +232,11 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.filterChemicalsMap[index.toString()] = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.filterChemicalsMap[index.toString()] = [...(chemicals ?? [])];
         },
         (err) => {},
       );
@@ -350,15 +340,15 @@ export class SalesOrderAddEditComponent extends BaseComponent {
 
   getChemicals(index: number, chemicalId?: string) {
     if (this.chemicals.length === 0 || chemicalId) {
-      this.chemicalResource.name = '';
-      this.chemicalResource.chemicalId = chemicalId ? chemicalId : '';
-      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          this.chemicals = [...resp.body];
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
-        },
-        (err) => {},
-      );
+      this.chemicalStore
+        .searchChemicals('', chemicalId ? { chemicalId } : {})
+        .subscribe(
+          (chemicals: Chemical[]) => {
+            this.chemicals = [...(chemicals ?? [])];
+            this.filterChemicalsMap[index.toString()] = [...this.chemicals];
+          },
+          (err) => {},
+        );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemicals];
     }

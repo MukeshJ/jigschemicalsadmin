@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormArray,
@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Customer } from '@core/domain-classes/customer';
 import { CustomerResourceParameter } from '@core/domain-classes/customer-resource-parameter';
 import { DeliveryStatusEnum } from '@core/domain-classes/delivery-status-enum';
@@ -28,7 +27,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 import { Location } from '@angular/common';
@@ -49,6 +48,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   selector: 'app-sales-order-return',
   templateUrl: './sales-order-return.component.html',
   styleUrls: ['./sales-order-return.component.scss'],
+  providers: [ChemicalLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
     FormsModule,
@@ -77,7 +77,8 @@ export class SaleOrderReturnComponent extends BaseComponent {
   customers: Customer[] = [];
   customerResource: CustomerResourceParameter;
   salesResouce: SalesOrderResourceParameter;
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   salesorders: SalesOrder[] = [];
   isLoading: boolean = false;
   isCustomerLoading: boolean = false;
@@ -110,7 +111,6 @@ export class SaleOrderReturnComponent extends BaseComponent {
     private salesOrderService: SalesOrderService,
     private router: Router,
     private taxService: TaxService,
-    private chemicalService: ChemicalService,
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
@@ -121,16 +121,11 @@ export class SaleOrderReturnComponent extends BaseComponent {
     this.salesResouce = new SalesOrderResourceParameter();
     this.salesOrderResource = new SalesOrderResourceParameter();
     this.customerResource = new CustomerResourceParameter();
-    this.chemicalResource = new ChemicalResourceParameter();
   }
 
   ngOnInit(): void {
     this.createSalesOrder();
     this.getTaxes();
-  }
-
-  onFilterValue(filterValue: any) {
-    console.log(filterValue);
   }
 
   getTaxes() {
@@ -383,11 +378,10 @@ export class SaleOrderReturnComponent extends BaseComponent {
 
   getChemicals(index: number) {
     if (this.chemicals.length === 0) {
-      this.chemicalResource.name = '';
-      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          this.chemicals = [...resp.body];
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
+      this.chemicalStore.searchChemicals('').subscribe(
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
+          this.filterChemicalsMap[index.toString()] = [...this.chemicals];
         },
         (err) => {},
       );

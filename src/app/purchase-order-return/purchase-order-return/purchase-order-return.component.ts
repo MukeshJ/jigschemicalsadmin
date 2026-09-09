@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -10,14 +10,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { DeliveryStatusEnum } from '@core/domain-classes/delivery-status-enum';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderItemTax } from '@core/domain-classes/purchase-order/purchase-order-item-tax';
 import { PurchaseOrderResourceParameter } from '@core/domain-classes/purchase-order/purchase-order-resource-parameter';
 import { Supplier } from '@core/domain-classes/supplier';
-import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
 import { ClonerService } from '@core/services/clone.service';
@@ -29,10 +27,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
-import { SupplierService } from 'src/app/supplier/supplier.service';
+import { SupplierLocalStore } from 'src/app/supplier/supplier-store';
 import { PurchaseOrderStatusEnum } from '@core/domain-classes/purchase-order/purchase-order-status';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { PackagingType } from '@core/domain-classes/packaging-type';
@@ -52,6 +50,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   selector: 'app-purchase-order-return',
   templateUrl: './purchase-order-return.component.html',
   styleUrls: ['./purchase-order-return.component.scss'],
+  providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
     FormsModule,
@@ -79,9 +78,11 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
   chemicals: Chemical[] = [];
   suppliers: Supplier[] = [];
   suppliersForSearch: Supplier[] = [];
-  supplierResource: SupplierResourceParameter;
+
+  private readonly supplierStore = inject(SupplierLocalStore);
   purchaseResouce: PurchaseOrderResourceParameter;
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   purchaseorders: PurchaseOrder[] = [];
   isLoading: boolean = false;
   isSupplierLoading: boolean = false;
@@ -106,13 +107,11 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
     private router: Router,
     private translationService: TranslationService,
     private taxService: TaxService,
-    private chemicalService: ChemicalService,
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
@@ -121,9 +120,7 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
     private packagingTypeService: PackagingTypeService,
   ) {
     super();
-    this.supplierResource = new SupplierResourceParameter();
     this.purchaseResouce = new PurchaseOrderResourceParameter();
-    this.chemicalResource = new ChemicalResourceParameter();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
     this.purchaseOrderResource.pageSize = 50;
     this.purchaseOrderResource.orderBy = 'poCreatedDate asc';
@@ -140,9 +137,6 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
     });
-  }
-  onFilterValue(filterValue: any) {
-    console.log(filterValue);
   }
 
   getTaxes() {
@@ -318,16 +312,11 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.filterChemicalsMap[index.toString()] = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.filterChemicalsMap[index.toString()] = [...(chemicals ?? [])];
         },
         (err) => {},
       );
@@ -416,11 +405,10 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
 
   getChemicals(index: number) {
     if (this.chemicals.length === 0) {
-      this.chemicalResource.name = '';
-      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          this.chemicals = [...resp.body];
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
+      this.chemicalStore.searchChemicals('').subscribe(
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
+          this.filterChemicalsMap[index.toString()] = [...this.chemicals];
         },
         (err) => {},
       );
@@ -452,18 +440,12 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
         tap((c) => (this.isSupplierLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.supplierResource.supplierName = c;
-          this.supplierResource.id = null;
-          return this.supplierService.getSuppliers(this.supplierResource);
-        }),
+        switchMap((c) => this.supplierStore.searchSuppliers(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Supplier[]>) => {
+        (suppliers: Supplier[]) => {
           this.isSupplierLoading = false;
-          if (resp && resp.headers) {
-            this.suppliersForSearch = [...resp.body];
-          }
+          this.suppliersForSearch = [...(suppliers ?? [])];
         },
         (err) => {
           this.isSupplierLoading = false;
@@ -478,18 +460,12 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
         tap((c) => (this.isSupplierLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.supplierResource.supplierName = c;
-          this.supplierResource.id = null;
-          return this.supplierService.getSuppliers(this.supplierResource);
-        }),
+        switchMap((c) => this.supplierStore.searchSuppliers(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Supplier[]>) => {
+        (suppliers: Supplier[]) => {
           this.isSupplierLoading = false;
-          if (resp && resp.headers) {
-            this.suppliers = [...resp.body];
-          }
+          this.suppliers = [...(suppliers ?? [])];
         },
         (err) => {
           this.isSupplierLoading = false;
@@ -498,17 +474,12 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    if (this.purchaseOrder) {
-      this.supplierResource.id = this.purchaseOrder.supplierId;
-    } else {
-      this.supplierResource.supplierName = '';
-      this.supplierResource.id = null;
-    }
-    this.supplierService.getSuppliers(this.supplierResource).subscribe((resp) => {
-      if (resp && resp.headers) {
-        this.suppliers = [...resp.body];
-        this.suppliersForSearch = [...resp.body];
-      }
+    const overrides = this.purchaseOrder
+      ? { id: this.purchaseOrder.supplierId }
+      : {};
+    this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
+      this.suppliers = [...(suppliers ?? [])];
+      this.suppliersForSearch = [...this.suppliers];
     });
   }
 

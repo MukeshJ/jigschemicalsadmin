@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -42,6 +42,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-chemical-suppliers',
@@ -71,12 +72,13 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatFooterRowDef,
     MatFooterRow,
     TranslatePipe,
-  ],
+    MatIcon
+],
 })
 export class ChemicalSuppliersComponent extends BaseComponent implements OnInit {
   suppliers: Supplier[] = [];
   countryList: Country[] = [];
-  isLoading: boolean = false;
+  isLoading = signal<boolean>(false);
   skip: number = 0;
   pageSize: number = 10;
   totalSuppliers = 0;
@@ -150,7 +152,7 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
         this.getSuppliersList();
       });
     if (this.data) {
-      this.isLoading = true;
+      this.isLoading.set(true);
       this.getSuppliersList();
     }
   }
@@ -164,17 +166,17 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
     supplierResourceParameter.email = this.EmailFilter;
     supplierResourceParameter.mobileNo = this.MobileFilter;
     supplierResourceParameter.country = this.CountryFilter ? this.CountryFilter : '';
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.sub$.sink = this.supplierService
       .getSuppliersByChemicalId(supplierResourceParameter)
       .subscribe(
         (c) => {
           this.suppliers = c.suppliers;
           this.totalSuppliers = c.totalCount;
-          this.isLoading = false;
+          this.isLoading.set(false);
         },
         () => {
-          this.isLoading = false;
+          this.isLoading.set(false);
         },
       );
   }
@@ -217,7 +219,7 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
       data: Object.assign({}, this.data),
     });
     this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result['flag']) this.getSuppliersList();
+      if (result?.['flag']) this.getSuppliersList();
     });
   }
   sendEmail() {

@@ -97,8 +97,8 @@
             </div>
             <div class="col-md-6 col-sm-6">
               <div class="form-group">
-                <label>Is Show In Frontend</label>
-                <input formControlName="isShowInFront" class="form-control" type="checkbox" />
+                <label> {{ 'IS_SHOW_IN_FRONT' | translate }}</label>
+                <input formControlName="isShowInFront"  class="checkbox-input" type="checkbox" />
               </div>
             </div>
           </div>
@@ -219,6 +219,14 @@
         <i class="fas fa-times-circle"></i>
         {{ 'CANCEL' | translate }}
       </button>
+      @if(chemical?.id){
+        <!-- @if (chemical.supplierCount > 0) { -->
+          <a (click)="viewSuppliers(chemical)" class="btn btn-primary btn-sm  ms-2">
+            {{ 'VIEW_SUPPLIERS' | translate }}</a
+          >
+        }
+      
+    <!-- } -->
     </div>
   </div>
 </form>

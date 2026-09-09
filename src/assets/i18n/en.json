@@ -780,6 +780,10 @@
   "PEOPLE": "People",
   "PRODUCTS": "Products",
   "PRESENCE": "Presence",
-  "FILE_DOWNLOADED_SUCCESSFULLY": "File Downloaded Successfully"
+  "IS_SHOW_IN_FRONT": "Is Show In Front",
+  "NO_SUPPLIER": "No Supplier",
+  "VIEW_SUPPLIERS": "View Suppliers",
+  "FILE_DOWNLOADED_SUCCESSFULLY": "File Downloaded Successfully",
+  "CHEMICAL_SHOW_FRONTEND_FLAG_UPDATED_SUCCESSFULLY": "Chemical Show Frontend Flag Updated Successfully"
   
 }

@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { DeliveryStatusEnum } from '@core/domain-classes/delivery-status-enum';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -18,7 +17,6 @@ import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-
 import { PurchaseOrderItemTax } from '@core/domain-classes/purchase-order/purchase-order-item-tax';
 import { PurchaseOrderStatusEnum } from '@core/domain-classes/purchase-order/purchase-order-status';
 import { Supplier } from '@core/domain-classes/supplier';
-import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
 import { CommonService } from '@core/services/common.service';
@@ -31,9 +29,9 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
-import { SupplierService } from 'src/app/supplier/supplier.service';
+import { SupplierLocalStore } from 'src/app/supplier/supplier-store';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
@@ -50,6 +48,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   selector: 'app-purchase-order-request-add-edit',
   templateUrl: './purchase-order-request-add-edit.component.html',
   styleUrls: ['./purchase-order-request-add-edit.component.scss'],
+  providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
     MatProgressSpinner,
@@ -76,8 +75,10 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   purchaseOrderForm: UntypedFormGroup;
   chemicals: Chemical[] = [];
   suppliers: Supplier[] = [];
-  supplierResource: SupplierResourceParameter;
-  chemicalResource: ChemicalResourceParameter;
+
+  private readonly supplierStore = inject(SupplierLocalStore);
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
   isLoading: boolean = false;
   isSupplierLoading: boolean = false;
   filterChemicalsMap: { [key: string]: Chemical[] } = {};
@@ -99,22 +100,18 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private supplierService: SupplierService,
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
     private router: Router,
     private translationService: TranslationService,
     private commonService: CommonService,
     private taxService: TaxService,
-    private chemicalService: ChemicalService,
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private packagingTypeService: PackagingTypeService,
   ) {
     super();
-    this.supplierResource = new SupplierResourceParameter();
-    this.chemicalResource = new ChemicalResourceParameter();
   }
 
   ngOnInit(): void {
@@ -129,10 +126,6 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
     });
-  }
-
-  onFilterValue(filterValue: any) {
-    console.log(filterValue);
   }
 
   getTaxes() {
@@ -240,16 +233,11 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       .valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.chemicalResource.name = c;
-          return this.chemicalService.getChemicals(this.chemicalResource);
-        }),
+        switchMap((c) => this.chemicalStore.searchChemicals(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          if (resp && resp.headers) {
-            this.filterChemicalsMap[index.toString()] = [...resp.body];
-          }
+        (chemicals: Chemical[]) => {
+          this.filterChemicalsMap[index.toString()] = [...(chemicals ?? [])];
         },
         (err) => {},
       );
@@ -327,11 +315,10 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
 
   getChemicals(index: number) {
     if (this.chemicals.length === 0) {
-      this.chemicalResource.name = '';
-      this.chemicalService.getChemicals(this.chemicalResource).subscribe(
-        (resp: HttpResponse<Chemical[]>) => {
-          this.chemicals = [...resp.body];
-          this.filterChemicalsMap[index.toString()] = [...resp.body];
+      this.chemicalStore.searchChemicals('').subscribe(
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
+          this.filterChemicalsMap[index.toString()] = [...this.chemicals];
         },
         (err) => {},
       );
@@ -372,18 +359,12 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
         tap((c) => (this.isSupplierLoading = true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((c) => {
-          this.supplierResource.supplierName = c;
-          this.supplierResource.id = '';
-          return this.supplierService.getSuppliers(this.supplierResource);
-        }),
+        switchMap((c) => this.supplierStore.searchSuppliers(c)),
       )
       .subscribe(
-        (resp: HttpResponse<Supplier[]>) => {
+        (suppliers: Supplier[]) => {
           this.isSupplierLoading = false;
-          if (resp && resp.headers) {
-            this.suppliers = [...resp.body];
-          }
+          this.suppliers = [...(suppliers ?? [])];
         },
         (err) => {
           this.isSupplierLoading = false;
@@ -392,16 +373,11 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    if (this.purchaseOrder) {
-      this.supplierResource.id = this.purchaseOrder.supplierId;
-    } else {
-      this.supplierResource.supplierName = '';
-      this.supplierResource.id = '';
-    }
-    this.supplierService.getSuppliers(this.supplierResource).subscribe((resp) => {
-      if (resp && resp.headers) {
-        this.suppliers = [...resp.body];
-      }
+    const overrides = this.purchaseOrder
+      ? { id: this.purchaseOrder.supplierId }
+      : {};
+    this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
+      this.suppliers = [...(suppliers ?? [])];
     });
   }
 

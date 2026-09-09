@@ -12,7 +12,7 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { distinctUntilChanged, pipe, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged, Observable, pipe, switchMap, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Supplier } from '@core/domain-classes/supplier';
 import { SupplierResourceParameter } from '@core/domain-classes/supplier-resource-parameter';
@@ -20,15 +20,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { SupplierService } from './supplier.service';
 import { SupplierGlobalStore } from '@shared/global-store/supplier-global-store';
 
-/**
- * LOCAL STORE — supplier module/component orchestration (mirrors ChemicalLocalStore).
- *
- * Provide it per-component (`providers: [SupplierLocalStore]`). It re-exposes the
- * shared list state from SupplierGlobalStore and drives every supplier action
- * (paging / sorting / filtering / CRUD). `isSaving` is the one extra bit of
- * local state, kept so the detail form can show its save spinner.
- * Never import this store into unrelated modules — inject SupplierGlobalStore.
- */
 export const SupplierLocalStore = signalStore(
   withState<{ isSaving: boolean }>({ isSaving: false }),
 
@@ -49,6 +40,13 @@ export const SupplierLocalStore = signalStore(
   withMethods((store) => ({
     refreshSuppliers() {
       store.globalStore.loadSuppliers(store.parameters());
+    },
+    
+    searchSuppliers(
+      supplierName: string,
+      overrides: Partial<SupplierResourceParameter> = {},
+    ): Observable<Supplier[]> {
+      return store.globalStore.searchSuppliers(supplierName, overrides);
     },
 
     updateParameters(params: Partial<SupplierResourceParameter>) {

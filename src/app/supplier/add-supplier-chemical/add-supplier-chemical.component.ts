@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -8,21 +8,21 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
 import { Supplier } from '@core/domain-classes/supplier';
 import { SupplierChemical } from '@core/domain-classes/supplier-chemical';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { debounceTime, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chemical.service';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-add-supplier-chemical',
@@ -37,7 +37,9 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
-  ],
+    MatIcon
+],
+  providers: [ChemicalLocalStore],
 })
 export class AddSupplierChemicalComponent extends BaseComponent implements OnInit {
   supplierChemicalForm: UntypedFormGroup;
@@ -45,8 +47,9 @@ export class AddSupplierChemicalComponent extends BaseComponent implements OnIni
   skip = 0;
   pageSize = 10;
   chemicals$: Observable<Chemical[]>;
-  chemicalResource: ChemicalResourceParameter;
   currentChemical: Chemical;
+
+  private readonly chemicalStore = inject(ChemicalLocalStore);
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -54,12 +57,9 @@ export class AddSupplierChemicalComponent extends BaseComponent implements OnIni
     private supplierChemicalService: SupplierChemicalService,
     @Inject(MAT_DIALOG_DATA) public data: Supplier,
     public dialogRef: MatDialogRef<AddSupplierChemicalComponent>,
-    private chemicalService: ChemicalService,
     private translationService: TranslationService,
   ) {
     super();
-    this.chemicalResource = new ChemicalResourceParameter();
-    this.chemicalResource.pageSize = 10;
   }
 
   ngOnInit(): void {
@@ -71,15 +71,13 @@ export class AddSupplierChemicalComponent extends BaseComponent implements OnIni
     this.chemicals$ = this.supplierChemicalForm.get('chemicalName').valueChanges.pipe(
       debounceTime(1000),
       tap(() => (this.isLoading = true)),
-      switchMap((value) => {
-        this.chemicalResource.name = value;
-        return this.chemicalService.getChemicals(this.chemicalResource).pipe(
+      switchMap((value) =>
+        this.chemicalStore.searchChemicals(value).pipe(
           tap(() => {
             this.isLoading = false;
           }),
-          map((c) => c.body),
-        );
-      }),
+        ),
+      ),
       finalize(() => {
         this.isLoading = false;
       }),

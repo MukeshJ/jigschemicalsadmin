@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { debounceTime, pipe, switchMap, tap } from 'rxjs';
+import { debounceTime, map, Observable, pipe, switchMap, tap } from 'rxjs';
 import {
   patchState,
   signalStore,
@@ -97,6 +97,16 @@ export const ChemicalGlobalStore = signalStore(
             ...params,
           },
         });
+      },
+
+      searchChemicals(  name: string,   overrides: Partial<ChemicalResourceParameter> = {},  ): Observable<Chemical[]> {
+        const params = new ChemicalResourceParameter();
+        params.name = name ?? '';
+        params.pageSize = 10;
+        Object.assign(params, overrides);
+        return chemicalService
+          .getChemicals(params)
+          .pipe(map((response) => response.body ?? []));
       },
     }),
   ),
