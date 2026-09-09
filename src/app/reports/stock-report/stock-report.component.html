@@ -30,10 +30,10 @@
         <th class="table-column-100" mat-header-cell *matHeaderCellDef></th>
         <td class="table-column-100" mat-cell *matCellDef="let inventory">
           @if (inventory != expandedElement) {
-            <i class="fas fa-chevron-right btn" (click)="toggleRow(inventory)"></i>
+            <i class="fas fa-chevron-right  expand-icon" (click)="toggleRow(inventory)"></i>
           }
           @if (inventory == expandedElement) {
-            <i class="fas fa-chevron-down btn" (click)="toggleRow(inventory)"></i>
+            <i class="fas fa-chevron-down  expand-icon" (click)="toggleRow(inventory)"></i>
           }
 
           <!-- <button *hasClaim="'INVE_MANAGE_INVENTORY'" class="btn blue-btn btn-sm ml-4"

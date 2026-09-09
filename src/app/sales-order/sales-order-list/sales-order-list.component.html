@@ -36,10 +36,10 @@
           <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
           <td class="table-column-150" mat-cell *matCellDef="let so">
             @if (so != expandedElement) {
-              <i class="fas fa-chevron-right btn" (click)="toggleRow(so)"></i>
+              <i class="fas fa-chevron-right  expand-icon" (click)="toggleRow(so)"></i>
             }
             @if (so == expandedElement) {
-              <i class="fas fa-chevron-down btn" (click)="toggleRow(so)"></i>
+              <i class="fas fa-chevron-down  expand-icon" (click)="toggleRow(so)"></i>
             }
 
             <button

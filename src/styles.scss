@@ -96,16 +96,33 @@ body {
   width: 90% !important;
 }
 
+// ---------------------------------------------------------------------------
+//  Loading overlay + spinner — global, consistent for every component
+// ---------------------------------------------------------------------------
+//  Each `.loading-shade` is toggled by its own component (`@if (isLoading)`,
+//  `@if (store.isLoading())`, `@if (dataSource.loading$ | async)`, …). This
+//  rule only governs how it is positioned and painted once it is shown.
+//
+//  Previously: `bottom: 56px` pushed the spinner off-centre wherever there was
+//  no 56px footer (dialogs, panels), and `z-index: 1` let Material's sticky
+//  header / paginator (z-index ~100) render on top of the spinner.
 .loading-shade {
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 56px;
-  right: 0;
-  z-index: 1;
+  inset: 0; // cover the whole positioned parent, spinner truly centred
+  z-index: 1000; // above sticky table headers, paginators, form controls
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(255, 255, 255, 0.6); // dim the content behind it
+  // block interaction with the content while a request is in flight
+  cursor: progress;
+}
+
+// Any element that directly hosts a `.loading-shade` must be a positioning
+// context, otherwise the absolutely-positioned overlay escapes to the nearest
+// positioned ancestor (often <body>) and covers the wrong area.
+:has(> .loading-shade) {
+  position: relative;
 }
 
 .table-container {
@@ -552,10 +569,21 @@ td.mat-mdc-footer-cell {
   background-color: #3b1f91 !important;
 }
 
+// Angular Material's MDC table renders a real <table> and lays out as
+// `display: table`. Forcing `display: block` here (a leftover from the old
+// flex-based Angular 13 mat-table) makes the browser wrap the rows in an
+// anonymous shrink-to-fit table box, so the grid only spans its content width
+// and leaves the rest of the container blank. Keep it a table and let it fill
+// 100%; horizontal scrolling is handled by the `.table-container` /
+// `.table-responsive` wrapper instead.
 .mat-table,
 .mat-mdc-table {
-  display: block;
   width: 100%;
+  min-width: 100%;
+}
+
+.table-container,
+.table-responsive {
   overflow-x: auto;
 }
 

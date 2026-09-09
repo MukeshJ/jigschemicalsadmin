@@ -131,10 +131,10 @@
           <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
           <td class="table-column-150" mat-cell *matCellDef="let po">
             @if (po != expandedElement) {
-              <i class="fas fa-chevron-right btn" (click)="toggleRow(po)"></i>
+              <i class="fas fa-chevron-right  expand-icon" (click)="toggleRow(po)"></i>
             }
             @if (po == expandedElement) {
-              <i class="fas fa-chevron-down btn" (click)="toggleRow(po)"></i>
+              <i class="fas fa-chevron-down  expand-icon" (click)="toggleRow(po)"></i>
             }
 
             <button
