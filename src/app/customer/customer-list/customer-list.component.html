@@ -34,13 +34,13 @@
       <th class="table-column-150" mat-header-cell *matHeaderCellDef></th>
       <td class="table-column-150" mat-cell *matCellDef="let customer">
         @if (customer != expandedElement) {
-          <i class="fas fa-chevron-right btn" (click)="toggleRow(customer)"></i>
+          <i class="fas fa-chevron-right  expand-icon " (click)="toggleRow(customer)"></i>
         }
         @if (customer == expandedElement) {
-          <i class="fas fa-chevron-down btn" (click)="toggleRow(customer)"></i>
+          <i class="fas fa-chevron-down  expand-icon" (click)="toggleRow(customer)"></i>
         }
         <button
-          class=""
+          class="ml-4"
           *hasClaim="[
             'customer_update_customer',
             'customer_delete_customer',

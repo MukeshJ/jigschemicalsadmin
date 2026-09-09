@@ -72,7 +72,6 @@ import { MatIcon } from "@angular/material/icon";
     MatFooterRowDef,
     MatFooterRow,
     TranslatePipe,
-    MatIcon
 ],
 })
 export class ChemicalSuppliersComponent extends BaseComponent implements OnInit {

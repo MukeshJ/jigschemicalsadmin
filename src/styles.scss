@@ -302,6 +302,63 @@ body {
   padding: 0 0 20px 0 !important;
 }
 
+// ===========================================================================
+//  Dialog close (X) button — global, consistent across every mat-dialog
+// ---------------------------------------------------------------------------
+//  Bootstrap 5 removed the `.close` class (it became `.btn-close`), so the ~31
+//  dialog templates still using `<button class="close"><i class="fas fa-times">`
+//  lost all styling and render as a default grey UA button. Restore a clean,
+//  borderless, circular icon button pinned to the top-right of the dialog
+//  header. Scoped to buttons only so it never touches Bootstrap's `.collapse`
+//  helpers etc.
+// ===========================================================================
+button.close {
+  // sit at the far right of the flex `.modal-header`, vertically centered
+  margin-left: auto !important;
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #df0b0b;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  > i,
+  .fas {
+    font-size: 16px;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  &:hover {
+    background-color: rgba(223, 11, 11, 0.1);
+    color: #b00909;
+  }
+
+  &:active {
+    background-color: rgba(223, 11, 11, 0.18);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: 0;
+  }
+}
+
 .grid-height {
   height: calc(100vh - 185px);
 }
@@ -551,13 +608,39 @@ td.mat-mdc-cell {
 
 .example-element-detail {
   overflow: hidden;
-  display: flex;
+  // `display: flex` let the single child shrink to its content width, leaving
+  // the rest of the expanded row blank. A block box auto-fills the full width
+  // of the col-spanned detail cell.
+  display: block;
+  width: 100%;
 }
 
 .inner-table {
-  margin: 5px 1em 1em 5px;
-  padding: 5px 1em 1em 5px;
+  display: block;
+  box-sizing: border-box;
+  margin: 5px 0 1em 0;
+  padding: 5px;
   width: 100% !important;
+}
+
+// The nested list components (<app-supplier-po-list>, <app-customer-so-list>,
+// <app-*-item>, …) are custom elements and render inline by default, so they
+// don't stretch to fill `.inner-table`. Force them — and the Material table,
+// its responsive wrapper and the paginator/footer inside — to span the full
+// available width and stay responsive.
+.inner-table > * {
+  display: block;
+  width: 100%;
+}
+
+.inner-table .table-responsive,
+.inner-table .table-container,
+.inner-table .mat-table,
+.inner-table .mat-mdc-table,
+.inner-table table.mat-table,
+.inner-table table.mat-mdc-table {
+  width: 100% !important;
+  min-width: 100%;
 }
 
 // (Removed `.table-bordered thead tr th { border-right: none !important }` —

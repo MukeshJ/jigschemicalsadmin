@@ -37,7 +37,6 @@ import { MatIcon } from "@angular/material/icon";
     MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
-    MatIcon
 ],
   providers: [ChemicalLocalStore],
 })
