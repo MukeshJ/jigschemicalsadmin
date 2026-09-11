@@ -236,11 +236,6 @@ tr.mat-mdc-row {
   --mat-table-row-item-container-height: 40px;
 }
 
-table.mat-table,
-table.mat-mdc-table {
-  border: 1px solid #edeff6;
-}
-
 // Header cell borders — mirror the body-cell treatment below so `<th>` columns
 // get the same vertical separators as `<td>`. Needed because Material's MDC
 // table now renders a real <thead>, which makes Bootstrap 5's `.table-bordered`
@@ -448,6 +443,21 @@ mat-form-field {
   // footer row clips it (the "only half visible" bug).
 }
 
+table.mat-table,
+table.mat-mdc-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  padding: 20px;
+  border: 0;
+  border-top: 1px solid #edeff6;
+}
+
+.table-responsive:has(> table.mat-table),
+.table-responsive:has(> table.mat-mdc-table) {
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+}
+
 .mat-footer-row,
 .mat-mdc-footer-row {
   background-color: #efefef !important;
@@ -478,7 +488,8 @@ td.mat-mdc-footer-cell {
 
 .mat-mdc-paginator .mat-mdc-paginator-container {
   min-height: 40px;
-  padding: 0 8px;
+  padding: 8px 0px;
+  justify-content: flex-start;
 }
 
 // page-size <mat-select> inside the paginator: drop the MDC form-field
@@ -684,7 +695,7 @@ td.mat-mdc-cell {
   background-color: #fff !important;
 }
 
-.table tr td,
+.table tr td:not(.mat-footer-cell):not(.mat-mdc-footer-cell),
 .table tr th {
   padding-left: 1.5rem !important;
 }

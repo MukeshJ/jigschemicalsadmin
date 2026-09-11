@@ -648,6 +648,11 @@ body {
   max-height: 470px;
 }
 
+.cus-mat-card .mat-mdc-card-actions,
+.cus-mat-card mat-card-actions {
+  display: block;
+}
+
 .page-header-main {
   margin: -5px 0px 10px;
   border-bottom: 1px solid #6d48dd;

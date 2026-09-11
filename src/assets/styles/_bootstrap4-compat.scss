@@ -46,11 +46,6 @@ $b4c-spacers: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem);
   }
 }
 
-// drop the trailing gap on the last field in a column/card so blocks stay flush
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
 // --- float (BS5: float-start / float-end) ---
 .float-left  { float: left  !important; }
 .float-right { float: right !important; }

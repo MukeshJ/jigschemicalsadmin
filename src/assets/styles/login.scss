@@ -118,9 +118,11 @@
   display: block;
   background-color: #fff;
   padding: 60px 55px 55px 55px;
-  img{
-    margin: auto;
-  }
+  img{  
+    width: auto;
+    display: block;
+    margin: 0 auto;
+    }
 }
 
 .login100-form-title {
