@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { SalesOrder } from '@core/domain-classes/sales-order';
@@ -44,7 +44,7 @@ export class SalesOrderDetailComponent extends BaseComponent {
   errorMsg: string = '';
   companyProfile: CompanyProfile;
   isLoading = false;
-  salesOrder: SalesOrder = null;
+  salesOrder = signal<SalesOrder | null>(null);
   salesOrderItems: SalesOrderItem[];
   salesOrderReturnsItems: SalesOrderItem[];
   salesOrderForInvoice: SalesOrder;
@@ -81,13 +81,16 @@ export class SalesOrderDetailComponent extends BaseComponent {
     this.isLoading = true;
     this.salesOrderService.getSalesOrderById(id).subscribe(
       (c: SalesOrder) => {
-        this.salesOrder = this.clonerService.deepClone<SalesOrder>(c);
-        this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems
+        this.salesOrder.set(this.clonerService.deepClone<SalesOrder>(c));
+        this.salesOrder().totalQuantity = this.salesOrder().salesOrderItems
           .map((item) => (item.status == 1 ? -1 * item.quantity : item.quantity))
-          .reduce((prev, next) => prev + next);
-        this.salesOrderItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 0);
-        this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 1);
+          .reduce((prev, next) => prev + next, 0);
+        this.salesOrderItems = this.salesOrder().salesOrderItems.filter((c) => c.status == 0);
+        this.salesOrderReturnsItems = this.salesOrder().salesOrderItems.filter((c) => c.status == 1);
         this.isLoading = false;
+        // Show the invoice section as soon as the order loads, instead of
+        // waiting for the user to click "Generate Invoice" first.
+        this.generateInvoice();
       },
       (err) => {
         this.isLoading = false;

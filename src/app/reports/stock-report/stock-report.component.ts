@@ -14,7 +14,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { InventoryDataSource } from 'src/app/inventory/inventory-list/inventory-datasource';
 import { InventoryService } from 'src/app/inventory/inventory.service';
 import * as XLSX from 'xlsx';
-import { AsyncPipe } from '@angular/common';
 import {
   MatTable,
   MatColumnDef,
@@ -63,7 +62,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     CustomCurrencyPipe_1,
     TranslatePipe,
   ],

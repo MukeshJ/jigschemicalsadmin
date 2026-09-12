@@ -576,17 +576,15 @@ td.mat-mdc-footer-cell {
   box-shadow: 0 0 0 0.2rem rgb(59 31 145 / 33%) !important;
 }
 
+.input-group-text {
+  padding: 0.65rem 0.75rem;
+  border-radius: 0;
+}
+
 .owl-dt-calendar-table .owl-dt-calendar-cell-selected {
   background-color: #3b1f91 !important;
 }
 
-// Angular Material's MDC table renders a real <table> and lays out as
-// `display: table`. Forcing `display: block` here (a leftover from the old
-// flex-based Angular 13 mat-table) makes the browser wrap the rows in an
-// anonymous shrink-to-fit table box, so the grid only spans its content width
-// and leaves the rest of the container blank. Keep it a table and let it fill
-// 100%; horizontal scrolling is handled by the `.table-container` /
-// `.table-responsive` wrapper instead.
 .mat-table,
 .mat-mdc-table {
   width: 100%;
