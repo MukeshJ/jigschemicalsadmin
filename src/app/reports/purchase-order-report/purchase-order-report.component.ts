@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, inject, signal } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -36,7 +36,6 @@ import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { NgClass, AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
@@ -76,7 +75,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerInput,
@@ -149,9 +147,8 @@ export class PurchaseOrderReportComponent extends BaseComponent {
     'status-search',
   ];
   footerToDisplayed: string[] = ['footer'];
-  isLoadingResults = true;
+  isLoadingResults = signal<boolean>(true);
   purchaseOrderResource: PurchaseOrderResourceParameter;
-  loading$: Observable<boolean>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   _supplierFilter: string;

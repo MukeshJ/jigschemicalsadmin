@@ -4,7 +4,6 @@ import { ContactUs } from '@core/domain-classes/contact-us';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { ContactUsService } from '../contact-us.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { ContactRequestTypePipe } from '../../shared/pipes/contact-request-type-pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -13,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-contact-us-detail',
   templateUrl: './contact-us-detail.component.html',
   styleUrls: ['./contact-us-detail.component.scss'],
-  imports: [MatProgressSpinner, UTCToLocalTime, ContactRequestTypePipe, TranslatePipe],
+  imports: [ UTCToLocalTime, ContactRequestTypePipe, TranslatePipe],
 })
 export class ContactUsDetailComponent implements OnInit {
   isDownloading = false;

@@ -18,13 +18,6 @@
   </div>
 </div>
 
-@if (isLoadingResults) {
-  <div class="loading-shade">
-    @if (isLoadingResults) {
-      <mat-spinner></mat-spinner>
-    }
-  </div>
-}
 <div class="table-responsive">
   <table mat-table [dataSource]="roles" class="table table-bordered table-hover">
     <!-- Action Column -->

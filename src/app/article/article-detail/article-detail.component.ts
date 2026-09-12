@@ -15,7 +15,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
@@ -30,7 +29,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinner,
     MatLabel,
     MatSelect,
     MatOption,
@@ -50,7 +48,6 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
   titlePage = 'Add Article';
   article: Article;
   categories: ArticleCategory[] = [];
-  isLoading = false;
   editorConfig = EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;

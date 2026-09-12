@@ -14,8 +14,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ArticleService } from '../article.service';
 import { ArticleDataSource } from './article-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
@@ -29,13 +27,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTableModule,
     MatSort,
     MatSortHeader,
     FormsModule,
     MatPaginator,
-    AsyncPipe,
     TruncatePipe,
     UTCToLocalTime,
     TranslatePipe,

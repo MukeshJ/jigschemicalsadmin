@@ -26,8 +26,6 @@ import { DocumentService } from '../document.service';
 import { DocumentDataSource } from './document-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption, MatSuffix } from '@angular/material/select';
 import {
   MatDatepickerInput,
@@ -65,7 +63,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatSelect,
     MatOption,
     MatDatepickerInput,
@@ -96,7 +93,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     UTCToLocalTime,
     TranslatePipe,
   ],

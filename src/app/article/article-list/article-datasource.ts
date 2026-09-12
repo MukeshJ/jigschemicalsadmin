@@ -10,9 +10,7 @@ import { ArticleService } from '../article.service';
 export class ArticleDataSource implements DataSource<Article> {
     private _articleSubject$ = new BehaviorSubject<Article[]>([]);
     private _responseHeaderSubject$ = new BehaviorSubject<ResponseHeader>(null);
-    private loadingSubject = new BehaviorSubject<boolean>(false);
 
-    public loading$ = this.loadingSubject.asObservable();
     private _count: number = 0;
     sub$: Subscription;
 
@@ -31,16 +29,13 @@ export class ArticleDataSource implements DataSource<Article> {
 
     disconnect(): void {
         this._articleSubject$.complete();
-        this.loadingSubject.complete();
         this.sub$.unsubscribe();
     }
 
     loadData(articleResource: ArticleResourceParameter) {
-        this.loadingSubject.next(true);
         this.sub$ = this.articleService.getArticles(articleResource)
             .pipe(
-                catchError(() => of([])),
-                finalize(() => this.loadingSubject.next(false)))
+                catchError(() => of([])),)
             .subscribe((resp: HttpResponse<Article[]>) => {
                 const paginationParam = JSON.parse(
                     resp.headers.get('X-Pagination')

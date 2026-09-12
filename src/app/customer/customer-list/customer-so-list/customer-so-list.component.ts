@@ -1,16 +1,14 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ResponseHeader } from '@core/domain-classes/response-header';
-import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderResource } from '@core/domain-classes/sales-order-resource';
 import { merge, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { SalesOrderDataSource } from 'src/app/sales-order/sales-order-list/sales-order-datasource';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
-import { NgClass, AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgClass } from '@angular/common';
 import {
   MatTable,
   MatColumnDef,
@@ -39,7 +37,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './customer-so-list.component.html',
   styleUrls: ['./customer-so-list.component.css'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -60,7 +57,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     PaymentStatusPipe,
     CustomCurrencyPipe,
     UTCToLocalTime,

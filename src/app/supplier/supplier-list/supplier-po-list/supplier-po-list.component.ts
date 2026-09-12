@@ -9,8 +9,7 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { PurchaseOrderDataSource } from 'src/app/purchase-order/purchase-order-list/purchase-order-datasource';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
-import { NgClass, AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgClass } from '@angular/common';
 import {
   MatTable,
   MatColumnDef,
@@ -39,7 +38,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './supplier-po-list.component.html',
   styleUrls: ['./supplier-po-list.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -60,7 +58,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     PaymentStatusPipe,
     CustomCurrencyPipe,
     UTCToLocalTime,

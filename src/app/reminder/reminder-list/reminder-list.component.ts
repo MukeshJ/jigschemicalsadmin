@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
-import { Frequency } from '@core/domain-classes/frequency.enum';
 import { Reminder } from '@core/domain-classes/reminder';
 import { ReminderFrequency } from '@core/domain-classes/reminder-frequency';
 import { ReminderResourceParameter } from '@core/domain-classes/reminder-resource-parameter';
@@ -41,8 +40,6 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatSelect, MatOption } from '@angular/material/select';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -81,8 +78,6 @@ import { ReminderFrequencyPipe } from './reminder-frequency.pipe';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    MatProgressSpinner,
-    AsyncPipe,
     TruncatePipe,
     UTCToLocalTime,
     TranslatePipe,

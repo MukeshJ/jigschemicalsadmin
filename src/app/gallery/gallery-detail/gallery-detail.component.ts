@@ -14,7 +14,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { GalleryService } from '../gallery.service';
 import { galleryCategories } from '../categories-enum';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -26,7 +25,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinner,
     MatSelect,
     MatOption,
     MatCard,

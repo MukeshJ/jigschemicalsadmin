@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormArray,
@@ -38,7 +38,6 @@ import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker'
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 import { QuantitiesUnitPricePipe as QuantitiesUnitPricePipe_1 } from '../../shared/pipes/quantities-unitprice.pipe';
@@ -61,7 +60,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatIconButton,
     MatIcon,
     HasClaimDirective,
-    MatProgressSpinner,
     CustomCurrencyPipe,
     TranslatePipe,
     QuantitiesUnitPricePipe_1,
@@ -80,7 +78,6 @@ export class SaleOrderReturnComponent extends BaseComponent {
 
   private readonly chemicalStore = inject(ChemicalLocalStore);
   salesorders: SalesOrder[] = [];
-  isLoading: boolean = false;
   isCustomerLoading: boolean = false;
   filterChemicalsMap: { [key: string]: Chemical[] } = {};
   unitsMap: { [key: string]: Unit[] } = {};

@@ -20,7 +20,6 @@ import { debounceTime, tap, switchMap, map, catchError } from 'rxjs/operators';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
@@ -34,7 +33,6 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   imports: [
-    MatProgressSpinner,
     RouterLink,
     HasClaimDirective,
     FormsModule,

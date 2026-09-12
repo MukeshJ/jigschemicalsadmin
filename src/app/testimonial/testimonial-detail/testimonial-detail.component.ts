@@ -14,7 +14,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { TestimonialService } from '../testimonial.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCard, MatCardActions } from '@angular/material/card';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
@@ -27,7 +26,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinner,
     AngularEditorModule,
     MatCard,
     MatCardActions,
@@ -39,7 +37,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class TestimonialDetailComponent extends BaseComponent implements OnInit {
   testimonialForm: UntypedFormGroup;
   testimonial: Testimonial;
-  isLoading = false;
   editorConfig = EditorConfig;
   isImageUpload = false;
   imgSrc: string | ArrayBuffer;

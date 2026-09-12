@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DOCUMENT, inject, OnInit } from '@angular/core';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { OnlineUser } from '@core/domain-classes/online-user';
 import { UserAuth } from '@core/domain-classes/user-auth';
@@ -12,14 +13,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';
 import { BaseComponent } from './base.component';
+import { LoadingService } from './loading.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet , MatProgressSpinner ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends BaseComponent implements OnInit {
+  
+  loading = false;
   constructor(
     private signalrService: SignalrService,
     private securityService: SecurityService,
@@ -28,13 +33,52 @@ export class AppComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private titleService: Title,
     private router: Router,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private loadingService: LoadingService) {
     super();
     translate.addLangs(['en', 'es', 'ar', 'ru', 'cn', 'ja', 'ko']);
     translate.setFallbackLang('en');
     this.setLanguage();
     this.setProfile();
     this.companyProfileSubscription();
+    const document = inject<Document>(DOCUMENT);
+
+    this.updateCanonicalUrl(document, this.router.url);
+    
+    this.loadingService.loading$.subscribe((isLoading) => {
+      this.loading = isLoading;
+    });
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.loadingService.setLoading(true);
+      }
+
+      if (event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.loadingService.setLoading(false);
+      }
+
+      if (event instanceof NavigationEnd) {
+        this.loadingService.setLoading(false);
+        this.updateCanonicalUrl(document, event.urlAfterRedirects || event.url);
+      }
+    });
+  }
+  
+  private updateCanonicalUrl(document: Document, currentUrl: string): void {
+    const baseUrl = (environment.apiUrl || '').replace(/\/+$/, '');
+    const cleanPath = (currentUrl || '/').split('?')[0].split('#')[0];
+    const path = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+    const canonicalHref = baseUrl ? (path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`) : path;
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+
+    canonical.setAttribute('href', canonicalHref);
   }
 
   setProfile() {
@@ -44,6 +88,8 @@ export class AppComponent extends BaseComponent implements OnInit {
       }
     });
   }
+
+  
 
   companyProfileSubscription() {
     this.securityService.companyProfile.subscribe(profile => {

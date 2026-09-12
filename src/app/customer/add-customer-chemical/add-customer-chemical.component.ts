@@ -19,7 +19,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
 import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -30,8 +29,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./add-customer-chemical.component.scss'],
   imports: [
     FormsModule,
-    ReactiveFormsModule,
-    MatProgressSpinner,
+    ReactiveFormsModule, 
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,

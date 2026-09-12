@@ -20,13 +20,6 @@
     </div>
   </div>
   <div class="modal-body">
-    @if (isLoading()) {
-      <div class="loading-shade">
-        @if (isLoading()) {
-          <mat-spinner></mat-spinner>
-        }
-      </div>
-    }
     <div class="table-responsive dialog-grid-height">
       @if (selection.hasValue()) {
         <div class="row mb-2">

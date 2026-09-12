@@ -1,13 +1,8 @@
 import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { PurchaseOrderShort } from '@core/domain-classes/purchase-order/purchase-order-short';
 import { SalesOrder } from '@core/domain-classes/sales-order';
-import { ClonerService } from '@core/services/clone.service';
-import { ToastrService } from 'ngx-toastr';
 import { SalesOrderService } from '../sales-order.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -27,7 +22,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './po-list.component.html',
   styleUrls: ['./po-list.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

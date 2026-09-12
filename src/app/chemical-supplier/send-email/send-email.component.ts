@@ -19,7 +19,6 @@ import { EditorConfig } from '@shared/editor.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { EmailTemplateService } from 'src/app/email-template/email-template.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatChipSet, MatChip } from '@angular/material/chips';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -30,7 +29,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './send-email.component.html',
   styleUrls: ['./send-email.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatChipSet,
     MatChip,
     MatLabel,
@@ -47,7 +45,6 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
   selectedEmailTamplate: EmailTemplate;
   emailForm: UntypedFormGroup;
   editorConfig = EditorConfig;
-  isLoading = false;
   constructor(
     private fb: UntypedFormBuilder,
     private emailTemplateService: EmailTemplateService,

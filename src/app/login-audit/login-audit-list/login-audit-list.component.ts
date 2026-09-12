@@ -9,8 +9,6 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { LoginAuditDataSource } from '../login-audit-datasource';
 import { LoginAuditService } from '../login-audit.service';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -36,7 +34,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './login-audit-list.component.html',
   styleUrls: ['./login-audit-list.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -55,7 +52,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     UTCToLocalTime,
     TranslatePipe,
   ],

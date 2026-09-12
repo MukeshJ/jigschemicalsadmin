@@ -1,8 +1,3 @@
-@if (isRedirecting) {
-  <div class="loading-shade">
-    <mat-spinner></mat-spinner>
-  </div>
-}
 
 <div class="topbar">
   <nav class="navbar navbar-expand-lg navbar-custom py-2">
@@ -10,7 +5,7 @@
       <a [routerLink]="['/']" class="logo">
         <span>
           @if (!logoImage) {
-            <img src="assets/images/logo.png" alt="logo-large" class="logo-lg" />
+            <img src="assets/images/logo.png" alt="logo-large" class="" />
           }
           @if (logoImage) {
             <img [src]="logoImage" alt="logo-large" class="logo-lg" />
@@ -27,95 +22,33 @@
           <span class="line"></span>
         </div>
       </div>
-
-      <div class="col-md-auto col-auto px-3">
+      <div class="col-md-auto col-auto ml-2">
         <div class="dropdown">
-          <button
-            class="btn blue-btn btn-sm"
-            type="button"
-            id="dropdownMenu2"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            *hasClaim="[
-              'sales_order_add_sales_order',
-              'purchase_order_add_purchase_order',
-              'customer_add_customer',
-              'supplier_add_supplier',
-              'chemical_add_chemical',
-              'expense_add_expense',
-            ]"
-          >
-            <i class="glyphicon glyphicon-plus"></i>
-            <i class="fa fa-plus"></i>
+          <button class="btn blue-btn btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false"
+            *hasClaim="['sales_order_add_sales_order','purchase_order_add_purchase_order','customer_add_customer','supplier_add_supplier','chemical_add_chemical','expense_add_expense']">
+            <i class="glyphicon glyphicon-plus"></i><i class="fa fa-plus"></i>
           </button>
-
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'sales_order_add_sales_order'"
-            >
-              <a [routerLink]="['/sales-order/add']">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'SALES_ORDER' | translate }}
-              </a>
-            </button>
-
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'purchase_order_add_purchase_order'"
-            >
-              <a [routerLink]="['/purchase-order/add']">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'PURCHASE_ORDER' | translate }}
-              </a>
-            </button>
-
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'customer_add_customer'"
-            >
-              <a [routerLink]="['/customer/addItem']">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'CUSTOMER' | translate }}
-              </a>
-            </button>
-
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'supplier_add_supplier'"
-            >
-              <a [routerLink]="['/supplier/manage/addItem']">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'SUPPLIER' | translate }}
-              </a>
-            </button>
-
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'chemical_add_chemical'"
-            >
-              <a [routerLink]="['/chemical/add']">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'CHEMICAL' | translate }}
-              </a>
-            </button>
-
-            <button
-              class="dropdown-item p-2 no-unserline"
-              type="button"
-              *hasClaim="'expense_add_expense'"
-            >
-              <a [routerLink]="'/expense/add'">
-                <i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
-                {{ 'EXPENSE' | translate }}
-              </a>
-            </button>
+            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'sales_order_add_sales_order'"> <a
+                [routerLink]="['/sales-order/add']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'SALES_ORDER' | translate}}</a></button>
+            <button class="dropdown-item p-2 no-unserline" type="button"
+              *hasClaim="'purchase_order_add_purchase_order'"><a [routerLink]="['/purchase-order/add']"><i
+                  class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'PURCHASE_ORDER' | translate}}</a></button>
+            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'customer_add_customer'"><a
+                [routerLink]="['/customer/addItem']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'CUSTOMER' | translate}} </a></button>
+            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'supplier_add_supplier'"><a
+                [routerLink]="['/supplier/manage/addItem']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'SUPPLIER' | translate}}</a></button>
+            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'chemical_add_chemical'"><a
+                [routerLink]="['/chemical/add']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'CHEMICAL' | translate}}</a></button>
+            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'expense_add_expense'"><a
+                [routerLink]="'/expense/add'"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
+                {{'EXPENSE' | translate}}</a></button>
           </div>
         </div>
       </div>
@@ -164,11 +97,6 @@
             />
 
             <mat-autocomplete #auto="matAutocomplete" panelClass="chemical-autocomplete-panel">
-              @if (loading$ | async) {
-                <mat-option disabled class="chemical-search-loading">
-                  <mat-spinner [diameter]="32"></mat-spinner>
-                </mat-option>
-              }
 
               @for (chemical of chemicals$ | async; track chemical.casNumber) {
                 <mat-option

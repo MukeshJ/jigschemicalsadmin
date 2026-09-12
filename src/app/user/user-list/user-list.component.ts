@@ -16,8 +16,6 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { UserService } from '../user.service';
 import { UserDataSource } from './user-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -49,7 +47,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTableModule,
     MatSort,
     MatColumnDef,
@@ -74,7 +71,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     TranslatePipe,
   ],
 })

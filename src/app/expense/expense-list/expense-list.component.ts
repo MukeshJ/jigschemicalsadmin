@@ -1,6 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
@@ -21,8 +20,6 @@ import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 import { ExpenseDataSource } from './expense-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -56,7 +53,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -83,7 +79,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     CustomCurrencyPipe,
     UTCToLocalTime,
     TranslatePipe,

@@ -84,6 +84,13 @@ export class InquiryChartComponent implements OnInit {
 
   public lineChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
+    // Without this, Chart.js sizes the canvas by applying an aspect ratio to
+    // the PARENT's width — but the parent here has no fixed height of its
+    // own, so its height comes from the canvas. Each resize nudges one,
+    // which nudges the other back, in an endless grow/shrink loop. Turning
+    // this off makes the chart fill the container's own (fixed) height
+    // instead of deriving one from an aspect ratio.
+    maintainAspectRatio: false,
   };
 
   public lineChartLegend = true;

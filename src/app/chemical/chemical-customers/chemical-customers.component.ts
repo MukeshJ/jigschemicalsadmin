@@ -15,7 +15,6 @@ import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chem
 import { CustomerService } from 'src/app/customer/customer.service';
 import { AddChemicalCustomerComponent } from '../add-chemical-customer/add-chemical-customer.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -41,7 +40,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./chemical-customers.component.scss'],
   imports: [
     HasClaimDirective,
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,
@@ -63,7 +61,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class ChemicalCustomersComponent extends BaseComponent implements OnInit {
   customers: Customer[] = [];
-  isLoading: boolean = false;
   skip: number = 0;
   pageSize: number = 10;
   totalCustomers = 0;
@@ -123,7 +120,6 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
         this.getCustomersList();
       });
     if (this.data) {
-      this.isLoading = true;
       this.getCustomersList();
     }
   }
@@ -136,17 +132,14 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
     customerResourceParameter.customerName = this.NameFilter;
     customerResourceParameter.email = this.EmailFilter;
     customerResourceParameter.mobileNo = this.MobileFilter;
-    this.isLoading = true;
     this.sub$.sink = this.customerService
       .getCustomersByChemicalId(customerResourceParameter)
       .subscribe(
         (c) => {
           this.customers = c.customers;
           this.totalCustomers = c.totalCount;
-          this.isLoading = false;
         },
         () => {
-          this.isLoading = false;
         },
       );
   }

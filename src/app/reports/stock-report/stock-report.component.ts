@@ -15,7 +15,6 @@ import { InventoryDataSource } from 'src/app/inventory/inventory-list/inventory-
 import { InventoryService } from 'src/app/inventory/inventory.service';
 import * as XLSX from 'xlsx';
 import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -44,7 +43,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./stock-report.component.scss'],
   providers: [CustomCurrencyPipe],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,

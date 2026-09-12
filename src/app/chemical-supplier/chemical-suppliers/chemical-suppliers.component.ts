@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -20,7 +19,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { Country } from '@core/domain-classes/country';
 import { CommonService } from '@core/services/common.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -42,7 +40,6 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-chemical-suppliers',
@@ -50,7 +47,6 @@ import { MatIcon } from "@angular/material/icon";
   styleUrls: ['./chemical-suppliers.component.scss'],
   imports: [
     HasClaimDirective,
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

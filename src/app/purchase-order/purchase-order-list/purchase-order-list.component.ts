@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
-import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderResourceParameter } from '@core/domain-classes/purchase-order/purchase-order-resource-parameter';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -24,7 +23,6 @@ import { ViewPurchaseOrderPaymentComponent } from '../view-purchase-order-paymen
 import { PurchaseOrderDataSource } from './purchase-order-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { NgClass, AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -61,7 +59,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,

@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -14,7 +14,6 @@ import { PurchaseOrderAttachment } from '@core/domain-classes/purchase-order/pur
 import { ToastrService } from 'ngx-toastr';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatCard, MatCardSubtitle } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { PurchaseOrderInvoiceComponent } from '../../shared/purchase-order-invoice/purchase-order-invoice.component';
 import { PaymentStatusPipe } from '../../shared/pipes/purchase-order-paymentStatus.pipe';
 import { PaymentMethodPipe } from '../../shared/pipes/paymentMethod.pipe';
@@ -31,7 +30,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     NgClass,
     MatCard,
     MatCardSubtitle,
-    MatProgressSpinner,
     PurchaseOrderInvoiceComponent,
     PaymentStatusPipe,
     PaymentMethodPipe,

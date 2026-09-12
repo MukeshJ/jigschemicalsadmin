@@ -24,8 +24,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { PurchasePaymentReportDataSource } from './purchase-payment-report.datasource';
 import { PurchasePaymentReportService } from './purchase-payment-report.service';
 import * as XLSX from 'xlsx';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import {
   MatTable,
@@ -56,7 +54,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./purchase-payment-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, PaymentMethodPipe],
   imports: [
-    MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerInput,
@@ -79,7 +76,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     PaymentMethodPipe_1,
     CustomCurrencyPipe_1,
     UTCToLocalTime_1,

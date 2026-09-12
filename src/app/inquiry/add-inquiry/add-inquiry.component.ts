@@ -1,4 +1,3 @@
-import { C } from '@angular/cdk/keycodes';
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -35,7 +34,6 @@ import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { UserService } from 'src/app/user/user.service';
 import { InquiryService } from '../inquiry.service';
 import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption, MatLabel, MatSelect, MatError } from '@angular/material/select';
 import { MatChipSet, MatChip } from '@angular/material/chips';
@@ -60,7 +58,6 @@ export function emailOrMobileValidator(): ValidatorFn {
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinner,
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,

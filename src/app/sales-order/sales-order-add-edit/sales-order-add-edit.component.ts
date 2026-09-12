@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -19,7 +19,6 @@ import { SalesOrderAttachment } from '@core/domain-classes/sales-order-attachmen
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderItemTax } from '@core/domain-classes/sales-order-item-tax';
 import { SalesOrderStatusEnum } from '@core/domain-classes/sales-order-status';
-import { SalesPurchaseOrderItem } from '@core/domain-classes/sales-purchase-order-item';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
 import { DeliveryMethodService } from '@core/services/delivery-method.service';
@@ -43,7 +42,6 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardSubtitle } from '@angular/material/card';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -69,7 +67,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatCard,
     MatCardSubtitle,
     HasClaimDirective,
-    MatProgressSpinner,
     CustomCurrencyPipe,
     UTCToLocalTime,
     TranslatePipe,
@@ -88,7 +85,6 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   customerResource: CustomerResourceParameter;
 
   private readonly chemicalStore = inject(ChemicalLocalStore);
-  isLoading: boolean = false;
   isCustomerLoading: boolean = false;
   filterChemicalsMap: { [key: string]: Chemical[] } = {};
   unitsMap: { [key: string]: Unit[] } = {};

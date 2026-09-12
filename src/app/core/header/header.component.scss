@@ -516,6 +516,9 @@ button:focus {
        text-decoration: none;
    }
 }
+.blackiconcolor {
+    color: #000 !important;
+}
 
 // Keep the header on a single line on larger screens: the search bar shrinks
 // first, while the logo, action buttons and user menu keep their width.

@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -23,7 +22,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './sales-order-items.component.html',
   styleUrls: ['./sales-order-items.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

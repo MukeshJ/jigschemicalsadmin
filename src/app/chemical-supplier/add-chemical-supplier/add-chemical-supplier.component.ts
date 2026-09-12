@@ -20,9 +20,7 @@ import { SupplierChemicalService } from 'src/app/supplier-chemical/supplier-chem
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-add-chemical-supplier',
@@ -34,7 +32,6 @@ import { MatIcon } from "@angular/material/icon";
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
-    MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
 ],

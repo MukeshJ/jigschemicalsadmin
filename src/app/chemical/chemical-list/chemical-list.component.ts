@@ -14,7 +14,6 @@ import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-s
 import { AddChemicalSupplierComponent } from 'src/app/chemical-supplier/add-chemical-supplier/add-chemical-supplier.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { NgStyle } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -53,7 +52,6 @@ import { ChemicalLocalStore } from '../chemical-store';
     MatButtonModule,
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,

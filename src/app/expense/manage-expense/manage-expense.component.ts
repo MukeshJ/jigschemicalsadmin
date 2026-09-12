@@ -19,7 +19,6 @@ import { UserService } from 'src/app/user/user.service';
 import { ExpenseService } from '../expense.service';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatLabel, MatSelect, MatOption } from '@angular/material/select';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -35,7 +34,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatSelect,
     MatOption,
     RouterLink,
-    MatProgressSpinner,
     TranslatePipe,
   ],
 })

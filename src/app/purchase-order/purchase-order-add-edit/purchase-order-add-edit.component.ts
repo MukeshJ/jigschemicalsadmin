@@ -12,7 +12,6 @@ import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Supplier } from '@core/domain-classes/supplier';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
-import { CommonService } from '@core/services/common.service';
 import { TaxService } from '@core/services/tax.service';
 import { TranslationService } from '@core/services/translation.service';
 import { QuantitiesUnitPriceTaxPipe } from '@shared/pipes/quantities-unitprice-tax.pipe';
@@ -44,7 +43,6 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardSubtitle } from '@angular/material/card';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CustomCurrencyPipe } from '../../shared/pipes/custome-currency.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -74,7 +72,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatCardSubtitle,
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     CustomCurrencyPipe,
     UTCToLocalTime,
     TranslatePipe,

@@ -30,7 +30,6 @@ import { MatLabel, MatSelect, MatOption, MatError } from '@angular/material/sele
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatCard, MatCardActions } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 export class AlreadyExistValidator {
@@ -60,7 +59,6 @@ export class AlreadyExistValidator {
     AngularEditorModule,
     MatCard,
     MatCardActions,
-    MatProgressSpinner,
     TranslatePipe,
   ],
   providers: [SupplierLocalStore],

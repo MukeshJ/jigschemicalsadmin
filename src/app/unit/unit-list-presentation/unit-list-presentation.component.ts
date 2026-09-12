@@ -5,7 +5,6 @@ import { Unit } from '@core/domain-classes/unit';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageUnitComponent } from '../manage-unit/manage-unit.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -25,7 +24,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './unit-list-presentation.component.html',
   styleUrls: ['./unit-list-presentation.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

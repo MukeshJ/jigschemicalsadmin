@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit, signal, SimpleChanges } from '@ang
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderService } from '../purchase-order.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -23,7 +22,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './purchase-order-item.component.html',
   styleUrls: ['./purchase-order-item.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

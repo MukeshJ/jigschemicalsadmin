@@ -17,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CompanyProfileService } from './company-profile.service';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCard, MatCardActions } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -32,7 +31,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatCard,
     MatCardActions,
     RouterLink,
-    MatProgressSpinner,
     TranslatePipe,
   ],
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Role } from '@core/domain-classes/role';
 import { CommonError } from '@core/error-handler/common-error';
@@ -9,7 +9,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { RoleService } from '../role.service';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { RouterLink } from '@angular/router';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -31,7 +30,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,
@@ -48,7 +46,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class RoleListComponent extends BaseComponent implements OnInit {
   roles: Role[] = [];
   displayedColumns: string[] = ['action', 'name'];
-  isLoadingResults = true;
+  isLoadingResults = signal<boolean>(false);
 
   constructor(
     private roleService: RoleService,
@@ -82,10 +80,10 @@ export class RoleListComponent extends BaseComponent implements OnInit {
   }
 
   getRoles(): void {
-    this.isLoadingResults = true;
+    this.isLoadingResults.set(true);
     this.sub$.sink = this.commonService.getRoles().subscribe(
       (data: Role[]) => {
-        this.isLoadingResults = false;
+        this.isLoadingResults.set(false);
         this.roles = data;
       },
       (err: CommonError) => {

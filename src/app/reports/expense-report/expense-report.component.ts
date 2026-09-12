@@ -6,7 +6,6 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
@@ -32,8 +31,6 @@ import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -70,7 +67,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     ReactiveFormsModule,
     MatDatepickerInput,
     MatDatepicker,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -96,7 +92,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     CustomCurrencyPipe_1,
     UTCToLocalTime_1,
     TranslatePipe,

@@ -15,8 +15,6 @@ import { DocumentLibraryService } from '../document-library.service';
 import { DocumentViewComponent } from '../../shared/document-view/document-view.component';
 import { DocumentLibraryDataSource } from './document-library-datasource';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSelect, MatOption } from '@angular/material/select';
 import {
   MatTable,
@@ -45,7 +43,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './document-library-list.component.html',
   styleUrls: ['./document-library-list.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatSelect,
     MatOption,
     MatTable,
@@ -68,7 +65,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     UTCToLocalTime,
     TranslatePipe,
   ],

@@ -23,7 +23,6 @@ import { SalesOrderService } from 'src/app/sales-order/sales-order.service';
 import { ViewSalesOrderPaymentComponent } from 'src/app/sales-order/view-sales-order-payment/view-sales-order-payment.component';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { NgClass, AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -60,7 +59,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,

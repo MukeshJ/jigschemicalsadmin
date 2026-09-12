@@ -12,7 +12,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { Page } from '@core/domain-classes/page';
 import { ManagePageComponent } from '../manage-page/manage-page.component';
 import { TranslationService } from '@core/services/translation.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -33,7 +32,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./page-list-presentation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

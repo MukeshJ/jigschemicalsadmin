@@ -30,6 +30,10 @@ export class SalesPurchaseReportComponent implements OnInit {
 
   barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
+    // See inquiry-chart.component.ts for why this is needed: without it, a
+    // responsive chart in a container with no fixed height of its own can
+    // get stuck in an endless grow/shrink resize loop.
+    maintainAspectRatio: false,
   };
 
   constructor(

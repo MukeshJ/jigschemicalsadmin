@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -23,7 +23,6 @@ import { TranslationService } from '@core/services/translation.service';
 import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -42,7 +41,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatDatepickerInput,
     MatDatepicker,
     RouterLink,
-    MatProgressSpinner,
     TranslatePipe,
   ],
 })

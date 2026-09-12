@@ -48,7 +48,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
 import { SupplierPOListComponent } from './supplier-po-list/supplier-po-list.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SupplierLocalStore } from '../supplier-store';
 
@@ -88,7 +87,6 @@ import { SupplierLocalStore } from '../supplier-store';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
   ],

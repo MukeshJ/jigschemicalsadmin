@@ -5,7 +5,6 @@ import { ExpenseCategory } from '@core/domain-classes/expense-category';
 import { TranslationService } from '@core/services/translation.service';
 import { BaseComponent } from 'src/app/base.component';
 import { ManageExpenseCategoryComponent } from '../manage-expense-category/manage-expense-category.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -25,7 +24,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './expense-category-list-presentation.component.html',
   styleUrls: ['./expense-category-list-presentation.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

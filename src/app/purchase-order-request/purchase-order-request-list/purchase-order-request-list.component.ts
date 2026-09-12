@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -19,7 +19,6 @@ import { SupplierService } from 'src/app/supplier/supplier.service';
 import { PurchaseOrderRequestDataSource } from './purchase-order-request-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -55,7 +54,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,

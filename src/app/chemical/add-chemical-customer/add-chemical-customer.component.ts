@@ -14,13 +14,12 @@ import { CustomerResourceParameter } from '@core/domain-classes/customer-resourc
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerChemicalService } from 'src/app/customer-chemical/customer-chemical.service';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { AsyncPipe } from '@angular/common';
 import { MatOption } from '@angular/material/select';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -33,14 +32,12 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
-    MatProgressSpinner,
     AsyncPipe,
     TranslatePipe,
   ],
 })
 export class AddChemicalCustomerComponent extends BaseComponent implements OnInit {
   customerChemicalForm: UntypedFormGroup;
-  isLoading = false;
   skip = 0;
   pageSize = 10;
   customers$: Observable<Customer[]>;
@@ -68,17 +65,12 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
   customerNameChangeEvent() {
     this.customers$ = this.customerChemicalForm.get('customerName').valueChanges.pipe(
       debounceTime(1000),
-      tap(() => (this.isLoading = true)),
       switchMap((value) => {
         this.customerResource.searchQuery = value;
         return this.customerChemicalService.searchCustomer(this.customerResource).pipe(
           tap(() => {
-            this.isLoading = false;
           }),
         );
-      }),
-      finalize(() => {
-        this.isLoading = false;
       }),
     );
   }
@@ -106,12 +98,10 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
         chemicalId: this.customerChemicalForm.get('chemicalId').value,
         customerId: this.currentCustomer.id,
       };
-      this.isLoading = true;
       this.sub$.sink = this.customerChemicalService
         .addCustomerByChemical(chemicalSupplier)
         .subscribe(
           (c) => {
-            this.isLoading = false;
             if (!c) {
               this.toastrService.error(
                 `${this.translationService.getValue('CUSTOMER_ALREADY_ADDED_FOR')} ${this.data.name}`,
@@ -124,7 +114,6 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
             }
           },
           () => {
-            this.isLoading = false;
           },
         );
     } else {

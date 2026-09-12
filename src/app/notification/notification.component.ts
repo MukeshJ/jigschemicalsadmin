@@ -26,9 +26,7 @@ import {
   MatFooterRowDef,
   MatFooterRow,
 } from '@angular/material/table';
-import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { UTCToLocalTime } from '../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -56,8 +54,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    MatProgressSpinner,
-    AsyncPipe,
     UTCToLocalTime,
     TranslatePipe,
   ],

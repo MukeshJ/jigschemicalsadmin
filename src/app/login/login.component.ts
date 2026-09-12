@@ -16,14 +16,13 @@ import { User } from '@core/domain-classes/user';
 import { OnlineUser } from '@core/domain-classes/online-user';
 import { SignalrService } from '@core/services/signalr.service';
 import { NgClass } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [MatProgressSpinner, FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
+  imports: [ FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   loginFormGroup: UntypedFormGroup;

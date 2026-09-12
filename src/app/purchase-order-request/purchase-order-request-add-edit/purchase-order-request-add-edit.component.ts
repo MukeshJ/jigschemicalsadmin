@@ -1,5 +1,4 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -32,7 +31,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierLocalStore } from 'src/app/supplier/supplier-store';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
@@ -51,7 +49,6 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
   imports: [
-    MatProgressSpinner,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerInput,

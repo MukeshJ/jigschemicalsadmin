@@ -27,8 +27,6 @@ import { InquiryService } from '../inquiry.service';
 import { InquiryChemicalListComponent } from './inquiry-chemical-list/inquiry-chemical-list.component';
 import { InquiryDataSource } from './inquiry-datasource';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -61,7 +59,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [
     HasClaimDirective,
     RouterLink,
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -88,7 +85,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     UTCToLocalTime,
     TranslatePipe,
   ],

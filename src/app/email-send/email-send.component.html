@@ -7,11 +7,6 @@
     </div>
   </div>
 </div>
-@if (isLoading) {
-  <div class="loading-shade">
-    <mat-spinner></mat-spinner>
-  </div>
-}
 <div class="row">
   <div class="col-md-12 col-sm-12">
     <div class="form-group">
@@ -191,11 +186,6 @@
                 <i class="text-light fas fa-trash"></i>
               </button>
             </span>
-            @if (file?.progress) {
-              <div class="loading-shade">
-                <mat-spinner></mat-spinner>
-              </div>
-            }
           </li>
         }
       </ul>

@@ -16,7 +16,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from 'src/app/chemical/chemical.service';
 import { SupplierService } from 'src/app/supplier/supplier.service';
 import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatCard } from '@angular/material/card';
 import { MatPrefix, MatOption } from '@angular/material/select';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
@@ -44,7 +43,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './search-supplier-by-chemical.component.html',
   styleUrls: ['./search-supplier-by-chemical.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatCard,
     FormsModule,
     ReactiveFormsModule,

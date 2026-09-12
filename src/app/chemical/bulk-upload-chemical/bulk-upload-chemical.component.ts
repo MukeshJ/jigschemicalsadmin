@@ -5,20 +5,18 @@ import { BaseComponent } from 'src/app/base.component';
 import { ChemicalService } from '../chemical.service';
 import * as XLSX from 'xlsx';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-bulk-upload-chemical',
   templateUrl: './bulk-upload-chemical.component.html',
   styleUrls: ['./bulk-upload-chemical.component.scss'],
-  imports: [HasClaimDirective, MatProgressSpinner],
+  imports: [HasClaimDirective],
 })
 export class BulkUploadChemicalComponent extends BaseComponent implements OnInit {
   formData = new FormData();
   fileName = '';
   response: UploadChemical;
   isUpload: boolean = false;
-  isLoading = false;
   displayedColumns: string[] = ['action', 'name', 'count'];
   constructor(
     private chemicalService: ChemicalService,
@@ -40,14 +38,12 @@ export class BulkUploadChemicalComponent extends BaseComponent implements OnInit
 
   upload() {
     if (this.isUpload) {
-      this.isLoading = true;
       this.chemicalService.bulkuUloadChemicals(this.formData).subscribe(
         (data) => {
           this.response = data;
-          this.isLoading = false;
           this.toastrService.success('Product Upload Successfully');
         },
-        () => (this.isLoading = false),
+        () => {},
       );
     } else {
       this.toastrService.error('Please Select file');

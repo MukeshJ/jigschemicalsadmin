@@ -9,8 +9,6 @@ import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
 import { InventoryService } from 'src/app/inventory/inventory.service';
 import { InventoryHistoryDataSource } from './inventory-history-datasource';
-import { AsyncPipe } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
   MatTable,
   MatColumnDef,
@@ -37,7 +35,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './inventory-history-list.component.html',
   styleUrls: ['./inventory-history-list.component.scss'],
   imports: [
-    MatProgressSpinner,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -56,7 +53,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatRow,
     MatFooterRowDef,
     MatFooterRow,
-    AsyncPipe,
     CustomCurrencyPipe,
     UTCToLocalTime,
     TranslatePipe,
