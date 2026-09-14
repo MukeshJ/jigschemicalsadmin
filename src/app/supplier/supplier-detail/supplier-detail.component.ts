@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -102,6 +102,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private location: Location,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -128,6 +129,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
         this.addSupplierAddress();
         this.supplierEmailsArray.push(this.buildSupplierEmail());
       }
+      this.cdr.detectChanges();
     });
     this.sub$.add(routeSub$);
   }
@@ -311,6 +313,7 @@ export class SupplierDetailComponent extends BaseComponent implements OnInit {
   getCountry() {
     const CountrySub$ = this.commonService.getCountry().subscribe((data) => {
       this.countries = data;
+      this.cdr.detectChanges();
     });
     this.sub$.add(CountrySub$);
   }

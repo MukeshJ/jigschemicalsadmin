@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -47,6 +47,7 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -59,6 +60,7 @@ export class TestimonialDetailComponent extends BaseComponent implements OnInit 
         this.patchTestimonial();
       } else {
       }
+      this.cdr.detectChanges();
     });
     this.sub$.add(routeSub$);
   }

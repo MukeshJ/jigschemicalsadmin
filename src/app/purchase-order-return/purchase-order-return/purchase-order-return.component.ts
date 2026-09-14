@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -116,6 +116,7 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
     private location: Location,
     private cloneService: ClonerService,
     private packagingTypeService: PackagingTypeService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.purchaseResouce = new PurchaseOrderResourceParameter();
@@ -134,6 +135,7 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
   getPackagingTypes() {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
+      this.cdr.detectChanges();
     });
   }
 
@@ -251,8 +253,10 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
             if (resp && resp.headers) {
               this.purchaseorders = [...resp.body];
             }
+            this.cdr.detectChanges();
           });
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -478,6 +482,7 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
       this.suppliersForSearch = [...this.suppliers];
+      this.cdr.detectChanges();
     });
   }
 

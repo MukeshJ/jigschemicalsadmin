@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -108,6 +108,7 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
     private translationService: TranslationService,
     private router: Router,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -138,6 +139,7 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
         (c) => {
           this.customers = c.customers;
           this.totalCustomers = c.totalCount;
+          this.cdr.detectChanges();
         },
         () => {
         },

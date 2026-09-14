@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -45,6 +45,7 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -59,6 +60,7 @@ export class IndustryDetailComponent extends BaseComponent implements OnInit {
           this.imgSrc = `${environment.apiUrl}${data.industry.imageUrl}`;
         }
       }
+      this.cdr.detectChanges();
     });
   }
 

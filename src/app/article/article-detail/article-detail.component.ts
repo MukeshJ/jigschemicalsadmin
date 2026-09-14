@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -58,6 +58,7 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -73,6 +74,7 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
       } else {
         this.titlePage = 'Add Article';
       }
+      this.cdr.detectChanges();
     });
     this.sub$.add(routeSub$);
   }
@@ -80,6 +82,7 @@ export class ArticleDetailComponent extends BaseComponent implements OnInit {
   getArticleCategory() {
     this.sub$.sink = this.articleService.getArticleCategories().subscribe((d) => {
       this.categories = d;
+      this.cdr.detectChanges();
     });
   }
 

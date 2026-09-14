@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -134,6 +134,7 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
     private dialog: MatDialog,
     private translationService: TranslationService,
     private commonService: CommonService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -169,6 +170,7 @@ export class ChemicalSuppliersComponent extends BaseComponent implements OnInit 
           this.suppliers = c.suppliers;
           this.totalSuppliers = c.totalCount;
           this.isLoading.set(false);
+          this.cdr.detectChanges();
         },
         () => {
           this.isLoading.set(false);

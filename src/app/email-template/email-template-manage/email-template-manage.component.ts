@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -34,6 +34,7 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
     private router: Router,
     private toastrService: ToastrService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -49,6 +50,7 @@ export class EmailTemplateManageComponent extends BaseComponent implements OnIni
         this.emailTemplate = data.emailTemplate;
         this.patchEmailTemplateData();
       }
+      this.cdr.detectChanges();
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   UntypedFormBuilder,
@@ -78,6 +78,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private location: Location,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -99,6 +100,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
           this.customer = Object.assign({}, null);
         }
       }
+      this.cdr.detectChanges();
     });
     this.sub$.add(routeSub$);
   }
@@ -220,6 +222,7 @@ export class CustomerDetailComponent extends BaseComponent implements OnInit {
   getCountry() {
     const CountrySub$ = this.commonService.getCountry().subscribe((data) => {
       this.countries = data;
+      this.cdr.detectChanges();
     });
     this.sub$.add(CountrySub$);
   }

@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -102,6 +102,7 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private inquiryStatusService: InquiryStatusService,
     private inquirySourceService: InquirySourceService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.userResource = new UserResource();
@@ -138,6 +139,7 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
       .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
 
@@ -225,17 +227,22 @@ export class AddInquiryComponent extends BaseComponent implements OnInit {
   getCountry() {
     this.sub$.sink = this.commonService.getCountry().subscribe((data) => {
       this.countries = data;
+      this.cdr.detectChanges();
     });
   }
 
   getInuiriesStatus() {
     this.sub$.sink = this.inquiryStatusService.getAll().subscribe((c) => {
       this.inquiryStatuses = c;
+      this.cdr.detectChanges();
     });
   }
 
   getInquirySource() {
-    this.inquirySourceService.getAll().subscribe((c) => (this.sourcesOfInquiry = c));
+    this.inquirySourceService.getAll().subscribe((c) => {
+      this.sourcesOfInquiry = c;
+      this.cdr.detectChanges();
+    });
   }
 
   handleFilterCity(cityName: string) {

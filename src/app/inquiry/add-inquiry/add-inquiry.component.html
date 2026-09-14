@@ -28,16 +28,17 @@
     </div>
     <div class="col-md-12" formArrayName="inquiryChemicals">
       @if (inquieryChemicalArray.controls.length) {
-        <span>{{ 'SELECTED_CHEMICALS' | translate }}:</span>
+        <div>{{ 'SELECTED_CHEMICALS' | translate }}:</div>
       }
-      <br />
       <mat-chip-set>
         @for (chemical of inquieryChemicalArray.controls; track chemical; let i = $index) {
-          <mat-chip>
-            <ng-container [formGroupName]="i">
-              <span>{{ chemical.get('name').value }}({{ chemical.get('casNumber').value }})</span>
-              <i class="material-icons cursor-pointer" (click)="removeChemical(i)"> clear </i>
-            </ng-container>
+          <mat-chip class="selected-chemical-chip">
+            <span>
+              {{ chemical.get('name')?.value }}({{ chemical.get('casNumber')?.value }})
+            </span>
+            <i class="material-icons selected-chemical-remove" (click)="removeChemical(i)">
+              clear
+            </i>
           </mat-chip>
         }
       </mat-chip-set>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -30,6 +30,7 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
     private inquiryNoteService: InquiryNoteService,
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -49,6 +50,7 @@ export class InquiryNoteComponent extends BaseComponent implements OnInit {
       .getInquiryNotes(this.inquiryId)
       .subscribe((c: InquiryNote[]) => {
         this.inquiryNotes = c;
+        this.cdr.detectChanges();
       });
   }
   patchNote(note: string) {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -54,6 +54,7 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
     public dialogRef: MatDialogRef<SendEmailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SendEmailSuppliers,
     private commonService: CommonService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -102,6 +103,7 @@ export class SendEmailComponent extends BaseComponent implements OnInit {
       .getEmailTemplates()
       .subscribe((emailTamplats: EmailTemplate[]) => {
         this.emailTamplates = emailTamplats;
+        this.cdr.detectChanges();
       });
   }
 

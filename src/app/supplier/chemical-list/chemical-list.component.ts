@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   Inject,
   OnInit,
@@ -106,6 +107,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Supplier,
     private dialog: MatDialog,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -144,6 +146,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
       next: (response) => {
         this.chemicals = response?.chemicals ?? [];
         this.totalChemicals = response?.totalCount ?? 0;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.toasterService.error(

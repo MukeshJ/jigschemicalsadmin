@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -72,6 +72,7 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
     private inquiryTaskService: InquiryTaskService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.userResource = new UserResource();
@@ -130,6 +131,7 @@ export class InquiryTaskAddComponent extends BaseComponent implements OnInit {
       .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
   onInquiryTaskSave() {

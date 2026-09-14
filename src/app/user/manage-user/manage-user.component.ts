@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -58,6 +58,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
     private toastrService: ToastrService,
     private commonService: CommonService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -77,6 +78,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
         this.userForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
         this.userForm.get('confirmPassword').setValidators([Validators.required]);
       }
+      this.cdr.detectChanges();
     });
     this.getRoles();
   }
@@ -205,6 +207,7 @@ export class ManageUserComponent extends BaseComponent implements OnInit {
         const selectedRoleIds = this.user.userRoles.map((c) => c.roleId);
         this.selectedRoles = this.roleList.filter((c) => selectedRoleIds.indexOf(c.id) > -1);
       }
+      this.cdr.detectChanges();
     });
   }
 }

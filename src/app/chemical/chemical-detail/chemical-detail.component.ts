@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   UntypedFormBuilder,
@@ -71,6 +71,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
     private chemicalTypeService: ChemicalTypeService,
     private unitService: UnitService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -93,6 +94,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
           this.chemical = null;
         }
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -106,6 +108,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
             : [],
         });
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -119,6 +122,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
             : [],
         });
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -128,6 +132,7 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
       if (this.chemical) {
         this.chemicalForm.patchValue({ unitId: this.chemical.unitId });
       }
+      this.cdr.detectChanges();
     });
   }
 

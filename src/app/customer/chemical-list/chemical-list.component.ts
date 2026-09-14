@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -89,6 +89,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     private customerService: CustomerService,
     public dialogRef: MatDialogRef<ChemicalListComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer,
+    private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
   ) {
     super();
@@ -122,9 +123,11 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
           this.chemicals = c.chemicals;
           this.totalChemicals = c.totalCount;
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
         () => {
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
       );
   }

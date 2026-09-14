@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -114,6 +114,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
     private inquiryStatusService: InquiryStatusService,
     private inquirySourceService: InquirySourceService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.userResource = new UserResource();
@@ -141,6 +142,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
           this.inquiry = null;
         }
       }
+      this.cdr.detectChanges();
     });
     this.sub$.add(routeSub$);
     this.chemicals$ = this.inquiryForm.get('chemicalNameInput').valueChanges.pipe(
@@ -164,6 +166,7 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
       .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
 
@@ -251,17 +254,22 @@ export class InquiryDetailComponent extends BaseComponent implements OnInit {
   getCountry() {
     this.sub$.sink = this.commonService.getCountry().subscribe((data) => {
       this.countries = data;
+      this.cdr.detectChanges();
     });
   }
 
   getInuiriesStatus() {
     this.sub$.sink = this.inquiryStatusService.getAll().subscribe((c) => {
       this.inquiryStatuses = c;
+      this.cdr.detectChanges();
     });
   }
 
   getInquirySource() {
-    this.inquirySourceService.getAll().subscribe((c) => (this.sourcesOfInquiry = c));
+    this.inquirySourceService.getAll().subscribe((c) => {
+      this.sourcesOfInquiry = c;
+      this.cdr.detectChanges();
+    });
   }
 
   handleFilterCity(cityName: string) {

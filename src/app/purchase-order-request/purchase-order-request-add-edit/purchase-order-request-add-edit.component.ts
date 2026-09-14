@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -107,6 +107,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private packagingTypeService: PackagingTypeService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -122,6 +123,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   getPackagingTypes() {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
+      this.cdr.detectChanges();
     });
   }
 
@@ -176,6 +178,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
           this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length),
         );
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -345,6 +348,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
         this.purchaseOrderForm.patchValue({
           orderNumber: purchaseOrder.orderNumber,
         });
+        this.cdr.detectChanges();
       });
     }
   }
@@ -375,6 +379,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       : {};
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
+      this.cdr.detectChanges();
     });
   }
 

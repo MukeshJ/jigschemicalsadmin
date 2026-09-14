@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -48,6 +48,7 @@ export class CompanyProfileComponent implements OnInit {
     private securityService: SecurityService,
     private commonService: CommonService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +59,7 @@ export class CompanyProfileComponent implements OnInit {
       if (data.profile.logoUrl) {
         this.imgSrc = environment.apiUrl + data.profile.logoUrl;
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -75,7 +77,10 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   getCurrencies() {
-    this.commonService.getCurrencies().subscribe((data) => (this.currencies = data));
+    this.commonService.getCurrencies().subscribe((data) => {
+      this.currencies = data;
+      this.cdr.detectChanges();
+    });
   }
 
   saveCompanyProfile() {

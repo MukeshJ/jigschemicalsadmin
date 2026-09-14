@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -46,6 +46,7 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
     private dialog: MatDialog,
     private translationService: TranslationService,
     private securityService: SecurityService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -60,6 +61,7 @@ export class MyProfileComponent extends BaseComponent implements OnInit {
         }
         this.userForm.patchValue(this.user);
       }
+      this.cdr.detectChanges();
     });
   }
 

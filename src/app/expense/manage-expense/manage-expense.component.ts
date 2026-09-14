@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -56,6 +56,7 @@ export class ManageExpenseComponent implements OnInit {
     private toastrService: ToastrService,
     private translationService: TranslationService,
     private activatedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +65,7 @@ export class ManageExpenseComponent implements OnInit {
     this.getUsers();
     this.activatedRoute.data.subscribe((data: { expense: Expense }) => {
       this.expenseForm.patchValue(data.expense);
+      this.cdr.detectChanges();
     });
   }
 
@@ -85,6 +87,7 @@ export class ManageExpenseComponent implements OnInit {
   getExpenseCategories() {
     this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
+      this.cdr.detectChanges();
     });
   }
 
@@ -94,6 +97,7 @@ export class ManageExpenseComponent implements OnInit {
     userResource.orderBy = 'firstName desc';
     this.userService.getUsers(userResource).subscribe((resp: HttpResponse<User[]>) => {
       this.users = resp.body;
+      this.cdr.detectChanges();
     });
   }
 

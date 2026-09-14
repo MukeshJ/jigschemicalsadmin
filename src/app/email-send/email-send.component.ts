@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -54,6 +54,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
     private emailSendService: EmailSendService,
     private router: Router,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -102,6 +103,7 @@ export class EmailSendComponent extends BaseComponent implements OnInit {
       .getEmailTemplates()
       .subscribe((emailTamplats: EmailTemplate[]) => {
         this.emailTamplates = emailTamplats;
+        this.cdr.detectChanges();
       });
   }
 

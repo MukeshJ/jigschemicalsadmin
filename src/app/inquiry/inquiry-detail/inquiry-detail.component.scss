@@ -1,0 +1,19 @@
+.selected-chemical-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 32px;
+	padding: 0 10px 0 14px;
+	border-radius: 999px !important;
+	background: #e9e9e9 !important;
+	border: 1px solid #d5d5d5;
+	color: #4a4a4a;
+}
+
+.selected-chemical-remove {
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+	color: #4a4a4a;
+	user-select: none;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -156,6 +156,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
     private route: Router,
     private activatedRoute: ActivatedRoute,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -176,14 +177,16 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
           this.reminderForm.get('frequency').setValidators([Validators.required]);
         }
       }
+      this.cdr.detectChanges();
     });
     this.getUsers();
   }
 
   getReminderFrequency() {
-    this.sub$.sink = this.commonService
-      .getReminderFrequency()
-      .subscribe((f) => (this.reminderFrequencies = [...f]));
+    this.sub$.sink = this.commonService.getReminderFrequency().subscribe((f) => {
+      this.reminderFrequencies = [...f];
+      this.cdr.detectChanges();
+    });
   }
 
   createReminderForm() {
@@ -277,6 +280,7 @@ export class AddReminderComponent extends BaseComponent implements OnInit {
         const reminderUsers = this.reminder.reminderUsers.map((c) => c.userId);
         this.selectedUsers = this.users.filter((c) => reminderUsers.indexOf(c.id) >= 0);
       }
+      this.cdr.detectChanges();
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -31,6 +31,7 @@ export class ManageEmailSmtpSettingComponent extends BaseComponent implements On
     private emailSmtpSettingService: EmailSmtpSettingService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -42,6 +43,7 @@ export class ManageEmailSmtpSettingComponent extends BaseComponent implements On
         this.isEditMode = true;
         this.smtpSettingForm.patchValue(data.smtpSetting);
       }
+      this.cdr.detectChanges();
     });
   }
 

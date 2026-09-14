@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -122,6 +122,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private packagingTypeService: PackagingTypeService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.purchaseOrderResource = new PurchaseOrderResourceParameter();
@@ -158,6 +159,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
           const paginationParam = JSON.parse(resp.headers.get('X-Pagination')) as ResponseHeader;
           this.purchaseOrderRequestList = [...resp.body];
         }
+        this.cdr.detectChanges();
       });
   }
   getPurchaseOrderRequestChange() {
@@ -206,10 +208,12 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
           .searchSuppliers('', { id: c.supplierId })
           .subscribe((suppliers) => {
             this.suppliers = [...(suppliers ?? [])];
+            this.cdr.detectChanges();
           });
 
         this.getAllTotal();
       }
+      this.cdr.detectChanges();
     });
   }
   clearFormArray() {
@@ -221,6 +225,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   getPackagingTypes() {
     this.packagingTypeService.getAll().subscribe((packagingTypes) => {
       this.packagingTypes = packagingTypes;
+      this.cdr.detectChanges();
     });
   }
 
@@ -280,6 +285,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
           this.createPurchaseOrderItem(this.purchaseOrderItemsArray.length),
         );
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -461,6 +467,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
         this.purchaseOrderForm.patchValue({
           orderNumber: purchaseOrder.orderNumber,
         });
+        this.cdr.detectChanges();
       });
     }
   }
@@ -491,6 +498,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
       : {};
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
+      this.cdr.detectChanges();
     });
   }
 
