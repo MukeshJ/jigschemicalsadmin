@@ -216,6 +216,15 @@ export class AppComponent extends BaseComponent implements OnInit {
         else if (event.url.indexOf('login-audit') > -1 || event.url.indexOf('logs') > -1) {
           this.commonService.setCurrentUrl("logs");
         }
+        else if (event.url.indexOf('article') > -1) {
+          this.commonService.setCurrentUrl("article");
+        }
+        else if (event.url.indexOf('testimonial') > -1) {
+          this.commonService.setCurrentUrl("testimonial");
+        }
+        else if (event.url.indexOf('gallery') > -1) {
+          this.commonService.setCurrentUrl("gallery");
+        }
         else {
           this.commonService.setCurrentUrl("");
         }
