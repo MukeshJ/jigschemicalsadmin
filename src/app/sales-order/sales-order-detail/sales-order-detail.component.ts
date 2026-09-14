@@ -99,7 +99,7 @@ export class SalesOrderDetailComponent extends BaseComponent {
   }
 
   generateInvoice() {
-    let soForInvoice = this.clonerService.deepClone<SalesOrder>(this.salesOrder);
+    let soForInvoice = this.clonerService.deepClone<SalesOrder>(this.salesOrder());
     soForInvoice.salesOrderItems.map((c) => {
       c.unitName = c.chemical?.unitName;
       return c;

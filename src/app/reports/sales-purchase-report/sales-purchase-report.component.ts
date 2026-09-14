@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { SalesVsPurchase } from '@core/domain-classes/sales-purchase';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -12,6 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sales-purchase-report',
   templateUrl: './sales-purchase-report.component.html',
   styleUrls: ['./sales-purchase-report.component.scss'],
+  providers: [UTCToLocalTime],
   imports: [FormsModule, BaseChartDirective, TranslatePipe],
 })
 export class SalesPurchaseReportComponent implements OnInit {
@@ -23,16 +24,13 @@ export class SalesPurchaseReportComponent implements OnInit {
   selectedMonth = new Date().getMonth() + 1;
   selectedYear = new Date().getFullYear();
 
-  barChartData: ChartData<'bar'> = {
+  barChartData = signal<ChartData<'bar'>>({
     labels: [],
     datasets: [],
-  };
+  });
 
   barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
-    // See inquiry-chart.component.ts for why this is needed: without it, a
-    // responsive chart in a container with no fixed height of its own can
-    // get stuck in an endless grow/shrink resize loop.
     maintainAspectRatio: false,
   };
 
@@ -54,13 +52,13 @@ export class SalesPurchaseReportComponent implements OnInit {
       .subscribe((data: SalesVsPurchase[]) => {
         const totalSales = data.map((c) => c.totalSales);
         const totalPurchase = data.map((c) => c.totalPurchase);
-        this.barChartData = {
+        this.barChartData.set({
           labels: data.map((c) => this.uTCToLocalTime.transform(c.date, 'shortDate')),
           datasets: [
             { data: totalSales, label: 'Sales', backgroundColor: '#2196f3' },
             { data: totalPurchase, label: 'Purchase', backgroundColor: '#3b1f91' },
           ],
-        };
+        });
         this.chart?.update();
       });
   }

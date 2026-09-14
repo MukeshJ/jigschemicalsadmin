@@ -315,7 +315,7 @@
                             {{ a.name }}
                           </mat-option>
                         }
-                        @if (filterChemicalsMap[i].length == 0) {
+                        @if (filterChemicalsMap[i]?.length == 0) {
                           <mat-option [value]="">
                             {{ 'NO_RECORDS' | translate }}
                           </mat-option>
