@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -150,7 +150,6 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
   constructor(
     private purchaseOrderService: PurchaseOrderService,
     private supplierService: SupplierService,
-    private cd: ChangeDetectorRef,
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private router: Router,
@@ -230,7 +229,6 @@ export class PurchaseOrderRequestListComponent extends BaseComponent {
 
   toggleRow(element: PurchaseOrder) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   poChangeEvent(purchaseOrder: PurchaseOrder) {

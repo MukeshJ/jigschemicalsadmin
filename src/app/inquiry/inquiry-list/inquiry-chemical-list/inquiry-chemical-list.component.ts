@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalSupplierCount } from '@core/domain-classes/chemical-supplier-count';
@@ -41,7 +41,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   ],
 })
 export class InquiryChemicalListComponent extends BaseComponent implements OnInit {
-  chemicals: ChemicalSupplierCount[] = [];
+  chemicals = signal<ChemicalSupplierCount[]>([]);
   isLoading: boolean = false;
   displayedColumns = ['name', 'casNumber', 'totalSupplier'];
   constructor(
@@ -63,7 +63,7 @@ export class InquiryChemicalListComponent extends BaseComponent implements OnIni
     this.isLoading = true;
     this.sub$.sink = this.inquiryService.getChemicalsByInquiryId(this.data.id).subscribe(
       (c) => {
-        this.chemicals = c;
+        this.chemicals.set(c);
         this.isLoading = false;
       },
       () => {

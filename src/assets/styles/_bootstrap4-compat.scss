@@ -70,6 +70,36 @@ $b4c-spacers: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem);
   .px-#{$key} { padding-left: $val !important; padding-right: $val !important; }
 }
 
+// ===========================================================================
+//  Badge color variants (BS5 renamed .badge-* to .text-bg-*, and dropped
+//  .badge-pill in favor of .rounded-pill) — ~15 templates still use the old
+//  BS4 names (.badge-success, .badge-danger, .badge-warning, .badge-primary,
+//  .badge-pill). Re-create them here with BS4's exact colors.
+// ===========================================================================
+$b4c-badge-colors: (
+  primary: (#007bff, #fff),
+  secondary: (#6c757d, #fff),
+  success: (#28a745, #fff),
+  danger: (#dc3545, #fff),
+  warning: (#ffc107, #212529),
+  info: (#17a2b8, #fff),
+  light: (#f8f9fa, #212529),
+  dark: (#343a40, #fff),
+);
+
+@each $name, $colors in $b4c-badge-colors {
+  .badge-#{$name} {
+    color: nth($colors, 2);
+    background-color: nth($colors, 1);
+  }
+}
+
+.badge-pill {
+  padding-right: 0.6em;
+  padding-left: 0.6em;
+  border-radius: 10rem;
+}
+
 // --- responsive variants actually used in templates (sm/md/lg/xl) ---
 @each $bp, $min in (sm: 576px, md: 768px, lg: 992px, xl: 1200px) {
   @media (min-width: $min) {

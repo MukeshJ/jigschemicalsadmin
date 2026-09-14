@@ -88,9 +88,6 @@ export class SalesOrderDetailComponent extends BaseComponent {
         this.salesOrderItems = this.salesOrder().salesOrderItems.filter((c) => c.status == 0);
         this.salesOrderReturnsItems = this.salesOrder().salesOrderItems.filter((c) => c.status == 1);
         this.isLoading = false;
-        // Show the invoice section as soon as the order loads, instead of
-        // waiting for the user to click "Generate Invoice" first.
-        this.generateInvoice();
       },
       (err) => {
         this.isLoading = false;

@@ -15,7 +15,7 @@
   </div>
   <div class="modal-body">
     <div class="table-container table-container dialog-grid-height">
-      <table mat-table [dataSource]="chemicals" class="mat-elevation-z8 table">
+      <table mat-table [dataSource]="chemicals()" class="mat-elevation-z8 table">
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th style="width: 50%" mat-header-cell *matHeaderCellDef>{{ 'NAME' | translate }}</th>

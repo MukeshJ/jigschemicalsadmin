@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -164,7 +164,6 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
   constructor(
     private salesOrderService: SalesOrderService,
     private customerService: CustomerService,
-    private cd: ChangeDetectorRef,
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private router: Router,
@@ -238,7 +237,6 @@ export class SalesOrderListComponent extends BaseComponent implements OnInit {
 
   toggleRow(element: SalesOrder) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   approveSalesOrder(salesOrder: SalesOrder) {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -92,7 +92,6 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
 
   constructor(
     private inventoryService: InventoryService,
-    private cd: ChangeDetectorRef,
     private dialog: MatDialog,
   ) {
     super();
@@ -143,7 +142,6 @@ export class InventoryListComponent extends BaseComponent implements OnInit {
 
   toggleRow(element: Inventory) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   addInvenotry(inventory: Inventory) {

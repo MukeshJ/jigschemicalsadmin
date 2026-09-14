@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -188,7 +188,6 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
   constructor(
     private salesOrderService: SalesOrderService,
     private customerService: CustomerService,
-    private cd: ChangeDetectorRef,
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private router: Router,
@@ -337,7 +336,6 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
 
   toggleRow(element: SalesOrder) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   deleteSalesOrder(salesOrder: SalesOrder) {

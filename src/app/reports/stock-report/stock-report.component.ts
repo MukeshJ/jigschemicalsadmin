@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -97,7 +97,6 @@ export class StockReportComponent extends BaseComponent implements OnInit {
 
   constructor(
     private inventoryService: InventoryService,
-    private cd: ChangeDetectorRef,
     private dialog: MatDialog,
     private translationService: TranslationService,
     private customCurrencyPipe: CustomCurrencyPipe,
@@ -150,7 +149,6 @@ export class StockReportComponent extends BaseComponent implements OnInit {
 
   toggleRow(element: Inventory) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   onDownloadReport() {

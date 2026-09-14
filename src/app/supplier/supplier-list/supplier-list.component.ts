@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnInit,
   inject,
@@ -119,7 +118,6 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private dialog: MatDialog,
     private commonService: CommonService,
-    private cd: ChangeDetectorRef,
   ) {
     super();
   }
@@ -187,6 +185,5 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
 
   toggleRow(supplier: Supplier): void {
     this.expandedElement = this.expandedElement === supplier ? null : supplier;
-    this.cd.detectChanges();
   }
 }

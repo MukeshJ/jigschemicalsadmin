@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerService } from '../customer.service';
 import { merge, Observable, Subject } from 'rxjs';
@@ -154,7 +154,6 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
     private router: Router,
     private translationService: TranslationService,
     private dialog: MatDialog,
-    private cd: ChangeDetectorRef,
   ) {
     super();
     this.customerResource = new CustomerResourceParameter();
@@ -252,6 +251,5 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
 
   toggleRow(customer: Customer) {
     this.expandedElement = this.expandedElement === customer ? null : customer;
-    this.cd.detectChanges();
   }
 }

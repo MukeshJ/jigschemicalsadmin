@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ViewChild, inject, signal } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -147,7 +147,6 @@ export class PurchaseOrderReportComponent extends BaseComponent {
     'status-search',
   ];
   footerToDisplayed: string[] = ['footer'];
-  isLoadingResults = signal<boolean>(true);
   purchaseOrderResource: PurchaseOrderResourceParameter;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -187,7 +186,6 @@ export class PurchaseOrderReportComponent extends BaseComponent {
   constructor(
     private purchaseOrderService: PurchaseOrderService,
     private supplierService: SupplierService,
-    private cd: ChangeDetectorRef,
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private router: Router,
@@ -337,7 +335,6 @@ export class PurchaseOrderReportComponent extends BaseComponent {
 
   toggleRow(element: PurchaseOrder) {
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.cd.detectChanges();
   }
 
   poChangeEvent(purchaseOrder: PurchaseOrder) {

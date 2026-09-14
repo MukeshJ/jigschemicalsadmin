@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -7,23 +7,19 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { Router, RouterLink } from '@angular/router';
-import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
+import { RouterLink } from '@angular/router';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Customer } from '@core/domain-classes/customer';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderResourceParameter } from '@core/domain-classes/sales-order-resource-parameter';
-import { ClonerService } from '@core/services/clone.service';
 import { dateCompare } from '@core/services/date-range';
 import { TranslationService } from '@core/services/translation.service';
 import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
 import { PaymentStatusPipe } from '@shared/pipes/purchase-order-paymentStatus.pipe';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
-import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
@@ -151,12 +147,7 @@ export class ChemicalSalesReportComponent extends BaseComponent {
     private salesOrderService: SalesOrderService,
     private customerService: CustomerService,
     private cd: ChangeDetectorRef,
-    private commonDialogService: CommonDialogService,
-    private toastrService: ToastrService,
-    private router: Router,
     private translationService: TranslationService,
-    private dialog: MatDialog,
-    private clonerService: ClonerService,
     private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
