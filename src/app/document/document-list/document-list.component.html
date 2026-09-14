@@ -27,9 +27,9 @@
         #input
       />
     </div>
-    <div class="col-sm-4 form-group">
+    <div class="col-sm-4 form-group ">
       <mat-select
-        class="form-control"
+        class="form-control "
         placeholder="{{ 'CATEGORY' | translate }}"
         (selectionChange)="onCategoryChange($event)"
       >
@@ -41,18 +41,18 @@
         }
       </mat-select>
     </div>
-    <div class="col-sm-auto form-group">
-      <div class="input-group">
+    <div class="col-sm-auto form-group ">
+      <div class="input-group ">
         <input
           #ref
-          class="form-control"
+          class="form-control "
           placeholder="{{ 'CREATED_DATE' | translate }}"
-          [matDatepicker]="picker"
+          [matDatepicker]="picker"s
           (dateInput)="onCreatedDateChange(ref.value)"
         />
         <mat-datepicker #picker></mat-datepicker>
         <div class="input-group-append">
-          <span class="input-group-text">
+          <span class="input-group-text document-date-toggle">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           </span>
         </div>

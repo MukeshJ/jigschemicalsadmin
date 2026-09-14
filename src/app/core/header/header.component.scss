@@ -516,8 +516,13 @@ button:focus {
        text-decoration: none;
    }
 }
+
+.add-menu-toggle::after {
+    display: none !important;
+}
+
 .blackiconcolor {
-    color: #000 !important;
+    color: rgb(0, 123, 255) !important;
 }
 
 // Keep the header on a single line on larger screens: the search bar shrinks

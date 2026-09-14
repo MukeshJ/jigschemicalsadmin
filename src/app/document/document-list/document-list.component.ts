@@ -277,16 +277,22 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
   }
 
   manageDocumentPermission(documentInfo: DocumentInfo) {
+    (document.activeElement as HTMLElement | null)?.blur();
     this.dialog.open(DocumentPermissionListComponent, {
       data: documentInfo,
       width: '80vw',
       height: '80vh',
+      autoFocus: true,
+      restoreFocus: false,
     });
   }
   onSharedSelectDocument() {
+    (document.activeElement as HTMLElement | null)?.blur();
     this.dialog.open(DocumentPermissionMultipleComponent, {
       data: this.selection.selected,
       width: '80vw',
+      autoFocus: true,
+      restoreFocus: false,
     });
   }
 

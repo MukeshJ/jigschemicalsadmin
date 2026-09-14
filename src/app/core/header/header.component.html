@@ -24,13 +24,18 @@
       </div>
       <div class="col-md-auto col-auto ml-2">
         <div class="dropdown">
-          <button class="btn blue-btn btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false"
-            *hasClaim="['sales_order_add_sales_order','purchase_order_add_purchase_order','customer_add_customer','supplier_add_supplier','chemical_add_chemical','expense_add_expense']">
-            <i class="glyphicon glyphicon-plus"></i><i class="fa fa-plus"></i>
+          <button
+            class="btn blue-btn btn-sm"
+            type="button"
+            id="dropdownMenu2"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fa fa-plus"></i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'sales_order_add_sales_order'"> <a
+            <button class="dropdown-item p-2 no-unserline" type="button">
+              <a
                 [routerLink]="['/sales-order/add']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
                 {{'SALES_ORDER' | translate}}</a></button>
             <button class="dropdown-item p-2 no-unserline" type="button"
@@ -46,7 +51,7 @@
             <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'chemical_add_chemical'"><a
                 [routerLink]="['/chemical/add']"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
                 {{'CHEMICAL' | translate}}</a></button>
-            <button class="dropdown-item p-2 no-unserline" type="button" *hasClaim="'expense_add_expense'"><a
+            <button class="dropdown-item p-2 no-unserline" type="button" ><a
                 [routerLink]="'/expense/add'"><i class="fa fa-plus ml-1 blackiconcolor"></i>&nbsp;
                 {{'EXPENSE' | translate}}</a></button>
           </div>
@@ -84,7 +89,7 @@
     </div>
 
     <!-- Chemical Search -->
-    <div class="col-md-7  header-search-col">
+    <div class="col-md-7  header-search-col px-3">
       <div class="mb-3">
         <div class="d-flex" [formGroup]="chemicalSearchForm">
           <div class="input-group">
@@ -119,14 +124,19 @@
         class="list-unstyled topbar-nav ml-auto topbar-nav-right mb-0 float-right hide-when-toogle"
       >
         <!-- Language -->
-        <li class="nav-item dropdown">
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+        <li class="nav-item dropdown pe-1">
+          <button
+            type="button"
+            class="dropdown-toggle nav-link btn btn-link p-0 border-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="languageDropdown"
+          >
             <img class="contry-flag rounded" [src]="language.flag" alt="language" />
-
             {{ language.name }}
-          </a>
+          </button>
 
-          <ul class="dropdown-menu contry-dropdown" aria-labelledby="dropdownMenuButton">
+          <ul class="dropdown-menu dropdown-menu-end contry-dropdown" aria-labelledby="languageDropdown">
             @for (language of languages; track language.lang) {
               <li
                 role="button"
@@ -143,7 +153,7 @@
 
         <!-- Notifications -->
         <li class="nav-item dropdown d-none d-md-block">
-          <span class="notification-area" data-toggle="dropdown">
+          <span class="notification-area" data-bs-toggle="dropdown" role="button" tabindex="0">
             <i class="far fa-bell fs-20 text-white"></i>
 
             <span class="noti-count">

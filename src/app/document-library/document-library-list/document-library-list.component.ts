@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Category } from '@core/domain-classes/category';
@@ -94,6 +94,7 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
     private documentLibraryService: DocumentLibraryService,
     private categoryService: DocumentCategoryService,
     public overlay: OverlayPanel,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.documentResource = new DocumentResource();
@@ -165,6 +166,7 @@ export class DocumentLibraryListComponent extends BaseComponent implements OnIni
         this.documentResource.pageSize = c.pageSize;
         this.documentResource.skip = c.skip;
         this.documentResource.totalCount = c.totalCount;
+        this.cdr.detectChanges();
       }
     });
   }

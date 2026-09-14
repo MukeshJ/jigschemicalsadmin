@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { EmailTemplate } from '@core/domain-classes/email-template';
 import { CommonError } from '@core/error-handler/common-error';
@@ -51,6 +51,7 @@ export class EmailTemplateListComponent extends BaseComponent implements OnInit 
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef, 
   ) {
     super();
   }
@@ -81,6 +82,7 @@ export class EmailTemplateListComponent extends BaseComponent implements OnInit 
     this.sub$.sink = this.emailTemplateService.getEmailTemplates().subscribe(
       (data: EmailTemplate[]) => {
         this.emailTemplates = data;
+        this.cdr.detectChanges();
       },
       (err: CommonError) => {
         err.messages.forEach((msg) => {

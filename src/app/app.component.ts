@@ -14,7 +14,7 @@ import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';
 import { BaseComponent } from './base.component';
 import { LoadingService } from './loading.service';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',

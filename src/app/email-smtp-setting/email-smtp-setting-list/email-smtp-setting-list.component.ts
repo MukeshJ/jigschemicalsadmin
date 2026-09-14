@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { EmailSMTPSetting } from '@core/domain-classes/email-smtp-setting';
 import { TranslationService } from '@core/services/translation.service';
@@ -50,6 +50,7 @@ export class EmailSmtpSettingListComponent extends BaseComponent implements OnIn
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
+    private cdr : ChangeDetectorRef
   ) {
     super();
   }
@@ -63,6 +64,7 @@ export class EmailSmtpSettingListComponent extends BaseComponent implements OnIn
       .getEmailSMTPSettings()
       .subscribe((settings: EmailSMTPSetting[]) => {
         this.emailSMTPSettings = settings;
+        this.cdr.detectChanges();
       });
   }
 
