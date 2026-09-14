@@ -44,7 +44,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   ],
 })
 export class RoleListComponent extends BaseComponent implements OnInit {
-  roles: Role[] = [];
+  roles = signal<Role[]>([]);
   displayedColumns: string[] = ['action', 'name'];
   isLoadingResults = signal<boolean>(false);
 
@@ -84,7 +84,7 @@ export class RoleListComponent extends BaseComponent implements OnInit {
     this.sub$.sink = this.commonService.getRoles().subscribe(
       (data: Role[]) => {
         this.isLoadingResults.set(false);
-        this.roles = data;
+        this.roles.set(data);
       },
       (err: CommonError) => {
         err.messages.forEach((msg) => {

@@ -99,18 +99,35 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   getChemicalTypes() {
     this.sub$.sink = this.chemicalTypeService.getChemicalTypes().subscribe((c) => {
       this.categories = c;
+      if (this.chemical) {
+        this.chemicalForm.patchValue({
+          chemicalCategories: this.chemical.chemicalCategories
+            ? this.chemical.chemicalCategories.map((c) => c.categoryId)
+            : [],
+        });
+      }
     });
   }
 
   getIndustries() {
     this.sub$.sink = this.commonService.getIndustries().subscribe((c) => {
       this.industries = c;
+      if (this.chemical) {
+        this.chemicalForm.patchValue({
+          chemicalIndustries: this.chemical.chemicalIndustries
+            ? this.chemical.chemicalIndustries.map((c) => c.industryId)
+            : [],
+        });
+      }
     });
   }
 
   getUnits() {
-    this.unitService.getAll().subscribe((units) => {
+    this.sub$.sink = this.unitService.getAll().subscribe((units) => {
       this.units = units;
+      if (this.chemical) {
+        this.chemicalForm.patchValue({ unitId: this.chemical.unitId });
+      }
     });
   }
 

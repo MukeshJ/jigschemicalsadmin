@@ -19,7 +19,7 @@
 </div>
 
 <div class="table-responsive">
-  <table mat-table [dataSource]="roles" class="table table-bordered table-hover">
+  <table mat-table [dataSource]="roles()" class="table table-bordered table-hover">
     <!-- Action Column -->
     <ng-container matColumnDef="action">
       <th class="table-column-150" mat-header-cell *matHeaderCellDef>{{ 'ACTION' | translate }}</th>

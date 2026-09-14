@@ -17,7 +17,7 @@
         [(ngModel)]="selectedRoleId"
         (selectionChange)="onRoleChange()"
       >
-        @for (role of roles; track role) {
+        @for (role of roles(); track role) {
           <mat-option [value]="role.id">
             {{ role.name }}
           </mat-option>
@@ -36,7 +36,7 @@
   </div>
 </div>
 
-@if (selectedRole) {
+@if (selectedRole()) {
   <div class="row">
     <div class="col-sm-5">
       <h5 class="text-primary">{{ 'ALL_USERS' | translate }}</h5>
@@ -60,12 +60,12 @@
       <div
         cdkDropList
         #todoList="cdkDropList"
-        [cdkDropListData]="roleUsers"
+        [cdkDropListData]="roleUsers()"
         [cdkDropListConnectedTo]="[doneList]"
         class="example-list"
         (cdkDropListDropped)="addUser($event)"
       >
-        @for (item of roleUsers; track item) {
+        @for (item of roleUsers(); track item) {
           <div class="example-box" cdkDrag>
             <span>{{ item.firstName }} {{ item.lastName }} ({{ item.userName }})</span>
           </div>
