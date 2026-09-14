@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -44,7 +44,7 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
   errorMsg: string = '';
   companyProfile: CompanyProfile;
   isLoading = false;
-  purchaseOrder: PurchaseOrder = null;
+  purchaseOrder = signal<PurchaseOrder | null>(null);
   purchaseOrderItems: PurchaseOrderItem[];
   purchaseOrderReturnsItems: PurchaseOrderItem[];
   purchaseOrderForInvoice: PurchaseOrder;
@@ -81,14 +81,15 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
     this.isLoading = true;
     this.purchaseOrderService.getPurchaseOrderById(id).subscribe(
       (c: PurchaseOrder) => {
-        this.purchaseOrder = this.clonerService.deepClone<PurchaseOrder>(c);
-        this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems
+        this.purchaseOrder.set(this.clonerService.deepClone<PurchaseOrder>(c));
+        const po = this.purchaseOrder();
+        po.totalQuantity = po.purchaseOrderItems
           .map((item) => (item.status == 1 ? -1 * item.quantity : item.quantity))
-          .reduce((prev, next) => prev + next);
-        this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter(
+          .reduce((prev, next) => prev + next, 0);
+        this.purchaseOrderItems = po.purchaseOrderItems.filter(
           (c) => c.status == 0,
         );
-        this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(
+        this.purchaseOrderReturnsItems = po.purchaseOrderItems.filter(
           (c) => c.status == 1,
         );
         this.isLoading = false;
@@ -100,7 +101,7 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
   }
 
   generateInvoice() {
-    let poForInvoice = this.clonerService.deepClone<PurchaseOrder>(this.purchaseOrder);
+    let poForInvoice = this.clonerService.deepClone<PurchaseOrder>(this.purchaseOrder());
     poForInvoice.purchaseOrderItems.map((c) => {
       c.unitName = c.chemical?.unitName;
       return c;

@@ -43,6 +43,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
+  providers: [ContactRequestTypePipe],
   imports: [
     MatTable,
     MatSort,

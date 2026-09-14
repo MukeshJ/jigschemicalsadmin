@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { SalesOrderPayment } from '@core/domain-classes/sales-order-payment';
 import { SalesOrderResourceParameter } from '@core/domain-classes/sales-order-resource-parameter';
@@ -18,7 +17,6 @@ import { CustomCurrencyPipe } from '@shared/pipes/custome-currency.pipe';
 import { PaymentMethodPipe } from '@shared/pipes/paymentMethod.pipe';
 import { PaymentStatusPipe } from '@shared/pipes/purchase-order-paymentStatus.pipe';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
-import { ToastrService } from 'ngx-toastr';
 import { Observable, merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseComponent } from 'src/app/base.component';
@@ -97,8 +95,6 @@ export class SalesPaymentReportComponent extends BaseComponent implements OnInit
 
   constructor(
     private salesPaymentReportService: SalesPaymentReportService,
-    private toastrService: ToastrService,
-    private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
     private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,

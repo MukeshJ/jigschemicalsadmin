@@ -9,7 +9,6 @@ import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-orde
 import { PurchaseOrderResourceParameter } from '@core/domain-classes/purchase-order/purchase-order-resource-parameter';
 import { ResponseHeader } from '@core/domain-classes/response-header';
 import { Supplier } from '@core/domain-classes/supplier';
-import { SecurityService } from '@core/security/security.service';
 import { ClonerService } from '@core/services/clone.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';

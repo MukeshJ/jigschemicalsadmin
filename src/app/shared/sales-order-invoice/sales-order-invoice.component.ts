@@ -30,7 +30,7 @@ export class SalesOrderInvoiceComponent implements OnInit, OnChanges {
     if (changes['salesOrder']) {
       this.salesOrder.totalQuantity = this.salesOrder.salesOrderItems
         .map((item) => (item.status == 0 ? item.quantity : -1 * item.quantity))
-        .reduce((prev, next) => prev + next);
+        .reduce((prev, next) => prev + next, 0);
       this.salesOrderItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 0);
       this.salesOrderReturnsItems = this.salesOrder.salesOrderItems.filter((c) => c.status == 1);
       this.salesOrderForInvoice = this.salesOrder;

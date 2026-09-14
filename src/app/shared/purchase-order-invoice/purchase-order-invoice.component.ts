@@ -31,7 +31,7 @@ export class PurchaseOrderInvoiceComponent implements OnInit, OnChanges {
     if (changes['purchaseOrder']) {
       this.purchaseOrder.totalQuantity = this.purchaseOrder.purchaseOrderItems
         .map((item) => (item.status == 0 ? item.quantity : -1 * item.quantity))
-        .reduce((prev, next) => prev + next);
+        .reduce((prev, next) => prev + next, 0);
       this.purchaseOrderItems = this.purchaseOrder.purchaseOrderItems.filter((c) => c.status == 0);
       this.purchaseOrderReturnsItems = this.purchaseOrder.purchaseOrderItems.filter(
         (c) => c.status == 1,

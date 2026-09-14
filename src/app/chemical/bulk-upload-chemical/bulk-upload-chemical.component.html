@@ -47,9 +47,9 @@
           <tr>
             <td scope="row">1</td>
             <td>Success Records</td>
-            <td>{{ response?.successRecords.length }}</td>
+            <td>{{ response?.successRecords?.length }}</td>
             <td>
-              @if (response?.successRecords.length > 0) {
+              @if (response?.successRecords?.length > 0) {
                 <div class="text-danger">
                   <button
                     type="submit"
@@ -65,9 +65,9 @@
           <tr>
             <td scope="row">2</td>
             <td>Skiped Records</td>
-            <td>{{ response?.skipedRecords.length }}</td>
+            <td>{{ response?.skipedRecords?.length }}</td>
             <td>
-              @if (response?.skipedRecords.length > 0) {
+              @if (response?.skipedRecords?.length > 0) {
                 <div class="text-danger">
                   <button
                     type="submit"
@@ -83,9 +83,9 @@
           <tr>
             <td scope="row">3</td>
             <td>Faild Records</td>
-            <td>{{ response?.failedRecords.length }}</td>
+            <td>{{ response?.failedRecords?.length }}</td>
             <td>
-              @if (response?.failedRecords.length > 0) {
+              @if (response?.failedRecords?.length > 0) {
                 <div class="text-danger">
                   <button
                     type="submit"
