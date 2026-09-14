@@ -93,10 +93,10 @@ export class SupplierChemicalComponent extends BaseComponent implements OnInit {
     super();
     this.SupplierResource = new SupplierResourceParameter();
     this.SupplierResource.pageSize = 10;
+    this.createSupplierChemicalForm();
   }
 
   ngOnInit(): void {
-    this.createSupplierChemicalForm();
     this.suppliers$ = this.supplierChemicalForm.get('supplierNameInput').valueChanges.pipe(
       debounceTime(1000),
       tap(() => (this.isLoading = true)),
