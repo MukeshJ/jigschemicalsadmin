@@ -38,7 +38,6 @@ export class NLogDataSource implements DataSource<NLog> {
         this.loadingSubject.next(true);
         this.nLogService.getNLogs(nLogResource).pipe(
             catchError(() => of([])),
-            finalize(() => this.loadingSubject.next(false))
         )
             .subscribe(
                 (resp: HttpResponse<NLog[]>) => {
@@ -49,6 +48,7 @@ export class NLogDataSource implements DataSource<NLog> {
                     const nLogs = [...resp.body];
                     this._count = nLogs.length;
                     this.nLogSubject.next(nLogs);
+                    this.loadingSubject.next(false)
                 }
             );
     }

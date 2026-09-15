@@ -95,10 +95,12 @@
                 <input formControlName="iUPACName" class="form-control w-100" type="text" />
               </div>
             </div>
-            <div class="col-md-6 col-sm-6">
-              <div class="form-group">
-                <label> {{ 'IS_SHOW_IN_FRONT' | translate }}</label>
-                <input formControlName="isShowInFront"  class="checkbox-input" type="checkbox" />
+            <div class="col-md-6 col-sm-6 ps-3">
+              <div class="form-group pt-3">
+                <div class="checkbox-field d-flex align-items-center gap-2">
+                  <input formControlName="isShowInFront" class="checkbox-input" type="checkbox" id="isShowInFront" />
+                  <label class="mb-0 ps-2" for="isShowInFront"> {{ 'IS_SHOW_IN_FRONT' | translate }}</label>
+                </div>
               </div>
             </div>
           </div>

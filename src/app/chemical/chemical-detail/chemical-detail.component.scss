@@ -23,12 +23,12 @@
   // custom checkbox: bold blue rounded square with a white tick
   appearance: none;
   -webkit-appearance: none;
-  display: block;
+  flex: 0 0 auto;
   width: 30px;
   height: 30px;
-  margin: 8px auto 0; // centered under the label
+  margin: 0;
   border: 2px solid #cfd4dc;
-  border-radius: 6px;
+  border-radius: 4px;
   background: #fff;
   cursor: pointer;
   position: relative;

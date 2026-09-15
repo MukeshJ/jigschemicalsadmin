@@ -635,13 +635,13 @@ button:focus {
   position: absolute;
   right: 14px;
   top: 50%;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   margin-top: -8px;
 
   border: 2px solid #999;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
   border-radius: 50%;
 
   animation: chemical-search-spin 0.8s linear infinite;
@@ -658,7 +658,4 @@ button:focus {
   to {
     transform: rotate(360deg);
   }
-}
-.chemical-search-group {
-  position: relative;
 }
