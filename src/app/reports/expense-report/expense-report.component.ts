@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -168,6 +168,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.expenseResource = new ExpenseResourceParameter();
@@ -242,6 +243,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
   getExpenseCategories() {
     this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
+      this.cdr.detectChanges();
     });
   }
 
@@ -253,6 +255,7 @@ export class ExpenseReportComponent extends BaseComponent implements OnInit {
       .getUsers(userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
 

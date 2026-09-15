@@ -725,3 +725,14 @@ td.mat-mdc-cell {
     }
   }
 }
+
+/* Disabled mat-select cells (e.g. the Unit column in purchase/sales order
+   line items, auto-derived from the selected chemical and disabled so it
+   can't be edited directly, styled with .form-control like the other
+   editable dropdowns in the same row). Material's default disabled trigger
+   text renders at 38% opacity, which is unreadable against a white table
+   cell — restore full-opacity, legible text so the value stays visible. */
+mat-select.form-control.mat-mdc-select-disabled,
+mat-select.form-control.mat-select-disabled {
+  --mat-select-disabled-trigger-text-color: rgba(0, 0, 0, 0.87);
+}

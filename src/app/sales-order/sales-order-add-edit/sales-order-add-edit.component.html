@@ -318,7 +318,14 @@
                     }
                   </td>
                   <td>
-                    <mat-select formControlName="unitId" class="form-control-plaintext">
+                    <mat-select
+                      formControlName="unitId"
+                      class="form-control"
+                      (selectionChange)="onUnitSelectionChange()"
+                    >
+                      <mat-select-trigger>
+                        {{ getUnitNameById(salesOrderItem.get('unitId').value, i) }}
+                      </mat-select-trigger>
                       @for (unit of unitsMap[i]; track unit) {
                         <mat-option [value]="unit.id">
                           {{ unit.name }}

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { DocumentCategory } from '@core/domain-classes/document-category';
@@ -79,6 +79,7 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
     private documentAuditTrailService: DocumentAuditTrailService,
     private categoryService: DocumentCategoryService,
     private commonService: CommonService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.documentResource = new DocumentResource();
@@ -100,6 +101,7 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
       .subscribe();
     this.sub$.sink = this.categoryService.entities$.subscribe((c) => {
       this.categories = [...c];
+      this.cdr.detectChanges();
     });
     this.getResourceParameter();
     this.getUsers();
@@ -160,6 +162,7 @@ export class DocumentAuditTrailComponent extends BaseComponent implements OnInit
     this.sub$.sink = this.commonService.getUsers().subscribe(
       (data: User[]) => {
         this.users = data;
+        this.cdr.detectChanges();
       },
       (err: CommonError) => {
         err.messages.forEach(() => {

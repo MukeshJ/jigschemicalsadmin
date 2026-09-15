@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -101,6 +101,7 @@ export class IndustryChemicalComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private industryChemicalService: IndustryChemicalService,
     private industryService: IndustryService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -131,6 +132,7 @@ export class IndustryChemicalComponent extends BaseComponent implements OnInit {
   getIndustries() {
     this.sub$.sink = this.industryService.getIndustries().subscribe((data) => {
       this.industries = data;
+      this.cdr.detectChanges();
     });
   }
 

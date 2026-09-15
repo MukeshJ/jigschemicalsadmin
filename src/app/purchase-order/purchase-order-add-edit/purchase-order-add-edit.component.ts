@@ -35,7 +35,7 @@ import { PurchaseOrderAttachment } from '@core/domain-classes/purchase-order/pur
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderItemTax } from '@core/domain-classes/purchase-order/purchase-order-item-tax';
 import { ResponseHeader } from '@core/domain-classes/response-header';
-import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
+import { MatSelect, MatOption, MatLabel, MatSelectTrigger } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
@@ -59,6 +59,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     FormsModule,
     ReactiveFormsModule,
     MatSelect,
+    MatSelectTrigger,
     MatDivider,
     MatOption,
     MatDatepickerInput,
@@ -303,7 +304,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
       unitPrice: [purchaseOrderItem.unitPrice, [Validators.required]],
       quantity: [purchaseOrderItem.quantity, [Validators.required]],
       taxValue: [taxs],
-      unitId: [{ value: purchaseOrderItem.chemical.unitId, disabled: true }, [Validators.required]],
+      unitId: [purchaseOrderItem.chemical.unitId, [Validators.required]],
       discountPercentage: [purchaseOrderItem.discountPercentage],
     });
     this.unitsMap[index] = [...this.route.snapshot.data['units']];
@@ -320,7 +321,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
       unitPrice: [0, [Validators.required, Validators.min(1)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       taxValue: [null],
-      unitId: [{ value: null, disabled: true }],
+      unitId: [null],
       discountPercentage: [0, [Validators.min(0)]],
     });
     this.unitsMap[index] = [...this.route.snapshot.data['units']];
@@ -411,6 +412,15 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   }
   onTaxSelectionChange() {
     this.getAllTotal();
+  }
+
+  getUnitNameById(unitId: string | number | null, index: number): string {
+    if (unitId === null || unitId === undefined || unitId === '') {
+      return '';
+    }
+
+    const unit = this.unitsMap[index]?.find((u: Unit) => String(u.id) === String(unitId));
+    return unit ? unit.name : '';
   }
 
   onRemovePurchaseOrderItem(index: number) {

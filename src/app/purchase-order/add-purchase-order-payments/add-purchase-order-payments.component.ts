@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -47,6 +47,7 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -92,9 +93,10 @@ export class AddPurchaseOrderPaymentsComponent extends BaseComponent implements 
   }
 
   paymentMethodsList() {
-    this.sub$.sink = this.purchaseOrderPaymentService
-      .getPaymentMethod()
-      .subscribe((f) => (this.paymentMethodslist = [...f]));
+    this.sub$.sink = this.purchaseOrderPaymentService.getPaymentMethod().subscribe((f) => {
+      this.paymentMethodslist = [...f];
+      this.cdr.detectChanges();
+    });
   }
 
   savePurchaseOrderPayment(): void {

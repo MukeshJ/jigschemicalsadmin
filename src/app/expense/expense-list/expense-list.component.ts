@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
@@ -148,6 +148,7 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
     private translationService: TranslationService,
     private expenseCategoryService: ExpenseCategoryService,
     private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.expenseResource = new ExpenseResourceParameter();
@@ -194,6 +195,7 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
   getExpenseCategories() {
     this.expenseCategoryService.getAll().subscribe((categories) => {
       this.expenseCategories = categories;
+      this.cdr.detectChanges();
     });
   }
 
@@ -205,6 +207,7 @@ export class ExpenseListComponent extends BaseComponent implements OnInit {
       .getUsers(userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
 

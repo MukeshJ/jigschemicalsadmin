@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -36,7 +36,7 @@ import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { CustomerService } from 'src/app/customer/customer.service';
 import { SalesOrderService } from '../sales-order.service';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { MatSelect, MatOption } from '@angular/material/select';
+import { MatSelect, MatOption, MatSelectTrigger } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -60,6 +60,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatDatepickerInput,
     MatDatepicker,
     MatSelect,
+    MatSelectTrigger,
     MatDivider,
     MatOption,
     MatIconButton,
@@ -116,6 +117,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private paymentTermService: PaymentTermService,
     private deliveryMethodService: DeliveryMethodService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.customerResource = new CustomerResourceParameter();
@@ -178,6 +180,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
         });
         this.salesOrderItemsArray.push(this.createSalesOrderItem(this.salesOrderItemsArray.length));
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -193,7 +196,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       unitPrice: [salesOrderItem.unitPrice, [Validators.required]],
       quantity: [salesOrderItem.quantity, [Validators.required]],
       taxValue: [taxs],
-      unitId: [{ value: salesOrderItem.chemical.unitId, disabled: true }, [Validators.required]],
+      unitId: [salesOrderItem.chemical.unitId, [Validators.required]],
       discountPercentage: [salesOrderItem.discountPercentage],
     });
     this.unitsMap[index] = [...this.route.snapshot.data['units']];
@@ -209,7 +212,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       unitPrice: [0, [Validators.required, Validators.min(1)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       taxValue: [null],
-      unitId: [{ value: null, disabled: true }],
+      unitId: [null],
       discountPercentage: [0, [Validators.min(0)]],
     });
     this.unitsMap[index] = [...this.route.snapshot.data['units']];
@@ -302,6 +305,17 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   onTaxSelectionChange() {
     this.getAllTotal();
   }
+  onUnitSelectionChange() {
+  }
+
+  getUnitNameById(unitId: string | number | null, index: number): string {
+    if (unitId === null || unitId === undefined || unitId === '') {
+      return '';
+    }
+
+    const unit = this.unitsMap[index]?.find((u: Unit) => String(u.id) === String(unitId));
+    return unit ? unit.name : '';
+  }
 
   onRemoveSalesOrderItem(index: number) {
     this.salesOrderItemsArray.removeAt(index);
@@ -325,12 +339,16 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   }
 
   getPaymentTerms() {
-    this.paymentTermService.getAll().subscribe((c) => (this.paymentTerms = c));
+    this.paymentTermService.getAll().subscribe((c) => {
+      this.paymentTerms = c;
+      this.cdr.detectChanges();
+    });
   }
 
   getDeliveryMethod() {
     this.deliveryMethodService.getAll().subscribe((methods) => {
       this.deliveryMethods = methods;
+      this.cdr.detectChanges();
     });
   }
 
@@ -392,9 +410,11 @@ export class SalesOrderAddEditComponent extends BaseComponent {
           if (resp && resp.headers) {
             this.customers = [...resp.body];
           }
+          this.cdr.detectChanges();
         },
         (err) => {
           this.isCustomerLoading = false;
+          this.cdr.detectChanges();
         },
       );
   }
@@ -410,6 +430,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
       if (resp && resp.headers) {
         this.customers = [...resp.body];
       }
+      this.cdr.detectChanges();
     });
   }
 

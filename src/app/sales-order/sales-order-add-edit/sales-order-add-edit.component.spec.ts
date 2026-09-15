@@ -8,9 +8,8 @@ describe('SalesOrderAddEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SalesOrderAddEditComponent ]
-    })
-    .compileComponents();
+      declarations: [SalesOrderAddEditComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,17 @@ describe('SalesOrderAddEditComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return the selected unit name from the mapped unit list', () => {
+    component.unitsMap[0] = [{ id: 1, name: 'Kilogram' } as any];
+
+    expect(component.getUnitNameById(1, 0)).toBe('Kilogram');
+  });
+
+  it('should return an empty value when the selected unit is not in the mapped list', () => {
+    component.unitsMap[0] = [{ id: 1, name: 'Kilogram' } as any];
+
+    expect(component.getUnitNameById(2, 0)).toBe('');
   });
 });

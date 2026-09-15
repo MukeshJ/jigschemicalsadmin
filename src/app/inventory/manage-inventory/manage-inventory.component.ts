@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, inject } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -37,6 +37,7 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
     private inventoryService: InventoryService,
     private toastrService: ToastrService,
     private fb: UntypedFormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -65,6 +66,7 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
   getChemicals() {
     this.chemicalStore.searchChemicals('').subscribe((chemicals) => {
       this.chemicals = [...(chemicals ?? [])];
+      this.cdr.detectChanges();
     });
   }
 
@@ -81,6 +83,7 @@ export class ManageInventoryComponent extends BaseComponent implements OnInit {
         if (this.data.id) {
           this.inventoryForm.get('chemicalId').setValue(this.data.chemicalId);
         }
+        this.cdr.detectChanges();
       });
   }
 

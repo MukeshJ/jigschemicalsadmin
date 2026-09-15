@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -148,6 +148,7 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.reminderResource = new ReminderResourceParameter();
@@ -191,9 +192,10 @@ export class ReminderListComponent extends BaseComponent implements OnInit {
   }
 
   getReminderFrequency() {
-    this.sub$.sink = this.commonService
-      .getReminderFrequency()
-      .subscribe((f) => (this.reminderFrequencies = [...f]));
+    this.sub$.sink = this.commonService.getReminderFrequency().subscribe((f) => {
+      this.reminderFrequencies = [...f];
+      this.cdr.detectChanges();
+    });
   }
 
   getResourceParameter() {

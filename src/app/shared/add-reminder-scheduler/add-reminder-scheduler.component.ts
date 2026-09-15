@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -70,6 +70,7 @@ export class AddReminderSchedulerComponent implements OnInit {
     private commonService: CommonService,
     public dialogRef: MatDialogRef<AddReminderSchedulerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModuleReference,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +105,7 @@ export class AddReminderSchedulerComponent implements OnInit {
   getUsers() {
     this.commonService.getAllUsers().subscribe((u: User[]) => {
       this.users = u;
+      this.cdr.detectChanges();
     });
   }
 
@@ -125,6 +127,7 @@ export class AddReminderSchedulerComponent implements OnInit {
   getReminderSchedulers() {
     this.commonService.getReminderSchedulers(this.data).subscribe((c: ReminderScheduler[]) => {
       this.reminderSchedulers = c;
+      this.cdr.detectChanges();
     });
   }
   cancelReminder() {

@@ -18,10 +18,8 @@ import { PurchaseOrderStatusEnum } from '@core/domain-classes/purchase-order/pur
 import { Supplier } from '@core/domain-classes/supplier';
 import { Tax } from '@core/domain-classes/tax';
 import { Unit } from '@core/domain-classes/unit';
-import { CommonService } from '@core/services/common.service';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { TaxService } from '@core/services/tax.service';
-import { TranslationService } from '@core/services/translation.service';
 import { QuantitiesUnitPriceTaxPipe } from '@shared/pipes/quantities-unitprice-tax.pipe';
 import { QuantitiesUnitPricePipe } from '@shared/pipes/quantities-unitprice.pipe';
 import { ToastrService } from 'ngx-toastr';
@@ -32,7 +30,7 @@ import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
 import { SupplierLocalStore } from 'src/app/supplier/supplier-store';
 import { MatDatepickerInput, MatDatepicker } from '@angular/material/datepicker';
-import { MatSelect, MatOption, MatLabel } from '@angular/material/select';
+import { MatSelect, MatOption, MatLabel, MatSelectTrigger } from '@angular/material/select';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -54,6 +52,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
     MatDatepickerInput,
     MatDatepicker,
     MatSelect,
+    MatSelectTrigger,
     MatDivider,
     MatOption,
     MatLabel,
@@ -100,8 +99,6 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
     private toastrService: ToastrService,
     private purchaseOrderService: PurchaseOrderService,
     private router: Router,
-    private translationService: TranslationService,
-    private commonService: CommonService,
     private taxService: TaxService,
     private route: ActivatedRoute,
     private quantitiesUnitPricePipe: QuantitiesUnitPricePipe,
@@ -196,7 +193,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       unitPrice: [purchaseOrderItem.unitPrice, [Validators.required]],
       quantity: [purchaseOrderItem.quantity, [Validators.required]],
       taxValue: [taxs],
-      unitId: [{ value: purchaseOrderItem.chemical.unitId, disabled: true }, [Validators.required]],
+      unitId: [purchaseOrderItem.chemical.unitId, [Validators.required]],
       discountPercentage: [purchaseOrderItem.discountPercentage],
     });
 
@@ -214,7 +211,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
       unitPrice: [0, [Validators.required, Validators.min(1)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       taxValue: [null],
-      unitId: [{ value: null, disabled: true }],
+      unitId: [null],
       discountPercentage: [0, [Validators.min(0)]],
     });
     this.unitsMap[index] = [...this.route.snapshot.data['units']];
@@ -306,6 +303,15 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   }
   onTaxSelectionChange() {
     this.getAllTotal();
+  }
+
+  getUnitNameById(unitId: string | number | null, index: number): string {
+    if (unitId === null || unitId === undefined || unitId === '') {
+      return '';
+    }
+
+    const unit = this.unitsMap[index]?.find((u: Unit) => String(u.id) === String(unitId));
+    return unit ? unit.name : '';
   }
 
   onRemovePurchaseOrderItem(index: number) {

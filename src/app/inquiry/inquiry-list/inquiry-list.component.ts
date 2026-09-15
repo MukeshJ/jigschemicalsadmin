@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -203,6 +203,7 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
     private userService: UserService,
     private inquiryStatusService: InquiryStatusService,
     private inquirySourceService: InquirySourceService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.inquiryResource = new InquiryResourceParameter();
@@ -263,17 +264,22 @@ export class InquiryListComponent extends BaseComponent implements OnInit {
       .getUsers(this.userResource)
       .subscribe((resp: HttpResponse<User[]>) => {
         this.users = resp.body;
+        this.cdr.detectChanges();
       });
   }
 
   getInuiriesStatus() {
     this.sub$.sink = this.inquiryStatusService.getAll().subscribe((c) => {
       this.inquiryStatuses = c;
+      this.cdr.detectChanges();
     });
   }
 
   getInquirySource() {
-    this.inquirySourceService.getAll().subscribe((c) => (this.sourcesOfInquiry = c));
+    this.inquirySourceService.getAll().subscribe((c) => {
+      this.sourcesOfInquiry = c;
+      this.cdr.detectChanges();
+    });
   }
 
   deleteInquiry(inquiry: Inquiry) {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormArray,
@@ -113,6 +113,7 @@ export class SaleOrderReturnComponent extends BaseComponent {
     private quantitiesUnitPriceTaxPipe: QuantitiesUnitPriceTaxPipe,
     private location: Location,
     private cloneService: ClonerService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.salesResouce = new SalesOrderResourceParameter();
@@ -159,6 +160,7 @@ export class SaleOrderReturnComponent extends BaseComponent {
       .subscribe((resp: HttpResponse<SalesOrder[]>) => {
         if (resp && resp.headers) {
           this.salesorders = [...resp.body];
+          this.cdr.detectChanges();
         }
       });
   }
@@ -177,6 +179,7 @@ export class SaleOrderReturnComponent extends BaseComponent {
       .subscribe((resp: HttpResponse<SalesOrder[]>) => {
         if (resp && resp.headers) {
           this.salesorders = [...resp.body];
+          this.cdr.detectChanges();
         }
       });
   }
@@ -224,8 +227,10 @@ export class SaleOrderReturnComponent extends BaseComponent {
             if (resp && resp.headers) {
               this.salesorders = [...resp.body];
             }
+            this.cdr.detectChanges();
           });
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -268,9 +273,11 @@ export class SaleOrderReturnComponent extends BaseComponent {
           if (resp && resp.headers) {
             this.customersForSearch = [...resp.body];
           }
+          this.cdr.detectChanges();
         },
         (err) => {
           this.isCustomerLoading = false;
+          this.cdr.detectChanges();
         },
       );
   }
@@ -294,9 +301,11 @@ export class SaleOrderReturnComponent extends BaseComponent {
           if (resp && resp.headers) {
             this.customers = [...resp.body];
           }
+          this.cdr.detectChanges();
         },
         (err) => {
           this.isCustomerLoading = false;
+          this.cdr.detectChanges();
         },
       );
   }
@@ -421,6 +430,7 @@ export class SaleOrderReturnComponent extends BaseComponent {
         this.customers = [...resp.body];
         this.customersForSearch = [...resp.body];
       }
+      this.cdr.detectChanges();
     });
   }
 

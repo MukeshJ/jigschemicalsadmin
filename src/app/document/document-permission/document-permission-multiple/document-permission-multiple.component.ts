@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -7,8 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentInfo } from '@core/domain-classes/document-info';
 import { DocumentPermission } from '@core/domain-classes/document-permission';
 import { PermissionUserRole } from '@core/domain-classes/permission-user-role';
@@ -18,7 +17,6 @@ import { CommonService } from '@core/services/common.service';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
-import { DocumentService } from '../../document.service';
 import { DocumentPermissionService } from '../document-permission.service';
 import { MatChipSet, MatChip } from '@angular/material/chips';
 import { MatLabel, MatSelect, MatOption, MatSuffix, MatError } from '@angular/material/select';
@@ -58,16 +56,14 @@ export class DocumentPermissionMultipleComponent extends BaseComponent implement
   permissionForm: UntypedFormGroup;
   minDate: Date = new Date();
   constructor(
-    private documentService: DocumentService,
     private documentPermissionService: DocumentPermissionService,
-    private commonDialogService: CommonDialogService,
-    private toastrService: ToastrService,
-    private dialog: MatDialog,
+     private toastrService: ToastrService,
     private commonService: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: DocumentInfo[],
     private dialogRef: MatDialogRef<DocumentPermissionMultipleComponent>,
     private fb: UntypedFormBuilder,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }
@@ -127,15 +123,17 @@ export class DocumentPermissionMultipleComponent extends BaseComponent implement
       });
   }
   getUsers() {
-    this.sub$.sink = this.commonService
-      .getUsers()
-      .subscribe((users: User[]) => (this.users = users));
+    this.sub$.sink = this.commonService.getUsers().subscribe((users: User[]) => {
+      this.users = users;
+      this.cdr.detectChanges();
+    });
   }
 
   getRoles() {
-    this.sub$.sink = this.commonService
-      .getRoles()
-      .subscribe((roles: Role[]) => (this.roles = roles));
+    this.sub$.sink = this.commonService.getRoles().subscribe((roles: Role[]) => {
+      this.roles = roles;
+      this.cdr.detectChanges();
+    });
   }
 
   closeDialog() {

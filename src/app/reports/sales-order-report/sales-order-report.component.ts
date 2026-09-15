@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -198,6 +198,7 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
     private utcToLocalTime: UTCToLocalTime,
     private customCurrencyPipe: CustomCurrencyPipe,
     private paymentStatusPipe: PaymentStatusPipe,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.salesOrderResource = new SalesOrderResourceParameter();
@@ -281,6 +282,7 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
       .subscribe(
         (chemicals: Chemical[]) => {
           this.chemicals = [...(chemicals ?? [])];
+          this.cdr.detectChanges();
         },
         (err) => {},
       );
@@ -290,6 +292,7 @@ export class SalesOrderReportComponent extends BaseComponent implements OnInit {
     return this.chemicalStore.searchChemicals('').subscribe(
       (chemicals: Chemical[]) => {
         this.chemicals = [...(chemicals ?? [])];
+        this.cdr.detectChanges();
       },
       (err) => {},
     );

@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -126,6 +126,7 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
     public overlay: OverlayPanel,
     private documentLibraryService: DocumentLibraryService,
     private translationService: TranslationService,
+    private cdr: ChangeDetectorRef,
   ) {
     super();
     this.documentResource = new DocumentResource();
@@ -150,6 +151,7 @@ export class DocumentListComponent extends BaseComponent implements OnInit, Afte
 
     this.sub$.sink = this.categoryService.entities$.subscribe((c) => {
       this.categories = [...c];
+      this.cdr.detectChanges();
     });
     this.getResourceParameter();
   }
