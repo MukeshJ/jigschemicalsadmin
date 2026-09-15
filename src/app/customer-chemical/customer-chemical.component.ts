@@ -92,7 +92,6 @@ export class CustomerChemicalComponent extends BaseComponent implements OnInit {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private customerService: CustomerService,
     private customerChemicalService: CustomerChemicalService,
     private chemicalService: ChemicalService,
     private toastrService: ToastrService,

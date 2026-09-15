@@ -34,23 +34,6 @@ export class ChemicalService {
     });
   }
 
-  getChemicalsDropDown( resourceParams: ChemicalResourceParameter ): Observable<HttpResponse<Chemical[]>> {
-    const url = 'chemical';
-    const customParams = new HttpParams()
-      .set('Fields', resourceParams.fields)
-      .set('OrderBy', resourceParams.orderBy)
-      .set('PageSize', resourceParams.pageSize.toString())
-      .set('Skip', resourceParams.skip.toString())
-      .set('SearchQuery', resourceParams.searchQuery)
-      .set('name', resourceParams.name)
-      .set('casNumber', resourceParams.casNumber ? resourceParams.casNumber : '')
-      .set('isShowInFront', resourceParams.isShowFront);
-    return this.http.get<Chemical[]>(url, {
-      params: customParams,
-      observe: 'response'
-    });
-  }
-
   getChemical(id: string): Observable<Chemical> {
     const url = `Chemical/${id}`;
     return this.http.get<Chemical>(url);

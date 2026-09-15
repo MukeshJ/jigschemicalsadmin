@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, signal, inject } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -15,11 +15,10 @@ import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
 import { BaseComponent } from 'src/app/base.component';
 import { LanguageFlag, Languages } from './languages';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { debounceTime, tap, switchMap, map, catchError } from 'rxjs/operators';
-import { ChemicalService } from 'src/app/chemical/chemical.service';
+import { Observable, of } from 'rxjs';
+import { debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
 import { Chemical } from '@core/domain-classes/chemical';
-import { ChemicalResourceParameter } from '@core/domain-classes/chemical-resource-parameter';
+import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
@@ -46,6 +45,7 @@ import { AsyncPipe } from '@angular/common';
     UTCToLocalTime,
     TranslatePipe,
   ],
+  providers: [ChemicalLocalStore],
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
   @ViewChild('selectElem', { static: true }) el: ElementRef;
@@ -57,14 +57,13 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   notificationCount: number = 0;
   notificationUserList: ReminderScheduler[] = [];
   languages: LanguageFlag[] = [];
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$ = this.loadingSubject.asObservable();
+  loadingSubject = signal<boolean>(false);
   isRedirecting = false;
   chemicalSearchForm!: UntypedFormGroup;
-  chemicalResourceParameter = new ChemicalResourceParameter();
   chemicals$!: Observable<Chemical[]>;
   profilePath = '';
   logoImage = '';
+  readonly chemicalStore = inject(ChemicalLocalStore);
   constructor(
     private router: Router,
     private fb: UntypedFormBuilder,
@@ -72,7 +71,6 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     private signalrService: SignalrService,
     private translationService: TranslationService,
     private commonService: CommonService,
-    private chemicalService: ChemicalService,
   ) {
     super();
   }
@@ -101,18 +99,16 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     });
     this.chemicals$ = this.chemicalSearchForm.get('chemicalNameInput')!.valueChanges.pipe(
       debounceTime(1000),
-      tap(() => this.loadingSubject.next(true)),
-      switchMap((value) => {
-        this.chemicalResourceParameter.searchQuery = value || '';
-        return this.chemicalService.getChemicalsDropDown(this.chemicalResourceParameter).pipe(
-          map((resp) => resp.body || []),
-          tap(() => this.loadingSubject.next(false)),
+      tap(() => this.loadingSubject.set(true)),
+      switchMap((value) =>
+        this.chemicalStore.searchChemicals('', { searchQuery: value || '' }).pipe(
+          tap(() => this.loadingSubject.set(false)),
           catchError(() => {
-            this.loadingSubject.next(false);
+            this.loadingSubject.set(false);
             return of([] as Chemical[]);
           }),
-        );
-      }),
+        ),
+      ),
     );
   }
 

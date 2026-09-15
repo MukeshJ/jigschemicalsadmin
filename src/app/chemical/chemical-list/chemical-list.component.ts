@@ -149,12 +149,17 @@ export class ChemicalListComponent extends BaseComponent {
     }
   }
 
-  checkPermission(pageId: string): boolean {
-    const pageAction = this.checkedChemicalArray.find((c) => c.pageId === pageId);
-    return pageAction ? true : false;
+  checkPermission(chemicalId: string): boolean {
+    return this.checkedChemicalArray.includes(chemicalId);
   }
 
-  selecetAll(event: any): void {}
+  selecetAll(event: any): void {
+    if (event.checked) {
+      this.checkedChemicalArray = this.chemicalStore.chemicalList().map((c) => c.id);
+    } else {
+      this.checkedChemicalArray = [];
+    }
+  }
 
   // ----- navigation / dialogs -----
 

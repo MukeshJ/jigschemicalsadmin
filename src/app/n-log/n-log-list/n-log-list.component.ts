@@ -26,6 +26,8 @@ import { RouterLink } from '@angular/router';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-n-log-list',
@@ -51,6 +53,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     TruncatePipe,
     UTCToLocalTime,
     TranslatePipe,
+    AsyncPipe,
+    MatProgressSpinner,
   ],
 })
 export class NLogListComponent extends BaseComponent implements OnInit, AfterViewInit {

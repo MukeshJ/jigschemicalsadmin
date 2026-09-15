@@ -35,26 +35,28 @@
           }
         </button>
       </th>
-      <td mat-cell *matCellDef="let chemical" class="table-column-50">
-        <mat-checkbox
-          color="primary"
-          (change)="onChange(chemical.id, $event)"
-          [checked]="checkPermission(chemical.id)"
-        >
-        </mat-checkbox>
-        <button
-          *hasClaim="[
-            'chemical_update_chemical',
-            'chemical_delete_chemical',
-            'chemical_assign_chemical_to_supplier',
-            'chemical_assign_chemical_to_customer',
-          ]"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          aria-label="Action"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
+      <td mat-cell *matCellDef="let chemical" class="table-column-100">
+        <div class="d-flex align-items-center gap-2">
+          <mat-checkbox
+            color="primary"
+            (change)="onChange(chemical.id, $event)"
+            [checked]="checkPermission(chemical.id)"
+          >
+          </mat-checkbox>
+          <button
+            *hasClaim="[
+              'chemical_update_chemical',
+              'chemical_delete_chemical',
+              'chemical_assign_chemical_to_supplier',
+              'chemical_assign_chemical_to_customer',
+            ]"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Action"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
         <mat-menu #menu="matMenu">
           <button
             *hasClaim="'chemical_update_chemical'"

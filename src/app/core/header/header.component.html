@@ -92,7 +92,7 @@
     <div class="col-md-7  header-search-col px-3">
       <div class="mb-3">
         <div class="d-flex" [formGroup]="chemicalSearchForm">
-          <div class="input-group">
+          <div class="input-group chemical-search-group">
             <input
               type="text"
               class="form-control"
@@ -100,6 +100,9 @@
               formControlName="chemicalNameInput"
               [matAutocomplete]="auto"
             />
+            @if (loadingSubject()) {
+              <span class="chemical-search-spinner spinner-border spinner-border-sm rounded" role="status" aria-hidden="true"></span>
+            }
 
             <mat-autocomplete #auto="matAutocomplete" panelClass="chemical-autocomplete-panel">
 
@@ -107,7 +110,7 @@
                 <mat-option
                   (click)="selectChemical(chemical)"
                   [value]="chemical.name"
-                  [class.d-none]="loading$ | async"
+                  [class.d-none]="loadingSubject()"
                 >
                   <span> {{ chemical.name }} - {{ chemical.casNumber }} </span>
                 </mat-option>

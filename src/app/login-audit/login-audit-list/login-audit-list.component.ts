@@ -28,6 +28,8 @@ import {
 } from '@angular/material/table';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login-audit-list',
@@ -54,6 +56,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatFooterRow,
     UTCToLocalTime,
     TranslatePipe,
+    AsyncPipe,
+    MatProgressSpinner,
   ],
 })
 export class LoginAuditListComponent extends BaseComponent implements OnInit, AfterViewInit {
