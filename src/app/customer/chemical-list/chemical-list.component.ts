@@ -69,6 +69,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   skip: number = 0;
   pageSize: number = 10;
   totalChemicals = 0;
+  hasChanges = false;
   _nameFilter = '';
   _casNumberFilter = '';
   displayedColumns = ['name', 'casNumber'];
@@ -146,7 +147,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close({ flag: this.hasChanges });
   }
   addChemicalCustomer() {
     const dialogRef = this.dialog.open(AddCustomerChemicalComponent, {
@@ -155,7 +156,8 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
       data: Object.assign({}, this.data),
     });
     this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result['flag']) {
+      if (result?.flag) {
+        this.hasChanges = true;
         this.getChemicalsList();
       }
     });

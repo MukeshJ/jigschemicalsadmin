@@ -155,9 +155,15 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
   }
 
   viewChemical(supplier: Supplier): void {
-    this.dialog.open(ChemicalListComponent, {
+    const dialogRef = this.dialog.open(ChemicalListComponent, {
       height: 'auto',
       data: Object.assign({}, supplier),
+      disableClose: true,
+    });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result?.flag) {
+        this.supplierStore.refreshSuppliers();
+      }
     });
   }
 

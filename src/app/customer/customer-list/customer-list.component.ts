@@ -232,8 +232,14 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
   }
 
   viewChemicals(customer: Customer): void {
-    this.dialog.open(ChemicalListComponent, {
+    const dialogRef = this.dialog.open(ChemicalListComponent, {
       data: Object.assign({}, customer),
+      disableClose: true,
+    });
+    this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result?.flag) {
+        this.dataSource.loadData(this.customerResource);
+      }
     });
   }
 
@@ -244,7 +250,7 @@ export class CustomerListComponent extends BaseComponent implements OnInit {
       data: Object.assign({}, customer),
     });
     this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result['flag']) {
+      if (result?.flag) {
         this.dataSource.loadData(this.customerResource);
       }
     });

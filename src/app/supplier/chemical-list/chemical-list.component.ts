@@ -76,6 +76,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   skip: number = 0;
   pageSize: number = 10;
   totalChemicals = 0;
+  hasChanges = false;
   _nameFilter = '';
   _casNumberFilter = '';
   displayedColumns = ['name', 'casNumber', 'action'];
@@ -168,6 +169,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
               this.toasterService.success(
                 this.translationService.getValue('CHEMICAL_DELETED_SUCCESSFULLY'),
               );
+              this.hasChanges = true;
               this.getChemicalsList();
             });
         }
@@ -180,7 +182,7 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close({ flag: this.hasChanges });
   }
   addChemicalSupplier() {
     const dialogRef = this.dialog.open(AddSupplierChemicalComponent, {
@@ -189,7 +191,8 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
       data: Object.assign({}, this.data),
     });
     this.sub$.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result['flag']) {
+      if (result?.flag) {
+        this.hasChanges = true;
         this.getChemicalsList();
       }
     });
