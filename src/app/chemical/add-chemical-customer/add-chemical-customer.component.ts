@@ -89,7 +89,7 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
   saveCustomerChemicals() {
     if (this.customerChemicalForm.valid) {
       if (
-        this.currentCustomer.customerName != this.customerChemicalForm.get('customerName').value
+        this.currentCustomer?.customerName != this.customerChemicalForm.get('customerName').value
       ) {
         this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CUSTOMER'));
         return;

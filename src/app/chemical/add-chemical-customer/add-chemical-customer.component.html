@@ -26,7 +26,7 @@
           />
           <mat-autocomplete #autoForCustomer="matAutocomplete">
             @for (customer of customers$ | async; track customer) {
-              <mat-option (click)="selectCustomer(customer)" [value]="customer.customerName">
+              <mat-option (onSelectionChange)="selectCustomer(customer)" [value]="customer.customerName">
                 <span>{{ customer.customerName }}</span>
               </mat-option>
             }

@@ -19,7 +19,7 @@
         />
         <mat-autocomplete #autoForProduct="matAutocomplete">
           @for (checmial of chemicals$ | async; track checmial) {
-            <mat-option (click)="selectChemical(checmial)" [value]="checmial">
+            <mat-option (onSelectionChange)="selectChemical(checmial)" [value]="checmial">
               <span>{{ checmial.name }}</span>
             </mat-option>
           }

@@ -10,7 +10,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { Customer } from '@core/domain-classes/customer';
 import { CustomerChemical } from '@core/domain-classes/customer-chemical';
-import { CommonError } from '@core/error-handler/common-error';
 import { TranslationService } from '@core/services/translation.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -46,7 +45,6 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
   pageSize = 10;
   chemicals$: Observable<Chemical[]>;
   currentChemical: Chemical;
-
   private readonly chemicalStore = inject(ChemicalLocalStore);
 
   constructor(
@@ -96,7 +94,7 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
 
   saveCustomerChemicals() {
     if (this.customerChemicalForm.valid) {
-      if (this.currentChemical.name != this.customerChemicalForm.get('chemicalName').value) {
+      if (this.currentChemical?.name != this.customerChemicalForm.get('chemicalName').value) {
         this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CHEMICAL'));
         return;
       }
@@ -107,29 +105,26 @@ export class AddCustomerChemicalComponent extends BaseComponent implements OnIni
       this.isLoading = true;
       this.sub$.sink = this.customerChemicalService
         .addCustomerByChemical(chemicalCustomer)
-        .subscribe(
-          (c) => {
+        .pipe(
+          finalize(() => {
             this.isLoading = false;
-            if (!c) {
-              this.toastrService.error(
-                `${this.translationService.getValue('CHEMICAL_ALREADY_ADDED_FOR')} ${this.data.customerName}`,
-              );
-            } else {
-              this.toastrService.success(
-                `${this.translationService.getValue('CHEMICAL_ADDED_FOR')} ${this.data.customerName}`,
-              );
-              this.dialogRef.close({ flag: true });
+          })
+        ).subscribe({
+          next: (response) => {
+            if (!response) {
+              this.toastrService.error(`${this.translationService.getValue('CHEMICAL_ALREADY_ADDED_FOR')} ${this.data.customerName}` );
+              return;
             }
+            this.toastrService.success(`${this.translationService.getValue( 'CHEMICAL_ADDED_FOR' )} ${this.data.customerName}` );
+            this.dialogRef.close({ flag: true });
           },
-          () => {
-            this.isLoading = false;
+          error: (error) => {
+            console.error(error);
+            this.toastrService.error(error);
           },
-        );
-    } else {
-      this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CHEMICAL'));
+        });
     }
   }
-
   closeDialog() {
     this.dialogRef.close({ flag: false });
   }

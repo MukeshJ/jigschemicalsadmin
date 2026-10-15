@@ -94,7 +94,7 @@ export class AddSupplierChemicalComponent extends BaseComponent implements OnIni
 
   saveSupplierChemicals() {
     if (this.supplierChemicalForm.valid) {
-      if (this.currentChemical.name != this.supplierChemicalForm.get('chemicalName').value) {
+      if (this.currentChemical?.name != this.supplierChemicalForm.get('chemicalName').value) {
         this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_RIGHT_CHEMICAL'));
         return;
       }

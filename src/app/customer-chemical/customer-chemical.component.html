@@ -20,7 +20,7 @@
       <!-- </mat-form-field> -->
       <mat-autocomplete #autoForCustomer="matAutocomplete">
         @for (customer of customers$ | async; track customer) {
-          <mat-option (click)="selectCustomer(customer)" [value]="customer.customerName">
+          <mat-option (onSelectionChange)="selectCustomer(customer)" [value]="customer.customerName">
             <span>{{ customer.customerName }}</span>
           </mat-option>
         }
@@ -37,7 +37,7 @@
       <!-- </mat-form-field> -->
       <mat-autocomplete #autoForChemical="matAutocomplete">
         @for (chemical of chemicals$ | async; track chemical) {
-          <mat-option (click)="selectChemical(chemical)" [value]="chemical.name">
+          <mat-option (onSelectionChange)="selectChemical(chemical)" [value]="chemical.name">
             <span>{{ chemical.name }}</span>
           </mat-option>
         }

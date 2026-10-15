@@ -20,7 +20,7 @@
         />
         <mat-autocomplete #autoForChemical="matAutocomplete">
           @for (supplier of suppliers$ | async; track supplier) {
-            <mat-option (click)="selectSupplier(supplier)" [value]="supplier.supplierName">
+            <mat-option (onSelectionChange)="selectSupplier(supplier)" [value]="supplier.supplierName">
               <span>{{ supplier.supplierName }}</span>
             </mat-option>
           }

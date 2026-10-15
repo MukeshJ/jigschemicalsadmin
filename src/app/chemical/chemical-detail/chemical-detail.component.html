@@ -226,7 +226,7 @@
             {{ 'VIEW_SUPPLIERS' | translate }}</a
           >
         }
-        @if(suppliers){
+        @if(chemical?.id){
           <a (click)="viewCustomers(chemical)" class="btn blue-btn btn-sm  ms-2">
             {{ 'VIEW_CUSTOMERS' | translate }}</a
           >
