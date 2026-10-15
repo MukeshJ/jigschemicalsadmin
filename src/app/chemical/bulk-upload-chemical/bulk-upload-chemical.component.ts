@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { UploadChemical } from '@core/domain-classes/uploadChemical';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
@@ -13,7 +13,7 @@ import { HasClaimDirective } from '../../shared/has-claim.directive';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HasClaimDirective],
 })
-export class BulkUploadChemicalComponent extends BaseComponent implements OnInit {
+export class BulkUploadChemicalComponent extends BaseComponent {
   formData = new FormData();
   fileName = '';
   response: UploadChemical;
@@ -25,8 +25,6 @@ export class BulkUploadChemicalComponent extends BaseComponent implements OnInit
   ) {
     super();
   }
-
-  ngOnInit(): void {}
 
   onFileSelected(event) {
     const file: File = event.target.files[0];

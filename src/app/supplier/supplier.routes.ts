@@ -4,6 +4,7 @@ import { SupplierDetailComponent } from './supplier-detail/supplier-detail.compo
 import { SupplierResolverService } from './supplier-detail/supplier-detail.resolver';
 import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { UploadChemicalComponent } from './upload-chemical/upload-chemical.component';
+import { BulkUploadSupplierComponent } from './bulk-upload-supplier/bulk-upload-supplier.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,11 @@ export const routes: Routes = [
     // data: { claimType: ['chemical_add_chemical', 'chemical_update_chemical'] },
     //canActivate: [AuthGuard],
     //resolve: { chemical: ChemicalDetailResolverService }
+  },
+  {
+    path: 'bulk-upload',
+    component: BulkUploadSupplierComponent,
+    // data: { claimType: 'supplier_add_supplier' },
   },
   {
     path: 'manage/:id',

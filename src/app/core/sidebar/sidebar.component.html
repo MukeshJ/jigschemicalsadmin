@@ -121,7 +121,15 @@
             <a [routerLink]="['supplier/uploadChemical']" routerLinkActive="active"
               [routerLinkActiveOptions]="{exact:true}" class="nav-link">
               <i class="fas fa-plus-square nav-icon"></i>
-              <p> Upload Chemical</p>
+              <p>{{ 'UPLOAD_CHEMICAL' | translate }}</p>
+            </a>
+          </li>
+          <!-- *hasClaim="'supplier_add_supplier'" -->
+          <li class="nav-item">
+            <a [routerLink]="['supplier/bulk-upload']" routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact:true}" class="nav-link">
+              <i class="fas fa-plus-square nav-icon"></i>
+              <p> {{'BULK_UPLOAD_SUPPLIER' | translate}} </p>
             </a>
           </li>
         </ul>

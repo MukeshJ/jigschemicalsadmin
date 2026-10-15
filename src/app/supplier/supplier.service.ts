@@ -97,4 +97,10 @@ export class SupplierService {
       .pipe(catchError(this.commonHttpErrorService.handleError));
   }
 
+  bulkUploadSuppliers(suppliers: FormData): Observable<any | CommonError> {
+    const url = `supplier/upload`;
+    return this.http.post<Supplier>(url, suppliers)
+      .pipe(catchError(this.commonHttpErrorService.handleError));
+  }
+
 }
