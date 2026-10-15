@@ -72,7 +72,9 @@
       </ng-container>
       <ng-container matColumnDef="logged">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'DATE_TIME' | translate }}</th>
-        <td mat-cell *matCellDef="let nLog">{{ nLog?.logged | utcToLocalTime: 'shortDate' }}</td>
+        <td mat-cell *matCellDef="let nLog">
+          {{ $safeNavigationMigration(nLog?.logged) | utcToLocalTime: 'shortDate' }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="level">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LEVEL' | translate }}</th>

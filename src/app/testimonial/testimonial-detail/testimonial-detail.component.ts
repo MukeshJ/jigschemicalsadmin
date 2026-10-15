@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -23,6 +23,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-testimonial-detail',
   templateUrl: './testimonial-detail.component.html',
   styleUrls: ['./testimonial-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

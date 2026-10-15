@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -46,6 +46,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./purchase-order-request-add-edit.component.scss'],
   providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -380,9 +381,7 @@ export class PurchaseOrderRequestAddEditComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    const overrides = this.purchaseOrder
-      ? { id: this.purchaseOrder.supplierId }
-      : {};
+    const overrides = this.purchaseOrder ? { id: this.purchaseOrder.supplierId } : {};
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
       this.cdr.detectChanges();

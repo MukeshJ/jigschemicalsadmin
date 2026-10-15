@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PurchaseOrderShort } from '@core/domain-classes/purchase-order/purchase-order-short';
 import { SalesOrder } from '@core/domain-classes/sales-order';
@@ -21,6 +29,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-po-list',
   templateUrl: './po-list.component.html',
   styleUrls: ['./po-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

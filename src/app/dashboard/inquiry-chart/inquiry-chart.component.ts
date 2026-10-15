@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MonthlyInquiry } from '@core/domain-classes/monthly-inquiry';
 import { TranslationService } from '@core/services/translation.service';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -11,6 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-chart',
   templateUrl: './inquiry-chart.component.html',
   styleUrls: ['./inquiry-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, BaseChartDirective, TranslatePipe],
 })
 export class InquiryChartComponent implements OnInit {

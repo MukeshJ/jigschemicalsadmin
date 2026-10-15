@@ -15,7 +15,10 @@
               </div>
               <div>
                 <span> {{ 'ORDER_DATE' | translate }} :</span>
-                {{ purchaseOrderForInvoice?.poCreatedDate | utcToLocalTime: 'shortDate' }}
+                {{
+                  $safeNavigationMigration(purchaseOrderForInvoice?.poCreatedDate)
+                    | utcToLocalTime: 'shortDate'
+                }}
               </div>
             </div>
             <div class="col-6" style="width: 50%; flex: 0 0 auto">
@@ -271,7 +274,8 @@
                     "
                   >
                     {{
-                      purchaseItem?.quantity * purchaseItem?.unitPrice -
+                      $safeNavigationMigration(purchaseItem?.quantity) *
+                        $safeNavigationMigration(purchaseItem?.unitPrice) -
                         purchaseItem.discount +
                         purchaseItem.taxValue | customCurrency
                     }}
@@ -364,7 +368,8 @@
                     "
                   >
                     {{
-                      purchaseItem?.quantity * purchaseItem?.unitPrice -
+                      $safeNavigationMigration(purchaseItem?.quantity) *
+                        $safeNavigationMigration(purchaseItem?.unitPrice) -
                         purchaseItem.discount +
                         purchaseItem.taxValue | customCurrency
                     }}

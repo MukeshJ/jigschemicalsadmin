@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { ResponseHeader } from '@core/domain-classes/response-header';
@@ -36,6 +43,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-customer-so-list',
   templateUrl: './customer-so-list.component.html',
   styleUrls: ['./customer-so-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

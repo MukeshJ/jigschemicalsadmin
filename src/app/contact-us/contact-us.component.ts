@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -44,6 +44,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
   providers: [ContactRequestTypePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

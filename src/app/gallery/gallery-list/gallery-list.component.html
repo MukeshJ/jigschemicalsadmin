@@ -17,7 +17,6 @@
   </div>
 </div>
 
-
 <div class="table-responsive">
   <table
     mat-table
@@ -109,8 +108,8 @@
         >
           <mat-option [value]="null">All</mat-option>
           @for (category of galleryCategories; track category) {
-            <mat-option [value]="category?.id">
-              {{ category?.id | galleryCategory }}
+            <mat-option [value]="$safeNavigationMigration(category?.id)">
+              {{ $safeNavigationMigration(category?.id) | galleryCategory }}
             </mat-option>
           }
         </mat-select>

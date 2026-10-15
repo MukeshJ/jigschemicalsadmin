@@ -187,7 +187,7 @@
                 <button
                   type="button"
                   class="btn btn-success btn-sm m-right-10"
-                  (click)="fileInput.click()"
+                  (click)="fileInput.click()" 
                 >
                   <i class="far fa-image"></i> {{ 'ADD_IMAGE' | translate }}
                 </button>
@@ -222,13 +222,15 @@
         {{ 'CANCEL' | translate }}
       </button>
       @if(chemical?.id){
-        <!-- @if (chemical.supplierCount > 0) { -->
           <a (click)="viewSuppliers(chemical)" class="btn btn-primary btn-sm  ms-2">
             {{ 'VIEW_SUPPLIERS' | translate }}</a
           >
         }
-      
-    <!-- } -->
+        @if(suppliers){
+          <a (click)="viewCustomers(chemical)" class="btn blue-btn btn-sm  ms-2">
+            {{ 'VIEW_CUSTOMERS' | translate }}</a
+          >
+        }
     </div>
   </div>
 </form>

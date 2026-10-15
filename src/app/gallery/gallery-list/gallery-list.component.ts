@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Gallery } from '@core/domain-classes/gallery';
 import { BaseComponent } from 'src/app/base.component';
@@ -42,6 +42,7 @@ import { GalleryCategoryPipe } from '@shared/pipes/gallery-category.pipe';
   selector: 'app-gallery-list',
   templateUrl: './gallery-list.component.html',
   styleUrls: ['./gallery-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

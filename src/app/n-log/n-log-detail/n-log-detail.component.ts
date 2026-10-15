@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NLog } from '@core/domain-classes/n-log';
 import { BaseComponent } from 'src/app/base.component';
@@ -9,6 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-n-log-detail',
   templateUrl: './n-log-detail.component.html',
   styleUrls: ['./n-log-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterLink, UTCToLocalTime, TranslatePipe],
 })
 export class NLogDetailComponent extends BaseComponent implements OnInit {

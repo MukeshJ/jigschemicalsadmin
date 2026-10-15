@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -37,6 +37,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-role-permission',
   templateUrl: './manage-role-permission.component.html',
   styleUrls: ['./manage-role-permission.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -26,6 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-add-chemical-customer',
   templateUrl: './add-chemical-customer.component.html',
   styleUrls: ['./add-chemical-customer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -67,10 +68,9 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
       debounceTime(1000),
       switchMap((value) => {
         this.customerResource.searchQuery = value;
-        return this.customerChemicalService.searchCustomer(this.customerResource).pipe(
-          tap(() => {
-          }),
-        );
+        return this.customerChemicalService
+          .searchCustomer(this.customerResource)
+          .pipe(tap(() => {}));
       }),
     );
   }
@@ -113,8 +113,7 @@ export class AddChemicalCustomerComponent extends BaseComponent implements OnIni
               this.dialogRef.close({ flag: true });
             }
           },
-          () => {
-          },
+          () => {},
         );
     } else {
       this.toastrService.error(this.translationService.getValue('PLEASE_SELECT_CUSTOMER'));

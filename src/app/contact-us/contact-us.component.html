@@ -86,7 +86,7 @@
             >
               <mat-option [value]="null">All</mat-option>
               @for (type of contactRequestTypes; track type) {
-                <mat-option [value]="type?.id">
+                <mat-option [value]="$safeNavigationMigration(type?.id)">
                   {{ type?.name }}
                 </mat-option>
               }

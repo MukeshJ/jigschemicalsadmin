@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -25,6 +25,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-edit',
   templateUrl: './document-edit.component.html',
   styleUrls: ['./document-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

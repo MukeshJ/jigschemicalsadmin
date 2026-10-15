@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Industry } from '@core/domain-classes/industry';
 import { BaseComponent } from 'src/app/base.component';
 import { IndustryService } from '../industry.service';
@@ -32,6 +32,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-industry-list',
   templateUrl: './industry-list.component.html',
   styleUrls: ['./industry-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

@@ -31,7 +31,7 @@
           {{ 'DATE_TIME' | translate }}
         </th>
         <td mat-cell *matCellDef="let audit">
-          {{ audit?.loginTime | utcToLocalTime: 'shortDate' }}
+          {{ $safeNavigationMigration(audit?.loginTime) | utcToLocalTime: 'shortDate' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="userName">

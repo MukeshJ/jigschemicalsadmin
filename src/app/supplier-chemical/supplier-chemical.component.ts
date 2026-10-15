@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -43,6 +43,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-supplier-chemical',
   templateUrl: './supplier-chemical.component.html',
   styleUrls: ['./supplier-chemical.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCard,
     FormsModule,

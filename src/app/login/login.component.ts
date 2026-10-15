@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -22,7 +22,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [ FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, TranslatePipe],
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   loginFormGroup: UntypedFormGroup;

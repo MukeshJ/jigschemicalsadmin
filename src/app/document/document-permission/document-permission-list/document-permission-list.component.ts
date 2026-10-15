@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import {
@@ -39,6 +39,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-permission-list',
   templateUrl: './document-permission-list.component.html',
   styleUrls: ['./document-permission-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormField,
     MatLabel,

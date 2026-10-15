@@ -5,6 +5,7 @@ import {
   OnInit,
   signal,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -45,6 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     MatTable,
@@ -65,7 +67,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFooterRowDef,
     MatFooterRow,
     TranslatePipe,
-    MatIconModule 
+    MatIconModule,
   ],
 })
 export class ChemicalListComponent extends BaseComponent implements OnInit {
@@ -125,36 +127,33 @@ export class ChemicalListComponent extends BaseComponent implements OnInit {
     }
   }
 
- 
   getChemicalsList(): void {
-  this.isLoadin.set(true);
+    this.isLoadin.set(true);
 
-  this.sub$.sink = this.supplierService
-    .getChemicalsBySupplierId(
-      this.data.id,
-      this.skip,
-      this.pageSize,
-      this.NameFilter,
-      this.CasNumberFilter
-    )
-    .pipe(
-      finalize(() => {
-        this.isLoadin.set(false);
-      })
-    )
-    .subscribe({
-      next: (response) => {
-        this.chemicals = response?.chemicals ?? [];
-        this.totalChemicals = response?.totalCount ?? 0;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        this.toasterService.error(
-          this.translationService.getValue(`${error}`)
-        );
-      }
-    });
-}
+    this.sub$.sink = this.supplierService
+      .getChemicalsBySupplierId(
+        this.data.id,
+        this.skip,
+        this.pageSize,
+        this.NameFilter,
+        this.CasNumberFilter,
+      )
+      .pipe(
+        finalize(() => {
+          this.isLoadin.set(false);
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          this.chemicals = response?.chemicals ?? [];
+          this.totalChemicals = response?.totalCount ?? 0;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          this.toasterService.error(this.translationService.getValue(`${error}`));
+        },
+      });
+  }
 
   removeChemialFromSupplier(chemical: Chemical) {
     this.sub$.sink = this.commonDialogService

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PaymentTerm } from '@core/domain-classes/payment-term';
 import { PaymentTermService } from '@core/services/payment-term.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-payment-term',
   templateUrl: './payment-term.component.html',
   styleUrls: ['./payment-term.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PaymentTermPresentationComponent, AsyncPipe],
 })
 export class PaymentTermComponent extends BaseComponent implements OnInit {

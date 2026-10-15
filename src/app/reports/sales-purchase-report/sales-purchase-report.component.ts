@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { SalesVsPurchase } from '@core/domain-classes/sales-purchase';
 import { UTCToLocalTime } from '@shared/pipes/utc-to-localtime.pipe';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -13,6 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './sales-purchase-report.component.html',
   styleUrls: ['./sales-purchase-report.component.scss'],
   providers: [UTCToLocalTime],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, BaseChartDirective, TranslatePipe],
 })
 export class SalesPurchaseReportComponent implements OnInit {

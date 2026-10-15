@@ -1,5 +1,11 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router, RouterLink } from '@angular/router';
@@ -50,6 +56,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

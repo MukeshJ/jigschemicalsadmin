@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -24,6 +30,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-add-sales-order-payment',
   templateUrl: './add-sales-order-payment.component.html',
   styleUrls: ['./add-sales-order-payment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -1,6 +1,14 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -60,6 +68,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

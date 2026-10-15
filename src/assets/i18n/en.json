@@ -785,6 +785,6 @@
   "VIEW_SUPPLIERS": "View Suppliers",
   "FILE_DOWNLOADED_SUCCESSFULLY": "File Downloaded Successfully",
   "BULK_UPLOAD_CHEMICAL": "Bulk Upload Chemical",
-  "CHEMICAL_SHOW_FRONTEND_FLAG_UPDATED_SUCCESSFULLY": "Chemical Show Frontend Flag Updated Successfully"
-  
+  "CHEMICAL_SHOW_FRONTEND_FLAG_UPDATED_SUCCESSFULLY": "Chemical Show Frontend Flag Updated Successfully",
+  "VIEW_CUSTOMERS" : "View Customers"
 }

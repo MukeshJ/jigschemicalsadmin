@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { InquiryAttachment } from '@core/domain-classes/inquiry-attachment';
@@ -16,6 +16,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-attachment',
   templateUrl: './inquiry-attachment.component.html',
   styleUrls: ['./inquiry-attachment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UTCToLocalTime, TranslatePipe],
 })
 export class InquiryAttachmentComponent extends BaseComponent implements OnInit {

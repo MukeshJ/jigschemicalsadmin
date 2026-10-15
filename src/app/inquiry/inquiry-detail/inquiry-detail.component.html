@@ -287,16 +287,18 @@
 </div>
 <div class="mt-2">
   @if (inquiry?.id) {
-    <app-inquiry-note [inquiryId]="inquiry?.id"></app-inquiry-note>
+    <app-inquiry-note [inquiryId]="$safeNavigationMigration(inquiry?.id)"></app-inquiry-note>
   }
 </div>
 <div class="mt-2">
   @if (inquiry?.id) {
-    <app-inquiry-task [inquiryId]="inquiry?.id"></app-inquiry-task>
+    <app-inquiry-task [inquiryId]="$safeNavigationMigration(inquiry?.id)"></app-inquiry-task>
   }
 </div>
 <div class="mt-2">
   @if (inquiry?.id) {
-    <app-inquiry-attachment [inquiryId]="inquiry?.id"></app-inquiry-attachment>
+    <app-inquiry-attachment
+      [inquiryId]="$safeNavigationMigration(inquiry?.id)"
+    ></app-inquiry-attachment>
   }
 </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -19,6 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-email-smtp-setting',
   templateUrl: './manage-email-smtp-setting.component.html',
   styleUrls: ['./manage-email-smtp-setting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, MatSlideToggle, RouterLink, TranslatePipe],
 })
 export class ManageEmailSmtpSettingComponent extends BaseComponent implements OnInit {

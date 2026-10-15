@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Chemical } from '@core/domain-classes/chemical';
@@ -33,6 +40,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-list',
   templateUrl: './chemical-list.component.html',
   styleUrls: ['./chemical-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     MatTable,

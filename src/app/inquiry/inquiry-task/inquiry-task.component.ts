@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { InquiryTask } from '@core/domain-classes/inquiry-task';
@@ -27,6 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-task',
   templateUrl: './inquiry-task.component.html',
   styleUrls: ['./inquiry-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

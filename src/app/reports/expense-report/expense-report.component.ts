@@ -1,5 +1,11 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -60,6 +66,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './expense-report.component.html',
   styleUrls: ['./expense-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

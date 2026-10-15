@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -62,6 +62,7 @@ export function emailOrMobileValidator(): ValidatorFn {
   selector: 'app-inquiry-detail',
   templateUrl: './inquiry-detail.component.html',
   styleUrls: ['./inquiry-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     FormsModule,

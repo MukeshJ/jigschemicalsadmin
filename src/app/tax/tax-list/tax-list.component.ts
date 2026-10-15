@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Tax } from '@core/domain-classes/tax';
 import { TaxService } from '@core/services/tax.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-tax-list',
   templateUrl: './tax-list.component.html',
   styleUrls: ['./tax-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TaxListPresentationComponent, AsyncPipe],
 })
 export class TaxListComponent extends BaseComponent implements OnInit {

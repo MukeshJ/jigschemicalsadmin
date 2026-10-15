@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardStaticatics } from '@core/domain-classes/dashboard-staticatics';
 import { Inquiry } from '@core/domain-classes/inquiry';
@@ -36,6 +36,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -20,6 +20,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-attachment-add',
   templateUrl: './inquiry-attachment-add.component.html',
   styleUrls: ['./inquiry-attachment-add.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class InquiryAttachmentAddComponent extends BaseComponent implements OnInit {

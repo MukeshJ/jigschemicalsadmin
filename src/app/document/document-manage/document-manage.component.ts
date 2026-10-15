@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Category } from '@core/domain-classes/category';
 import { DocumentCategoryService } from '@core/services/document-category.service';
@@ -19,6 +19,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-document-manage',
   templateUrl: './document-manage.component.html',
   styleUrls: ['./document-manage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DocumentManagePresentationComponent, AsyncPipe],
 })
 export class DocumentManageComponent extends BaseComponent implements OnInit {

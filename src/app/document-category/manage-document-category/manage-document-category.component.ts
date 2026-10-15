@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormGroup,
   Validators,
@@ -17,6 +17,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-document-category',
   templateUrl: './manage-document-category.component.html',
   styleUrls: ['./manage-document-category.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageDocumentCategoryComponent extends BaseComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DeliveryMethod } from '@core/domain-classes/delivery-method';
 import { DeliveryMethodService } from '@core/services/delivery-method.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-delivery-method-list',
   templateUrl: './delivery-method-list.component.html',
   styleUrls: ['./delivery-method-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DeliveryMethodListPresentationComponent, AsyncPipe],
 })
 export class DeliveryMethodListComponent extends BaseComponent implements OnInit {

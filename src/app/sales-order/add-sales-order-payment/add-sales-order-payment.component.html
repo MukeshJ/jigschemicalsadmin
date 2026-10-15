@@ -84,8 +84,8 @@
                   formControlName="paymentMethod"
                 >
                   @for (paymentMethod of paymentMethodslist; track paymentMethod) {
-                    <mat-option [value]="paymentMethod?.id">
-                      {{ paymentMethod?.id | paymentmethod }}
+                    <mat-option [value]="$safeNavigationMigration(paymentMethod?.id)">
+                      {{ $safeNavigationMigration(paymentMethod?.id) | paymentmethod }}
                     </mat-option>
                   }
                 </mat-select>

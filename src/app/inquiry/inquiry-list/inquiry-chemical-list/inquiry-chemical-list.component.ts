@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Chemical } from '@core/domain-classes/chemical';
 import { ChemicalSupplierCount } from '@core/domain-classes/chemical-supplier-count';
@@ -25,6 +25,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-chemical-list',
   templateUrl: './inquiry-chemical-list.component.html',
   styleUrls: ['./inquiry-chemical-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

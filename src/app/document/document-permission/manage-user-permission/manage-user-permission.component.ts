@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -37,6 +37,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-user-permission',
   templateUrl: './manage-user-permission.component.html',
   styleUrls: ['./manage-user-permission.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

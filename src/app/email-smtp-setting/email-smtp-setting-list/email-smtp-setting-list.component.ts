@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { EmailSMTPSetting } from '@core/domain-classes/email-smtp-setting';
 import { TranslationService } from '@core/services/translation.service';
@@ -25,6 +25,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-email-smtp-setting-list',
   templateUrl: './email-smtp-setting-list.component.html',
   styleUrls: ['./email-smtp-setting-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,
@@ -50,7 +51,7 @@ export class EmailSmtpSettingListComponent extends BaseComponent implements OnIn
     private commonDialogService: CommonDialogService,
     private toastrService: ToastrService,
     private translationService: TranslationService,
-    private cdr : ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }

@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { DocumentCategory } from '@core/domain-classes/document-category';
@@ -34,6 +42,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-audit-trail',
   templateUrl: './document-audit-trail.component.html',
   styleUrls: ['./document-audit-trail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatSelect,
     MatOption,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { PageAction } from '@core/domain-classes/page-action';
 import { Page } from '@core/domain-classes/page';
@@ -14,6 +14,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-manage-page-action',
   templateUrl: './manage-page-action.component.html',
   styleUrls: ['./manage-page-action.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ManagePageActionPresentationComponent, AsyncPipe],
 })
 export class ManagePageActionComponent implements OnInit {

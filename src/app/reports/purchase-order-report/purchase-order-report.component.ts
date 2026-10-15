@@ -1,5 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -72,6 +78,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './purchase-order-report.component.html',
   styleUrls: ['./purchase-order-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, ChemicalLocalStore],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

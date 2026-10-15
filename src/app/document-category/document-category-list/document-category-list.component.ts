@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DocumentCategory } from '@core/domain-classes/document-category';
 import { DocumentCategoryService } from '@core/services/document-category.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-document-category-list',
   templateUrl: './document-category-list.component.html',
   styleUrls: ['./document-category-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DocumentCategoryListPresentationComponent, AsyncPipe],
 })
 export class DocumentCategoryListComponent extends BaseComponent implements OnInit {

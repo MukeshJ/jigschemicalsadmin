@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Action } from '@core/domain-classes/action';
 import { PageAction } from '@core/domain-classes/page-action';
 import { User } from '@core/domain-classes/user';
@@ -12,6 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-user-permission-presentation',
   templateUrl: './user-permission-presentation.component.html',
   styleUrls: ['./user-permission-presentation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatCheckbox, HasClaimDirective, RouterLink, TranslatePipe],
 })
 export class UserPermissionPresentationComponent implements OnInit {

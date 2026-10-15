@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -61,6 +68,7 @@ export class AlreadyExistValidator {
     MatCardActions,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [SupplierLocalStore],
 })
 export class SupplierDetailComponent extends BaseComponent implements OnInit {

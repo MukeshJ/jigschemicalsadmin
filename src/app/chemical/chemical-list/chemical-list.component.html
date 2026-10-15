@@ -90,6 +90,14 @@
             <mat-icon>add_circle_outline</mat-icon>
             <span>{{ 'ADD_CUSTOMER' | translate }}</span>
           </button>
+          <button mat-menu-item (click)="viewSuppliers(chemical)">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ 'SUPPLIERS' | translate }} ({{ chemical.supplierCount }})</span>
+          </button>
+          <button mat-menu-item (click)="viewCustomers(chemical)">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ 'CUSTOMERS' | translate }} ({{ chemical.customerCount }})</span>
+          </button>
         </mat-menu>
       </td>
     </ng-container>
@@ -141,18 +149,6 @@
         <div [innerHtml]="chemical.synonyms"></div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="supplierCount">
-      <th mat-header-cell *matHeaderCellDef>{{ 'SUPPLIERS' | translate }}</th>
-      <td mat-cell *matCellDef="let chemical">
-        @if (chemical.supplierCount > 0) {
-          <a (click)="viewSuppliers(chemical)" class="btn btn-danger btn-sm">
-            {{ 'SUPPLIERS' | translate }}({{ chemical.supplierCount }})</a
-          >
-        } @else {
-          <span> No Supplier</span>
-        }
-      </td>
-    </ng-container>
     <ng-container matColumnDef="isShowFront">
       <th mat-header-cell *matHeaderCellDef>Is Show in Front</th>
       <td mat-cell *matCellDef="let chemical">
@@ -162,18 +158,6 @@
           (change)="chemicalStore.updateShowFrontendFlag({ id: chemical.id, isShowInFront: $event.checked })"
         >
         </mat-checkbox>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="customerCount">
-      <th mat-header-cell *matHeaderCellDef>{{ 'CUSTOMERS' | translate }}</th>
-      <td mat-cell *matCellDef="let chemical">
-        @if (chemical.customerCount > 0) {
-          <a (click)="viewCustomers(chemical)" class="btn blue-btn btn-sm">
-            {{ 'CUSTOMERS' | translate }}({{ chemical.customerCount }})</a
-          >
-        } @else {
-          <span> No Customers</span>
-        }
       </td>
     </ng-container>
     <ng-container matColumnDef="action-search">
@@ -211,12 +195,6 @@
     <ng-container matColumnDef="synonyms-search">
       <th mat-header-cell *matHeaderCellDef></th>
     </ng-container>
-    <ng-container matColumnDef="supplier-search">
-      <th mat-header-cell *matHeaderCellDef></th>
-    </ng-container>
-    <ng-container matColumnDef="customer-search">
-      <th mat-header-cell *matHeaderCellDef></th>
-    </ng-container>
     <ng-container matColumnDef="categories-search">
       <th mat-header-cell *matHeaderCellDef></th>
     </ng-container>
@@ -236,7 +214,7 @@
       </th>
     </ng-container>
     <ng-container matColumnDef="footer">
-      <td mat-footer-cell colspan="9" *matFooterCellDef>
+      <td mat-footer-cell colspan="7" *matFooterCellDef>
         <mat-paginator
           [length]="chemicalStore.parameters().totalCount"
           [pageSize]="chemicalStore.parameters().pageSize"
@@ -264,8 +242,6 @@
           'name-search',
           'casnumber-search',
           'synonyms-search',
-          'supplier-search',
-          'customer-search',
           'categories-search',
           'industries-search',
           'isShowFront-search',

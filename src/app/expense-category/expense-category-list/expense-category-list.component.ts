@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
 import { ExpenseCategoryService } from '@core/services/expense-category.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-expense-category-list',
   templateUrl: './expense-category-list.component.html',
   styleUrls: ['./expense-category-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ExpenseCategoryListPresentationComponent, AsyncPipe],
 })
 export class ExpenseCategoryListComponent extends BaseComponent implements OnInit {

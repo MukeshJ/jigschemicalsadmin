@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
@@ -31,6 +31,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-view-purchase-order-payment',
   templateUrl: './view-purchase-order-payment.component.html',
   styleUrls: ['./view-purchase-order-payment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

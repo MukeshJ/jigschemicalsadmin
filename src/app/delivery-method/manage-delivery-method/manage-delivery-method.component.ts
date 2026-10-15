@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -18,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-delivery-method',
   templateUrl: './manage-delivery-method.component.html',
   styleUrls: ['./manage-delivery-method.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManageDeliveryMethodComponent extends BaseComponent implements OnInit {

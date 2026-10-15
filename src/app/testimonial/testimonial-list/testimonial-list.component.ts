@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import {
   MatTableDataSource,
@@ -32,6 +32,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-testimonial-list',
   templateUrl: './testimonial-list.component.html',
   styleUrls: ['./testimonial-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

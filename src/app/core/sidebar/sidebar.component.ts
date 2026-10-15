@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UserAuth } from '@core/domain-classes/user-auth';
 import { SecurityService } from '@core/security/security.service';
 import { CommonService } from '@core/services/common.service';
@@ -13,6 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HasClaimDirective, RouterLinkActive, RouterLink, NgClass, TranslatePipe],
 })
 export class SidebarComponent extends BaseComponent implements OnInit {

@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -55,6 +55,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./purchase-order-add-edit.component.scss'],
   providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -205,12 +206,10 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
           );
         });
 
-        this.supplierStore
-          .searchSuppliers('', { id: c.supplierId })
-          .subscribe((suppliers) => {
-            this.suppliers = [...(suppliers ?? [])];
-            this.cdr.detectChanges();
-          });
+        this.supplierStore.searchSuppliers('', { id: c.supplierId }).subscribe((suppliers) => {
+          this.suppliers = [...(suppliers ?? [])];
+          this.cdr.detectChanges();
+        });
 
         this.getAllTotal();
       }
@@ -446,15 +445,13 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
 
   getChemicals(index: number, chemicalId?: string) {
     if (this.chemical.length === 0 || chemicalId) {
-      this.chemicalStore
-        .searchChemicals('', chemicalId ? { chemicalId } : {})
-        .subscribe(
-          (chemicals: Chemical[]) => {
-            this.chemical = [...(chemicals ?? [])];
-            this.filterChemicalsMap[index.toString()] = [...this.chemical];
-          },
-          (err) => {},
-        );
+      this.chemicalStore.searchChemicals('', chemicalId ? { chemicalId } : {}).subscribe(
+        (chemicals: Chemical[]) => {
+          this.chemical = [...(chemicals ?? [])];
+          this.filterChemicalsMap[index.toString()] = [...this.chemical];
+        },
+        (err) => {},
+      );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemical];
     }
@@ -503,9 +500,7 @@ export class PurchaseOrderAddEditComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    const overrides = this.purchaseOrder
-      ? { id: this.purchaseOrder.supplierId }
-      : {};
+    const overrides = this.purchaseOrder ? { id: this.purchaseOrder.supplierId } : {};
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
       this.cdr.detectChanges();

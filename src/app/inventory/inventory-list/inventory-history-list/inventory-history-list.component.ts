@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Inventory } from '@core/domain-classes/inventory/inventory';
@@ -36,6 +44,7 @@ import { InventorySourcePipe } from '../../inventory-source.pipe';
   selector: 'app-inventory-history-list',
   templateUrl: './inventory-history-list.component.html',
   styleUrls: ['./inventory-history-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

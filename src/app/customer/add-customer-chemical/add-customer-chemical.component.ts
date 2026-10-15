@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -29,13 +29,14 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./add-customer-chemical.component.scss'],
   imports: [
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
     AsyncPipe,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ChemicalLocalStore],
 })
 export class AddCustomerChemicalComponent extends BaseComponent implements OnInit {

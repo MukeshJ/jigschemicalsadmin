@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Action } from '@core/domain-classes/action';
 import { PageAction } from '@core/domain-classes/page-action';
 import { Page } from '@core/domain-classes/page';
@@ -20,6 +20,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-user-permission',
   templateUrl: './user-permission.component.html',
   styleUrls: ['./user-permission.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UserPermissionPresentationComponent, AsyncPipe],
 })
 export class UserPermissionComponent extends BaseComponent implements OnInit {

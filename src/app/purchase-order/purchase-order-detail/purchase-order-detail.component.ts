@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -25,6 +25,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-purchase-order-detail',
   templateUrl: './purchase-order-detail.component.html',
   styleUrls: ['./purchase-order-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     NgClass,
@@ -86,12 +87,8 @@ export class PurchaseOrderDetailComponent extends BaseComponent {
         po.totalQuantity = po.purchaseOrderItems
           .map((item) => (item.status == 1 ? -1 * item.quantity : item.quantity))
           .reduce((prev, next) => prev + next, 0);
-        this.purchaseOrderItems = po.purchaseOrderItems.filter(
-          (c) => c.status == 0,
-        );
-        this.purchaseOrderReturnsItems = po.purchaseOrderItems.filter(
-          (c) => c.status == 1,
-        );
+        this.purchaseOrderItems = po.purchaseOrderItems.filter((c) => c.status == 0);
+        this.purchaseOrderReturnsItems = po.purchaseOrderItems.filter((c) => c.status == 1);
         this.isLoading = false;
       },
       (err) => {

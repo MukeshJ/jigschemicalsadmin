@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { LoginAudit } from '@core/domain-classes/login-audit';
@@ -35,6 +42,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   selector: 'app-login-audit-list',
   templateUrl: './login-audit-list.component.html',
   styleUrls: ['./login-audit-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

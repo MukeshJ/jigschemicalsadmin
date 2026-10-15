@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -28,6 +34,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-send-email',
   templateUrl: './send-email.component.html',
   styleUrls: ['./send-email.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatChipSet,
     MatChip,

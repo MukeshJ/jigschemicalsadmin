@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
 import { SalesOrderService } from '../../sales-order.service';
@@ -21,6 +28,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sales-order-items',
   templateUrl: './sales-order-items.component.html',
   styleUrls: ['./sales-order-items.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

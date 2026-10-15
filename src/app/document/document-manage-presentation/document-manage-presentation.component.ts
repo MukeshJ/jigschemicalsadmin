@@ -76,6 +76,7 @@ export class DocumentManagePresentationComponent extends BaseComponent implement
       reader.onload = (e: any) => {
         this.documentSource = e.target.result;
         this.fileUploadValidation('upload');
+        this.cd.markForCheck();
       };
       reader.readAsDataURL(file_url);
     } else {

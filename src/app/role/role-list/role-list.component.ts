@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { Role } from '@core/domain-classes/role';
 import { CommonError } from '@core/error-handler/common-error';
@@ -27,6 +27,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

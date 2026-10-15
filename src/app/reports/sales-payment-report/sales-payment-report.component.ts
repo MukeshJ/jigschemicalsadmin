@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -52,6 +52,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './sales-payment-report.component.html',
   styleUrls: ['./sales-payment-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, PaymentMethodPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

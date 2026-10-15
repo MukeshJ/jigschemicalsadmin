@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   UntypedFormBuilder,
@@ -26,6 +32,7 @@ import { Subject } from 'rxjs';
 import { Supplier } from 'src/app/core/domain-classes/supplier';
 import { ChemicalSuppliersComponent } from 'src/app/chemical-supplier/chemical-suppliers/chemical-suppliers.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ChemicalCustomersComponent } from '../chemical-customers/chemical-customers.component';
 
 @Component({
   templateUrl: './chemical-detail.component.html',
@@ -40,6 +47,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatCardActions,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ChemicalLocalStore],
 })
 export class ChemicalDetailComponent extends BaseComponent implements OnInit {
@@ -257,12 +265,18 @@ export class ChemicalDetailComponent extends BaseComponent implements OnInit {
   onChemicalList() {
     this.router.navigate(['/chemical'], { relativeTo: this.route });
   }
-  
-    viewSuppliers(chemical: Chemical): void {
-      this.dialog.open(ChemicalSuppliersComponent, {
-        height: 'auto',
-        data: Object.assign({}, chemical),
-      });
-    }
-  
+
+  viewSuppliers(chemical: Chemical): void {
+    this.dialog.open(ChemicalSuppliersComponent, {
+      height: 'auto',
+      data: Object.assign({}, chemical),
+    });
+  }
+
+  viewCustomers(chemical: Chemical): void {
+    this.dialog.open(ChemicalCustomersComponent, {
+      height: 'auto',
+      data: Object.assign({}, chemical),
+    });
+  }
 }

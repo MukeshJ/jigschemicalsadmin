@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { EmailTemplate } from '@core/domain-classes/email-template';
 import { CommonError } from '@core/error-handler/common-error';
@@ -26,6 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-email-template-list',
   templateUrl: './email-template-list.component.html',
   styleUrls: ['./email-template-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLinkActive,
@@ -51,7 +52,7 @@ export class EmailTemplateListComponent extends BaseComponent implements OnInit 
     private toastrService: ToastrService,
     private commonDialogService: CommonDialogService,
     private translationService: TranslationService,
-    private cdr: ChangeDetectorRef, 
+    private cdr: ChangeDetectorRef,
   ) {
     super();
   }

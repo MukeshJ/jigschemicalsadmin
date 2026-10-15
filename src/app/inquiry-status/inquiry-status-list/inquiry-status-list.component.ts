@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { InquiryStatus } from '@core/domain-classes/inquiry-status';
 import { InquiryStatusService } from '@core/services/inquiry-status.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-inquiry-status-list',
   templateUrl: './inquiry-status-list.component.html',
   styleUrls: ['./inquiry-status-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [InquiryStatusListPresentationComponent, AsyncPipe],
 })
 export class InquiryStatusListComponent extends BaseComponent implements OnInit {

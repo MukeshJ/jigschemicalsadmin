@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DocumentAuditTrail } from '@core/domain-classes/document-audit-trail';
 import { DocumentInfo } from '@core/domain-classes/document-info';
 import { DocumentOperation } from '@core/domain-classes/document-operation';
@@ -18,6 +18,7 @@ import { NgxDocViewerComponent } from 'ngx-doc-viewer';
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
   styleUrls: ['./document-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatIcon, NgxExtendedPdfViewerModule, NgxDocViewerComponent],
 })
 export class DocumentViewComponent extends BaseComponent implements OnInit {

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Action } from '@core/domain-classes/action';
 import { PageAction } from '@core/domain-classes/page-action';
 import { Page } from '@core/domain-classes/page';
@@ -12,6 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-role-presentation',
   templateUrl: './manage-role-presentation.component.html',
   styleUrls: ['./manage-role-presentation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, MatCheckbox, RouterLink, TranslatePipe],
 })
 export class ManageRolePresentationComponent implements OnInit {

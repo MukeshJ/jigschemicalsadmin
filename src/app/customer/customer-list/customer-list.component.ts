@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { CustomerService } from '../customer.service';
 import { merge, Observable, Subject } from 'rxjs';
@@ -45,6 +45,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     RouterLink,

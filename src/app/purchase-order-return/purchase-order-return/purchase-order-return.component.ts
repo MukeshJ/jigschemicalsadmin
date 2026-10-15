@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -51,6 +51,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./purchase-order-return.component.scss'],
   providers: [ChemicalLocalStore, SupplierLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -476,9 +477,7 @@ export class PurchaseOrderReturnComponent extends BaseComponent {
   }
 
   getSuppliers() {
-    const overrides = this.purchaseOrder
-      ? { id: this.purchaseOrder.supplierId }
-      : {};
+    const overrides = this.purchaseOrder ? { id: this.purchaseOrder.supplierId } : {};
     this.supplierStore.searchSuppliers('', overrides).subscribe((suppliers) => {
       this.suppliers = [...(suppliers ?? [])];
       this.suppliersForSearch = [...this.suppliers];

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -26,6 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-add-chemical-supplier',
   templateUrl: './add-chemical-supplier.component.html',
   styleUrls: ['./add-chemical-supplier.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -34,7 +35,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatOption,
     AsyncPipe,
     TranslatePipe,
-],
+  ],
 })
 export class AddChemicalSupplierComponent extends BaseComponent implements OnInit {
   supplierChemicalForm: UntypedFormGroup;

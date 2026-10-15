@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -18,6 +24,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-note',
   templateUrl: './inquiry-note.component.html',
   styleUrls: ['./inquiry-note.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, UTCToLocalTime, TranslatePipe],
 })
 export class InquiryNoteComponent extends BaseComponent implements OnInit {

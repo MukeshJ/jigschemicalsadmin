@@ -92,7 +92,7 @@
             >
               <option value="">--{{ 'NONE' | translate }}--</option>
               @for (frequencyItem of reminderFrequencies; track frequencyItem) {
-                <option [value]="frequencyItem?.id">
+                <option [value]="$safeNavigationMigration(frequencyItem?.id)">
                   {{ frequencyItem?.name }}
                 </option>
               }

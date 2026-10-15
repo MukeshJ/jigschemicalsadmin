@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -22,10 +22,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-role-users',
   templateUrl: './role-users.component.html',
   styleUrls: ['./role-users.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatLabel, MatSelect, FormsModule, MatOption, CdkDropList, CdkDrag, TranslatePipe],
 })
 export class RoleUsersComponent extends BaseComponent implements OnInit {
-  roles =  signal<Role[]>([]);
+  roles = signal<Role[]>([]);
   allUsers = signal<User[]>([]);
   selectedRole = signal<Role | null>(null);
   roleUsers = signal<UserRoles[]>([]);

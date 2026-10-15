@@ -1,4 +1,10 @@
-import { Component, Inject, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from 'src/app/base.component';
 import { Action } from '@core/domain-classes/action';
@@ -12,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-action',
   templateUrl: './manage-action.component.html',
   styleUrls: ['./manage-action.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, TranslatePipe],
 })
 export class ManageActionComponent extends BaseComponent implements OnChanges {

@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -31,6 +37,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-permission-multiple',
   templateUrl: './document-permission-multiple.component.html',
   styleUrls: ['./document-permission-multiple.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatChipSet,
     MatChip,
@@ -57,7 +64,7 @@ export class DocumentPermissionMultipleComponent extends BaseComponent implement
   minDate: Date = new Date();
   constructor(
     private documentPermissionService: DocumentPermissionService,
-     private toastrService: ToastrService,
+    private toastrService: ToastrService,
     private commonService: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: DocumentInfo[],
     private dialogRef: MatDialogRef<DocumentPermissionMultipleComponent>,

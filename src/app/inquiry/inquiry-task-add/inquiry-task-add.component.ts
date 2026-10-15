@@ -1,5 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -30,6 +36,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-inquiry-task-add',
   templateUrl: './inquiry-task-add.component.html',
   styleUrls: ['./inquiry-task-add.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { OnlineUser } from '@core/domain-classes/online-user';
 import { SignalrService } from '@core/services/signalr.service';
@@ -10,6 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-session',
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe],
 })
 export class SessionComponent extends BaseComponent implements OnInit {

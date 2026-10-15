@@ -27,7 +27,9 @@
         {{ salesOrder()?.customer?.address }}<br /><br />{{ 'PHONE' | translate }}:
         {{ salesOrder()?.customer?.mobileNo }}<br />{{ 'EMAIL' | translate }}:
         @if (salesOrder()?.customer?.email) {
-          <a href="mailto:{{ salesOrder()?.customer?.email }}">{{ salesOrder()?.customer?.email }}</a>
+          <a href="mailto:{{ salesOrder()?.customer?.email }}">{{
+            salesOrder()?.customer?.email
+          }}</a>
         }
         <div class="clearfix"></div>
       </div>
@@ -51,9 +53,8 @@
         <b> {{ salesOrder()?.orderNumber }}</b
         ><br />
         <b>{{ 'DATE' | translate }} : </b
-        >{{ salesOrder()?.soCreatedDate | utcToLocalTime: 'shortDate' }} <br /><b
-          >{{ 'PAYMENT_STATUS' | translate }} :
-        </b>
+        >{{ $safeNavigationMigration(salesOrder()?.soCreatedDate) | utcToLocalTime: 'shortDate' }}
+        <br /><b>{{ 'PAYMENT_STATUS' | translate }} : </b>
         <span
           class="badge-pill"
           [ngClass]="{
@@ -62,7 +63,7 @@
             'badge-warning': salesOrder()?.paymentStatus == 2,
           }"
         >
-          {{ salesOrder()?.paymentStatus | paymentStatus }}</span
+          {{ $safeNavigationMigration(salesOrder()?.paymentStatus) | paymentStatus }}</span
         >
         <div class="clearfix"></div>
       </div>
@@ -116,7 +117,8 @@
               </td>
               <td class="text-right">
                 {{
-                  salesItem?.quantity * salesItem?.unitPrice -
+                  $safeNavigationMigration(salesItem?.quantity) *
+                    $safeNavigationMigration(salesItem?.unitPrice) -
                     salesItem.discount +
                     salesItem.taxValue | customCurrency
                 }}
@@ -155,7 +157,8 @@
             <td class="text-right">
               {{
                 -1 *
-                  (salesItem?.quantity * salesItem?.unitPrice -
+                  ($safeNavigationMigration(salesItem?.quantity) *
+                    $safeNavigationMigration(salesItem?.unitPrice) -
                     salesItem.discount +
                     salesItem.taxValue) | customCurrency
               }}
@@ -247,7 +250,10 @@
                           </tr>
                         </thead>
                         <tbody>
-                          @for (attachment of salesOrder().salesOrderAttachments; track attachment) {
+                          @for (
+                            attachment of salesOrder().salesOrderAttachments;
+                            track attachment
+                          ) {
                             <tr>
                               <td>
                                 <a href="javascript:;" (click)="downloadAttachment(attachment)">

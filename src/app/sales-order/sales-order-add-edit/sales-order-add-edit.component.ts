@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -54,6 +54,7 @@ import { QuantitiesUnitPriceTaxPipe as QuantitiesUnitPriceTaxPipe_1 } from '../.
   styleUrls: ['./sales-order-add-edit.component.scss'],
   providers: [ChemicalLocalStore],
   viewProviders: [QuantitiesUnitPricePipe, QuantitiesUnitPriceTaxPipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -305,8 +306,7 @@ export class SalesOrderAddEditComponent extends BaseComponent {
   onTaxSelectionChange() {
     this.getAllTotal();
   }
-  onUnitSelectionChange() {
-  }
+  onUnitSelectionChange() {}
 
   getUnitNameById(unitId: string | number | null, index: number): string {
     if (unitId === null || unitId === undefined || unitId === '') {
@@ -354,15 +354,13 @@ export class SalesOrderAddEditComponent extends BaseComponent {
 
   getChemicals(index: number, chemicalId?: string) {
     if (this.chemicals.length === 0 || chemicalId) {
-      this.chemicalStore
-        .searchChemicals('', chemicalId ? { chemicalId } : {})
-        .subscribe(
-          (chemicals: Chemical[]) => {
-            this.chemicals = [...(chemicals ?? [])];
-            this.filterChemicalsMap[index.toString()] = [...this.chemicals];
-          },
-          (err) => {},
-        );
+      this.chemicalStore.searchChemicals('', chemicalId ? { chemicalId } : {}).subscribe(
+        (chemicals: Chemical[]) => {
+          this.chemicals = [...(chemicals ?? [])];
+          this.filterChemicalsMap[index.toString()] = [...this.chemicals];
+        },
+        (err) => {},
+      );
     } else {
       this.filterChemicalsMap[index.toString()] = [...this.chemicals];
     }

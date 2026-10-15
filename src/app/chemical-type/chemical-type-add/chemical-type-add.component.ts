@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -23,6 +23,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-type-add',
   templateUrl: './chemical-type-add.component.html',
   styleUrls: ['./chemical-type-add.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

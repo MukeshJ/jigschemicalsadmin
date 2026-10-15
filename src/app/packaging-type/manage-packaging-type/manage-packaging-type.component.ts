@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -18,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-packaging-type',
   templateUrl: './manage-packaging-type.component.html',
   styleUrls: ['./manage-packaging-type.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, TranslatePipe],
 })
 export class ManagePackagingTypeComponent extends BaseComponent implements OnInit {

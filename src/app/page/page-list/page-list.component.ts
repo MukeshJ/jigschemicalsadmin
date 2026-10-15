@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Page } from '@core/domain-classes/page';
 import { BaseComponent } from 'src/app/base.component';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-page-list',
   templateUrl: './page-list.component.html',
   styleUrls: ['./page-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PageListPresentationComponent, AsyncPipe],
 })
 export class PageListComponent extends BaseComponent implements OnInit {

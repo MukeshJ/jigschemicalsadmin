@@ -180,7 +180,9 @@
       <ul class="list-group">
         @for (file of files; track file; let i = $index) {
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <h4 class="name">{{ file?.name }} -- {{ formatBytes(file?.size) }}</h4>
+            <h4 class="name">
+              {{ file?.name }} -- {{ formatBytes($safeNavigationMigration(file?.size)) }}
+            </h4>
             <span class="badge badge-pill">
               <button class="btn btn-danger" (click)="onDeleteFile(i)">
                 <i class="text-light fas fa-trash"></i>

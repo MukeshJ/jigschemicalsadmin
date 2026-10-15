@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -20,6 +20,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-email-template-manage',
   templateUrl: './email-template-manage.component.html',
   styleUrls: ['./email-template-manage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, ReactiveFormsModule, AngularEditorModule, RouterLink, TranslatePipe],
 })
 export class EmailTemplateManageComponent extends BaseComponent implements OnInit {

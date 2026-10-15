@@ -1,5 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { Category } from '@core/domain-classes/category';
@@ -42,6 +50,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-document-library-list',
   templateUrl: './document-library-list.component.html',
   styleUrls: ['./document-library-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatSelect,
     MatOption,

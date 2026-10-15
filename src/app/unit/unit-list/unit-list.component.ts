@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Unit } from '@core/domain-classes/unit';
 import { TranslationService } from '@core/services/translation.service';
 import { UnitService } from '@core/services/unit.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-unit-list',
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [UnitListPresentationComponent, AsyncPipe],
 })
 export class UnitListComponent extends BaseComponent implements OnInit {

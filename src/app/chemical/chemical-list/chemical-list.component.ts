@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { Router, RouterLink } from '@angular/router';
 import { Sort, MatSort, MatSortHeader } from '@angular/material/sort';
@@ -80,6 +80,7 @@ import { ChemicalLocalStore } from '../chemical-store';
     MatFooterRow,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ChemicalLocalStore],
 })
 export class ChemicalListComponent extends BaseComponent {
@@ -91,8 +92,6 @@ export class ChemicalListComponent extends BaseComponent {
     'name',
     'casNumber',
     'synonyms',
-    'supplierCount',
-    'customerCount',
     'categories',
     'industries',
     'isShowFront',
@@ -108,7 +107,7 @@ export class ChemicalListComponent extends BaseComponent {
   ) {
     super();
   }
-  
+
   deleteChemical(chemical: Chemical): void {
     this.sub$.sink = this.commonDialogService
       .deleteConformationDialog(

@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
 import { PurchaseOrderItem } from '@core/domain-classes/purchase-order/purchase-order-item';
 import { PurchaseOrderService } from 'src/app/purchase-order/purchase-order.service';
@@ -21,6 +28,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-purchase-order-report-item',
   templateUrl: './purchase-order-item.component.html',
   styleUrls: ['./purchase-order-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

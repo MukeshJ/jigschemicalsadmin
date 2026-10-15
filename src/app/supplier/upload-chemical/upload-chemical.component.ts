@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UploadChemical } from '@core/domain-classes/uploadChemical';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
@@ -24,6 +24,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-upload-chemical',
   templateUrl: './upload-chemical.component.html',
   styleUrls: ['./upload-chemical.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { PendingInterceptorService } from './pending-interceptor.service';
@@ -8,6 +8,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
   selector: 'app-loading-indicator',
   templateUrl: './loading-indicator.component.html',
   styleUrls: ['./loading-indicator.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatProgressBar],
 })
 export class LoadingIndicatorComponent implements OnInit, OnDestroy {

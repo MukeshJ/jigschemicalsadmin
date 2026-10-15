@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CompanyProfile } from '@core/domain-classes/company-profile';
 import { SalesOrder } from '@core/domain-classes/sales-order';
 import { SalesOrderItem } from '@core/domain-classes/sales-order-item';
@@ -11,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-sales-order-invoice',
   templateUrl: './sales-order-invoice.component.html',
   styleUrls: ['./sales-order-invoice.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CustomCurrencyPipe, UTCToLocalTime, TranslatePipe],
 })
 export class SalesOrderInvoiceComponent implements OnInit, OnChanges {

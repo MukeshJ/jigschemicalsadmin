@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PackagingType } from '@core/domain-classes/packaging-type';
 import { PackagingTypeService } from '@core/services/packaging-type.service';
 import { TranslationService } from '@core/services/translation.service';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-packaging-type-list',
   templateUrl: './packaging-type-list.component.html',
   styleUrls: ['./packaging-type-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PackagingTypeListPresentationComponent, AsyncPipe],
 })
 export class PackagingTypeListComponent extends BaseComponent implements OnInit {

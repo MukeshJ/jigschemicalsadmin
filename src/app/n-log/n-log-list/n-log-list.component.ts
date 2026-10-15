@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { NLog } from '@core/domain-classes/n-log';
@@ -33,6 +40,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   selector: 'app-n-log-list',
   templateUrl: './n-log-list.component.html',
   styleUrls: ['./n-log-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatSelect,
     MatOption,

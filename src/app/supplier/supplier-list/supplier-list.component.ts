@@ -1,13 +1,5 @@
-import {
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
-import {
-  UntypedFormControl,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -89,6 +81,7 @@ import { SupplierLocalStore } from '../supplier-store';
     AsyncPipe,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [SupplierLocalStore],
 })
 export class SupplierListComponent extends BaseComponent implements OnInit {
@@ -129,7 +122,7 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
       map((value) => this._filterCountryForAutoComplete(value)),
     );
   }
-  
+
   deleteSupplier(supplier: Supplier): void {
     this.sub$.sink = this.commonDialogService
       .deleteConformationDialog(
@@ -152,9 +145,7 @@ export class SupplierListComponent extends BaseComponent implements OnInit {
   }
 
   getCountries(): void {
-    this.sub$.sink = this.commonService
-      .getCountry()
-      .subscribe((c) => (this.countryList = c));
+    this.sub$.sink = this.commonService.getCountry().subscribe((c) => (this.countryList = c));
   }
 
   // ----- navigation / dialogs / row expansion -----

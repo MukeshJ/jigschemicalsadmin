@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  signal,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
@@ -45,6 +53,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-suppliers',
   templateUrl: './chemical-suppliers.component.html',
   styleUrls: ['./chemical-suppliers.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     MatTable,
@@ -68,7 +77,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     MatFooterRowDef,
     MatFooterRow,
     TranslatePipe,
-],
+  ],
 })
 export class ChemicalSuppliersComponent extends BaseComponent implements OnInit {
   suppliers: Supplier[] = [];

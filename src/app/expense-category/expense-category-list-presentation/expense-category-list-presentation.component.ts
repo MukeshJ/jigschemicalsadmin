@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonDialogService } from '@core/common-dialog/common-dialog.service';
 import { ExpenseCategory } from '@core/domain-classes/expense-category';
@@ -23,6 +30,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-expense-category-list-presentation',
   templateUrl: './expense-category-list-presentation.component.html',
   styleUrls: ['./expense-category-list-presentation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,

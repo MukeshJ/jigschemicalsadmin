@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { PurchaseOrder } from '@core/domain-classes/purchase-order/purchase-order';
@@ -37,6 +45,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-supplier-po-list',
   templateUrl: './supplier-po-list.component.html',
   styleUrls: ['./supplier-po-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatSort,

@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -48,6 +54,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-industry-chemical',
   templateUrl: './industry-chemical.component.html',
   styleUrls: ['./industry-chemical.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCard,
     MatLabel,

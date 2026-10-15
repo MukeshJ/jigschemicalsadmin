@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -23,6 +30,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './manage-inventory.component.html',
   styleUrls: ['./manage-inventory.component.scss'],
   imports: [FormsModule, ReactiveFormsModule, MatSelect, MatDivider, MatOption, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ChemicalLocalStore],
 })
 export class ManageInventoryComponent extends BaseComponent implements OnInit {

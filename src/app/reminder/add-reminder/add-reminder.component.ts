@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormArray,
   UntypedFormBuilder,
@@ -29,6 +29,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-add-reminder',
   templateUrl: './add-reminder.component.html',
   styleUrls: ['./add-reminder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

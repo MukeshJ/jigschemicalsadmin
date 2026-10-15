@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CalenderReminderDto } from '@core/domain-classes/calender-reminder';
 import { Reminder } from '@core/domain-classes/reminder';
 import {
@@ -30,6 +30,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-calender-view',
   templateUrl: './calender-view.component.html',
   styleUrls: ['./calender-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CalendarPreviousViewDirective,
     CalendarTodayDirective,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UploadChemical } from '@core/domain-classes/uploadChemical';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
@@ -10,6 +10,7 @@ import { HasClaimDirective } from '../../shared/has-claim.directive';
   selector: 'app-bulk-upload-chemical',
   templateUrl: './bulk-upload-chemical.component.html',
   styleUrls: ['./bulk-upload-chemical.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HasClaimDirective],
 })
 export class BulkUploadChemicalComponent extends BaseComponent implements OnInit {

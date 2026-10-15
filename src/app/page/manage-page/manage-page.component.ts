@@ -1,4 +1,10 @@
-import { Component, Inject, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Page } from '@core/domain-classes/page';
 import { PageService } from '@core/services/page.service';
@@ -12,6 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-manage-page',
   templateUrl: './manage-page.component.html',
   styleUrls: ['./manage-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, TranslatePipe],
 })
 export class ManagePageComponent extends BaseComponent implements OnChanges {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContactUs } from '@core/domain-classes/contact-us';
 import { TranslationService } from '@core/services/translation.service';
@@ -12,7 +12,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-contact-us-detail',
   templateUrl: './contact-us-detail.component.html',
   styleUrls: ['./contact-us-detail.component.scss'],
-  imports: [ UTCToLocalTime, ContactRequestTypePipe, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [UTCToLocalTime, ContactRequestTypePipe, TranslatePipe],
 })
 export class ContactUsDetailComponent implements OnInit {
   isDownloading = false;

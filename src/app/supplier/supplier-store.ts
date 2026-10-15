@@ -117,6 +117,7 @@ export const SupplierLocalStore = signalStore(
                   ),
                 );
                 store.router.navigate(['/supplier']);
+                store.globalStore.loadSuppliers(store.parameters())
               },
               error: (e: any) => {
                 patchState(store, { isSaving: false });
@@ -145,6 +146,7 @@ export const SupplierLocalStore = signalStore(
                   ),
                 );
                 store.router.navigate(['/supplier']);
+                store.globalStore.loadSuppliers(store.parameters())
               },
               error: (e: any) => {
                 patchState(store, { isSaving: false });

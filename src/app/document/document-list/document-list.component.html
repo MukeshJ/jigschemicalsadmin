@@ -27,9 +27,9 @@
         #input
       />
     </div>
-    <div class="col-sm-4 form-group ">
+    <div class="col-sm-4 form-group">
       <mat-select
-        class="form-control "
+        class="form-control"
         placeholder="{{ 'CATEGORY' | translate }}"
         (selectionChange)="onCategoryChange($event)"
       >
@@ -41,13 +41,14 @@
         }
       </mat-select>
     </div>
-    <div class="col-sm-auto form-group ">
-      <div class="input-group ">
+    <div class="col-sm-auto form-group">
+      <div class="input-group">
         <input
           #ref
-          class="form-control "
+          class="form-control"
           placeholder="{{ 'CREATED_DATE' | translate }}"
-          [matDatepicker]="picker"s
+          [matDatepicker]="picker"
+          s
           (dateInput)="onCreatedDateChange(ref.value)"
         />
         <mat-datepicker #picker></mat-datepicker>
@@ -180,7 +181,7 @@
           {{ 'CREATED_DATE' | translate }}
         </th>
         <td class="table-column-200" mat-cell *matCellDef="let document">
-          {{ document?.createdDate | utcToLocalTime: 'shortDate' }}
+          {{ $safeNavigationMigration(document?.createdDate) | utcToLocalTime: 'shortDate' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="createdBy">

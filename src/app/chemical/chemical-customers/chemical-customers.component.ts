@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -38,6 +45,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-chemical-customers',
   templateUrl: './chemical-customers.component.html',
   styleUrls: ['./chemical-customers.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HasClaimDirective,
     MatTable,
@@ -141,8 +149,7 @@ export class ChemicalCustomersComponent extends BaseComponent implements OnInit 
           this.totalCustomers = c.totalCount;
           this.cdr.detectChanges();
         },
-        () => {
-        },
+        () => {},
       );
   }
 

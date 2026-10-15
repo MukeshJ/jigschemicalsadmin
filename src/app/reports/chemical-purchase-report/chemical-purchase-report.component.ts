@@ -1,5 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormControl,
   UntypedFormGroup,
@@ -61,6 +68,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './chemical-purchase-report.component.html',
   styleUrls: ['./chemical-purchase-report.component.scss'],
   providers: [UTCToLocalTime, CustomCurrencyPipe, PaymentStatusPipe, ChemicalLocalStore],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

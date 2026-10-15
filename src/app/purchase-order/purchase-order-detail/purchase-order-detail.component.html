@@ -59,8 +59,8 @@
         <h5 class="">{{ 'COMPANY_PROFILE' | translate }}</h5>
         <b> {{ companyProfile?.title }}</b
         ><br />
-        {{ companyProfile?.address }}<br /><br />{{ 'PHONE' | translate }}: {{ companyProfile?.phone
-        }}<br />{{ 'EMAIL' | translate }}:
+        {{ companyProfile?.address }}<br /><br />{{ 'PHONE' | translate }}:
+        {{ companyProfile?.phone }}<br />{{ 'EMAIL' | translate }}:
         @if (companyProfile?.email) {
           <a href="mailto:{{ companyProfile?.email }}">{{ companyProfile?.email }}</a>
         }
@@ -73,9 +73,10 @@
         <b> {{ purchaseOrder()?.orderNumber }}</b
         ><br />
         <b>{{ 'DATE' | translate }} : </b
-        >{{ purchaseOrder()?.poCreatedDate | utcToLocalTime: 'shortDate' }} <br /><b
-          >{{ 'PAYMENT_STATUS' | translate }} :
-        </b>
+        >{{
+          $safeNavigationMigration(purchaseOrder()?.poCreatedDate) | utcToLocalTime: 'shortDate'
+        }}
+        <br /><b>{{ 'PAYMENT_STATUS' | translate }} : </b>
         <span
           class="badge-pill"
           [ngClass]="{
@@ -84,7 +85,7 @@
             'badge-warning': purchaseOrder()?.paymentStatus == 2,
           }"
         >
-          {{ purchaseOrder()?.paymentStatus | paymentStatus }}</span
+          {{ $safeNavigationMigration(purchaseOrder()?.paymentStatus) | paymentStatus }}</span
         >
         <div class="clearfix"></div>
       </div>
@@ -138,7 +139,8 @@
               </td>
               <td class="text-right">
                 {{
-                  purchaseItem?.quantity * purchaseItem?.unitPrice -
+                  $safeNavigationMigration(purchaseItem?.quantity) *
+                    $safeNavigationMigration(purchaseItem?.unitPrice) -
                     purchaseItem.discount +
                     purchaseItem.taxValue | customCurrency
                 }}
@@ -177,7 +179,8 @@
             <td class="text-right">
               {{
                 -1 *
-                  (purchaseItem?.quantity * purchaseItem?.unitPrice -
+                  ($safeNavigationMigration(purchaseItem?.quantity) *
+                    $safeNavigationMigration(purchaseItem?.unitPrice) -
                     purchaseItem.discount +
                     purchaseItem.taxValue) | customCurrency
               }}

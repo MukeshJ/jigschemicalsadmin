@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from 'src/app/base.component';
 import { Action } from '@core/domain-classes/action';
@@ -12,6 +12,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-action-list',
   templateUrl: './action-list.component.html',
   styleUrls: ['./action-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ActionListPresentationComponent, AsyncPipe],
 })
 export class ActionListComponent extends BaseComponent implements OnInit {

@@ -1,11 +1,25 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, signal, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import {
   FormsModule,
   ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
 } from '@angular/forms';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Chemical } from '@core/domain-classes/chemical';
 import { ReminderScheduler } from '@core/domain-classes/reminder-scheduler';
 import { UserAuth } from '@core/domain-classes/user-auth';
 import { SecurityService } from '@core/security/security.service';
@@ -13,19 +27,14 @@ import { CommonService } from '@core/services/common.service';
 import { SignalrService } from '@core/services/signalr.service';
 import { TranslationService } from '@core/services/translation.service';
 import { environment } from '@environments/environment';
-import { BaseComponent } from 'src/app/base.component';
-import { LanguageFlag, Languages } from './languages';
 import { Observable, of } from 'rxjs';
-import { debounceTime, tap, switchMap, catchError } from 'rxjs/operators';
-import { Chemical } from '@core/domain-classes/chemical';
+import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
+import { BaseComponent } from 'src/app/base.component';
 import { ChemicalLocalStore } from 'src/app/chemical/chemical-store';
 import { HasClaimDirective } from '../../shared/has-claim.directive';
-import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
-import { MatOption } from '@angular/material/select';
 import { DateAgoPipe } from '../../shared/pipes/date-ago.pipe';
 import { UTCToLocalTime } from '../../shared/pipes/utc-to-localtime.pipe';
-import { TranslatePipe } from '@ngx-translate/core';
-import { AsyncPipe } from '@angular/common';
+import { LanguageFlag, Languages } from './languages';
 
 @Component({
   selector: 'app-header',
@@ -45,6 +54,7 @@ import { AsyncPipe } from '@angular/common';
     UTCToLocalTime,
     TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ChemicalLocalStore],
 })
 export class HeaderComponent extends BaseComponent implements OnInit {

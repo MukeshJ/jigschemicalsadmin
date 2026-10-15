@@ -121,7 +121,7 @@
           >
             <mat-option [value]="">None</mat-option>
             @for (frequency of reminderFrequencies; track frequency) {
-              <mat-option [value]="frequency?.id">
+              <mat-option [value]="$safeNavigationMigration(frequency?.id)">
                 {{ frequency?.name }}
               </mat-option>
             }

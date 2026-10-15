@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   MatTableDataSource,
@@ -30,6 +30,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-view-sales-order-payment',
   templateUrl: './view-sales-order-payment.component.html',
   styleUrls: ['./view-sales-order-payment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTable,
     MatColumnDef,
